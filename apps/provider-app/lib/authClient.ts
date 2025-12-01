@@ -4,8 +4,10 @@ import { createAuthClient } from 'better-auth/react';
 import { expoClient } from '@better-auth/expo/client';
 import { inferAdditionalFields } from 'better-auth/client/plugins';
 
+import { API_URL } from './env';
+
 export const authClient = createAuthClient({
-  baseURL: 'http://localhost:3000',
+  baseURL: API_URL,
   plugins: [
     expoClient({
       scheme: 'provider-app',
