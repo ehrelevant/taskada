@@ -3,11 +3,17 @@ import { Button, Typography } from '@repo/components';
 import { colors } from '@repo/theme';
 import { CreditCard, FileClock, MessageSquareWarning, UserPen } from 'lucide-react-native';
 import { Image, StyleSheet, View } from 'react-native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { OptionsStackParamList } from '@navigation/OptionsStack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLoading } from '@contexts/LoadingContext';
+import { useNavigation } from '@react-navigation/native';
+
+type OptionsNavProp = NativeStackNavigationProp<OptionsStackParamList, 'Options'>;
 
 export function OptionsScreen() {
   const { setLoading } = useLoading();
+  const navigation = useNavigation<OptionsNavProp>();
 
   const signOut = async () => {
     setLoading(true);
@@ -34,7 +40,7 @@ export function OptionsScreen() {
         <Button title="Manage Profile" variant="outline" style={styles.button} leftIcon={
           <UserPen size={24} color={colors.actionPrimary} />
         }/>
-        <Button title="Manage Payout Methods" variant="outline" style={styles.button} leftIcon={
+        <Button title="Manage Payout Methods" variant="outline" style={styles.button} onPress={() => navigation.navigate('PayoutMethods')} leftIcon={
           <CreditCard size={24} color={colors.actionPrimary} />
         }/>
         <Button title="View Transaction History" variant="outline" style={styles.button} leftIcon={

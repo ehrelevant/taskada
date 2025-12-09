@@ -2,10 +2,11 @@ import { BottomTabBarProps, createBottomTabNavigator } from '@react-navigation/b
 import { colors, palette } from '@repo/theme';
 import { HardHat, Home, Menu } from 'lucide-react-native';
 import { HomeScreen } from '@screens/home/HomeScreen';
-import { OptionsScreen } from '@screens/options/OptionsScreen';
 import { ServiceListScreen } from '@screens/services/ServiceListScreen';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Typography } from '@repo/components';
+
+import { OptionsStack } from './OptionsStack';
 
 export type DashboardTabsParamList = {
   Home: undefined;
@@ -86,10 +87,10 @@ function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
 
 export function DashboardTabs() {
   return (
-    <Tab.Navigator tabBar={(props) => <TabBar {...props} />} initialRouteName="Home">
+    <Tab.Navigator tabBar={(props) => <TabBar {...props} />} screenOptions={{ headerShown: false }} initialRouteName="Home">
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Services" component={ServiceListScreen} />
-      <Tab.Screen name="Options" component={OptionsScreen} />
+      <Tab.Screen name="Options" component={OptionsStack} />
     </Tab.Navigator>
   );
 }
