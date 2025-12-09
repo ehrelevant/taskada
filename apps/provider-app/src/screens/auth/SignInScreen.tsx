@@ -1,10 +1,11 @@
 import { authClient } from '@lib/authClient';
 import { AuthStackParamList } from '@navigation/AuthStack';
-import { Button, Input, LoadingView, Typography } from '@repo/components';
+import { Button, Input, Typography } from '@repo/components';
 import { colors } from '@repo/theme';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Pressable, StyleSheet, Text } from 'react-native';
+import { useLoading } from 'contexts/LoadingContext';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 
@@ -13,14 +14,15 @@ type SignInNavProp = NativeStackNavigationProp<AuthStackParamList, 'SignIn'>;
 export function SignInScreen() {
   const navigation = useNavigation<SignInNavProp>();
 
+  const { setLoading } = useLoading();
+
   const [errorMessage, setErrorMessage] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSignIn = async () => {
-    setIsLoading(true);
+    setLoading(true);
     setErrorMessage('');
 
     console.log('Requesting...');
@@ -36,14 +38,8 @@ export function SignInScreen() {
       setErrorMessage(error.message ?? '');
     }
 
-    setIsLoading(false);
+    setLoading(false);
   };
-
-  if (isLoading) {
-    return (
-      <LoadingView />
-    );
-  }
 
   return (
     <KeyboardAwareScrollView contentContainerStyle={styles.scrollContainer}>

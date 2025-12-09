@@ -1,4 +1,5 @@
 import { KeyboardProvider } from 'react-native-keyboard-controller';
+import { LoadingProvider } from 'contexts/LoadingContext';
 import { queryClient } from '@lib/queryClient';
 import { QueryClientProvider } from 'react-query';
 import { RootNavigator } from '@navigation/RootNavigator';
@@ -9,7 +10,9 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <SafeAreaProvider>
         <KeyboardProvider>
-          <RootNavigator />
+          <LoadingProvider>
+            <RootNavigator />
+          </LoadingProvider>
         </KeyboardProvider>
       </SafeAreaProvider>
     </QueryClientProvider>
