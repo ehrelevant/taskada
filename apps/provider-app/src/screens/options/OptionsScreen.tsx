@@ -1,9 +1,9 @@
 import { authClient } from '@lib/authClient';
-import { Button } from '@repo/components';
+import { Button, Typography } from '@repo/components';
 import { colors } from '@repo/theme';
-import { FileClock, UserPen } from 'lucide-react-native';
+import { CreditCard, FileClock, MessageSquareWarning, UserPen } from 'lucide-react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { StyleSheet } from 'react-native';
 import { useLoading } from '@contexts/LoadingContext';
 
 export function OptionsScreen() {
@@ -15,15 +15,36 @@ export function OptionsScreen() {
     setLoading(false);
   };
 
+  const { data: userSession } = authClient.useSession();
+
+  if (userSession === null) {
+    return (
+      <View style={styles.container} />
+    );
+  }
+
+  const { user } = userSession;
+
   return (
     <SafeAreaView style={styles.container}>
-      <Button title="Manage Profile" variant="outline" style={styles.button} leftIcon={
-        <UserPen size={24} color={colors.actionPrimary} />
-      }/>
-      <Button title="View Transaction History" variant="outline" style={styles.button} leftIcon={
-        <FileClock size={24} color={colors.actionPrimary} />
-      }/>
-      <Button title="Sign Out" variant="primary" onPress={signOut} />
+      <Image source={require('@lib/assets/default.jpg')} style={styles.profilePicture} />
+      <Typography variant='h1'>{user.name} {user.lastName}</Typography>
+
+      <View style={styles.buttonsContainer}>
+        <Button title="Manage Profile" variant="outline" style={styles.button} leftIcon={
+          <UserPen size={24} color={colors.actionPrimary} />
+        }/>
+        <Button title="Manage Payout Methods" variant="outline" style={styles.button} leftIcon={
+          <CreditCard size={24} color={colors.actionPrimary} />
+        }/>
+        <Button title="View Transaction History" variant="outline" style={styles.button} leftIcon={
+          <FileClock size={24} color={colors.actionPrimary} />
+        }/>
+        <Button title="Report Issue" variant="outline" style={styles.button} leftIcon={
+          <MessageSquareWarning size={24} color={colors.actionPrimary} />
+        }/>
+        <Button title="Sign Out" variant="primary" onPress={signOut} />
+      </View>
     </SafeAreaView>
   );
 }
@@ -32,9 +53,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'stretch',
+    alignItems: 'center',
     gap: 6,
     paddingHorizontal: 10,
+  },
+  profilePicture: {
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+    marginBottom: 10,
+  },
+  buttonsContainer: {
+    flex: 1,
+    gap: 6,
+    alignItems: 'stretch',
+    justifyContent: 'center',
   },
   button: {
     gap: 10,
