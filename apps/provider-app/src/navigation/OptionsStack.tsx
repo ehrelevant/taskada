@@ -1,10 +1,11 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { OptionsScreen } from '@screens/options/OptionsScreen';
-import { PayoutMethodsScreen } from '@screens/options/payouts/PayoutMethodsScreen';
-
+import { PayoutMethodsScreen } from '@screens/options/payoutMethods/PayoutMethodsScreen';
+import { ProfileScreen } from '@screens/options/profile/ProfileScreen';
 
 export type OptionsStackParamList = {
   Options: undefined;
+  Profile: undefined;
   PayoutMethods: undefined;
 };
 
@@ -23,6 +24,13 @@ export function OptionsStack() {
         component={OptionsScreen}
         options={{
           title: 'Options',
+        }}
+      />
+      <Stack.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          title: 'Profile',
         }}
       />
       <Stack.Screen

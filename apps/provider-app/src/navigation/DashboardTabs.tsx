@@ -1,17 +1,17 @@
 import { BottomTabBarProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { colors, palette } from '@repo/theme';
 import { HardHat, Home, Menu } from 'lucide-react-native';
-import { ServiceListScreen } from '@screens/services/ServiceListScreen';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Typography } from '@repo/components';
 
 import { HomeStack } from './HomeStack';
 import { OptionsStack } from './OptionsStack';
+import { ServicesStack } from './ServicesStack';
 
 export type DashboardTabsParamList = {
-  Home: undefined;
-  Services: undefined;
-  Options: undefined;
+  HomeStack: undefined;
+  ServicesStack: undefined;
+  OptionsStack: undefined;
 };
 
 const Tab = createBottomTabNavigator<DashboardTabsParamList>();
@@ -87,10 +87,10 @@ function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
 
 export function DashboardTabs() {
   return (
-    <Tab.Navigator tabBar={(props) => <TabBar {...props} />} screenOptions={{ headerShown: false }} initialRouteName="Home">
-      <Tab.Screen name="Home" component={HomeStack} />
-      <Tab.Screen name="Services" component={ServiceListScreen} />
-      <Tab.Screen name="Options" component={OptionsStack} />
+    <Tab.Navigator tabBar={(props) => <TabBar {...props} />} screenOptions={{ headerShown: false }} initialRouteName="HomeStack">
+      <Tab.Screen name="HomeStack" component={HomeStack} />
+      <Tab.Screen name="ServicesStack" component={ServicesStack} />
+      <Tab.Screen name="OptionsStack" component={OptionsStack} />
     </Tab.Navigator>
   );
 }

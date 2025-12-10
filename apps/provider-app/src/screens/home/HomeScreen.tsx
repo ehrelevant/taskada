@@ -5,31 +5,25 @@ import { StyleSheet, View } from 'react-native';
 export function HomeScreen() {
   const { data: session } = authClient.useSession();
 
-  if (session !== null) {
-    const { user } = session;
-
-    return (
-      <View style={styles.container}>
-        <View style={styles.textContainer}>
-          <Typography variant='h3'>
-            Hello, {user.name} {user.middleName && user.middleName[0] + '.'} {user.lastName}!
-          </Typography>
-          <Typography variant='subtitle1' align='center'>
-            To get requests, please add an address and register your services.
-          </Typography>
-        </View>
-
-        <View style={styles.buttonContainer}>
-          <Button title="Add an Address" variant="outline" />
-          <Button title="Register a Service" variant="primary" />
-        </View>
-      </View>
-    )
-  } else {
+  if (session === null) {
     return (
       <View style={styles.container} />
     );
   }
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.textContainer}>
+        <Typography variant="h4" style={{ textAlign: 'center' }}>
+          To start receiving requests, press <Typography weight="bold">&quot;Start Receiving Requests&quot;</Typography>.
+        </Typography>
+      </View>
+
+      <View style={styles.buttonContainer}>
+        <Button title="Start Receiving Requests" />
+      </View>
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({
