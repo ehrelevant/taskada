@@ -1,48 +1,26 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Session, UserSession } from '@thallesp/nestjs-better-auth';
 
 import { ProvidersService } from './providers.service';
 
 import { CreateProviderDto } from './dto/create-provider.dto';
-import { UpdateProviderDto } from './dto/update-provider.dto';
+
 
 @Controller('providers')
 export class ProvidersController {
   constructor(private readonly providersService: ProvidersService) {}
 
+  @Get('me')
+  async getProviderForUser(@Session() userSession: UserSession) {
+    return await this.providersService.getProviderByUserId(userSession.user.id);
+  }
+
   @Post()
-  @HttpCode(HttpStatus.CREATED)
-  async createProvider(@Body() createProviderDto: CreateProviderDto) {
+  async createProvider(@Session() userSession: UserSession, @Body() createProviderDto: CreateProviderDto) {
+    if (createProviderDto.userId !== userSession.user.id) {
+      throw new Error('You can only create a provider for yourself');
+    }
+
     return await this.providersService.createProvider(createProviderDto);
-  }
-
-  @Get()
-  async getAllProviders() {
-    return await this.providersService.getAllProviders();
-  }
-
-  @Get(':userId')
-  async getProviderByUserId(@Param('userId') userId: string) {
-    return await this.providersService.getProviderByUserId(userId);
-  }
-
-  @Put(':userId')
-  async updateProvider(@Param('userId') userId: string, @Body() updateProviderDto: UpdateProviderDto) {
-    return await this.providersService.updateProvider(userId, updateProviderDto);
-  }
-
-  @Delete(':userId')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  async deleteProvider(@Param('userId') userId: string) {
-    return await this.providersService.deleteProvider(userId);
-  }
-
-  @Get(':userId/services')
-  async getProviderServices(@Param('userId') userId: string) {
-    return await this.providersService.getProviderServices(userId);
-  }
-
-  @Get(':userId/bookings')
-  async getProviderBookings(@Param('userId') userId: string) {
-    return await this.providersService.getProviderBookings(userId);
   }
 }

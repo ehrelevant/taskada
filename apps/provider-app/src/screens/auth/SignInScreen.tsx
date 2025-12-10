@@ -1,3 +1,4 @@
+import { apiFetch } from '@lib/helpers';
 import { authClient } from '@lib/authClient';
 import { AuthStackParamList } from '@navigation/AuthStack';
 import { Button, Input, Typography } from '@repo/components';
@@ -5,6 +6,7 @@ import { colors } from '@repo/theme';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Pressable, StyleSheet, Text } from 'react-native';
+import { type Provider } from '@repo/database';
 import { useLoading } from '@contexts/LoadingContext';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
@@ -36,6 +38,20 @@ export function SignInScreen() {
     } else if (error !== null) {
       console.log(error);
       setErrorMessage(error.message ?? '');
+    }
+
+    const userProviderResponse = await apiFetch('/providers/me');
+    const userProviderData: Provider | null = await userProviderResponse.json();
+
+    if (!userProviderData) {
+      const createProviderResponse = await apiFetch('/providers', {
+        method: 'POST',
+        body: JSON.stringify({
+          userId: userData?.user.id,
+        }),
+      });
+      const newProviderData: Provider | null = await createProviderResponse.json();
+      console.log(newProviderData)
     }
 
     setLoading(false);
