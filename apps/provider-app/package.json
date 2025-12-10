@@ -35,6 +35,7 @@
     "valibot": "^1.1.0"
   },
   "devDependencies": {
+    "@repo/database": "workspace:*",
     "@types/react": "~19.1.0",
     "typescript": "~5.9.2"
   },

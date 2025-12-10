@@ -126,6 +126,9 @@ importers:
         specifier: ^1.1.0
         version: 1.1.0(typescript@5.9.3)
     devDependencies:
+      '@repo/database':
+        specifier: workspace:*
+        version: link:../../packages/database
       '@types/react':
         specifier: ~19.1.0
         version: 19.1.16
