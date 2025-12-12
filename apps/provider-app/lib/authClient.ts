@@ -35,3 +35,14 @@ export const authClient = createAuthClient({
     }),
   ],
 });
+
+export async function getActiveUserId() {
+  const { data: userSession, error } = await authClient.getSession();
+
+  // TODO: Add proper null handling
+  if (error || !userSession) {
+    throw new Error(error?.message);
+  }
+
+  return userSession.user.id;
+}
