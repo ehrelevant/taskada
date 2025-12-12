@@ -33,7 +33,7 @@ export function OptionsScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Image source={require('@lib/assets/default.jpg')} style={styles.profilePicture} />
+      <Image source={require('@lib/assets/default-profile.jpg')} style={styles.profilePicture} />
       <Typography variant='h1'>{user.name} {user.lastName}</Typography>
 
       <View style={styles.buttonsContainer}>
