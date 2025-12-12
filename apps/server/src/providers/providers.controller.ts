@@ -1,5 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
-import { Session, UserSession } from '@thallesp/nestjs-better-auth';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 
 import { ProvidersService } from './providers.service';
 
@@ -10,17 +9,27 @@ import { CreateProviderDto } from './dto/create-provider.dto';
 export class ProvidersController {
   constructor(private readonly providersService: ProvidersService) {}
 
-  @Get('me')
-  async getProviderForUser(@Session() userSession: UserSession) {
-    return await this.providersService.getProviderByUserId(userSession.user.id);
+  @Get(':userId')
+  async getProviderForUser(@Param('userId') userId: string) {
+    return await this.providersService.getProviderByUserId(userId);
   }
 
-  @Post()
-  async createProvider(@Session() userSession: UserSession, @Body() createProviderDto: CreateProviderDto) {
-    if (createProviderDto.userId !== userSession.user.id) {
+  @Post(':userId')
+  async createProviderForUser(@Param('userId') userId: string, @Body() createProviderDto: CreateProviderDto) {
+    if (createProviderDto.userId !== userId) {
       throw new Error('You can only create a provider for yourself');
     }
 
     return await this.providersService.createProvider(createProviderDto);
+  }
+
+  @Put(':userId/enable')
+  async enableProvider(@Param('userId') userId: string) {
+    return await this.providersService.updateProvider(userId, { isAccepting: true });
+  }
+
+  @Put(':userId/disable')
+  async disableProvider(@Param('userId') userId: string) {
+    return await this.providersService.updateProvider(userId, { isAccepting: false });
   }
 }

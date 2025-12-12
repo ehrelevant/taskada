@@ -16,46 +16,43 @@ type SignInNavProp = NativeStackNavigationProp<AuthStackParamList, 'SignIn'>;
 export function SignInScreen() {
   const navigation = useNavigation<SignInNavProp>();
 
-  const { setLoading } = useLoading();
+  const { withLoading } = useLoading();
 
   const [errorMessage, setErrorMessage] = useState('');
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSignIn = async () => {
-    setLoading(true);
+  const handleSignIn = withLoading(async () => {
     setErrorMessage('');
 
-    console.log('Requesting...');
     const { data: userData, error } = await authClient.signIn.email({
       email,
       password,
     });
 
-    if (userData !== null) {
-      console.log(userData);
-    } else if (error !== null) {
+    console.log(userData);
+
+    if (error !== null || userData === null) {
       console.log(error);
       setErrorMessage(error.message ?? '');
+      return;
     }
 
-    const userProviderResponse = await apiFetch('/providers/me');
+    const userId = userData.user.id;
+    const userProviderResponse = await apiFetch(`/providers/${userId}`);
     const userProviderData: Provider | null = await userProviderResponse.json();
 
     if (!userProviderData) {
       const createProviderResponse = await apiFetch('/providers', {
         method: 'POST',
-        body: JSON.stringify({
-          userId: userData?.user.id,
-        }),
+        body: JSON.stringify({ userId }),
       });
       const newProviderData: Provider | null = await createProviderResponse.json();
+
       console.log(newProviderData)
     }
-
-    setLoading(false);
-  };
+  });
 
   return (
     <KeyboardAwareScrollView contentContainerStyle={styles.scrollContainer}>

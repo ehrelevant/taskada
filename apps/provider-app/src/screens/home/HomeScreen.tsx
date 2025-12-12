@@ -1,14 +1,16 @@
-import { authClient } from '@lib/authClient';
+import { apiFetch } from '@lib/helpers';
 import { Button, Typography } from '@repo/components';
+import { getActiveUserId } from '@lib/authClient';
 import { StyleSheet, View } from 'react-native';
 
-export function HomeScreen() {
-  const { data: session } = authClient.useSession();
+export async function HomeScreen() {
+  const userId = await getActiveUserId();
 
-  if (session === null) {
-    return (
-      <View style={styles.container} />
-    );
+  const enableRequests = async () => {
+    const response = await apiFetch(`/providers/${userId}/enable`, {
+      method: 'PUT',
+    });
+    console.log(await response.json());
   }
 
   return (
@@ -20,7 +22,7 @@ export function HomeScreen() {
       </View>
 
       <View style={styles.buttonContainer}>
-        <Button title="Start Receiving Requests" />
+        <Button title="Start Receiving Requests" onPress={enableRequests} />
       </View>
     </View>
   )
