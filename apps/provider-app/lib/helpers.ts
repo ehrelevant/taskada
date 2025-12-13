@@ -1,7 +1,9 @@
 import { API_URL } from "./env";
 import { authClient } from "./authClient";
 
-export async function apiFetch(endpoint: string, options?: RequestInit, authenticated = true) {
+type RequestMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+
+export async function apiFetch(endpoint: string, method: RequestMethod = 'GET', options?: RequestInit, authenticated = true) {
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
     ...(options?.headers || {}),
@@ -14,6 +16,7 @@ export async function apiFetch(endpoint: string, options?: RequestInit, authenti
 
     return fetch(`${API_URL}${endpoint}`, {
       ...options,
+      method,
       headers: {
         ...headers,
         'Cookie': cookies,
@@ -24,6 +27,7 @@ export async function apiFetch(endpoint: string, options?: RequestInit, authenti
 
   return fetch(`${API_URL}${endpoint}`, {
     ...options,
+    method,
     headers,
   });
 }

@@ -4,7 +4,7 @@ import { StyleSheet, View } from 'react-native';
 
 export function HomeScreen() {
   const enableRequests = async () => {
-    const response = await apiFetch(`/providers/enable`, { method: 'PUT' });
+    const response = await apiFetch(`/providers/enable`, 'PUT');
     console.log(await response.json());
   }
 

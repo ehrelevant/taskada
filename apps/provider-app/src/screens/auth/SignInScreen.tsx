@@ -43,7 +43,7 @@ export function SignInScreen() {
     const userProviderData: Provider | null = await userProviderResponse.json();
 
     if (!userProviderData) {
-      const createProviderResponse = await apiFetch('/providers', { method: 'POST' });
+      const createProviderResponse = await apiFetch('/providers', 'POST');
       const newProviderData: Provider | null = await createProviderResponse.json();
 
       console.log(newProviderData)

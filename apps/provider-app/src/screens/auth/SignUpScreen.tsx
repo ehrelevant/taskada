@@ -48,7 +48,7 @@ export function SignUpScreen() {
       setErrorMessage(error.message ?? '');
     }
 
-    const createProviderResponse = await apiFetch('/providers', { method: 'POST' });
+    const createProviderResponse = await apiFetch('/providers', 'POST');
     const newProviderData: Provider | null = await createProviderResponse.json();
     console.log(newProviderData)
 
