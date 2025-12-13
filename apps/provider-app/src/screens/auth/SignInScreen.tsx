@@ -39,15 +39,11 @@ export function SignInScreen() {
       return;
     }
 
-    const userId = userData.user.id;
-    const userProviderResponse = await apiFetch(`/providers/${userId}`);
+    const userProviderResponse = await apiFetch(`/providers`);
     const userProviderData: Provider | null = await userProviderResponse.json();
 
     if (!userProviderData) {
-      const createProviderResponse = await apiFetch('/providers', {
-        method: 'POST',
-        body: JSON.stringify({ userId }),
-      });
+      const createProviderResponse = await apiFetch('/providers', { method: 'POST' });
       const newProviderData: Provider | null = await createProviderResponse.json();
 
       console.log(newProviderData)

@@ -1,15 +1,10 @@
 import { apiFetch } from '@lib/helpers';
 import { Button, Typography } from '@repo/components';
-import { getActiveUserId } from '@lib/authClient';
 import { StyleSheet, View } from 'react-native';
 
-export async function HomeScreen() {
-  const userId = await getActiveUserId();
-
+export function HomeScreen() {
   const enableRequests = async () => {
-    const response = await apiFetch(`/providers/${userId}/enable`, {
-      method: 'PUT',
-    });
+    const response = await apiFetch(`/providers/enable`, { method: 'PUT' });
     console.log(await response.json());
   }
 

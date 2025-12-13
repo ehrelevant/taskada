@@ -3,10 +3,6 @@ import { IsBoolean, IsOptional, IsString } from 'class-validator';
 
 export class CreateProviderDto {
   @ApiProperty()
-  @IsString()
-  userId: string;
-
-  @ApiProperty()
   @IsOptional()
   @IsString()
   agencyId?: string;
