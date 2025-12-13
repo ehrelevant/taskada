@@ -220,12 +220,6 @@ importers:
       better-auth:
         specifier: ^1.3.27
         version: 1.3.27(react@19.1.0)
-      class-transformer:
-        specifier: ^0.5.1
-        version: 0.5.1
-      class-validator:
-        specifier: ^0.14.2
-        version: 0.14.2
       drizzle-orm:
         specifier: ^0.44.5
         version: 0.44.5(@types/pg@8.15.5)(kysely@0.28.7)(mysql2@2.3.3)(pg@8.16.3)
@@ -10283,7 +10277,8 @@ snapshots:
       '@types/methods': 1.1.4
       '@types/superagent': 8.1.9
 
-  '@types/validator@13.15.4': {}
+  '@types/validator@13.15.4':
+    optional: true
 
   '@types/yargs-parser@21.0.3': {}
 
@@ -11211,13 +11206,15 @@ snapshots:
 
   cjs-module-lexer@1.4.3: {}
 
-  class-transformer@0.5.1: {}
+  class-transformer@0.5.1:
+    optional: true
 
   class-validator@0.14.2:
     dependencies:
       '@types/validator': 13.15.4
       libphonenumber-js: 1.12.25
       validator: 13.15.20
+    optional: true
 
   cli-cursor@2.1.0:
     dependencies:
@@ -13557,7 +13554,8 @@ snapshots:
       prelude-ls: 1.2.1
       type-check: 0.4.0
 
-  libphonenumber-js@1.12.25: {}
+  libphonenumber-js@1.12.25:
+    optional: true
 
   lighthouse-logger@1.4.2:
     dependencies:
@@ -16027,7 +16025,8 @@ snapshots:
 
   validate-npm-package-name@5.0.1: {}
 
-  validator@13.15.20: {}
+  validator@13.15.20:
+    optional: true
 
   vary@1.1.2: {}
 
