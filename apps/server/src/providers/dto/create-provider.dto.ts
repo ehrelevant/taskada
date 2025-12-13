@@ -1,14 +1,14 @@
+import * as v from 'valibot';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsOptional, IsString } from 'class-validator';
+import { ProviderInsertSchema } from '@repo/database';
 
-export class CreateProviderDto {
+export class CreateProviderDto implements v.InferInput<typeof ProviderInsertSchema> {
   @ApiProperty()
-  @IsOptional()
-  @IsString()
+  userId: string;
+
+  @ApiProperty()
   agencyId?: string;
 
   @ApiProperty()
-  @IsOptional()
-  @IsBoolean()
   isAccepting?: boolean;
 }
