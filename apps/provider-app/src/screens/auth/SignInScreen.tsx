@@ -6,7 +6,6 @@ import { colors } from '@repo/theme';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Pressable, StyleSheet, Text } from 'react-native';
-import { type Provider } from '@repo/database';
 import { useLoading } from '@contexts/LoadingContext';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
@@ -39,13 +38,12 @@ export function SignInScreen() {
       return;
     }
 
-    const userProviderResponse = await apiFetch(`/providers`);
-    const userProviderData: Provider | null = await userProviderResponse.json();
+    const providerResponse = await apiFetch(`/providers`);
 
-    if (!userProviderData) {
+    if (providerResponse.status === 404) {
+      // Means provider does not exist, create one
       const createProviderResponse = await apiFetch('/providers', 'POST');
-      const newProviderData: Provider | null = await createProviderResponse.json();
-
+      const newProviderData = await createProviderResponse.json();
       console.log(newProviderData)
     }
   });
