@@ -1,15 +1,15 @@
 import { BottomTabBarProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { ClipboardList, HardHat, Menu } from 'lucide-react-native';
 import { colors, palette } from '@repo/theme';
-import { HardHat, Home, Menu } from 'lucide-react-native';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Typography } from '@repo/components';
 
-import { HomeStack } from './HomeStack';
 import { OptionsStack } from './OptionsStack';
+import { RequestsStack } from './RequestsStack';
 import { ServicesStack } from './ServicesStack';
 
 export type DashboardTabsParamList = {
-  HomeStack: undefined;
+  RequestsStack: undefined;
   ServicesStack: undefined;
   OptionsStack: undefined;
 };
@@ -49,8 +49,8 @@ function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
             strokeWidth: 2
           };
 
-          if (route.name === 'HomeStack') {
-            return <Home {...iconProps} />;
+          if (route.name === 'RequestsStack') {
+            return <ClipboardList {...iconProps} />;
           } else if (route.name === 'ServicesStack') {
             return <HardHat {...iconProps} />;
           } else  {
@@ -87,10 +87,10 @@ function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
 
 export function DashboardTabs() {
   return (
-    <Tab.Navigator tabBar={(props) => <TabBar {...props} />} screenOptions={{ headerShown: false }} initialRouteName="HomeStack">
-      <Tab.Screen name="HomeStack" component={HomeStack} />
-      <Tab.Screen name="ServicesStack" component={ServicesStack} />
-      <Tab.Screen name="OptionsStack" component={OptionsStack} />
+    <Tab.Navigator tabBar={(props) => <TabBar {...props} />} screenOptions={{ headerShown: false }} initialRouteName="RequestsStack">
+      <Tab.Screen name="RequestsStack" component={RequestsStack} options={{ title: 'Requests' }} />
+      <Tab.Screen name="ServicesStack" component={ServicesStack} options={{ title: 'Services' }} />
+      <Tab.Screen name="OptionsStack" component={OptionsStack} options={{ title: 'Options' }} />
     </Tab.Navigator>
   );
 }

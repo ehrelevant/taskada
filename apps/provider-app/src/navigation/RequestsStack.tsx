@@ -1,13 +1,12 @@
 import { BookingChatScreen } from '@screens/home/booking/BookingChatScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { HomeScreen } from '@screens/home/HomeScreen';
 import { RequestDetailsScreen } from '@screens/home/request/RequestDetailsScreen';
 import { RequestListScreen } from '@screens/home/request/RequestListScreen';
 import { TransactionDoneScreen } from '@screens/home/transaction/TransactionDoneScreen';
 import { TransactionServingScreen } from '@screens/home/transaction/TransactionServingScreen';
 import { TransactionTransitScreen } from '@screens/home/transaction/TransactionTransitScreen';
 
-export type HomeStackParamList = {
+export type RequestsStackParamList = {
   Home: undefined;
   RequestList: undefined;
   RequestDetails: undefined;
@@ -18,23 +17,16 @@ export type HomeStackParamList = {
   TransactionDone: undefined;
 };
 
-const Stack = createNativeStackNavigator<HomeStackParamList>();
+const Stack = createNativeStackNavigator<RequestsStackParamList>();
 
-export function HomeStack() {
+export function RequestsStack() {
   return (
     <Stack.Navigator
-      initialRouteName="Home"
+      initialRouteName="RequestList"
       screenOptions={{
         animationDuration: 400,
       }}
     >
-      <Stack.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{
-          title: 'Home',
-        }}
-      />
       <Stack.Screen
         name="RequestList"
         component={RequestListScreen}
