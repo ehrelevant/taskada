@@ -1,9 +1,37 @@
 import { apiFetch } from '@lib/helpers';
 import { Button, Typography } from '@repo/components';
 import { colors } from '@repo/theme';
-import { Image, StyleSheet, View } from 'react-native';
+import { FlatList, Image, StyleSheet, View } from 'react-native';
 import { Provider } from '@repo/database';
+import { RequestListing } from '@lib/components/RequestListing';
 import { useEffect, useState } from 'react';
+
+const SAMPLE_REQUESTS = [
+  {
+    id: '1',
+    title: 'Plumbing',
+    distance: 'XXXm',
+    address: 'UP Alumni Engineers Centennial Hall, P. Velasquez St., University of the Philippines Diliman, 1101 Diliman, Quezon City, Philippines',
+  },
+  {
+    id: '2',
+    title: 'Car Mechanic',
+    distance: 'XXXm',
+    address: 'UP Alumni Engineers Centennial Hall, P. Velasquez St., University of the Philippines Diliman, 1101 Diliman, Quezon City, Philippines',
+  },
+  {
+    id: '3',
+    title: 'Baby Sitting',
+    distance: 'XXXm',
+    address: 'UP Alumni Engineers Centennial Hall, P. Velasquez St., University of the Philippines Diliman, 1101 Diliman, Quezon City, Philippines',
+  },
+  {
+    id: '4',
+    title: 'Cleaning',
+    distance: 'XXXm',
+    address: 'UP Alumni Engineers Centennial Hall, P. Velasquez St., University of the Philippines Diliman, 1101 Diliman, Quezon City, Philippines',
+  },
+];
 
 export function RequestListScreen() {
   const [isAccepting, setIsAccepting] = useState(false);
@@ -29,11 +57,26 @@ export function RequestListScreen() {
     setIsAccepting(newIsAccepting);
   };
 
+  const requests = SAMPLE_REQUESTS;
+
   return (isAccepting) ? (
     <View style={styles.screen}>
-      <View style={styles.requestsListContainer}>
-
-      </View>
+      <FlatList
+        data={requests}
+        keyExtractor={item => item.id}
+        contentContainerStyle={styles.requestsListContainer}
+        renderItem={({ item }) => (
+          <RequestListing
+            title={item.title}
+            distance={item.distance}
+            address={item.address}
+            onViewDetails={() => {
+              // TODO: Navigate to details of request
+              console.log(`View details for ${item.title ?? item.id} request`);
+            }}
+          />
+        )}
+      />
 
       <View style={styles.bottomButtonContainer}>
         <Button title="Stop Receiving Requests" variant="outline" onPress={disableRequests} />
@@ -83,9 +126,10 @@ const styles = StyleSheet.create({
     bottom: 0,
     padding: 8,
     borderTopColor: colors.border,
-    borderTopWidth: 2
+    borderTopWidth: 2,
+    backgroundColor: colors.backgroundSecondary,
   },
   requestsListContainer: {
-    flex: 1,
+    paddingBottom: 60,
   }
 });
