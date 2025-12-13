@@ -1,15 +1,5 @@
-import {
-  boolean,
-  check,
-  integer,
-  numeric,
-  pgEnum,
-  pgSchema,
-  primaryKey,
-  text,
-  timestamp,
-  uuid,
-} from 'drizzle-orm/pg-core';
+import { boolean, check, integer, numeric, pgEnum, pgSchema, primaryKey, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-valibot';
 import { sql } from 'drizzle-orm';
 
 import { geographyPointColumnType } from './custom/geography';
@@ -40,6 +30,9 @@ export const user = app.table(
 );
 export type User = typeof user.$inferSelect;
 export type NewUser = typeof user.$inferInsert;
+export const UserSelectSchema = createSelectSchema(user);
+export const UserInsertSchema = createInsertSchema(user);
+export const UserUpdateSchema = createUpdateSchema(user);
 
 export const roleEnum = pgEnum('role', ['provider', 'seeker', 'admin']);
 export const userRole = app.table(
@@ -55,6 +48,9 @@ export const userRole = app.table(
 );
 export type UserRole = typeof userRole.$inferSelect;
 export type NewUserRole = typeof userRole.$inferInsert;
+export const UserRoleSelectSchema = createSelectSchema(userRole);
+export const UserRoleInsertSchema = createInsertSchema(userRole);
+export const UserRoleUpdateSchema = createUpdateSchema(userRole);
 
 export const agency = app.table('agency', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
@@ -75,6 +71,9 @@ export const provider = app.table('provider', {
 });
 export type Provider = typeof provider.$inferSelect;
 export type NewProvider = typeof provider.$inferInsert;
+export const ProviderSelectSchema = createSelectSchema(provider);
+export const ProviderInsertSchema = createInsertSchema(provider);
+export const ProviderUpdateSchema = createUpdateSchema(provider);
 
 export const seeker = app.table('seeker', {
   userId: uuid('user_id')
@@ -84,6 +83,9 @@ export const seeker = app.table('seeker', {
 });
 export type Seeker = typeof seeker.$inferSelect;
 export type NewSeeker = typeof seeker.$inferInsert;
+export const SeekerSelectSchema = createSelectSchema(seeker);
+export const SeekerInsertSchema = createInsertSchema(seeker);
+export const SeekerUpdateSchema = createUpdateSchema(seeker);
 
 export const serviceType = app.table('service_type', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
@@ -93,6 +95,9 @@ export const serviceType = app.table('service_type', {
 });
 export type ServiceType = typeof serviceType.$inferSelect;
 export type NewServiceType = typeof serviceType.$inferInsert;
+export const ServiceTypeSelectSchema = createSelectSchema(serviceType);
+export const ServiceTypeInsertSchema = createInsertSchema(serviceType);
+export const ServiceTypeUpdateSchema = createUpdateSchema(serviceType);
 
 export const service = app.table('service', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
@@ -107,6 +112,9 @@ export const service = app.table('service', {
 });
 export type Service = typeof service.$inferSelect;
 export type NewService = typeof service.$inferInsert;
+export const ServiceSelectSchema = createSelectSchema(service);
+export const ServiceInsertSchema = createInsertSchema(service);
+export const ServiceUpdateSchema = createUpdateSchema(service);
 
 export const portfolio = app.table('portfolio', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
@@ -117,6 +125,9 @@ export const portfolio = app.table('portfolio', {
 });
 export type Portfolio = typeof portfolio.$inferSelect;
 export type NewPortfolio = typeof portfolio.$inferInsert;
+export const PortfolioSelectSchema = createSelectSchema(portfolio);
+export const PortfolioInsertSchema = createInsertSchema(portfolio);
+export const PortfolioUpdateSchema = createUpdateSchema(portfolio);
 
 export const portfolioImage = app.table('portfolio_image', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
@@ -127,6 +138,9 @@ export const portfolioImage = app.table('portfolio_image', {
 });
 export type PortfolioImage = typeof portfolioImage.$inferSelect;
 export type NewPortfolioImage = typeof portfolioImage.$inferInsert;
+export const PortfolioImageSelectSchema = createSelectSchema(portfolioImage);
+export const PortfolioImageInsertSchema = createInsertSchema(portfolioImage);
+export const PortfolioImageUpdateSchema = createUpdateSchema(portfolioImage);
 
 export const review = app.table(
   'review',
@@ -150,6 +164,9 @@ export const review = app.table(
 );
 export type Review = typeof review.$inferSelect;
 export type NewReview = typeof review.$inferInsert;
+export const ReviewSelectSchema = createSelectSchema(review);
+export const ReviewInsertSchema = createInsertSchema(review);
+export const ReviewUpdateSchema = createUpdateSchema(review);
 
 export const reviewImage = app.table('review_image', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
@@ -160,6 +177,9 @@ export const reviewImage = app.table('review_image', {
 });
 export type ReviewImage = typeof reviewImage.$inferSelect;
 export type NewReviewImage = typeof reviewImage.$inferInsert;
+export const ReviewImageSelectSchema = createSelectSchema(reviewImage);
+export const ReviewImageInsertSchema = createInsertSchema(reviewImage);
+export const ReviewImageUpdateSchema = createUpdateSchema(reviewImage);
 
 export const request = app.table('request', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
@@ -181,6 +201,9 @@ export const request = app.table('request', {
 });
 export type Request = typeof request.$inferSelect;
 export type NewRequest = typeof request.$inferInsert;
+export const RequestSelectSchema = createSelectSchema(request);
+export const RequestInsertSchema = createInsertSchema(request);
+export const RequestUpdateSchema = createUpdateSchema(request);
 
 export const requestImage = app.table('request_image', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
@@ -191,6 +214,9 @@ export const requestImage = app.table('request_image', {
 });
 export type RequestImage = typeof requestImage.$inferSelect;
 export type NewRequestImage = typeof requestImage.$inferInsert;
+export const RequestImageSelectSchema = createSelectSchema(requestImage);
+export const RequestImageInsertSchema = createInsertSchema(requestImage);
+export const RequestImageUpdateSchema = createUpdateSchema(requestImage);
 
 export const booking = app.table('booking', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
@@ -215,6 +241,9 @@ export const booking = app.table('booking', {
 });
 export type Booking = typeof booking.$inferSelect;
 export type NewBooking = typeof booking.$inferInsert;
+export const BookingSelectSchema = createSelectSchema(booking);
+export const BookingInsertSchema = createInsertSchema(booking);
+export const BookingUpdateSchema = createUpdateSchema(booking);
 
 export const address = app.table('address', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
@@ -223,6 +252,9 @@ export const address = app.table('address', {
 });
 export type Address = typeof address.$inferSelect;
 export type NewAddress = typeof address.$inferInsert;
+export const AddressSelectSchema = createSelectSchema(address);
+export const AddressInsertSchema = createInsertSchema(address);
+export const AddressUpdateSchema = createUpdateSchema(address);
 
 export const message = app.table('message', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
@@ -241,6 +273,9 @@ export const message = app.table('message', {
 });
 export type Message = typeof message.$inferSelect;
 export type NewMessage = typeof message.$inferInsert;
+export const MessageSelectSchema = createSelectSchema(message);
+export const MessageInsertSchema = createInsertSchema(message);
+export const MessageUpdateSchema = createUpdateSchema(message);
 
 export const messageImage = app.table('message_image', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
@@ -251,3 +286,6 @@ export const messageImage = app.table('message_image', {
 });
 export type MessageImage = typeof messageImage.$inferSelect;
 export type NewMessageImage = typeof messageImage.$inferInsert;
+export const MessageImageSelectSchema = createSelectSchema(messageImage);
+export const MessageImageInsertSchema = createInsertSchema(messageImage);
+export const MessageImageUpdateSchema = createUpdateSchema(messageImage);
