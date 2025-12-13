@@ -49,9 +49,9 @@ function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
             strokeWidth: 2
           };
 
-          if (route.name === 'Home') {
+          if (route.name === 'HomeStack') {
             return <Home {...iconProps} />;
-          } else if (route.name === 'Services') {
+          } else if (route.name === 'ServicesStack') {
             return <HardHat {...iconProps} />;
           } else  {
             return <Menu {...iconProps} />;
