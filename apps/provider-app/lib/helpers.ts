@@ -12,7 +12,6 @@ export async function apiFetch(endpoint: string, method: RequestMethod = 'GET', 
   if (authenticated) {
     // Add authentication cookie
     const cookies = authClient.getCookie();
-    console.log(cookies);
 
     return fetch(`${API_URL}${endpoint}`, {
       ...options,
