@@ -1,8 +1,8 @@
-import * as v from 'valibot';
 import { ApiProperty } from '@nestjs/swagger';
+import { type InferInput } from 'valibot';
 import { ProviderInsertSchema } from '@repo/database';
 
-export class CreateProviderDto implements v.InferInput<typeof ProviderInsertSchema> {
+export class CreateProviderDto implements InferInput<typeof ProviderInsertSchema> {
   @ApiProperty()
   userId: string;
 
