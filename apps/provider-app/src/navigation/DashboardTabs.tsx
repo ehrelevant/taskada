@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     backgroundColor: colors.backgroundSecondary,
     borderTopColor: colors.border,
-    borderWidth: 2
+    borderTopWidth: 2
   },
   tabButton: {
     flex: 1,
