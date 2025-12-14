@@ -232,6 +232,15 @@ export const RequestImageSelectSchema = createSelectSchema(requestImage);
 export const RequestImageInsertSchema = v.omit(createInsertSchema(requestImage), ['id']);
 export const RequestImageUpdateSchema = v.omit(createUpdateSchema(requestImage), ['id']);
 
+export const bookingStatusEnum = pgEnum('booking_status', [
+  'pending',
+  'accepted',
+  'in_transit',
+  'serving',
+  'completed',
+  'cancelled',
+]);
+
 export const booking = app.table('booking', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
   providerUserId: uuid('provider_id')
@@ -246,6 +255,7 @@ export const booking = app.table('booking', {
   requestId: uuid('request_id')
     .notNull()
     .references(() => request.id, { onUpdate: 'cascade', onDelete: 'cascade' }),
+  status: bookingStatusEnum('status').notNull().default('pending'), // <--- ADDED
   cost: numeric('cost', { mode: 'number', precision: 10, scale: 2 }).notNull().default(0),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true })

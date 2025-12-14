@@ -1,0 +1,2 @@
+CREATE TYPE "public"."booking_status" AS ENUM('pending', 'accepted', 'in_transit', 'serving', 'completed', 'cancelled');--> statement-breakpoint
+ALTER TABLE "app"."booking" ADD COLUMN "status" "booking_status" DEFAULT 'pending' NOT NULL;
