@@ -8,7 +8,18 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { useEffect, useState } from 'react';
 import { valibotResolver } from '@hookform/resolvers/valibot';
 
-const addServiceSchema = v.object({
+export type ProviderService = {
+  id: string;
+  initialCost: string;
+  isEnabled: boolean;
+  serviceType: {
+    id: string;
+    name: string;
+    iconUrl?: string;
+  };
+};
+
+const serviceSchema = v.object({
   serviceTypeId: v.pipe(v.string(), v.minLength(1, 'Please select a service type')),
   initialCost: v.pipe(
     v.string(),
@@ -17,7 +28,7 @@ const addServiceSchema = v.object({
   ),
 });
 
-type AddServiceFormData = v.InferOutput<typeof addServiceSchema>;
+type ServiceFormData = v.InferOutput<typeof serviceSchema>;
 
 type ServiceType = {
   id: string;
@@ -26,57 +37,80 @@ type ServiceType = {
 
 type Props = {
   visible: boolean;
+  serviceToEdit?: ProviderService | null;
   onClose: () => void;
   onSuccess: () => void;
 };
 
-export function AddServiceModal({ visible, onClose, onSuccess }: Props) {
+export function AddServiceModal({ visible, serviceToEdit, onClose, onSuccess }: Props) {
   const [serviceTypes, setServiceTypes] = useState<ServiceType[]>([]);
   const [isLoadingTypes, setIsLoadingTypes] = useState(false);
+  const isEditing = !!serviceToEdit;
 
   const {
     control,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors, isSubmitting },
-  } = useForm<AddServiceFormData>({
-    resolver: valibotResolver(addServiceSchema),
+  } = useForm<ServiceFormData>({
+    resolver: valibotResolver(serviceSchema),
     defaultValues: {
       serviceTypeId: '',
       initialCost: '',
     },
   });
 
-  // Fetch available service types when modal opens
+  // Reset or Populate form when visibility or editing state changes
   useEffect(() => {
     if (visible) {
-      setIsLoadingTypes(true);
-      apiFetch('/service-types', 'GET')
-        .then((res) => res.json())
-        .then((data) => setServiceTypes(data))
-        .catch((err) => console.error('Failed to load types:', err))
-        .finally(() => setIsLoadingTypes(false));
-    }
-  }, [visible]);
+      if (serviceToEdit) {
+        setValue('serviceTypeId', serviceToEdit.serviceType.id);
+        setValue('initialCost', String(serviceToEdit.initialCost));
+      } else {
+        reset({
+            serviceTypeId: '',
+            initialCost: ''
+        });
+      }
 
-  const onSubmit = async (data: AddServiceFormData) => {
+      // Load types if not loaded
+      if (serviceTypes.length === 0) {
+        setIsLoadingTypes(true);
+        apiFetch('/service-types', 'GET')
+            .then((res) => res.json())
+            .then((data) => setServiceTypes(data))
+            .catch((err) => console.error('Failed to load types:', err))
+            .finally(() => setIsLoadingTypes(false));
+      }
+    }
+  }, [visible, serviceToEdit, setValue, reset, serviceTypes.length]);
+
+  const onSubmit = async (data: ServiceFormData) => {
     try {
-      console.log(data);
-      const res = await apiFetch('/services', 'POST', {
-        body: JSON.stringify({
-          serviceTypeId: data.serviceTypeId,
-          initialCost: parseFloat(data.initialCost),
-          isEnabled: true,
-        }),
-      });
-      console.log(res.status, await res.json());
+      let res;
+      const payload = {
+        serviceTypeId: data.serviceTypeId,
+        initialCost: parseFloat(data.initialCost),
+        ...(isEditing ? {} : { isEnabled: true }),
+      };
+
+      if (isEditing && serviceToEdit) {
+        res = await apiFetch(`/services/${serviceToEdit.id}`, 'PATCH', {
+            body: JSON.stringify(payload)
+        });
+      } else {
+        res = await apiFetch('/services', 'POST', {
+          body: JSON.stringify(payload),
+        });
+      }
 
       if (res.ok) {
         reset();
         onSuccess();
         onClose();
       } else {
-        console.error('Failed to create service');
+        console.error('Failed to save service');
       }
     } catch (error) {
       console.error(error);
@@ -88,7 +122,7 @@ export function AddServiceModal({ visible, onClose, onSuccess }: Props) {
       <View style={styles.overlay}>
         <View style={styles.container}>
           <Typography variant="h4" style={styles.title}>
-            New Service
+            {isEditing ? 'Edit Service' : 'New Service'}
           </Typography>
 
           <KeyboardAwareScrollView contentContainerStyle={styles.scrollContent}>
@@ -106,23 +140,29 @@ export function AddServiceModal({ visible, onClose, onSuccess }: Props) {
                   name="serviceTypeId"
                   render={({ field: { onChange, value } }) => (
                     <View style={styles.typeList}>
-                      {serviceTypes.map((type) => (
+                      {serviceTypes.map((type) => {
+                        const isSelected = value === type.id;
+                        const isDisabled = isEditing && !isSelected;
+
+                        return (
                         <TouchableOpacity
                           key={type.id}
-                          onPress={() => onChange(type.id)}
+                          onPress={() => !isDisabled && onChange(type.id)}
                           style={[
                             styles.chip,
-                            value === type.id && styles.chipSelected,
+                            isSelected && styles.chipSelected,
+                            isDisabled && styles.chipDisabled
                           ]}
+                          disabled={isDisabled}
                         >
                           <Typography
                             variant="caption"
-                            color={value === type.id ? colors.white : colors.textPrimary}
+                            color={isSelected ? colors.white : (isDisabled ? colors.textDisabled : colors.textPrimary)}
                           >
                             {type.name}
                           </Typography>
                         </TouchableOpacity>
-                      ))}
+                      )})}
                     </View>
                   )}
                 />
@@ -165,7 +205,7 @@ export function AddServiceModal({ visible, onClose, onSuccess }: Props) {
               style={styles.button}
             />
             <Button
-              title="Add Service"
+              title={isEditing ? "Save Changes" : "Add Service"}
               onPress={handleSubmit(onSubmit)}
               isLoading={isSubmitting}
               style={styles.button}
@@ -220,6 +260,11 @@ const styles = StyleSheet.create({
   chipSelected: {
     backgroundColor: colors.actionPrimary,
     borderColor: colors.actionPrimary,
+  },
+  chipDisabled: {
+    backgroundColor: colors.backgroundSecondary,
+    borderColor: colors.border,
+    opacity: 0.5,
   },
   actions: {
     flexDirection: 'row',

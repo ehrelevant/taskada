@@ -2,26 +2,18 @@ import { Alert, FlatList, StyleSheet, Switch, TouchableOpacity, View } from 'rea
 import { apiFetch } from '@lib/helpers';
 import { Card, Typography } from '@repo/components';
 import { colors, palette, shadows, spacing } from '@repo/theme';
-import { Plus, Wrench } from 'lucide-react-native';
+import { Pencil, Plus, Trash2, Wrench } from 'lucide-react-native';
 import { useEffect, useState } from 'react';
 
-import { AddServiceModal } from './AddServiceModal';
-
-type ProviderService = {
-  id: string;
-  initialCost: string;
-  isEnabled: boolean;
-  serviceType: {
-    id: string;
-    name: string;
-    iconUrl?: string;
-  };
-};
+import { AddServiceModal, type ProviderService } from './AddServiceModal';
 
 export function ServiceListScreen() {
   const [services, setServices] = useState<ProviderService[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
+
+  // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingService, setEditingService] = useState<ProviderService | null>(null);
 
   const fetchServices = async () => {
     try {
@@ -40,6 +32,36 @@ export function ServiceListScreen() {
     fetchServices();
   }, []);
 
+  const handleEdit = (service: ProviderService) => {
+    setEditingService(service);
+    setIsModalOpen(true);
+  };
+
+  const handleDelete = (service: ProviderService) => {
+    Alert.alert(
+      'Delete Service',
+      `Are you sure you want to remove ${service.serviceType.name}?`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+             setServices(prev => prev.filter(s => s.id !== service.id));
+
+             try {
+                const res = await apiFetch(`/services/${service.id}`, 'DELETE');
+                if (!res.ok) throw new Error();
+             } catch {
+                Alert.alert('Error', 'Failed to delete service');
+                fetchServices(); // Revert logic by refreshing
+             }
+          }
+        }
+      ]
+    );
+  };
+
   const toggleService = async (id: string, currentStatus: boolean) => {
     setServices((prev) =>
       prev.map((s) => (s.id === id ? { ...s, isEnabled: !currentStatus } : s))
@@ -56,6 +78,11 @@ export function ServiceListScreen() {
     }
   };
 
+  const handleCloseModal = () => {
+      setIsModalOpen(false);
+      setEditingService(null);
+  };
+
   const renderItem = ({ item }: { item: ProviderService }) => (
     <Card style={styles.card} padding="m">
       <View style={styles.cardHeader}>
@@ -67,6 +94,16 @@ export function ServiceListScreen() {
           <Typography variant="body2" color={colors.textSecondary}>
             Starts at Php {item.initialCost}
           </Typography>
+        </View>
+
+        {/* Edit Actions */}
+        <View style={styles.headerActions}>
+            <TouchableOpacity onPress={() => handleEdit(item)} style={styles.iconButton}>
+                <Pencil size={20} color={colors.textSecondary} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => handleDelete(item)} style={styles.iconButton}>
+                <Trash2 size={20} color={colors.error} />
+            </TouchableOpacity>
         </View>
       </View>
 
@@ -110,7 +147,10 @@ export function ServiceListScreen() {
 
       <TouchableOpacity
         style={styles.fab}
-        onPress={() => setIsModalOpen(true)}
+        onPress={() => {
+            setEditingService(null);
+            setIsModalOpen(true);
+        }}
         activeOpacity={0.8}
       >
         <Plus color={colors.white} size={32} />
@@ -118,7 +158,8 @@ export function ServiceListScreen() {
 
       <AddServiceModal
         visible={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        serviceToEdit={editingService}
+        onClose={handleCloseModal}
         onSuccess={fetchServices}
       />
     </View>
@@ -153,6 +194,14 @@ const styles = StyleSheet.create({
   },
   cardContent: {
     flex: 1,
+  },
+  headerActions: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.s,
+  },
+  iconButton: {
+      padding: 8,
   },
   cardFooter: {
     flexDirection: 'row',
