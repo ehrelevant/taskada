@@ -1,3 +1,4 @@
+import * as v from 'valibot';
 import { boolean, check, integer, numeric, pgEnum, pgSchema, primaryKey, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-valibot';
 import { sql } from 'drizzle-orm';
@@ -31,8 +32,18 @@ export const user = app.table(
 export type User = typeof user.$inferSelect;
 export type NewUser = typeof user.$inferInsert;
 export const UserSelectSchema = createSelectSchema(user);
-export const UserInsertSchema = createInsertSchema(user);
-export const UserUpdateSchema = createUpdateSchema(user);
+export const UserInsertSchema = v.omit(
+  createInsertSchema(user, {
+    email: v.pipe(v.string(), v.email()),
+  }),
+  ['id', 'createdAt', 'updatedAt'],
+);
+export const UserUpdateSchema = v.omit(
+  createUpdateSchema(user, {
+    email: v.optional(v.pipe(v.string(), v.email())),
+  }),
+  ['id', 'createdAt', 'updatedAt']
+);
 
 export const roleEnum = pgEnum('role', ['provider', 'seeker', 'admin']);
 export const userRole = app.table(
@@ -49,8 +60,8 @@ export const userRole = app.table(
 export type UserRole = typeof userRole.$inferSelect;
 export type NewUserRole = typeof userRole.$inferInsert;
 export const UserRoleSelectSchema = createSelectSchema(userRole);
-export const UserRoleInsertSchema = createInsertSchema(userRole);
-export const UserRoleUpdateSchema = createUpdateSchema(userRole);
+export const UserRoleInsertSchema = v.omit(createInsertSchema(userRole), ['assigned_at']);
+export const UserRoleUpdateSchema = v.omit(createUpdateSchema(userRole), ['assigned_at']);
 
 export const agency = app.table('agency', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
@@ -60,6 +71,9 @@ export const agency = app.table('agency', {
 });
 export type Agency = typeof agency.$inferSelect;
 export type NewAgency = typeof agency.$inferInsert;
+export const AgencySelectSchema = createSelectSchema(agency);
+export const AgencyInsertSchema = v.omit(createInsertSchema(agency), ['id']);
+export const AgencyUpdateSchema = v.omit(createUpdateSchema(agency), ['id']);
 
 export const provider = app.table('provider', {
   userId: uuid('user_id')
@@ -96,8 +110,8 @@ export const serviceType = app.table('service_type', {
 export type ServiceType = typeof serviceType.$inferSelect;
 export type NewServiceType = typeof serviceType.$inferInsert;
 export const ServiceTypeSelectSchema = createSelectSchema(serviceType);
-export const ServiceTypeInsertSchema = createInsertSchema(serviceType);
-export const ServiceTypeUpdateSchema = createUpdateSchema(serviceType);
+export const ServiceTypeInsertSchema = v.omit(createInsertSchema(serviceType), ['id']);
+export const ServiceTypeUpdateSchema = v.omit(createUpdateSchema(serviceType), ['id']);
 
 export const service = app.table('service', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
@@ -113,8 +127,8 @@ export const service = app.table('service', {
 export type Service = typeof service.$inferSelect;
 export type NewService = typeof service.$inferInsert;
 export const ServiceSelectSchema = createSelectSchema(service);
-export const ServiceInsertSchema = createInsertSchema(service);
-export const ServiceUpdateSchema = createUpdateSchema(service);
+export const ServiceInsertSchema = v.omit(createInsertSchema(service), ['id']);
+export const ServiceUpdateSchema = v.omit(createUpdateSchema(service), ['id']);
 
 export const portfolio = app.table('portfolio', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
@@ -126,8 +140,8 @@ export const portfolio = app.table('portfolio', {
 export type Portfolio = typeof portfolio.$inferSelect;
 export type NewPortfolio = typeof portfolio.$inferInsert;
 export const PortfolioSelectSchema = createSelectSchema(portfolio);
-export const PortfolioInsertSchema = createInsertSchema(portfolio);
-export const PortfolioUpdateSchema = createUpdateSchema(portfolio);
+export const PortfolioInsertSchema = v.omit(createInsertSchema(portfolio), ['id']);
+export const PortfolioUpdateSchema = v.omit(createUpdateSchema(portfolio), ['id']);
 
 export const portfolioImage = app.table('portfolio_image', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
@@ -139,8 +153,8 @@ export const portfolioImage = app.table('portfolio_image', {
 export type PortfolioImage = typeof portfolioImage.$inferSelect;
 export type NewPortfolioImage = typeof portfolioImage.$inferInsert;
 export const PortfolioImageSelectSchema = createSelectSchema(portfolioImage);
-export const PortfolioImageInsertSchema = createInsertSchema(portfolioImage);
-export const PortfolioImageUpdateSchema = createUpdateSchema(portfolioImage);
+export const PortfolioImageInsertSchema = v.omit(createInsertSchema(portfolioImage), ['id']);
+export const PortfolioImageUpdateSchema = v.omit(createUpdateSchema(portfolioImage), ['id']);
 
 export const review = app.table(
   'review',
@@ -165,8 +179,8 @@ export const review = app.table(
 export type Review = typeof review.$inferSelect;
 export type NewReview = typeof review.$inferInsert;
 export const ReviewSelectSchema = createSelectSchema(review);
-export const ReviewInsertSchema = createInsertSchema(review);
-export const ReviewUpdateSchema = createUpdateSchema(review);
+export const ReviewInsertSchema = v.omit(createInsertSchema(review), ['id', 'createdAt', 'updatedAt']);
+export const ReviewUpdateSchema = v.omit(createUpdateSchema(review), ['id', 'createdAt', 'updatedAt']);
 
 export const reviewImage = app.table('review_image', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
@@ -178,8 +192,8 @@ export const reviewImage = app.table('review_image', {
 export type ReviewImage = typeof reviewImage.$inferSelect;
 export type NewReviewImage = typeof reviewImage.$inferInsert;
 export const ReviewImageSelectSchema = createSelectSchema(reviewImage);
-export const ReviewImageInsertSchema = createInsertSchema(reviewImage);
-export const ReviewImageUpdateSchema = createUpdateSchema(reviewImage);
+export const ReviewImageInsertSchema = v.omit(createInsertSchema(reviewImage), ['id']);
+export const ReviewImageUpdateSchema = v.omit(createUpdateSchema(reviewImage), ['id']);
 
 export const request = app.table('request', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
@@ -202,8 +216,8 @@ export const request = app.table('request', {
 export type Request = typeof request.$inferSelect;
 export type NewRequest = typeof request.$inferInsert;
 export const RequestSelectSchema = createSelectSchema(request);
-export const RequestInsertSchema = createInsertSchema(request);
-export const RequestUpdateSchema = createUpdateSchema(request);
+export const RequestInsertSchema = v.omit(createInsertSchema(request), ['id', 'createdAt', 'updatedAt']);
+export const RequestUpdateSchema = v.omit(createUpdateSchema(request), ['id', 'createdAt', 'updatedAt']);
 
 export const requestImage = app.table('request_image', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
@@ -215,8 +229,8 @@ export const requestImage = app.table('request_image', {
 export type RequestImage = typeof requestImage.$inferSelect;
 export type NewRequestImage = typeof requestImage.$inferInsert;
 export const RequestImageSelectSchema = createSelectSchema(requestImage);
-export const RequestImageInsertSchema = createInsertSchema(requestImage);
-export const RequestImageUpdateSchema = createUpdateSchema(requestImage);
+export const RequestImageInsertSchema = v.omit(createInsertSchema(requestImage), ['id']);
+export const RequestImageUpdateSchema = v.omit(createUpdateSchema(requestImage), ['id']);
 
 export const booking = app.table('booking', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
@@ -242,8 +256,8 @@ export const booking = app.table('booking', {
 export type Booking = typeof booking.$inferSelect;
 export type NewBooking = typeof booking.$inferInsert;
 export const BookingSelectSchema = createSelectSchema(booking);
-export const BookingInsertSchema = createInsertSchema(booking);
-export const BookingUpdateSchema = createUpdateSchema(booking);
+export const BookingInsertSchema = v.omit(createInsertSchema(booking), ['id', 'createdAt', 'updatedAt']);
+export const BookingUpdateSchema = v.omit(createUpdateSchema(booking), ['id', 'createdAt', 'updatedAt']);
 
 export const address = app.table('address', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
@@ -253,8 +267,8 @@ export const address = app.table('address', {
 export type Address = typeof address.$inferSelect;
 export type NewAddress = typeof address.$inferInsert;
 export const AddressSelectSchema = createSelectSchema(address);
-export const AddressInsertSchema = createInsertSchema(address);
-export const AddressUpdateSchema = createUpdateSchema(address);
+export const AddressInsertSchema = v.omit(createInsertSchema(address), ['id']);
+export const AddressUpdateSchema = v.omit(createUpdateSchema(address), ['id']);
 
 export const message = app.table('message', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
@@ -274,8 +288,8 @@ export const message = app.table('message', {
 export type Message = typeof message.$inferSelect;
 export type NewMessage = typeof message.$inferInsert;
 export const MessageSelectSchema = createSelectSchema(message);
-export const MessageInsertSchema = createInsertSchema(message);
-export const MessageUpdateSchema = createUpdateSchema(message);
+export const MessageInsertSchema = v.omit(createInsertSchema(message), ['id', 'createdAt', 'updatedAt']);
+export const MessageUpdateSchema = v.omit(createUpdateSchema(message), ['id', 'createdAt', 'updatedAt']);
 
 export const messageImage = app.table('message_image', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
@@ -287,5 +301,5 @@ export const messageImage = app.table('message_image', {
 export type MessageImage = typeof messageImage.$inferSelect;
 export type NewMessageImage = typeof messageImage.$inferInsert;
 export const MessageImageSelectSchema = createSelectSchema(messageImage);
-export const MessageImageInsertSchema = createInsertSchema(messageImage);
-export const MessageImageUpdateSchema = createUpdateSchema(messageImage);
+export const MessageImageInsertSchema = v.omit(createInsertSchema(messageImage), ['id']);
+export const MessageImageUpdateSchema = v.omit(createUpdateSchema(messageImage), ['id']);
