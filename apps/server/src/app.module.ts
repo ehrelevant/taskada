@@ -5,6 +5,7 @@ import { auth } from './auth';
 
 import { DatabaseModule } from './database/database.module';
 import { ProvidersModule } from './providers/providers.module';
+import { ServicesModule } from './services/services.module';
 import { ServiceTypesModule } from './service-types/service-types.module';
 
 @Module({
@@ -12,7 +13,8 @@ import { ServiceTypesModule } from './service-types/service-types.module';
     DatabaseModule,
     AuthModule.forRoot({ auth }),
     ProvidersModule,
-    ServiceTypesModule
+    ServiceTypesModule,
+    ServicesModule,
   ],
 })
 export class AppModule {}

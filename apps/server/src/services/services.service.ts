@@ -1,6 +1,6 @@
-import { and, eq } from 'drizzle-orm';
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
-import { provider, service, serviceType } from '@repo/database';
+import { desc, eq } from 'drizzle-orm';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { service, serviceType } from '@repo/database';
 
 import { DatabaseService } from '../database/database.service';
 
@@ -11,43 +11,33 @@ import { UpdateServiceDto } from './dto/update-service.dto';
 export class ServicesService {
   constructor(private readonly dbService: DatabaseService) {}
 
-  async createService(userId: string, createServiceDto: CreateServiceDto) {
-    // TODO: Disallow passing of userId through DTO
-    const providers = await this.dbService.db
-      .select()
-      .from(provider)
-      .where(eq(provider.userId, userId));
-
-    if (providers.length === 0) {
-      throw new ForbiddenException('User is not a provider');
-    }
-
-    const [newService] = await this.dbService.db.insert(service).values(createServiceDto).returning();
-
+  async createService(createServiceDto: CreateServiceDto) {
+    const [newService] = await this.dbService.db
+      .insert(service)
+      .values(createServiceDto)
+      .returning();
     return newService;
   }
 
-  async getAllServices(serviceTypeId?: string, providerUserId?: string) {
-    return await this.dbService.db
+  async getServicesByProviderId(providerUserId: string) {
+    const services = await this.dbService.db
       .select({
         id: service.id,
         initialCost: service.initialCost,
         isEnabled: service.isEnabled,
-        serviceTypeName: serviceType.name,
-        serviceTypeDescription: serviceType.description,
-        serviceTypeIconUrl: serviceType.iconUrl,
-        providerUserId: provider.userId,
-        providerIsAccepting: provider.isAccepting,
+        serviceType: {
+          id: serviceType.id,
+          name: serviceType.name,
+          description: serviceType.description,
+          iconUrl: serviceType.iconUrl,
+        },
       })
       .from(service)
       .leftJoin(serviceType, eq(service.serviceTypeId, serviceType.id))
-      .leftJoin(provider, eq(service.providerUserId, provider.userId))
-      .where(
-        and(
-          serviceTypeId ? eq(service.serviceTypeId, serviceTypeId) : undefined,
-          providerUserId ? eq(service.providerUserId, providerUserId) : undefined,
-        ),
-      );
+      .where(eq(service.providerUserId, providerUserId))
+      .orderBy(desc(service.isEnabled)); // Active services first
+
+    return services;
   }
 
   async updateService(id: string, updateServiceDto: UpdateServiceDto) {
@@ -65,7 +55,10 @@ export class ServicesService {
   }
 
   async deleteService(id: string) {
-    const [deletedService] = await this.dbService.db.delete(service).where(eq(service.id, id)).returning();
+    const [deletedService] = await this.dbService.db
+      .delete(service)
+      .where(eq(service.id, id))
+      .returning();
 
     if (!deletedService) {
       throw new NotFoundException(`Service with ID ${id} not found`);
