@@ -46,6 +46,8 @@ export const UserUpdateSchema = v.omit(
 );
 
 export const roleEnum = pgEnum('role', ['provider', 'seeker', 'admin']);
+export type Role = typeof roleEnum.enumValues[number];
+
 export const userRole = app.table(
   'user_role',
   {
@@ -240,6 +242,7 @@ export const bookingStatusEnum = pgEnum('booking_status', [
   'completed',
   'cancelled',
 ]);
+export type BookingStatus = typeof bookingStatusEnum.enumValues[number];
 
 export const booking = app.table('booking', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
