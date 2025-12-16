@@ -1,5 +1,5 @@
 import * as v from 'valibot';
-import { boolean, check, integer, numeric, pgEnum, pgSchema, primaryKey, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { boolean, check, integer, jsonb, numeric, pgEnum, pgSchema, primaryKey, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-valibot';
 import { sql } from 'drizzle-orm';
 
@@ -316,3 +316,20 @@ export type NewMessageImage = typeof messageImage.$inferInsert;
 export const MessageImageSelectSchema = createSelectSchema(messageImage);
 export const MessageImageInsertSchema = v.omit(createInsertSchema(messageImage), ['id']);
 export const MessageImageUpdateSchema = v.omit(createUpdateSchema(messageImage), ['id']);
+
+export const paymentMethod = app.table('payment_method', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  userId: text('user_id').notNull(),
+  type: text('type').notNull(),
+  channelCode: text('channel_code').notNull(),
+  externalId: text('external_id').notNull(),
+  status: text('status').default('PENDING').notNull(),
+  metadata: jsonb('metadata'),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+});
+export type PaymentMethod = typeof paymentMethod.$inferSelect;
+export type NewPaymentMethod = typeof paymentMethod.$inferInsert;
+export const PaymentMethodSelectSchema = createSelectSchema(paymentMethod);
+export const PaymentMethodInsertSchema = v.omit(createInsertSchema(paymentMethod), ['id']);
+export const PaymentMethodUpdateSchema = v.omit(createUpdateSchema(paymentMethod), ['id']);
