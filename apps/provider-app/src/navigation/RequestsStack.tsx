@@ -9,11 +9,11 @@ import { TransactionTransitScreen } from '@screens/home/transaction/TransactionT
 export type RequestsStackParamList = {
   Home: undefined;
   RequestList: undefined;
-  RequestDetails: undefined;
-  BookingChat: undefined;
-  BookingDetails: undefined;
-  TransactionTransit: undefined;
-  TransactionServing: undefined;
+  RequestDetails: { requestId: string };
+  BookingChat: { bookingId: string };
+  BookingDetails: { bookingId: string };
+  TransactionTransit: { bookingId: string };
+  TransactionServing: { bookingId: string };
   TransactionDone: undefined;
 };
 
