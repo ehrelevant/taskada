@@ -4,7 +4,7 @@ import { LoadingView } from '@repo/components';
 type LoadingContextType = {
   isLoading: boolean;
   setLoading: (v: boolean) => void;
-  withLoading: <T>(fn: () => Promise<T>) => (() => Promise<T>);
+  withLoading: <T>(fn: () => Promise<T>) => () => Promise<T>;
 };
 
 const LoadingContext = createContext<LoadingContextType | undefined>(undefined);
@@ -16,7 +16,7 @@ export const LoadingProvider: React.FC<{ children: React.ReactNode }> = ({ child
     () => ({
       isLoading,
       setLoading: setIsLoading,
-      withLoading: (fn) => {
+      withLoading: fn => {
         // Wraps an async function to set loading state
         return async () => {
           setIsLoading(true);
@@ -25,17 +25,13 @@ export const LoadingProvider: React.FC<{ children: React.ReactNode }> = ({ child
           } finally {
             setIsLoading(false);
           }
-        }
+        };
       },
     }),
-    [isLoading]
+    [isLoading],
   );
 
-  return (
-    <LoadingContext.Provider value={value}>
-      {isLoading ? <LoadingView /> : children}
-    </LoadingContext.Provider>
-  );
+  return <LoadingContext.Provider value={value}>{isLoading ? <LoadingView /> : children}</LoadingContext.Provider>;
 };
 
 export function useLoading() {

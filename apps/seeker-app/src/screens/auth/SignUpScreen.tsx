@@ -38,13 +38,34 @@ export function SignUpScreen() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Typography variant="h4" style={styles.title}>Create Account</Typography>
+      <Typography variant="h4" style={styles.title}>
+        Create Account
+      </Typography>
 
       <Input label="First Name" value={firstName} onChangeText={setFirstName} containerStyle={styles.input} />
       <Input label="Last Name" value={lastName} onChangeText={setLastName} containerStyle={styles.input} />
-      <Input label="Phone Number" value={phone} onChangeText={setPhone} keyboardType="phone-pad" containerStyle={styles.input} />
-      <Input label="Email" value={email} onChangeText={setEmail} autoCapitalize="none" keyboardType="email-address" containerStyle={styles.input} />
-      <Input label="Password" value={password} onChangeText={setPassword} secureTextEntry containerStyle={styles.input} />
+      <Input
+        label="Phone Number"
+        value={phone}
+        onChangeText={setPhone}
+        keyboardType="phone-pad"
+        containerStyle={styles.input}
+      />
+      <Input
+        label="Email"
+        value={email}
+        onChangeText={setEmail}
+        autoCapitalize="none"
+        keyboardType="email-address"
+        containerStyle={styles.input}
+      />
+      <Input
+        label="Password"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+        containerStyle={styles.input}
+      />
 
       <Button title="Sign Up" onPress={handleSignUp} style={styles.button} />
 
@@ -74,5 +95,5 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: spacing.m,
-  }
+  },
 });

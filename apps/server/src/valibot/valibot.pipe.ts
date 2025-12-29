@@ -6,8 +6,7 @@ export class ValibotPipe<T extends BaseSchema<unknown, unknown, BaseIssue<unknow
   constructor(private schema: T) {}
 
   transform(value: unknown, metadata: ArgumentMetadata) {
-    if (metadata.type !== 'body')
-      return value;
+    if (metadata.type !== 'body') return value;
 
     const result = safeParse(this.schema, value);
 
@@ -16,7 +15,7 @@ export class ValibotPipe<T extends BaseSchema<unknown, unknown, BaseIssue<unknow
     }
 
     // Format error messages to be readable
-    const errorMessages = result.issues.map((issue) => issue.message).join(', ');
+    const errorMessages = result.issues.map(issue => issue.message).join(', ');
     throw new BadRequestException(errorMessages);
   }
 }

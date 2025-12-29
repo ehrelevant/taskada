@@ -34,21 +34,21 @@ export class RequestsService {
         id: request.id,
         description: request.description,
         serviceType: {
-            id: serviceType.id,
-            name: serviceType.name,
-            icon: serviceType.iconUrl
+          id: serviceType.id,
+          name: serviceType.name,
+          icon: serviceType.iconUrl,
         },
         seeker: {
-            id: seeker.userId,
-            name: user.firstName,
-            lastName: user.lastName,
-            avatar: user.avatarUrl,
-            phone: user.phoneNumber
+          id: seeker.userId,
+          name: user.firstName,
+          lastName: user.lastName,
+          avatar: user.avatarUrl,
+          phone: user.phoneNumber,
         },
         address: {
-            label: address.label,
-            coordinates: address.coordinates
-        }
+          label: address.label,
+          coordinates: address.coordinates,
+        },
       })
       .from(request)
       .innerJoin(serviceType, eq(request.serviceTypeId, serviceType.id))

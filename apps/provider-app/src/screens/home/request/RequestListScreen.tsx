@@ -11,25 +11,29 @@ const SAMPLE_REQUESTS = [
     id: '1',
     title: 'Plumbing',
     distance: 'XXXm',
-    address: 'UP Alumni Engineers Centennial Hall, P. Velasquez St., University of the Philippines Diliman, 1101 Diliman, Quezon City, Philippines',
+    address:
+      'UP Alumni Engineers Centennial Hall, P. Velasquez St., University of the Philippines Diliman, 1101 Diliman, Quezon City, Philippines',
   },
   {
     id: '2',
     title: 'Car Mechanic',
     distance: 'XXXm',
-    address: 'UP Alumni Engineers Centennial Hall, P. Velasquez St., University of the Philippines Diliman, 1101 Diliman, Quezon City, Philippines',
+    address:
+      'UP Alumni Engineers Centennial Hall, P. Velasquez St., University of the Philippines Diliman, 1101 Diliman, Quezon City, Philippines',
   },
   {
     id: '3',
     title: 'Baby Sitting',
     distance: 'XXXm',
-    address: 'UP Alumni Engineers Centennial Hall, P. Velasquez St., University of the Philippines Diliman, 1101 Diliman, Quezon City, Philippines',
+    address:
+      'UP Alumni Engineers Centennial Hall, P. Velasquez St., University of the Philippines Diliman, 1101 Diliman, Quezon City, Philippines',
   },
   {
     id: '4',
     title: 'Cleaning',
     distance: 'XXXm',
-    address: 'UP Alumni Engineers Centennial Hall, P. Velasquez St., University of the Philippines Diliman, 1101 Diliman, Quezon City, Philippines',
+    address:
+      'UP Alumni Engineers Centennial Hall, P. Velasquez St., University of the Philippines Diliman, 1101 Diliman, Quezon City, Philippines',
   },
 ];
 
@@ -59,7 +63,7 @@ export function RequestListScreen() {
 
   const requests = SAMPLE_REQUESTS;
 
-  return (isAccepting) ? (
+  return isAccepting ? (
     <View style={styles.screen}>
       <FlatList
         data={requests}
@@ -88,7 +92,8 @@ export function RequestListScreen() {
         <Image source={require('@assets/logo.png')} style={styles.logo} resizeMode="contain" />
         <View style={styles.textContainer}>
           <Typography variant="h4" style={{ textAlign: 'center' }}>
-            To start receiving requests, press <Typography weight="bold">&quot;Start Receiving Requests&quot;</Typography>.
+            To start receiving requests, press{' '}
+            <Typography weight="bold">&quot;Start Receiving Requests&quot;</Typography>.
           </Typography>
         </View>
       </View>
@@ -117,7 +122,7 @@ const styles = StyleSheet.create({
   textContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: '10%'
+    paddingHorizontal: '10%',
   },
   bottomButtonContainer: {
     position: 'absolute',
@@ -131,5 +136,5 @@ const styles = StyleSheet.create({
   },
   requestsListContainer: {
     paddingBottom: 60,
-  }
+  },
 });

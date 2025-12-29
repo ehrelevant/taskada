@@ -1,13 +1,18 @@
-import { API_URL } from "./env";
-import { authClient } from "./authClient";
+import { API_URL } from './env';
+import { authClient } from './authClient';
 
 type RequestMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
 
-export async function apiFetch(endpoint: string, method: RequestMethod = 'GET', options?: Omit<RequestInit, 'method'>, authenticated = true) {
+export async function apiFetch(
+  endpoint: string,
+  method: RequestMethod = 'GET',
+  options?: Omit<RequestInit, 'method'>,
+  authenticated = true,
+) {
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
     ...(options?.headers || {}),
-  }
+  };
 
   if (authenticated) {
     // Add authentication cookie
@@ -18,7 +23,7 @@ export async function apiFetch(endpoint: string, method: RequestMethod = 'GET', 
       method,
       headers: {
         ...headers,
-        'Cookie': cookies,
+        Cookie: cookies,
       },
       credentials: 'omit',
     });

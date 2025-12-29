@@ -26,5 +26,3 @@ export function ServicesStack() {
     </Stack.Navigator>
   );
 }
-
-

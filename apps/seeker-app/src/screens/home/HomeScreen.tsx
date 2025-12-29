@@ -15,15 +15,14 @@ const SERVICES = [
 export function HomeScreen() {
   const { data: session } = authClient.useSession();
 
-  const renderItem = ({ item }: { item: typeof SERVICES[number] }) => (
-    <TouchableOpacity
-      style={styles.gridItem}
-      onPress={() => Alert.alert('Coming Soon', `Searching for ${item.name}`)}
-    >
+  const renderItem = ({ item }: { item: (typeof SERVICES)[number] }) => (
+    <TouchableOpacity style={styles.gridItem} onPress={() => Alert.alert('Coming Soon', `Searching for ${item.name}`)}>
       <Card elevation="s" style={styles.card}>
         {/* Placeholder for Icon */}
         <View style={styles.iconPlaceholder} />
-        <Typography variant="body2" weight="medium" align="center">{item.name}</Typography>
+        <Typography variant="body2" weight="medium" align="center">
+          {item.name}
+        </Typography>
       </Card>
     </TouchableOpacity>
   );
@@ -32,13 +31,15 @@ export function HomeScreen() {
     <View style={styles.container}>
       <View style={styles.header}>
         <Typography variant="h5">Hello, {session?.user?.name?.split(' ')[0]}!</Typography>
-        <Typography variant="body2" color={colors.textSecondary}>What help do you need today?</Typography>
+        <Typography variant="body2" color={colors.textSecondary}>
+          What help do you need today?
+        </Typography>
       </View>
 
       <FlatList
         data={SERVICES}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={item => item.id}
         numColumns={3}
         contentContainerStyle={styles.listContent}
         columnWrapperStyle={styles.columnWrapper}
@@ -80,5 +81,5 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surfaceSecondary,
     borderRadius: 16,
     marginBottom: spacing.s,
-  }
+  },
 });

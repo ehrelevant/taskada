@@ -43,4 +43,3 @@ export function OptionsStack() {
     </Stack.Navigator>
   );
 }
-

@@ -1,10 +1,6 @@
 {
   "$schema": "https://turborepo.com/schema.json",
-  "globalEnv": [
-    "DATABASE_URL",
-    "EXPO_PUBLIC_API_URL",
-    "PORT"
-  ],
+  "globalEnv": ["DATABASE_URL", "EXPO_PUBLIC_API_URL", "PORT"],
   "tasks": {
     "dev": {
       "cache": false,

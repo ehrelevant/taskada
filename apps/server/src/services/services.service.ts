@@ -12,10 +12,7 @@ export class ServicesService {
   constructor(private readonly dbService: DatabaseService) {}
 
   async createService(createServiceDto: CreateServiceDto) {
-    const [newService] = await this.dbService.db
-      .insert(service)
-      .values(createServiceDto)
-      .returning();
+    const [newService] = await this.dbService.db.insert(service).values(createServiceDto).returning();
     return newService;
   }
 
@@ -55,10 +52,7 @@ export class ServicesService {
   }
 
   async deleteService(id: string) {
-    const [deletedService] = await this.dbService.db
-      .delete(service)
-      .where(eq(service.id, id))
-      .returning();
+    const [deletedService] = await this.dbService.db.delete(service).where(eq(service.id, id)).returning();
 
     if (!deletedService) {
       throw new NotFoundException(`Service with ID ${id} not found`);

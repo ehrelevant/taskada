@@ -72,5 +72,3 @@ export function RequestsStack() {
     </Stack.Navigator>
   );
 }
-
-

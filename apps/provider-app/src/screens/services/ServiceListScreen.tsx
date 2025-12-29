@@ -38,49 +38,41 @@ export function ServiceListScreen() {
   };
 
   const handleDelete = (service: ProviderService) => {
-    Alert.alert(
-      'Delete Service',
-      `Are you sure you want to remove ${service.serviceType.name}?`,
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Delete',
-          style: 'destructive',
-          onPress: async () => {
-             setServices(prev => prev.filter(s => s.id !== service.id));
+    Alert.alert('Delete Service', `Are you sure you want to remove ${service.serviceType.name}?`, [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Delete',
+        style: 'destructive',
+        onPress: async () => {
+          setServices(prev => prev.filter(s => s.id !== service.id));
 
-             try {
-                const res = await apiFetch(`/services/${service.id}`, 'DELETE');
-                if (!res.ok) throw new Error();
-             } catch {
-                Alert.alert('Error', 'Failed to delete service');
-                fetchServices(); // Revert logic by refreshing
-             }
+          try {
+            const res = await apiFetch(`/services/${service.id}`, 'DELETE');
+            if (!res.ok) throw new Error();
+          } catch {
+            Alert.alert('Error', 'Failed to delete service');
+            fetchServices(); // Revert logic by refreshing
           }
-        }
-      ]
-    );
+        },
+      },
+    ]);
   };
 
   const toggleService = async (id: string, currentStatus: boolean) => {
-    setServices((prev) =>
-      prev.map((s) => (s.id === id ? { ...s, isEnabled: !currentStatus } : s))
-    );
+    setServices(prev => prev.map(s => (s.id === id ? { ...s, isEnabled: !currentStatus } : s)));
 
     try {
       const res = await apiFetch(`/services/${id}`, 'PATCH', { body: JSON.stringify({ isEnabled: !currentStatus }) });
       if (!res.ok) throw new Error('API Error');
     } catch {
-      setServices((prev) =>
-        prev.map((s) => (s.id === id ? { ...s, isEnabled: currentStatus } : s))
-      );
+      setServices(prev => prev.map(s => (s.id === id ? { ...s, isEnabled: currentStatus } : s)));
       Alert.alert('Error', 'Failed to update service status');
     }
   };
 
   const handleCloseModal = () => {
-      setIsModalOpen(false);
-      setEditingService(null);
+    setIsModalOpen(false);
+    setEditingService(null);
   };
 
   const renderItem = ({ item }: { item: ProviderService }) => (
@@ -98,20 +90,17 @@ export function ServiceListScreen() {
 
         {/* Edit Actions */}
         <View style={styles.headerActions}>
-            <TouchableOpacity onPress={() => handleEdit(item)} style={styles.iconButton}>
-                <Pencil size={20} color={colors.textSecondary} />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleDelete(item)} style={styles.iconButton}>
-                <Trash2 size={20} color={colors.error} />
-            </TouchableOpacity>
+          <TouchableOpacity onPress={() => handleEdit(item)} style={styles.iconButton}>
+            <Pencil size={20} color={colors.textSecondary} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => handleDelete(item)} style={styles.iconButton}>
+            <Trash2 size={20} color={colors.error} />
+          </TouchableOpacity>
         </View>
       </View>
 
       <View style={styles.cardFooter}>
-        <Typography
-          variant="caption"
-          color={item.isEnabled ? colors.success : colors.textDisabled}
-        >
+        <Typography variant="caption" color={item.isEnabled ? colors.success : colors.textDisabled}>
           {item.isEnabled ? 'Active' : 'Disabled'}
         </Typography>
         <Switch
@@ -129,7 +118,7 @@ export function ServiceListScreen() {
       <FlatList
         data={services}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={item => item.id}
         contentContainerStyle={styles.listContent}
         refreshing={isRefreshing}
         onRefresh={() => {
@@ -138,9 +127,7 @@ export function ServiceListScreen() {
         }}
         ListEmptyComponent={
           <View style={styles.emptyState}>
-            <Typography color={colors.textSecondary}>
-              No services added yet. Tap + to start.
-            </Typography>
+            <Typography color={colors.textSecondary}>No services added yet. Tap + to start.</Typography>
           </View>
         }
       />
@@ -148,8 +135,8 @@ export function ServiceListScreen() {
       <TouchableOpacity
         style={styles.fab}
         onPress={() => {
-            setEditingService(null);
-            setIsModalOpen(true);
+          setEditingService(null);
+          setIsModalOpen(true);
         }}
         activeOpacity={0.8}
       >
@@ -196,12 +183,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   headerActions: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: spacing.s,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.s,
   },
   iconButton: {
-      padding: 8,
+    padding: 8,
   },
   cardFooter: {
     flexDirection: 'row',

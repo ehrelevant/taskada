@@ -20,7 +20,7 @@ export function SignInScreen() {
   const handleSignIn = withLoading(async () => {
     const { error } = await authClient.signIn.email({
       email,
-      password
+      password,
     });
 
     if (error) {
@@ -30,7 +30,9 @@ export function SignInScreen() {
 
   return (
     <View style={styles.container}>
-      <Typography variant="h3" style={styles.title}>Welcome Back!</Typography>
+      <Typography variant="h3" style={styles.title}>
+        Welcome Back!
+      </Typography>
 
       <Input
         label="Email"
@@ -80,5 +82,5 @@ const styles = StyleSheet.create({
   },
   link: {
     marginTop: spacing.s,
-  }
+  },
 });

@@ -25,14 +25,14 @@ export function DashboardTabs() {
         name="Home"
         component={HomeScreen}
         options={{
-          tabBarIcon: ({ color, size }) => <Home color={color} size={size} />
+          tabBarIcon: ({ color, size }) => <Home color={color} size={size} />,
         }}
       />
       <Tab.Screen
         name="Profile"
         component={ProfileScreen}
         options={{
-          tabBarIcon: ({ color, size }) => <User color={color} size={size} />
+          tabBarIcon: ({ color, size }) => <User color={color} size={size} />,
         }}
       />
     </Tab.Navigator>

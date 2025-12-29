@@ -44,7 +44,7 @@ export function SignInScreen() {
       // Means provider does not exist, create one
       const createProviderResponse = await apiFetch('/providers', 'POST');
       const newProviderData = await createProviderResponse.json();
-      console.log(newProviderData)
+      console.log(newProviderData);
     }
   });
 

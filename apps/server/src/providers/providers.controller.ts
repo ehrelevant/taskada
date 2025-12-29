@@ -12,9 +12,7 @@ export class ProvidersController {
   constructor(private readonly providersService: ProvidersService) {}
 
   @Get()
-  async getProviderForUser(
-    @Session() { user: { id: userId } }: UserSession,
-  ) {
+  async getProviderForUser(@Session() { user: { id: userId } }: UserSession) {
     return await this.providersService.getProviderByUserId(userId);
   }
 
@@ -22,22 +20,18 @@ export class ProvidersController {
   @UsePipes(new ValibotPipe(ProviderInsertSchema))
   async createProviderForUser(
     @Session() { user: { id: userId } }: UserSession,
-    @Body() createProviderDto: CreateProviderDto
+    @Body() createProviderDto: CreateProviderDto,
   ) {
     return await this.providersService.createProvider(userId, createProviderDto);
   }
 
   @Put('enable')
-  async enableProvider(
-    @Session() { user: { id: userId } }: UserSession,
-  ) {
+  async enableProvider(@Session() { user: { id: userId } }: UserSession) {
     return await this.providersService.updateProvider(userId, { isAccepting: true });
   }
 
   @Put('disable')
-  async disableProvider(
-    @Session() { user: { id: userId } }: UserSession,
-  ) {
+  async disableProvider(@Session() { user: { id: userId } }: UserSession) {
     return await this.providersService.updateProvider(userId, { isAccepting: false });
   }
 }

@@ -69,8 +69,8 @@ export function AddServiceModal({ visible, serviceToEdit, onClose, onSuccess }: 
         setValue('initialCost', String(serviceToEdit.initialCost));
       } else {
         reset({
-            serviceTypeId: '',
-            initialCost: ''
+          serviceTypeId: '',
+          initialCost: '',
         });
       }
 
@@ -78,10 +78,10 @@ export function AddServiceModal({ visible, serviceToEdit, onClose, onSuccess }: 
       if (serviceTypes.length === 0) {
         setIsLoadingTypes(true);
         apiFetch('/service-types', 'GET')
-            .then((res) => res.json())
-            .then((data) => setServiceTypes(data))
-            .catch((err) => console.error('Failed to load types:', err))
-            .finally(() => setIsLoadingTypes(false));
+          .then(res => res.json())
+          .then(data => setServiceTypes(data))
+          .catch(err => console.error('Failed to load types:', err))
+          .finally(() => setIsLoadingTypes(false));
       }
     }
   }, [visible, serviceToEdit, setValue, reset, serviceTypes.length]);
@@ -97,7 +97,7 @@ export function AddServiceModal({ visible, serviceToEdit, onClose, onSuccess }: 
 
       if (isEditing && serviceToEdit) {
         res = await apiFetch(`/services/${serviceToEdit.id}`, 'PATCH', {
-            body: JSON.stringify(payload)
+          body: JSON.stringify(payload),
         });
       } else {
         res = await apiFetch('/services', 'POST', {
@@ -140,29 +140,26 @@ export function AddServiceModal({ visible, serviceToEdit, onClose, onSuccess }: 
                   name="serviceTypeId"
                   render={({ field: { onChange, value } }) => (
                     <View style={styles.typeList}>
-                      {serviceTypes.map((type) => {
+                      {serviceTypes.map(type => {
                         const isSelected = value === type.id;
                         const isDisabled = isEditing && !isSelected;
 
                         return (
-                        <TouchableOpacity
-                          key={type.id}
-                          onPress={() => !isDisabled && onChange(type.id)}
-                          style={[
-                            styles.chip,
-                            isSelected && styles.chipSelected,
-                            isDisabled && styles.chipDisabled
-                          ]}
-                          disabled={isDisabled}
-                        >
-                          <Typography
-                            variant="caption"
-                            color={isSelected ? colors.white : (isDisabled ? colors.textDisabled : colors.textPrimary)}
+                          <TouchableOpacity
+                            key={type.id}
+                            onPress={() => !isDisabled && onChange(type.id)}
+                            style={[styles.chip, isSelected && styles.chipSelected, isDisabled && styles.chipDisabled]}
+                            disabled={isDisabled}
                           >
-                            {type.name}
-                          </Typography>
-                        </TouchableOpacity>
-                      )})}
+                            <Typography
+                              variant="caption"
+                              color={isSelected ? colors.white : isDisabled ? colors.textDisabled : colors.textPrimary}
+                            >
+                              {type.name}
+                            </Typography>
+                          </TouchableOpacity>
+                        );
+                      })}
                     </View>
                   )}
                 />
@@ -205,7 +202,7 @@ export function AddServiceModal({ visible, serviceToEdit, onClose, onSuccess }: 
               style={styles.button}
             />
             <Button
-              title={isEditing ? "Save Changes" : "Add Service"}
+              title={isEditing ? 'Save Changes' : 'Add Service'}
               onPress={handleSubmit(onSubmit)}
               isLoading={isSubmitting}
               style={styles.button}

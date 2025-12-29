@@ -13,9 +13,5 @@ export function RootNavigator() {
     return <LoadingView />;
   }
 
-  return (
-    <NavigationContainer>
-      {session ? <DashboardTabs /> : <AuthStack />}
-    </NavigationContainer>
-  );
+  return <NavigationContainer>{session ? <DashboardTabs /> : <AuthStack />}</NavigationContainer>;
 }

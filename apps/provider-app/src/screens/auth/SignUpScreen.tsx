@@ -50,7 +50,7 @@ export function SignUpScreen() {
 
     const createProviderResponse = await apiFetch('/providers', 'POST');
     const newProviderData: Provider | null = await createProviderResponse.json();
-    console.log(newProviderData)
+    console.log(newProviderData);
 
     setLoading(false);
   };

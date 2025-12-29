@@ -1,9 +1,7 @@
 import { StyleSheet, View } from 'react-native';
 
 export function BookingChatScreen() {
-  return (
-    <View></View>
-  )
+  return <View></View>;
 }
 
 const _ = StyleSheet.create({});

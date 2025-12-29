@@ -1,5 +1,17 @@
 import * as v from 'valibot';
-import { boolean, check, integer, jsonb, numeric, pgEnum, pgSchema, primaryKey, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import {
+  boolean,
+  check,
+  integer,
+  jsonb,
+  numeric,
+  pgEnum,
+  pgSchema,
+  primaryKey,
+  text,
+  timestamp,
+  uuid,
+} from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-valibot';
 import { sql } from 'drizzle-orm';
 
@@ -42,11 +54,11 @@ export const UserUpdateSchema = v.omit(
   createUpdateSchema(user, {
     email: v.optional(v.pipe(v.string(), v.email())),
   }),
-  ['id', 'createdAt', 'updatedAt']
+  ['id', 'createdAt', 'updatedAt'],
 );
 
 export const roleEnum = pgEnum('role', ['provider', 'seeker', 'admin']);
-export type Role = typeof roleEnum.enumValues[number];
+export type Role = (typeof roleEnum.enumValues)[number];
 
 export const userRole = app.table(
   'user_role',
@@ -242,7 +254,7 @@ export const bookingStatusEnum = pgEnum('booking_status', [
   'completed',
   'cancelled',
 ]);
-export type BookingStatus = typeof bookingStatusEnum.enumValues[number];
+export type BookingStatus = (typeof bookingStatusEnum.enumValues)[number];
 
 export const booking = app.table('booking', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),

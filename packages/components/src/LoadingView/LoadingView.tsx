@@ -1,6 +1,6 @@
-import { ActivityIndicator, StyleSheet } from "react-native";
-import { colors } from "@repo/theme";
-import { View } from "react-native";
+import { ActivityIndicator, StyleSheet } from 'react-native';
+import { colors } from '@repo/theme';
+import { View } from 'react-native';
 
 export function LoadingView() {
   return (

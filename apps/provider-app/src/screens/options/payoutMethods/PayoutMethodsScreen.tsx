@@ -1,5 +1,5 @@
-import { Button } from "@repo/components";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Button } from '@repo/components';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export function PayoutMethodsScreen() {
   return (

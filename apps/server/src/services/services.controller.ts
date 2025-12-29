@@ -20,10 +20,7 @@ export class ServicesController {
 
   @Post()
   @UsePipes(new ValibotPipe(omit(ServiceInsertSchema, ['providerUserId'])))
-  async createService(
-    @Session() { user }: UserSession,
-    @Body() createServiceDto: CreateServiceDto,
-  ) {
+  async createService(@Session() { user }: UserSession, @Body() createServiceDto: CreateServiceDto) {
     // Force the providerUserId to match the authenticated session
     return await this.servicesService.createService({
       ...createServiceDto,
@@ -33,10 +30,7 @@ export class ServicesController {
 
   @Patch(':id')
   @UsePipes(new ValibotPipe(ServiceUpdateSchema))
-  async updateService(
-    @Param('id') id: string,
-    @Body() updateServiceDto: UpdateServiceDto,
-  ) {
+  async updateService(@Param('id') id: string, @Body() updateServiceDto: UpdateServiceDto) {
     return await this.servicesService.updateService(id, updateServiceDto);
   }
 

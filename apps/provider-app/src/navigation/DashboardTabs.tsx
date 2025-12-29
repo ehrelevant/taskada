@@ -23,10 +23,10 @@ function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
         const { options } = descriptors[route.key];
         const label =
           options.tabBarLabel !== undefined
-          ? options.tabBarLabel
-          : options.title !== undefined
-            ? options.title
-            : route.name
+            ? options.tabBarLabel
+            : options.title !== undefined
+              ? options.title
+              : route.name;
 
         const isFocused = state.index === index;
 
@@ -40,20 +40,20 @@ function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
           if (!isFocused && !event.defaultPrevented) {
             navigation.navigate(route.name, route.params);
           }
-        }
+        };
 
         const renderIcon = () => {
           const iconProps = {
             size: 24,
             color: isFocused ? colors.actionPrimary : palette.gray500,
-            strokeWidth: 2
+            strokeWidth: 2,
           };
 
           if (route.name === 'RequestsStack') {
             return <ClipboardList {...iconProps} />;
           } else if (route.name === 'ServicesStack') {
             return <HardHat {...iconProps} />;
-          } else  {
+          } else {
             return <Menu {...iconProps} />;
           }
         };
@@ -87,7 +87,11 @@ function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
 
 export function DashboardTabs() {
   return (
-    <Tab.Navigator tabBar={(props) => <TabBar {...props} />} screenOptions={{ headerShown: false }} initialRouteName="RequestsStack">
+    <Tab.Navigator
+      tabBar={props => <TabBar {...props} />}
+      screenOptions={{ headerShown: false }}
+      initialRouteName="RequestsStack"
+    >
       <Tab.Screen name="RequestsStack" component={RequestsStack} options={{ title: 'Requests' }} />
       <Tab.Screen name="ServicesStack" component={ServicesStack} options={{ title: 'Services' }} />
       <Tab.Screen name="OptionsStack" component={OptionsStack} options={{ title: 'Options' }} />
@@ -102,7 +106,7 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     backgroundColor: colors.backgroundSecondary,
     borderTopColor: colors.border,
-    borderTopWidth: 2
+    borderTopWidth: 2,
   },
   tabButton: {
     flex: 1,

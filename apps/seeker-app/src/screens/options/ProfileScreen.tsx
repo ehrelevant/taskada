@@ -18,8 +18,12 @@ export function ProfileScreen() {
             {session?.user?.name?.charAt(0)}
           </Typography>
         </View>
-        <Typography variant="h5" style={styles.name}>{session?.user?.name}</Typography>
-        <Typography variant="body2" color={colors.textSecondary}>{session?.user?.email}</Typography>
+        <Typography variant="h5" style={styles.name}>
+          {session?.user?.name}
+        </Typography>
+        <Typography variant="body2" color={colors.textSecondary}>
+          {session?.user?.email}
+        </Typography>
       </View>
 
       <View style={styles.actions}>
@@ -53,5 +57,5 @@ const styles = StyleSheet.create({
   },
   actions: {
     marginTop: 'auto',
-  }
+  },
 });
