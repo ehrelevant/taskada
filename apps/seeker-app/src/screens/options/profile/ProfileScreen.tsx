@@ -1,14 +1,10 @@
 import { authClient } from '@lib/authClient';
-import { Button, Typography } from '@repo/components';
 import { colors, spacing } from '@repo/theme';
 import { StyleSheet, View } from 'react-native';
+import { Typography } from '@repo/components';
 
 export function ProfileScreen() {
   const { data: session } = authClient.useSession();
-
-  const handleSignOut = async () => {
-    await authClient.signOut();
-  };
 
   return (
     <View style={styles.container}>
@@ -24,10 +20,6 @@ export function ProfileScreen() {
         <Typography variant="body2" color={colors.textSecondary}>
           {session?.user?.email}
         </Typography>
-      </View>
-
-      <View style={styles.actions}>
-        <Button title="Sign Out" variant="outline" onPress={handleSignOut} />
       </View>
     </View>
   );
@@ -59,3 +51,4 @@ const styles = StyleSheet.create({
     marginTop: 'auto',
   },
 });
+
