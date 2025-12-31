@@ -1,9 +1,11 @@
-import { Alert, StyleSheet, View } from 'react-native';
+import { apiFetch } from '@lib/helpers';
 import { authClient } from '@lib/authClient';
 import { AuthStackParamList } from '@navigation/AuthStack';
 import { Button, Input, Typography } from '@repo/components';
-import { colors, spacing } from '@repo/theme';
+import { colors } from '@repo/theme';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { Pressable, StyleSheet, Text } from 'react-native';
 import { useLoading } from '@contexts/LoadingContext';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
@@ -13,74 +15,74 @@ type SignInNavProp = NativeStackNavigationProp<AuthStackParamList, 'SignIn'>;
 export function SignInScreen() {
   const navigation = useNavigation<SignInNavProp>();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const { withLoading } = useLoading();
 
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
   const handleSignIn = withLoading(async () => {
-    const { error } = await authClient.signIn.email({
+    setErrorMessage('');
+
+    const { data: userData, error } = await authClient.signIn.email({
       email,
       password,
     });
 
-    if (error) {
-      Alert.alert('Sign In Failed', error.message);
+    console.log(userData);
+
+    if (error !== null || userData === null) {
+      console.log(error);
+      setErrorMessage(error.message ?? '');
+      return;
+    }
+
+    const seekerResponse = await apiFetch(`/seekers`);
+
+    if (seekerResponse.status === 404) {
+      // Means seeker does not exist, create one
+      const createSeekerResponse = await apiFetch('/seekers', 'POST');
+      const newSeekerData = await createSeekerResponse.json();
+      console.log(newSeekerData);
     }
   });
 
   return (
-    <View style={styles.container}>
-      <Typography variant="h3" style={styles.title}>
-        Welcome Back!
-      </Typography>
-
-      <Input
-        label="Email"
-        value={email}
-        onChangeText={setEmail}
-        autoCapitalize="none"
-        keyboardType="email-address"
-        containerStyle={styles.input}
-      />
+    <KeyboardAwareScrollView contentContainerStyle={styles.scrollContainer}>
+      <Input label="Email" placeholder="Email" autoComplete="email" value={email} onChangeText={setEmail} />
       <Input
         label="Password"
+        placeholder="Password"
+        autoComplete="new-password"
         value={password}
         onChangeText={setPassword}
         secureTextEntry
-        containerStyle={styles.input}
       />
 
-      <Button title="Sign In" onPress={handleSignIn} style={styles.button} />
+      {errorMessage !== '' && (
+        <Typography variant="body1" color={colors.error}>
+          {errorMessage}
+        </Typography>
+      )}
 
-      <Button
-        title="Create an account"
-        variant="text"
-        onPress={() => navigation.navigate('SignUp')}
-        style={styles.link}
-      />
-    </View>
+      <Button title="Sign In" onPress={handleSignIn} />
+
+      <Pressable onPress={() => navigation.replace('SignUp')}>
+        <Typography variant="subtitle1">
+          Don&apos;t have an account? <Text style={{ textDecorationLine: 'underline' }}>Sign Up</Text>
+        </Typography>
+      </Pressable>
+    </KeyboardAwareScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: spacing.l,
+  scrollContainer: {
+    flexGrow: 1,
     justifyContent: 'center',
-    backgroundColor: colors.background,
-  },
-  title: {
-    textAlign: 'center',
-    marginBottom: spacing.xl,
-    color: colors.actionPrimary,
-  },
-  input: {
-    marginBottom: spacing.m,
-  },
-  button: {
-    marginTop: spacing.m,
-  },
-  link: {
-    marginTop: spacing.s,
+    alignItems: 'center',
+    gap: 10,
+    paddingHorizontal: 10,
   },
 });

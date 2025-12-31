@@ -1,7 +1,6 @@
+import { authClient } from '@lib/authClient';
 import { LoadingView } from '@repo/components';
 import { NavigationContainer } from '@react-navigation/native';
-
-import { authClient } from '../../lib/authClient';
 
 import { AuthStack } from './AuthStack';
 import { DashboardTabs } from './DashboardTabs';
