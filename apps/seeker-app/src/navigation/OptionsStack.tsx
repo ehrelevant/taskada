@@ -1,3 +1,5 @@
+import { AddCardScreen } from '@screens/options/paymentMethods/AddCardScreen';
+import { AddEWalletScreen } from '@screens/options/paymentMethods/AddEWalletScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { OptionsScreen } from '@screens/options/OptionsScreen';
 import { PaymentMethodsScreen } from '@screens/options/paymentMethods/PaymentMethodsScreen';
@@ -8,6 +10,8 @@ export type OptionsStackParamList = {
   Options: undefined;
   Profile: undefined;
   PaymentMethods: undefined;
+  AddCard: undefined;
+  AddEWallet: undefined;
   TransactionHistory: undefined;
 };
 
@@ -24,30 +28,32 @@ export function OptionsStack() {
       <Stack.Screen
         name="Options"
         component={OptionsScreen}
-        options={{
-          title: 'Options',
-        }}
+        options={{ title: 'Options' }}
       />
       <Stack.Screen
         name="Profile"
         component={ProfileScreen}
-        options={{
-          title: 'Profile',
-        }}
+        options={{ title: 'Profile' }}
       />
       <Stack.Screen
         name="PaymentMethods"
         component={PaymentMethodsScreen}
-        options={{
-          title: 'Payment Methods',
-        }}
+        options={{ title: 'Payment Methods' }}
+      />
+      <Stack.Screen
+        name="AddCard"
+        component={AddCardScreen}
+        options={{ title: 'Add Card' }}
+      />
+      <Stack.Screen
+        name="AddEWallet"
+        component={AddEWalletScreen}
+        options={{ title: 'Add E-Wallet' }}
       />
       <Stack.Screen
         name="TransactionHistory"
         component={TransactionHistoryScreen}
-        options={{
-          title: 'Transaction History',
-        }}
+        options={{ title: 'Transaction History' }}
       />
     </Stack.Navigator>
   );
