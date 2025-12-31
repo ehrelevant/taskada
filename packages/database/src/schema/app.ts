@@ -330,13 +330,15 @@ export const MessageImageInsertSchema = v.omit(createInsertSchema(messageImage),
 export const MessageImageUpdateSchema = v.omit(createUpdateSchema(messageImage), ['id']);
 
 export const paymentMethod = app.table('payment_method', {
-  id: uuid('id').primaryKey().defaultRandom(),
-  userId: text('user_id').notNull(),
+  id: uuid('id').primaryKey().notNull().defaultRandom(),
+  userId: uuid('user_id')
+    .notNull()
+    .references(() => user.id, { onUpdate: 'cascade', onDelete: 'cascade' }),
   type: text('type').notNull(),
   channelCode: text('channel_code').notNull(),
   externalId: text('external_id').notNull(),
   status: text('status').default('PENDING').notNull(),
-  metadata: jsonb('metadata'),
+  metadata: jsonb('metadata').$type<Record<string, unknown>>(),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
 });
