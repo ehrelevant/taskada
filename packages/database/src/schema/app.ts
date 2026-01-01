@@ -30,6 +30,7 @@ export const user = app.table(
     phoneNumber: text('phone_number').unique().notNull(),
     avatarUrl: text('avatar_url'),
     emailVerified: boolean('email_verified').notNull().default(false),
+    xenditCustomerId: text('xendit_customer_id').unique(),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true })
       .notNull()
