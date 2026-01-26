@@ -10,11 +10,13 @@ import { RequestsModule } from './requests/requests.module';
 import { SeekersModule } from './seekers/seekers.module';
 import { ServicesModule } from './services/services.module';
 import { ServiceTypesModule } from './service-types/service-types.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
     DatabaseModule,
     AuthModule.forRoot({ auth }),
+    UsersModule,
     ProvidersModule,
     SeekersModule,
     ServiceTypesModule,

@@ -41,6 +41,7 @@ export function OptionsScreen() {
           title="Manage Profile"
           variant="outline"
           style={styles.button}
+          onPress={() => navigation.navigate('Profile')}
           leftIcon={<UserPen size={24} color={colors.actionPrimary} />}
         />
         <Button
