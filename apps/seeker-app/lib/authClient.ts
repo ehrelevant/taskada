@@ -10,8 +10,8 @@ export const authClient = createAuthClient({
   baseURL: API_URL,
   plugins: [
     expoClient({
-      scheme: 'provider-app',
-      storagePrefix: 'provider-app',
+      scheme: 'seeker-app',
+      storagePrefix: 'seeker-app',
       storage: SecureStore,
     }),
     inferAdditionalFields({
