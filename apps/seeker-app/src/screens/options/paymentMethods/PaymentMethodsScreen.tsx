@@ -24,38 +24,39 @@ export function PaymentMethodsScreen() {
         {/* Saved Payment Methods List */}
         <Typography variant="h5" style={styles.sectionTitle}>Saved Methods</Typography>
 
-        {SAVED_METHODS.length > 0 ? (
-          SAVED_METHODS.map((method) => (
-            <Card key={method.id} style={styles.methodCard} padding="m">
-              <View style={styles.methodInfo}>
-                <View style={styles.iconContainer}>
-                  {method.type === 'CARD' ? (
-                    <CreditCard color={colors.textPrimary} size={24} />
-                  ) : (
-                    <Wallet color={colors.textPrimary} size={24} />
-                  )}
+        <View style={styles.savedMethodsContainer}>
+          {SAVED_METHODS.length > 0 ? (
+            SAVED_METHODS.map((method) => (
+              <Card key={method.id} style={styles.methodCard} padding="m">
+                <View style={styles.methodInfo}>
+                  <View style={styles.iconContainer}>
+                    {method.type === 'CARD' ? (
+                      <CreditCard color={colors.textPrimary} size={24} />
+                    ) : (
+                      <Wallet color={colors.textPrimary} size={24} />
+                    )}
+                  </View>
+                  <Typography variant="body1" weight="medium">
+                    {method.label}
+                  </Typography>
                 </View>
-                <Typography variant="body1" weight="medium">
-                  {method.label}
-                </Typography>
-              </View>
-              <TouchableOpacity>
-                <Trash2 color={colors.error} size={20} />
-              </TouchableOpacity>
-            </Card>
-          ))
-        ) : (
-          <View style={styles.emptyState}>
-             <Typography color={colors.textSecondary}>No payment methods added yet.</Typography>
-          </View>
-        )}
+                <TouchableOpacity>
+                  <Trash2 color={colors.error} size={20} />
+                </TouchableOpacity>
+              </Card>
+            ))
+          ) : (
+            <View style={styles.emptyState}>
+              <Typography color={colors.textSecondary}>No payment methods added yet.</Typography>
+            </View>
+          )}
+        </View>
 
         {/* Add New Payment Method */}
         <Typography variant="h5" style={styles.sectionTitle}>Add Payment Method</Typography>
 
         <View style={styles.actionsContainer}>
           <TouchableOpacity
-            style={styles.actionButton}
             onPress={() => navigation.navigate('AddCard')}
           >
             <Card style={styles.actionCard} padding="m">
@@ -71,7 +72,6 @@ export function PaymentMethodsScreen() {
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={styles.actionButton}
             onPress={() => navigation.navigate('AddEWallet')}
           >
             <Card style={styles.actionCard} padding="m">
@@ -104,8 +104,10 @@ const styles = StyleSheet.create({
     marginTop: spacing.s,
     marginLeft: spacing.xs,
   },
+  savedMethodsContainer: {
+    gap: spacing.s,
+  },
   methodCard: {
-    marginBottom: spacing.s,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -132,10 +134,7 @@ const styles = StyleSheet.create({
     marginBottom: spacing.l,
   },
   actionsContainer: {
-    gap: spacing.m,
-  },
-  actionButton: {
-    marginBottom: spacing.xs,
+    gap: spacing.s,
   },
   actionCard: {
     flexDirection: 'row',
