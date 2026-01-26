@@ -44,10 +44,10 @@ export function OptionsScreen() {
           leftIcon={<UserPen size={24} color={colors.actionPrimary} />}
         />
         <Button
-          title="Manage Payout Methods"
+          title="Manage Payment Methods"
           variant="outline"
           style={styles.button}
-          onPress={() => navigation.navigate('PayoutMethods')}
+          onPress={() => navigation.navigate('PaymentMethods')}
           leftIcon={<CreditCard size={24} color={colors.actionPrimary} />}
         />
         <Button

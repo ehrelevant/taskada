@@ -1,12 +1,16 @@
+import { AddCardScreen } from '@screens/options/paymentMethods/AddCardScreen';
+import { AddEWalletScreen } from '@screens/options/paymentMethods/AddEWalletScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { OptionsScreen } from '@screens/options/OptionsScreen';
-import { PayoutMethodsScreen } from '@screens/options/payoutMethods/PayoutMethodsScreen';
+import { PaymentMethodsScreen } from '@screens/options/paymentMethods/PaymentMethodsScreen';
 import { ProfileScreen } from '@screens/options/profile/ProfileScreen';
 
 export type OptionsStackParamList = {
   Options: undefined;
   Profile: undefined;
-  PayoutMethods: undefined;
+  PaymentMethods: undefined;
+  AddCard: undefined;
+  AddEWallet: undefined;
 };
 
 const Stack = createNativeStackNavigator<OptionsStackParamList>();
@@ -34,11 +38,21 @@ export function OptionsStack() {
         }}
       />
       <Stack.Screen
-        name="PayoutMethods"
-        component={PayoutMethodsScreen}
+        name="PaymentMethods"
+        component={PaymentMethodsScreen}
         options={{
-          title: 'Payout Methods',
+          title: 'Payment Methods',
         }}
+      />
+      <Stack.Screen
+        name="AddCard"
+        component={AddCardScreen}
+        options={{ title: 'Add Card' }}
+      />
+      <Stack.Screen
+        name="AddEWallet"
+        component={AddEWalletScreen}
+        options={{ title: 'Add E-Wallet' }}
       />
     </Stack.Navigator>
   );
