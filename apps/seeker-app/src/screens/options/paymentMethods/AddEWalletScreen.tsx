@@ -5,9 +5,13 @@ import { Check } from 'lucide-react-native';
 import { colors, spacing } from '@repo/theme';
 import { Controller, useForm } from 'react-hook-form';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { OptionsStackParamList } from '@navigation/OptionsStack';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import { valibotResolver } from '@hookform/resolvers/valibot';
+
+type NavProp = NativeStackNavigationProp<OptionsStackParamList, 'AddEWallet'>;
 
 const WALLETS = [
   { id: 'GCASH', name: 'GCash', color: '#007DFE' },
@@ -18,14 +22,14 @@ const eWalletSchema = v.object({
   channelCode: v.string('Please select a wallet'),
   phoneNumber: v.pipe(
     v.string(),
-    v.regex(/^(09|\+639)\d{9}$/, 'Invalid PH phone number (e.g., 0917...)')
+    v.regex(/^(09|\+639)\d{9}$/, 'Invalid PH phone number (e.g., 0917...)'),
   ),
 });
 
 type EWalletFormData = v.InferOutput<typeof eWalletSchema>;
 
 export function AddEWalletScreen() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavProp>();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
@@ -63,7 +67,9 @@ export function AddEWalletScreen() {
   return (
     <View style={styles.container}>
       <KeyboardAwareScrollView contentContainerStyle={styles.scrollContent}>
-        <Typography variant="h5" style={styles.sectionTitle}>Select Wallet</Typography>
+        <Typography variant="h5" style={styles.sectionTitle}>
+          Select Wallet
+        </Typography>
 
         <View style={styles.walletGrid}>
           {WALLETS.map((wallet) => {
@@ -76,27 +82,40 @@ export function AddEWalletScreen() {
                 style={styles.walletTouch}
               >
                 <Card
-                  style={[styles.walletCard, isSelected && styles.walletCardSelected]}
+                  style={[
+                    styles.walletCard,
+                    isSelected && styles.walletCardSelected,
+                  ]}
                   padding="m"
                 >
-                   {/* In a real app, use proper SVGs or Images for logos */}
-                   <View style={[styles.placeholderLogo, { backgroundColor: wallet.color }]}>
-                     <Typography variant="caption" color="white" weight="bold">{wallet.name[0]}</Typography>
-                   </View>
-                   <Typography weight={isSelected ? "bold" : "regular"}>{wallet.name}</Typography>
+                  <View
+                    style={[
+                      styles.placeholderLogo,
+                      { backgroundColor: wallet.color },
+                    ]}
+                  >
+                    <Typography variant="caption" color="white" weight="bold">
+                      {wallet.name[0]}
+                    </Typography>
+                  </View>
+                  <Typography weight={isSelected ? 'bold' : 'regular'}>
+                    {wallet.name}
+                  </Typography>
 
-                   {isSelected && (
-                     <View style={styles.checkIcon}>
-                       <Check size={16} color={colors.white} />
-                     </View>
-                   )}
+                  {isSelected && (
+                    <View style={styles.checkIcon}>
+                      <Check size={16} color={colors.white} />
+                    </View>
+                  )}
                 </Card>
               </TouchableOpacity>
             );
           })}
         </View>
 
-        <Typography variant="h5" style={styles.sectionTitle}>Account Details</Typography>
+        <Typography variant="h5" style={styles.sectionTitle}>
+          Account Details
+        </Typography>
 
         <Controller
           control={control}
