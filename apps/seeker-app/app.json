@@ -23,7 +23,12 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.taskada.seeker"
+      "package": "com.taskada.seeker",
+      "config": {
+        "googleMaps": {
+          "apiKey": "process.env.GOOGLE_MAPS_API_KEY"
+        }
+      }
     },
     "web": {
       "favicon": "./lib/assets/favicon.png",
