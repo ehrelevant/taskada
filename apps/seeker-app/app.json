@@ -42,7 +42,6 @@
           "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
         }
       ],
-      "expo-maps",
       "expo-web-browser"
     ]
   }
