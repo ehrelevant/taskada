@@ -1,6 +1,6 @@
 {
   "$schema": "https://turborepo.com/schema.json",
-  "globalEnv": ["DATABASE_URL", "XENDIT_SECRET_KEY", "EXPO_PUBLIC_API_URL", "PORT"],
+  "globalEnv": ["DATABASE_URL", "XENDIT_SECRET_KEY", "EXPO_PUBLIC_API_URL", "PORT", "GOOGLE_MAPS_API_KEY", "EXPO_PUBLIC_GOOGLE_MAPS_API_KEY"],
   "tasks": {
     "dev": {
       "cache": false,
