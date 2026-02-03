@@ -1,15 +1,22 @@
-import { ActivityIndicator, ScrollView, StyleSheet, View } from 'react-native';
-import { Avatar, Rating, ReviewCard, Typography } from '@repo/components';
+import { ActivityIndicator, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Avatar, Button, Rating, ReviewCard, Typography } from '@repo/components';
+import { Check } from 'lucide-react-native';
 import { colors, spacing } from '@repo/theme';
 import { getServiceDetails, getServiceReviews, type Review, type ServiceDetails } from '@lib/helpers';
-import { RouteProp, useRoute } from '@react-navigation/native';
+import { HomeStackParamList } from '@navigation/HomeStack';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
 
-type ServiceDetailsRouteProp = RouteProp<{ ServiceDetails: { serviceId: string } }, 'ServiceDetails'>;
+type ServiceDetailsRouteProp = RouteProp<
+  { ServiceDetails: { serviceId: string; returnTo?: 'RequestForm' } },
+  'ServiceDetails'
+>;
 
 export function ServiceDetailsScreen() {
   const route = useRoute<ServiceDetailsRouteProp>();
-  const { serviceId } = route.params;
+  const navigation = useNavigation<NativeStackNavigationProp<HomeStackParamList>>();
+  const { serviceId, returnTo } = route.params;
 
   const [details, setDetails] = useState<ServiceDetails | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
@@ -34,6 +41,29 @@ export function ServiceDetailsScreen() {
 
     loadData();
   }, [serviceId]);
+
+  useEffect(() => {
+    if (returnTo === 'RequestForm' && details) {
+      navigation.setOptions({
+        headerRight: () => (
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('RequestForm', {
+                serviceTypeId: details.serviceTypeId,
+                serviceId,
+              });
+            }}
+            style={styles.headerButton}
+          >
+            <Check size={20} color={colors.actionPrimary} />
+            <Typography variant="body2" color="actionPrimary" weight="medium">
+              Use This
+            </Typography>
+          </TouchableOpacity>
+        ),
+      });
+    }
+  }, [returnTo, details, serviceId, navigation]);
 
   if (loading) {
     return (
@@ -77,6 +107,16 @@ export function ServiceDetailsScreen() {
         <Typography variant="body1" color="textSecondary" style={{ marginTop: spacing.s }}>
           ${details.initialCost.toFixed(2)}
         </Typography>
+        <Button
+          title={returnTo === 'RequestForm' ? 'Select This Service' : 'Request Provider'}
+          onPress={() => {
+            navigation.navigate('RequestForm', {
+              serviceTypeId: details.serviceTypeId,
+              serviceId,
+            });
+          }}
+          style={{ marginTop: spacing.m }}
+        />
       </View>
 
       <View style={styles.section}>
@@ -125,5 +165,11 @@ const styles = StyleSheet.create({
     padding: spacing.l,
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
+  },
+  headerButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: spacing.s,
+    paddingVertical: spacing.xs,
   },
 });

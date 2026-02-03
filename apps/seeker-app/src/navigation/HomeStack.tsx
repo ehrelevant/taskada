@@ -7,6 +7,7 @@ import { ServiceTypesListScreen } from '@screens/service-types/ServiceTypesListS
 export type HomeStackParamList = {
   Home: undefined;
   ServiceTypesList: undefined;
+  ServiceDetails: { serviceId: string; returnTo?: 'RequestForm' };
   RequestForm: {
     serviceTypeId?: string;
     serviceId?: string;
