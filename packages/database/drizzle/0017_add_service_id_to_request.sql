@@ -1,0 +1,2 @@
+ALTER TABLE "app"."request" ADD COLUMN "service_id" uuid;--> statement-breakpoint
+ALTER TABLE "app"."request" ADD CONSTRAINT "request_service_id_service_id_fk" FOREIGN KEY ("service_id") REFERENCES "app"."service"("id") ON DELETE set null ON UPDATE cascade;

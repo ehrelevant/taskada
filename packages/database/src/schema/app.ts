@@ -215,6 +215,7 @@ export const request = app.table('request', {
   serviceTypeId: uuid('service_type_id')
     .notNull()
     .references(() => serviceType.id, { onUpdate: 'cascade', onDelete: 'restrict' }),
+  serviceId: uuid('service_id').references(() => service.id, { onUpdate: 'cascade', onDelete: 'set null' }),
   seekerUserId: uuid('seeker_id')
     .notNull()
     .references(() => seeker.userId, { onUpdate: 'cascade', onDelete: 'cascade' }),
