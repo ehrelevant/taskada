@@ -20,10 +20,7 @@ const WALLETS = [
 
 const eWalletSchema = v.object({
   channelCode: v.string('Please select a wallet'),
-  phoneNumber: v.pipe(
-    v.string(),
-    v.regex(/^(09|\+639)\d{9}$/, 'Invalid PH phone number (e.g., 0917...)'),
-  ),
+  phoneNumber: v.pipe(v.string(), v.regex(/^(09|\+639)\d{9}$/, 'Invalid PH phone number (e.g., 0917...)')),
 });
 
 type EWalletFormData = v.InferOutput<typeof eWalletSchema>;
@@ -72,7 +69,7 @@ export function AddEWalletScreen() {
         </Typography>
 
         <View style={styles.walletGrid}>
-          {WALLETS.map((wallet) => {
+          {WALLETS.map(wallet => {
             const isSelected = selectedChannel === wallet.id;
             return (
               <TouchableOpacity
@@ -81,26 +78,13 @@ export function AddEWalletScreen() {
                 activeOpacity={0.9}
                 style={styles.walletTouch}
               >
-                <Card
-                  style={[
-                    styles.walletCard,
-                    isSelected && styles.walletCardSelected,
-                  ]}
-                  padding="m"
-                >
-                  <View
-                    style={[
-                      styles.placeholderLogo,
-                      { backgroundColor: wallet.color },
-                    ]}
-                  >
+                <Card style={[styles.walletCard, isSelected && styles.walletCardSelected]} padding="m">
+                  <View style={[styles.placeholderLogo, { backgroundColor: wallet.color }]}>
                     <Typography variant="caption" color="white" weight="bold">
                       {wallet.name[0]}
                     </Typography>
                   </View>
-                  <Typography weight={isSelected ? 'bold' : 'regular'}>
-                    {wallet.name}
-                  </Typography>
+                  <Typography weight={isSelected ? 'bold' : 'regular'}>{wallet.name}</Typography>
 
                   {isSelected && (
                     <View style={styles.checkIcon}>
@@ -137,11 +121,7 @@ export function AddEWalletScreen() {
       </KeyboardAwareScrollView>
 
       <View style={styles.footer}>
-        <Button
-          title="Link Account"
-          onPress={handleSubmit(onSubmit)}
-          isLoading={isSubmitting}
-        />
+        <Button title="Link Account" onPress={handleSubmit(onSubmit)} isLoading={isSubmitting} />
       </View>
     </View>
   );

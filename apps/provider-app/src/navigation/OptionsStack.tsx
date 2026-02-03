@@ -44,16 +44,8 @@ export function OptionsStack() {
           title: 'Payment Methods',
         }}
       />
-      <Stack.Screen
-        name="AddCard"
-        component={AddCardScreen}
-        options={{ title: 'Add Card' }}
-      />
-      <Stack.Screen
-        name="AddEWallet"
-        component={AddEWalletScreen}
-        options={{ title: 'Add E-Wallet' }}
-      />
+      <Stack.Screen name="AddCard" component={AddCardScreen} options={{ title: 'Add Card' }} />
+      <Stack.Screen name="AddEWallet" component={AddEWalletScreen} options={{ title: 'Add E-Wallet' }} />
     </Stack.Navigator>
   );
 }

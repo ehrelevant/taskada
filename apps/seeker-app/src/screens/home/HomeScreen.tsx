@@ -1,8 +1,15 @@
 import { ActivityIndicator, FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { authClient } from '@lib/authClient';
 import { Avatar, FeaturedServiceCard, Rating, SearchBar, ServiceTypeCard, Typography } from '@repo/components';
-import { colors, spacing } from '@repo/theme';
-import { type FeaturedService, getFeaturedServices, getServiceTypes, type SearchResult, type ServiceType, searchServices } from '@lib/helpers';
+import { colors, radius, spacing } from '@repo/theme';
+import {
+  type FeaturedService,
+  getFeaturedServices,
+  getServiceTypes,
+  type SearchResult,
+  type ServiceType,
+  searchServices,
+} from '@lib/helpers';
 import { HomeStackParamList } from '@navigation/HomeStack';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useCallback, useEffect, useState } from 'react';
@@ -90,7 +97,9 @@ export function HomeScreen() {
             <Typography variant="body1" color="textSecondary">
               Hello,
             </Typography>
-            <Typography variant="h4">{session?.user?.name?.split(' ') + ' ' + session?.user?.lastName || 'User'}</Typography>
+            <Typography variant="h4">
+              {session?.user?.name?.split(' ') + ' ' + session?.user?.lastName || 'User'}
+            </Typography>
           </View>
         </View>
         <Typography variant="body1" color="textSecondary" style={{ marginTop: spacing.xs }}>
@@ -162,7 +171,7 @@ export function HomeScreen() {
             name={item.name}
             iconUrl={item.iconUrl}
             onPress={() => {
-              navigation.navigate('ServiceTypesList');
+              navigation.navigate('RequestForm', { serviceTypeId: item.id });
             }}
           />
         )}
@@ -198,13 +207,6 @@ export function HomeScreen() {
     </View>
   );
 }
-
-const radius = {
-  xs: 4,
-  s: 8,
-  m: 12,
-  l: 16,
-};
 
 const styles = StyleSheet.create({
   centerContainer: {

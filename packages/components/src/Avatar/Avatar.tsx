@@ -50,11 +50,16 @@ export function Avatar({ source, size = 40, name, style }: AvatarProps) {
         style,
       ]}
     >
-      <Typography variant="body2" color="textInverse" weight="semiBold" style={{
+      <Typography
+        variant="body2"
+        color="textInverse"
+        weight="semiBold"
+        style={{
           fontSize: size * 0.4,
           height: size * 0.5,
           verticalAlign: 'middle',
-        }}>
+        }}
+      >
         {initials}
       </Typography>
     </View>

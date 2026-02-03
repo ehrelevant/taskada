@@ -11,18 +11,9 @@ import { valibotResolver } from '@hookform/resolvers/valibot';
 // Validation Schema
 const cardSchema = v.object({
   cardHolderName: v.pipe(v.string(), v.minLength(1, 'Cardholder name is required')),
-  cardNumber: v.pipe(
-    v.string(),
-    v.regex(/^\d{16}$/, 'Card number must be 16 digits')
-  ),
-  expiryDate: v.pipe(
-    v.string(),
-    v.regex(/^(0[1-9]|1[0-2])\/\d{2}$/, 'Format must be MM/YY')
-  ),
-  cvv: v.pipe(
-    v.string(),
-    v.regex(/^\d{3,4}$/, 'CVV must be 3 or 4 digits')
-  ),
+  cardNumber: v.pipe(v.string(), v.regex(/^\d{16}$/, 'Card number must be 16 digits')),
+  expiryDate: v.pipe(v.string(), v.regex(/^(0[1-9]|1[0-2])\/\d{2}$/, 'Format must be MM/YY')),
+  cvv: v.pipe(v.string(), v.regex(/^\d{3,4}$/, 'CVV must be 3 or 4 digits')),
 });
 
 type CardFormData = v.InferOutput<typeof cardSchema>;
@@ -101,7 +92,7 @@ export function AddCardScreen() {
                     placeholder="MM/YY"
                     maxLength={5}
                     onBlur={onBlur}
-                    onChangeText={(text) => {
+                    onChangeText={text => {
                       // Auto-formatting for MM/YY
                       if (text.length === 2 && value.length === 1) {
                         onChange(text + '/');
@@ -155,11 +146,7 @@ export function AddCardScreen() {
       </KeyboardAwareScrollView>
 
       <View style={styles.footer}>
-        <Button
-          title="Add Card"
-          onPress={handleSubmit(onSubmit)}
-          isLoading={isSubmitting}
-        />
+        <Button title="Add Card" onPress={handleSubmit(onSubmit)} isLoading={isSubmitting} />
       </View>
     </View>
   );

@@ -51,11 +51,7 @@ export function FeaturedServiceCard({
           {serviceTypeName}
         </Typography>
         <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 2 }}>
-          <Avatar
-            source={providerAvatar ? { uri: providerAvatar } : null}
-            size={24}
-            name={providerName}
-          />
+          <Avatar source={providerAvatar ? { uri: providerAvatar } : null} size={24} name={providerName} />
           <Typography variant="body1" color="textPrimary" weight="medium" style={{ marginLeft: spacing.xs }}>
             {providerName}
           </Typography>

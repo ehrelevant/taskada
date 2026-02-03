@@ -2,64 +2,64 @@ import { ConfigContext, ExpoConfig } from '@expo/config';
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
-  name: "seeker-app",
-  slug: "seeker-app",
-  version: "1.0.0",
-  orientation: "portrait",
-  icon: "./lib/assets/icon.png",
-  userInterfaceStyle: "light",
+  name: 'seeker-app',
+  slug: 'seeker-app',
+  version: '1.0.0',
+  orientation: 'portrait',
+  icon: './lib/assets/icon.png',
+  userInterfaceStyle: 'light',
   newArchEnabled: true,
-  scheme: "seeker-app",
+  scheme: 'seeker-app',
   splash: {
-    image: "./lib/assets/splash-icon.png",
-    resizeMode: "contain",
-    backgroundColor: "#ffffff"
+    image: './lib/assets/splash-icon.png',
+    resizeMode: 'contain',
+    backgroundColor: '#ffffff',
   },
   ios: {
     supportsTablet: true,
-    bundleIdentifier: "com.taskada.seeker"
+    bundleIdentifier: 'com.taskada.seeker',
   },
   android: {
     adaptiveIcon: {
-      foregroundImage: "./lib/assets/adaptive-icon.png",
-      backgroundColor: "#ffffff"
+      foregroundImage: './lib/assets/adaptive-icon.png',
+      backgroundColor: '#ffffff',
     },
     edgeToEdgeEnabled: true,
     predictiveBackGestureEnabled: false,
-    package: "com.taskada.seeker",
+    package: 'com.taskada.seeker',
     config: {
       googleMaps: {
-        apiKey: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY || ""
-      }
+        apiKey: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY || '',
+      },
     },
     permissions: [
-      "android.permission.RECORD_AUDIO",
-      "android.permission.ACCESS_COARSE_LOCATION",
-      "android.permission.ACCESS_FINE_LOCATION",
-      "android.permission.ACCESS_BACKGROUND_LOCATION",
-      "android.permission.FOREGROUND_SERVICE",
-      "android.permission.FOREGROUND_SERVICE_LOCATION"
-    ]
+      'android.permission.RECORD_AUDIO',
+      'android.permission.ACCESS_COARSE_LOCATION',
+      'android.permission.ACCESS_FINE_LOCATION',
+      'android.permission.ACCESS_BACKGROUND_LOCATION',
+      'android.permission.FOREGROUND_SERVICE',
+      'android.permission.FOREGROUND_SERVICE_LOCATION',
+    ],
   },
   web: {
-    favicon: "./lib/assets/favicon.png",
-    bundler: "metro"
+    favicon: './lib/assets/favicon.png',
+    bundler: 'metro',
   },
   plugins: [
     [
-      "expo-image-picker",
+      'expo-image-picker',
       {
-        photosPermission: "The app accesses your photos to let you share them."
-      }
+        photosPermission: 'The app accesses your photos to let you share them.',
+      },
     ],
     [
-      "expo-location",
+      'expo-location',
       {
-        locationAlwaysAndWhenInUsePermission: "Allow $(PRODUCT_NAME) to use your location.",
+        locationAlwaysAndWhenInUsePermission: 'Allow $(PRODUCT_NAME) to use your location.',
         isAndroidBackgroundLocationEnabled: true,
-        isIosBackgroundLocationEnabled: true
-      }
+        isIosBackgroundLocationEnabled: true,
+      },
     ],
-    "expo-web-browser"
-  ]
-})
+    'expo-web-browser',
+  ],
+});

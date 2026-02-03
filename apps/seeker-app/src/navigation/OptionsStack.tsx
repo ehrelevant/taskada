@@ -25,31 +25,11 @@ export function OptionsStack() {
         animationDuration: 400,
       }}
     >
-      <Stack.Screen
-        name="Options"
-        component={OptionsScreen}
-        options={{ title: 'Options' }}
-      />
-      <Stack.Screen
-        name="Profile"
-        component={ProfileScreen}
-        options={{ title: 'Profile' }}
-      />
-      <Stack.Screen
-        name="PaymentMethods"
-        component={PaymentMethodsScreen}
-        options={{ title: 'Payment Methods' }}
-      />
-      <Stack.Screen
-        name="AddCard"
-        component={AddCardScreen}
-        options={{ title: 'Add Card' }}
-      />
-      <Stack.Screen
-        name="AddEWallet"
-        component={AddEWalletScreen}
-        options={{ title: 'Add E-Wallet' }}
-      />
+      <Stack.Screen name="Options" component={OptionsScreen} options={{ title: 'Options' }} />
+      <Stack.Screen name="Profile" component={ProfileScreen} options={{ title: 'Profile' }} />
+      <Stack.Screen name="PaymentMethods" component={PaymentMethodsScreen} options={{ title: 'Payment Methods' }} />
+      <Stack.Screen name="AddCard" component={AddCardScreen} options={{ title: 'Add Card' }} />
+      <Stack.Screen name="AddEWallet" component={AddEWalletScreen} options={{ title: 'Add E-Wallet' }} />
       <Stack.Screen
         name="TransactionHistory"
         component={TransactionHistoryScreen}
