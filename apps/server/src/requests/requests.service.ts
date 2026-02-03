@@ -1,15 +1,76 @@
-import { address, request, seeker, serviceType, user } from '@repo/database';
+import { address, request, requestImage, seeker, serviceType, user } from '@repo/database';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { desc, eq } from 'drizzle-orm';
-import { Injectable } from '@nestjs/common';
 
 import { DatabaseService } from '../database/database.service';
+
+import { CreateRequestDto } from './dto/create-request.dto';
+
+type GeographyPoint = [number, number];
 
 @Injectable()
 export class RequestsService {
   constructor(private readonly dbService: DatabaseService) {}
 
+  async createAddress(label: string, lat: number, lng: number) {
+    const [newAddress] = await this.dbService.db
+      .insert(address)
+      .values({
+        label,
+        coordinates: [lng, lat] as GeographyPoint,
+      })
+      .returning();
+
+    return newAddress;
+  }
+
+  async createRequest(dto: CreateRequestDto, seekerUserId: string) {
+    const [seekerRecord] = await this.dbService.db
+      .select()
+      .from(seeker)
+      .where(eq(seeker.userId, seekerUserId))
+      .limit(1);
+
+    if (!seekerRecord) {
+      throw new BadRequestException('User is not a seeker');
+    }
+
+    const [newAddress] = await this.dbService.db
+      .insert(address)
+      .values({
+        label: dto.addressLabel,
+        coordinates: [dto.longitude, dto.latitude] as GeographyPoint,
+      })
+      .returning();
+
+    const [newRequest] = await this.dbService.db
+      .insert(request)
+      .values({
+        serviceTypeId: dto.serviceTypeId,
+        serviceId: dto.serviceId,
+        seekerUserId,
+        addressId: newAddress.id,
+        description: dto.description,
+      })
+      .returning();
+
+    if (dto.imageUrls && dto.imageUrls.length > 0) {
+      await this.addRequestImages(newRequest.id, dto.imageUrls);
+    }
+
+    return newRequest;
+  }
+
+  async addRequestImages(requestId: string, imageUrls: string[]) {
+    const images = imageUrls.map(url => ({
+      requestId,
+      image: url,
+    }));
+
+    await this.dbService.db.insert(requestImage).values(images);
+  }
+
   async getNearbyRequests() {
-    // TODO: Filter by PostGIS distance
     return await this.dbService.db
       .select({
         id: request.id,

@@ -1,19 +1,35 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { NewRequest } from '@repo/database';
+import { array, minLength, number, object, optional, pipe, string } from 'valibot';
 
-export class CreateRequestDto implements NewRequest {
+export class CreateRequestDto {
   @ApiProperty()
   serviceTypeId: string;
 
-  @ApiProperty()
-  seekerUserId: string;
+  @ApiProperty({ required: false })
+  serviceId?: string;
 
   @ApiProperty()
-  addressId: string;
+  description: string;
 
   @ApiProperty()
-  description?: string;
+  latitude: number;
 
   @ApiProperty()
-  images?: string[];
+  longitude: number;
+
+  @ApiProperty()
+  addressLabel: string;
+
+  @ApiProperty({ required: false })
+  imageUrls?: string[];
 }
+
+export const CreateRequestSchema = object({
+  serviceTypeId: string(),
+  serviceId: optional(string()),
+  description: pipe(string(), minLength(10, 'Description must be at least 10 characters')),
+  latitude: number(),
+  longitude: number(),
+  addressLabel: pipe(string(), minLength(5, 'Please enter a valid address')),
+  imageUrls: optional(array(string())),
+});
