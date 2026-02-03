@@ -11,8 +11,8 @@ import { UpdateServiceDto } from './dto/update-service.dto';
 export class ServicesService {
   constructor(private readonly dbService: DatabaseService) {}
 
-  async searchServices(query: string) {
-    if (!query) {
+  async searchServices(query: string, serviceTypeId?: string) {
+    if (!query && !serviceTypeId) {
       return [];
     }
 
@@ -37,10 +37,13 @@ export class ServicesService {
       .where(
         and(
           eq(service.isEnabled, true),
-          or(
-            ilike(serviceType.name, searchPattern),
-            ilike(sql<string>`CONCAT(${user.firstName}, ' ', ${user.lastName})`, searchPattern),
-          ),
+          serviceTypeId ? eq(service.serviceTypeId, serviceTypeId) : undefined,
+          query
+            ? or(
+                ilike(serviceType.name, searchPattern),
+                ilike(sql<string>`CONCAT(${user.firstName}, ' ', ${user.lastName})`, searchPattern),
+              )
+            : undefined,
         ),
       )
       .groupBy(service.id, user.id, serviceType.id)
@@ -81,6 +84,7 @@ export class ServicesService {
         id: service.id,
         initialCost: service.initialCost,
         isEnabled: service.isEnabled,
+        serviceTypeId: serviceType.id,
         serviceTypeName: serviceType.name,
         providerName: sql<string>`CONCAT(${user.firstName}, ' ', ${user.lastName})`,
         providerAvatar: user.avatarUrl,

@@ -15,9 +15,9 @@ export class ServicesController {
   constructor(private readonly servicesService: ServicesService) {}
 
   @Get('search')
-  async searchServices(@Query('query') query: string) {
+  async searchServices(@Query('query') query: string, @Query('serviceTypeId') serviceTypeId?: string) {
     const searchQuery = parseSearchQuery(query);
-    return await this.servicesService.searchServices(searchQuery);
+    return await this.servicesService.searchServices(searchQuery, serviceTypeId);
   }
 
   @Get('featured')
