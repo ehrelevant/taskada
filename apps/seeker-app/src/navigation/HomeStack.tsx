@@ -1,12 +1,16 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { HomeScreen } from '@screens/home/HomeScreen';
+import { RequestFormScreen } from '@screens/request-form/RequestFormScreen';
 import { ServiceDetailsScreen } from '@screens/service-details/ServiceDetailsScreen';
 import { ServiceTypesListScreen } from '@screens/service-types/ServiceTypesListScreen';
 
 export type HomeStackParamList = {
   Home: undefined;
   ServiceTypesList: undefined;
-  ServiceDetails: { serviceId: string };
+  RequestForm: {
+    serviceTypeId?: string;
+    serviceId?: string;
+  };
 };
 
 const Stack = createNativeStackNavigator<HomeStackParamList>();
@@ -24,6 +28,7 @@ export function HomeStack() {
         component={HomeScreen}
         options={{
           title: 'Home',
+          headerShown: false,
         }}
       />
       <Stack.Screen
@@ -38,6 +43,13 @@ export function HomeStack() {
         component={ServiceDetailsScreen}
         options={{
           title: 'Service Details',
+        }}
+      />
+      <Stack.Screen
+        name="RequestForm"
+        component={RequestFormScreen}
+        options={{
+          title: 'Request Service',
         }}
       />
     </Stack.Navigator>
