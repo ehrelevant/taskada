@@ -12,6 +12,7 @@ export class ChatSocketClient {
   private bookingDeclinedHandlers: ((data: { bookingId: string; requestId: string }) => void)[] = [];
   private proposalSubmittedHandlers: ((data: ProposalSubmittedData) => void)[] = [];
   private proposalAcceptedHandlers: ((data: ProposalAcceptedData) => void)[] = [];
+  private providerArrivedHandlers: ((data: { bookingId: string }) => void)[] = [];
 
   async connect(userId: string, userRole: 'seeker' | 'provider'): Promise<void> {
     if (this.socket?.connected) {
@@ -65,6 +66,10 @@ export class ChatSocketClient {
 
     this.socket.on('proposal_accepted', (data: ProposalAcceptedData) => {
       this.proposalAcceptedHandlers.forEach(handler => handler(data));
+    });
+
+    this.socket.on('provider_arrived', (data: { bookingId: string }) => {
+      this.providerArrivedHandlers.forEach(handler => handler(data));
     });
 
     this.socket.on('error', (error: { message: string }) => {
@@ -135,6 +140,10 @@ export class ChatSocketClient {
     this.proposalAcceptedHandlers.push(handler);
   }
 
+  onProviderArrived(handler: (data: { bookingId: string }) => void) {
+    this.providerArrivedHandlers.push(handler);
+  }
+
   removeAllListeners() {
     this.messageHandlers = [];
     this.typingHandlers = [];
@@ -143,6 +152,7 @@ export class ChatSocketClient {
     this.bookingDeclinedHandlers = [];
     this.proposalSubmittedHandlers = [];
     this.proposalAcceptedHandlers = [];
+    this.providerArrivedHandlers = [];
   }
 }
 
