@@ -12,6 +12,8 @@ type RequestDetailsNavigationProp = NativeStackNavigationProp<RequestsStackParam
 
 interface RequestDetails {
   id: string;
+  serviceId: string | null;
+  serviceTypeId: string;
   serviceType: {
     id: string;
     name: string;
@@ -40,6 +42,7 @@ export function RequestDetailsScreen() {
   const [request, setRequest] = useState<RequestDetails | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isCreatingBooking, setIsCreatingBooking] = useState(false);
 
   useEffect(() => {
     loadRequestDetails();
@@ -72,6 +75,84 @@ export function RequestDetailsScreen() {
 
   const handleGoBack = () => {
     navigation.goBack();
+  };
+
+  const handleSettleRequest = async () => {
+    if (!request) {
+      return;
+    }
+
+    // Determine which service to use
+    let serviceId: string;
+
+    if (request.serviceId) {
+      // Request is for a specific service
+      serviceId = request.serviceId;
+    } else {
+      // Request is for a service type - need to find provider's matching service
+      // Since providers only have one service per type, fetch it
+      try {
+        const servicesResponse = await apiFetch(`/services/my-services?serviceTypeId=${request.serviceTypeId}`, 'GET');
+        if (!servicesResponse.ok) {
+          throw new Error('Failed to load your services');
+        }
+        const services = await servicesResponse.json();
+        if (services.length === 0) {
+          setError('You do not have a service matching this request type');
+          return;
+        }
+        serviceId = services[0].id;
+      } catch (err) {
+        console.error('Failed to get matching service:', err);
+        setError('Failed to find matching service. Please try again.');
+        return;
+      }
+    }
+
+    setIsCreatingBooking(true);
+
+    try {
+      // 1. Create booking
+      const bookingResponse = await apiFetch('/bookings', 'POST', {
+        body: JSON.stringify({
+          requestId: request.id,
+          serviceId: serviceId,
+        }),
+      });
+
+      if (!bookingResponse.ok) {
+        throw new Error('Failed to create booking');
+      }
+
+      const booking = await bookingResponse.json();
+
+      // 2. Update request status to 'settling'
+      const statusResponse = await apiFetch(`/requests/${request.id}/status`, 'PATCH', {
+        body: JSON.stringify({ status: 'settling' }),
+      });
+
+      if (!statusResponse.ok) {
+        console.warn('Failed to update request status, but booking was created');
+      }
+
+      // 3. Navigate to chat screen
+      navigation.replace('Chat', {
+        bookingId: booking.id,
+        otherUser: {
+          id: request.seeker.id,
+          firstName: request.seeker.firstName,
+          lastName: request.seeker.lastName,
+          avatarUrl: request.seeker.avatarUrl,
+        },
+        requestId: request.id,
+        address: request.address,
+      });
+    } catch (err) {
+      console.error('Failed to settle request:', err);
+      setError('Failed to start chat. Please try again.');
+    } finally {
+      setIsCreatingBooking(false);
+    }
   };
 
   if (isLoading) {
@@ -171,15 +252,15 @@ export function RequestDetailsScreen() {
         </View>
       )}
 
-      {/* Note about accepting */}
-      <View style={styles.noteSection}>
-        <Typography variant="body2" color="textSecondary" style={styles.noteText}>
-          Request acceptance is not yet implemented. For now, you can only view request details.
-        </Typography>
-      </View>
-
-      {/* Back Button */}
+      {/* Action Buttons */}
       <View style={styles.buttonContainer}>
+        <Button
+          title="Settle Request Via Chat"
+          onPress={handleSettleRequest}
+          isLoading={isCreatingBooking}
+          disabled={isCreatingBooking}
+          style={styles.button}
+        />
         <Button title="Go Back" variant="outline" onPress={handleGoBack} style={styles.button} />
       </View>
     </ScrollView>

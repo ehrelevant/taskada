@@ -53,6 +53,22 @@ export function StandbyScreen() {
           }
         });
 
+        matchingSocket.onRequestSettling(data => {
+          if (data.requestId === requestId) {
+            // Navigate to chat screen immediately when provider creates booking
+            navigation.replace('Chat', {
+              bookingId: data.bookingId,
+              providerInfo: {
+                id: data.provider.id,
+                firstName: data.provider.firstName,
+                lastName: data.provider.lastName,
+                avatarUrl: data.provider.avatarUrl,
+              },
+              requestId,
+            });
+          }
+        });
+
         matchingSocket.onError(err => {
           console.error('Socket error:', err);
           setError(err.message);
@@ -65,6 +81,46 @@ export function StandbyScreen() {
         }
       }
     };
+
+    /*
+    // NOTE: Old implementation, commented in case it is still needed.
+    // Possibly use this as a fallback if WebSocket connection fails?
+    // Poll for request status changes
+    const checkRequestStatus = async () => {
+      try {
+        const response = await apiFetch(`/requests/${requestId}`, 'GET');
+        if (response.ok) {
+          const request = await response.json();
+          if (request.status === 'settling') {
+            // Request is being settled, fetch booking info
+            const bookingsResponse = await apiFetch(`/bookings?requestId=${requestId}`, 'GET');
+            if (bookingsResponse.ok) {
+              const bookings = await bookingsResponse.json();
+              if (bookings.length > 0) {
+                const booking = bookings[0];
+                // Navigate to chat
+                navigation.navigate('Chat', {
+                  bookingId: booking.id,
+                  providerInfo: {
+                    id: booking.provider.id,
+                    firstName: booking.provider.firstName,
+                    lastName: booking.provider.lastName,
+                    avatarUrl: booking.provider.avatarUrl,
+                  },
+                  requestId,
+                });
+              }
+            }
+          }
+        }
+      } catch (err) {
+        console.error('Failed to check request status:', err);
+      }
+    };
+
+    // Start polling every 5 seconds
+    statusCheckInterval = setInterval(checkRequestStatus, 5000);
+    */
 
     setupSocket();
 

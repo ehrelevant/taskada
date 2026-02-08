@@ -1,5 +1,6 @@
-import { BookingChatScreen } from '@screens/home/booking/BookingChatScreen';
+import { ChatScreen } from '@screens/home/chat/ChatScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { FinalizeDetailsScreen } from '@screens/home/booking/FinalizeDetailsScreen';
 import { RequestDetailsScreen } from '@screens/home/request/RequestDetailsScreen';
 import { RequestListScreen } from '@screens/home/request/RequestListScreen';
 import { TransactionDoneScreen } from '@screens/home/transaction/TransactionDoneScreen';
@@ -10,8 +11,27 @@ export type RequestsStackParamList = {
   Home: undefined;
   RequestList: undefined;
   RequestDetails: { requestId: string };
-  BookingChat: { bookingId: string };
-  BookingDetails: { bookingId: string };
+  Chat: {
+    bookingId: string;
+    otherUser: {
+      id: string;
+      firstName: string;
+      lastName: string;
+      avatarUrl: string | null;
+    };
+    requestId: string;
+    address: {
+      label: string | null;
+      coordinates: [number, number];
+    };
+  };
+  FinalizeDetails: {
+    bookingId: string;
+    seekerLocation: {
+      label: string | null;
+      coordinates: [number, number];
+    };
+  };
   TransactionTransit: { bookingId: string };
   TransactionServing: { bookingId: string };
   TransactionDone: undefined;
@@ -42,10 +62,19 @@ export function RequestsStack() {
         }}
       />
       <Stack.Screen
-        name="BookingChat"
-        component={BookingChatScreen}
+        name="Chat"
+        component={ChatScreen}
         options={{
-          title: 'Booking Chat',
+          title: 'Chat',
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="FinalizeDetails"
+        component={FinalizeDetailsScreen}
+        options={{
+          title: 'Finalize Details',
+          headerShown: false,
         }}
       />
       <Stack.Screen

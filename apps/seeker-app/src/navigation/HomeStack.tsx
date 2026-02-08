@@ -1,3 +1,4 @@
+import { ChatScreen } from '@screens/home/chat/ChatScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { HomeScreen } from '@screens/home/HomeScreen';
 import { RequestFormScreen } from '@screens/request-form/RequestFormScreen';
@@ -14,6 +15,16 @@ export type HomeStackParamList = {
     serviceId?: string;
   };
   Standby: {
+    requestId: string;
+  };
+  Chat: {
+    bookingId: string;
+    providerInfo: {
+      id: string;
+      firstName: string;
+      lastName: string;
+      avatarUrl: string | null;
+    };
     requestId: string;
   };
 };
@@ -63,6 +74,14 @@ export function HomeStack() {
         options={{
           title: 'Finding Provider',
           headerBackVisible: false,
+        }}
+      />
+      <Stack.Screen
+        name="Chat"
+        component={ChatScreen}
+        options={{
+          title: 'Chat',
+          headerShown: false,
         }}
       />
     </Stack.Navigator>
