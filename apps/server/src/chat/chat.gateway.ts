@@ -177,6 +177,33 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     });
   }
 
+  @UseGuards(WsAuthGuard)
+  @SubscribeMessage('decline_booking')
+  async handleDeclineBooking(
+    @ConnectedSocket() client: AuthenticatedSocket,
+    @MessageBody() data: { bookingId: string; requestId: string },
+  ) {
+    if (!client.userId) {
+      client.emit('error', { message: 'Unauthorized: User not authenticated' });
+      return;
+    }
+
+    const { bookingId, requestId } = data;
+
+    try {
+      // Get booking participants to identify the seeker
+      const participants = await this.messagesService.getBookingParticipants(bookingId);
+
+      // Broadcast to all users in the booking room
+      await this.broadcastBookingDeclined(bookingId, requestId, participants.seekerUserId);
+
+      this.logger.log(`Booking ${bookingId} declined by provider ${client.userId}`);
+    } catch (error) {
+      this.logger.error(`Error declining booking: ${error.message}`);
+      client.emit('error', { message: error.message || 'Failed to decline booking' });
+    }
+  }
+
   // Method to broadcast booking_declined event to seeker
   async broadcastBookingDeclined(bookingId: string, requestId: string, seekerUserId: string): Promise<void> {
     const roomName = `booking:${bookingId}`;
