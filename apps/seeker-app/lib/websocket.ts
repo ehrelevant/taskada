@@ -142,6 +142,26 @@ class MatchingSocketClient {
     this.socket?.off('provider_viewing', callback);
   }
 
+  onRequestSettling(
+    callback: (data: {
+      requestId: string;
+      bookingId: string;
+      provider: { id: string; firstName: string; lastName: string; avatarUrl: string | null };
+    }) => void,
+  ) {
+    this.socket?.on('request_settling', callback);
+  }
+
+  offRequestSettling(
+    callback: (data: {
+      requestId: string;
+      bookingId: string;
+      provider: { id: string; firstName: string; lastName: string; avatarUrl: string | null };
+    }) => void,
+  ) {
+    this.socket?.off('request_settling', callback);
+  }
+
   onError(callback: (error: { message: string }) => void) {
     this.socket?.on('error', callback);
   }
