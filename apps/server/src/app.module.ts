@@ -25,6 +25,7 @@ import { UsersModule } from './users/users.module';
     RequestsModule,
     BookingsModule,
     MatchingModule,
+    PushNotificationsModule,
   ],
 })
 export class AppModule {}
