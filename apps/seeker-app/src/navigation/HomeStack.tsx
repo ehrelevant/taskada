@@ -3,6 +3,7 @@ import { HomeScreen } from '@screens/home/HomeScreen';
 import { RequestFormScreen } from '@screens/request-form/RequestFormScreen';
 import { ServiceDetailsScreen } from '@screens/service-details/ServiceDetailsScreen';
 import { ServiceTypesListScreen } from '@screens/service-types/ServiceTypesListScreen';
+import { StandbyScreen } from '@screens/standby/StandbyScreen';
 
 export type HomeStackParamList = {
   Home: undefined;
@@ -11,6 +12,9 @@ export type HomeStackParamList = {
   RequestForm: {
     serviceTypeId?: string;
     serviceId?: string;
+  };
+  Standby: {
+    requestId: string;
   };
 };
 
@@ -51,6 +55,14 @@ export function HomeStack() {
         component={RequestFormScreen}
         options={{
           title: 'Request Service',
+        }}
+      />
+      <Stack.Screen
+        name="Standby"
+        component={StandbyScreen}
+        options={{
+          title: 'Finding Provider',
+          headerBackVisible: false,
         }}
       />
     </Stack.Navigator>

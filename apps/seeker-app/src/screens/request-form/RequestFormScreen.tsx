@@ -149,8 +149,12 @@ export function RequestFormScreen() {
   const onSubmit = async (data: RequestFormData) => {
     try {
       setLoading(true);
-      await createRequest(data);
-      navigation.goBack();
+      const newRequest = await createRequest(data);
+
+      // Navigate to standby screen
+      navigation.replace('Standby', {
+        requestId: newRequest.id,
+      });
     } catch (error) {
       console.error('Failed to create request:', error);
     } finally {

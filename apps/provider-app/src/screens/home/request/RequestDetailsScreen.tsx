@@ -1,7 +1,271 @@
-import { StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Image, ScrollView, StyleSheet, View } from 'react-native';
+import { apiFetch } from '@lib/helpers';
+import { Button, Typography } from '@repo/components';
+import { colors, spacing } from '@repo/theme';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RequestsStackParamList } from '@navigation/RequestsStack';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { useEffect, useState } from 'react';
 
-export function RequestDetailsScreen() {
-  return <View></View>;
+type RequestDetailsRouteProp = RouteProp<RequestsStackParamList, 'RequestDetails'>;
+type RequestDetailsNavigationProp = NativeStackNavigationProp<RequestsStackParamList, 'RequestDetails'>;
+
+interface RequestDetails {
+  id: string;
+  serviceType: {
+    id: string;
+    name: string;
+    iconUrl: string | null;
+  };
+  seeker: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    avatarUrl: string | null;
+    phoneNumber: string;
+  };
+  address: {
+    label: string | null;
+    coordinates: [number, number];
+  };
+  description: string | null;
+  images: string[];
 }
 
-const _ = StyleSheet.create({});
+export function RequestDetailsScreen() {
+  const route = useRoute<RequestDetailsRouteProp>();
+  const navigation = useNavigation<RequestDetailsNavigationProp>();
+  const { requestId } = route.params;
+
+  const [request, setRequest] = useState<RequestDetails | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    loadRequestDetails();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [requestId]);
+
+  const loadRequestDetails = async () => {
+    try {
+      setIsLoading(true);
+      const response = await apiFetch(`/requests/${requestId}`, 'GET');
+
+      if (!response.ok) {
+        if (response.status === 404) {
+          setError('This request no longer exists. It may have been cancelled by the seeker.');
+        } else {
+          throw new Error('Failed to load request details');
+        }
+        return;
+      }
+
+      const data = await response.json();
+      setRequest(data);
+    } catch (err) {
+      console.error('Failed to load request details:', err);
+      setError('Failed to load request details. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleGoBack = () => {
+    navigation.goBack();
+  };
+
+  if (isLoading) {
+    return (
+      <View style={styles.centerContainer}>
+        <ActivityIndicator size="large" color={colors.actionPrimary} />
+        <Typography variant="body1" color="textSecondary" style={styles.loadingText}>
+          Loading request details...
+        </Typography>
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.centerContainer}>
+        <Typography variant="h5" color="error" style={styles.errorTitle}>
+          Request Not Found
+        </Typography>
+        <Typography variant="body1" color="textSecondary" style={styles.errorMessage}>
+          {error}
+        </Typography>
+        <Button title="Go Back" onPress={handleGoBack} style={styles.button} />
+      </View>
+    );
+  }
+
+  if (!request) {
+    return (
+      <View style={styles.centerContainer}>
+        <Typography variant="body1" color="textSecondary">
+          Request not found
+        </Typography>
+        <Button title="Go Back" onPress={handleGoBack} style={styles.button} />
+      </View>
+    );
+  }
+
+  return (
+    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+      {/* Service Type Header */}
+      <View style={styles.headerSection}>
+        <Typography variant="h5" style={styles.serviceTypeName}>
+          {request.serviceType.name}
+        </Typography>
+      </View>
+
+      {/* Seeker Information */}
+      <View style={styles.section}>
+        <Typography variant="h6" style={styles.sectionTitle}>
+          Seeker Information
+        </Typography>
+        <View style={styles.seekerInfo}>
+          {request.seeker.avatarUrl && <Image source={{ uri: request.seeker.avatarUrl }} style={styles.avatar} />}
+          <View style={styles.seekerDetails}>
+            <Typography variant="body1" weight="medium">
+              {request.seeker.firstName} {request.seeker.lastName}
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              {request.seeker.phoneNumber}
+            </Typography>
+          </View>
+        </View>
+      </View>
+
+      {/* Location */}
+      <View style={styles.section}>
+        <Typography variant="h6" style={styles.sectionTitle}>
+          Location
+        </Typography>
+        <Typography variant="body1">{request.address.label || 'Address not specified'}</Typography>
+      </View>
+
+      {/* Description */}
+      {request.description && (
+        <View style={styles.section}>
+          <Typography variant="h6" style={styles.sectionTitle}>
+            Description
+          </Typography>
+          <Typography variant="body1" style={styles.description}>
+            {request.description}
+          </Typography>
+        </View>
+      )}
+
+      {/* Images */}
+      {request.images && request.images.length > 0 && (
+        <View style={styles.section}>
+          <Typography variant="h6" style={styles.sectionTitle}>
+            Photos ({request.images.length})
+          </Typography>
+          <View style={styles.imagesContainer}>
+            {request.images.map((image, index) => (
+              <Image key={index} source={{ uri: image }} style={styles.image} resizeMode="cover" />
+            ))}
+          </View>
+        </View>
+      )}
+
+      {/* Note about accepting */}
+      <View style={styles.noteSection}>
+        <Typography variant="body2" color="textSecondary" style={styles.noteText}>
+          Request acceptance is not yet implemented. For now, you can only view request details.
+        </Typography>
+      </View>
+
+      {/* Back Button */}
+      <View style={styles.buttonContainer}>
+        <Button title="Go Back" variant="outline" onPress={handleGoBack} style={styles.button} />
+      </View>
+    </ScrollView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.background,
+  },
+  contentContainer: {
+    padding: spacing.m,
+    paddingBottom: spacing.xl,
+  },
+  centerContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: spacing.l,
+  },
+  headerSection: {
+    marginBottom: spacing.l,
+    paddingBottom: spacing.m,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+  },
+  serviceTypeName: {
+    marginBottom: spacing.xs,
+  },
+  section: {
+    marginBottom: spacing.l,
+  },
+  sectionTitle: {
+    marginBottom: spacing.s,
+  },
+  seekerInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  avatar: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginRight: spacing.m,
+  },
+  seekerDetails: {
+    flex: 1,
+  },
+  description: {
+    lineHeight: 22,
+  },
+  imagesContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.s,
+  },
+  image: {
+    width: 100,
+    height: 100,
+    borderRadius: 8,
+  },
+  noteSection: {
+    backgroundColor: colors.backgroundSecondary,
+    padding: spacing.m,
+    borderRadius: 8,
+    marginBottom: spacing.l,
+  },
+  noteText: {
+    textAlign: 'center',
+    fontStyle: 'italic',
+  },
+  buttonContainer: {
+    marginTop: spacing.m,
+  },
+  button: {
+    marginTop: spacing.s,
+  },
+  loadingText: {
+    marginTop: spacing.m,
+  },
+  errorTitle: {
+    marginBottom: spacing.m,
+  },
+  errorMessage: {
+    textAlign: 'center',
+    marginBottom: spacing.l,
+  },
+});
