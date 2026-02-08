@@ -2,10 +2,11 @@ import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { ArrowLeft } from 'lucide-react-native';
 import { Button, Typography } from '@repo/components';
 import { colors, spacing } from '@repo/theme';
-import { KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RequestsStackParamList } from '@navigation/RequestsStack';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState } from 'react';
 
 type FinalizeDetailsRouteProp = RouteProp<RequestsStackParamList, 'FinalizeDetails'>;
