@@ -1,0 +1,1 @@
+ALTER TABLE "app"."booking" ADD COLUMN "specifications" text;

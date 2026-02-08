@@ -268,6 +268,7 @@ export const booking = app.table('booking', {
     .references(() => seeker.userId, { onUpdate: 'cascade', onDelete: 'cascade' }),
   status: bookingStatusEnum('status').notNull().default('in_transit'),
   cost: numeric('cost', { mode: 'number', precision: 10, scale: 2 }).notNull().default(0),
+  specifications: text('specifications'),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true })
     .notNull()
