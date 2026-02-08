@@ -6,6 +6,7 @@ import { ValibotPipe } from 'src/valibot/valibot.pipe';
 import { BookingsService } from './bookings.service';
 
 import { CreateBookingDto } from './dto/create-booking.dto';
+import { SubmitProposalDto } from './dto/submit-proposal.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
 
 @Controller('bookings')
@@ -29,5 +30,19 @@ export class BookingsController {
     return await this.bookingsService.updateBooking(id, {
       status: updateStatusDto.status,
     });
+  }
+
+  @Patch(':id/proposal')
+  async submitProposal(
+    @Session() { user }: UserSession,
+    @Param('id') id: string,
+    @Body() submitProposalDto: SubmitProposalDto,
+  ) {
+    return await this.bookingsService.submitProposal(
+      user.id,
+      id,
+      submitProposalDto.cost,
+      submitProposalDto.specifications,
+    );
   }
 }

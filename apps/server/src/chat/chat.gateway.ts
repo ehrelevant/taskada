@@ -246,4 +246,92 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     this.logger.log(`Sent new booking notification to seeker ${seekerUserId}`);
   }
+
+  // Method to broadcast proposal submitted to seeker
+  async broadcastProposalSubmitted(
+    bookingId: string,
+    seekerUserId: string,
+    providerInfo: { id: string; firstName: string; lastName: string; avatarUrl: string | null },
+    proposal: {
+      cost: number;
+      specifications: string;
+      serviceTypeName: string;
+      address: { label: string | null; coordinates: unknown } | undefined;
+    },
+  ): Promise<void> {
+    const roomName = `booking:${bookingId}`;
+
+    // Broadcast to all users in the booking room
+    this.server.to(roomName).emit('proposal_submitted', {
+      bookingId,
+      providerInfo,
+      proposal,
+    });
+
+    // Send push notification to seeker
+    await this.pushNotificationsService.sendPushNotification(
+      seekerUserId,
+      'New Service Proposal',
+      `${providerInfo.firstName} ${providerInfo.lastName} has submitted service cost and specifications.`,
+      {
+        type: 'proposal_submitted',
+        bookingId,
+        cost: proposal.cost,
+        specifications: proposal.specifications,
+        serviceTypeName: proposal.serviceTypeName,
+      },
+    );
+
+    this.logger.log(`Broadcasted proposal_submitted for booking ${bookingId}`);
+  }
+
+  // Method to broadcast proposal declined to provider
+  async broadcastProposalDeclined(bookingId: string, providerUserId: string): Promise<void> {
+    const roomName = `booking:${bookingId}`;
+
+    // Broadcast to all users in the booking room
+    this.server.to(roomName).emit('proposal_declined', {
+      bookingId,
+    });
+
+    // Send push notification to provider
+    await this.pushNotificationsService.sendPushNotification(
+      providerUserId,
+      'Proposal Declined',
+      'The seeker has declined your service proposal. You can discuss further in chat.',
+      {
+        type: 'proposal_declined',
+        bookingId,
+      },
+    );
+
+    this.logger.log(`Broadcasted proposal_declined for booking ${bookingId}`);
+  }
+
+  @UseGuards(WsAuthGuard)
+  @SubscribeMessage('decline_proposal')
+  async handleDeclineProposal(
+    @ConnectedSocket() client: AuthenticatedSocket,
+    @MessageBody() data: { bookingId: string },
+  ) {
+    if (!client.userId) {
+      client.emit('error', { message: 'Unauthorized: User not authenticated' });
+      return;
+    }
+
+    const { bookingId } = data;
+
+    try {
+      // Get booking participants to identify the provider
+      const participants = await this.messagesService.getBookingParticipants(bookingId);
+
+      // Broadcast to all users in the booking room
+      await this.broadcastProposalDeclined(bookingId, participants.providerUserId);
+
+      this.logger.log(`Proposal ${bookingId} declined by seeker ${client.userId}`);
+    } catch (error) {
+      this.logger.error(`Error declining proposal: ${error.message}`);
+      client.emit('error', { message: error.message || 'Failed to decline proposal' });
+    }
+  }
 }

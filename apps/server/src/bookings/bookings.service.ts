@@ -1,6 +1,6 @@
+import { address, booking, request, service, serviceType, user } from '@repo/database';
 import { and, eq } from 'drizzle-orm';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { booking, request, service, user } from '@repo/database';
 
 import { ChatGateway } from '../chat/chat.gateway';
 import { DatabaseService } from '../database/database.service';
@@ -84,6 +84,78 @@ export class BookingsService {
       .where(eq(booking.id, bookingId))
       .returning();
     return updated;
+  }
+
+  async submitProposal(providerId: string, bookingId: string, cost: number, specifications: string) {
+    // Verify booking exists and provider is the owner
+    const [bookingRecord] = await this.dbService.db
+      .select()
+      .from(booking)
+      .where(and(eq(booking.id, bookingId), eq(booking.providerUserId, providerId)))
+      .limit(1);
+
+    if (!bookingRecord) {
+      throw new NotFoundException('Booking not found or you are not the provider');
+    }
+
+    // Update booking with cost and specifications
+    const [updated] = await this.dbService.db
+      .update(booking)
+      .set({ cost, specifications })
+      .where(eq(booking.id, bookingId))
+      .returning();
+
+    // Get service type info for notification
+    const [serviceInfo] = await this.dbService.db
+      .select({
+        serviceTypeName: serviceType.name,
+      })
+      .from(service)
+      .innerJoin(serviceType, eq(service.serviceTypeId, serviceType.id))
+      .where(eq(service.id, bookingRecord.serviceId))
+      .limit(1);
+
+    // Get provider info for notification
+    const [providerInfo] = await this.dbService.db
+      .select({
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        avatarUrl: user.avatarUrl,
+      })
+      .from(user)
+      .where(eq(user.id, providerId))
+      .limit(1);
+
+    // Get seeker's address
+    const seekerAddress = await this.getSeekerAddress(bookingRecord.seekerUserId, bookingId);
+
+    // Notify seeker about proposal via WebSocket
+    await this.chatGateway.broadcastProposalSubmitted(bookingId, bookingRecord.seekerUserId, providerInfo, {
+      cost,
+      specifications,
+      serviceTypeName: serviceInfo?.serviceTypeName || 'Service',
+      address: seekerAddress,
+    });
+
+    return updated;
+  }
+
+  private async getSeekerAddress(seekerUserId: string, bookingId: string) {
+    // Get the request associated with this booking to find the address
+    const [addressRecord] = await this.dbService.db
+      .select({
+        label: address.label,
+        coordinates: address.coordinates,
+      })
+      .from(request)
+      .innerJoin(address, eq(request.addressId, address.id))
+      .innerJoin(booking, eq(request.seekerUserId, booking.seekerUserId))
+      .where(eq(booking.id, bookingId))
+      .orderBy(request.createdAt)
+      .limit(1);
+
+    return addressRecord;
   }
 
   async getBookings(requestId?: string, seekerUserId?: string) {
