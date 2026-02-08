@@ -83,6 +83,12 @@ export class BookingsService {
       .set(updateBookingDto)
       .where(eq(booking.id, bookingId))
       .returning();
+
+    // If status changed to completed, notify seeker
+    if (updateBookingDto.status === 'completed' && updated) {
+      await this.chatGateway.broadcastBookingCompleted(bookingId, updated.seekerUserId);
+    }
+
     return updated;
   }
 

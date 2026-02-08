@@ -442,4 +442,54 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     this.logger.log(`Broadcasted provider_arrived for booking ${bookingId}`);
   }
+
+  @UseGuards(WsAuthGuard)
+  @SubscribeMessage('booking_completed')
+  async handleBookingCompleted(
+    @ConnectedSocket() client: AuthenticatedSocket,
+    @MessageBody() data: { bookingId: string },
+  ) {
+    if (!client.userId) {
+      client.emit('error', { message: 'Unauthorized: User not authenticated' });
+      return;
+    }
+
+    const { bookingId } = data;
+
+    try {
+      // Get booking participants to identify the seeker
+      const participants = await this.messagesService.getBookingParticipants(bookingId);
+
+      // Broadcast to all users in the booking room
+      await this.broadcastBookingCompleted(bookingId, participants.seekerUserId);
+
+      this.logger.log(`Booking ${bookingId} marked as completed by provider ${client.userId}`);
+    } catch (error) {
+      this.logger.error(`Error handling booking completion: ${error.message}`);
+      client.emit('error', { message: error.message || 'Failed to process booking completion' });
+    }
+  }
+
+  // Method to broadcast booking_completed event to seeker
+  async broadcastBookingCompleted(bookingId: string, seekerUserId: string) {
+    const roomName = `booking:${bookingId}`;
+
+    // Broadcast to all users in the booking room
+    this.server.to(roomName).emit('booking_completed', {
+      bookingId,
+    });
+
+    // Send push notification to seeker
+    await this.pushNotificationsService.sendPushNotification(
+      seekerUserId,
+      'Service Completed',
+      'Your service has been completed. Please rate your experience!',
+      {
+        type: 'booking_completed',
+        bookingId,
+      },
+    );
+
+    this.logger.log(`Broadcasted booking_completed for booking ${bookingId}`);
+  }
 }
