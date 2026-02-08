@@ -85,6 +85,10 @@ export class ChatSocketClient {
     this.socket?.emit('typing', { bookingId, isTyping });
   }
 
+  declineBooking(bookingId: string, requestId: string) {
+    this.socket?.emit('decline_booking', { bookingId, requestId });
+  }
+
   onNewMessage(handler: (message: Message) => void) {
     this.messageHandlers.push(handler);
   }
