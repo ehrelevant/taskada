@@ -184,6 +184,7 @@ export function HomeScreen() {
         {featuredServices.length > 0 ? (
           <FlatList
             data={featuredServices}
+            contentContainerStyle={{ gap: spacing.m }}
             keyExtractor={item => item.serviceId}
             renderItem={({ item }) => (
               <FeaturedServiceCard
@@ -194,7 +195,6 @@ export function HomeScreen() {
                 reviewCount={item.reviewCount}
                 serviceId={item.serviceId}
                 onPress={() => navigateToService(item.serviceId)}
-                style={{ marginRight: spacing.s }}
               />
             )}
           />
