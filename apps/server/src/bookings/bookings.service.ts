@@ -158,6 +158,42 @@ export class BookingsService {
     return addressRecord;
   }
 
+  async getBookingById(bookingId: string) {
+    const [bookingRecord] = await this.dbService.db
+      .select({
+        id: booking.id,
+        providerUserId: booking.providerUserId,
+        seekerUserId: booking.seekerUserId,
+        serviceId: booking.serviceId,
+        status: booking.status,
+        cost: booking.cost,
+        specifications: booking.specifications,
+        createdAt: booking.createdAt,
+        provider: {
+          id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          avatarUrl: user.avatarUrl,
+        },
+      })
+      .from(booking)
+      .leftJoin(user, eq(booking.providerUserId, user.id))
+      .where(eq(booking.id, bookingId))
+      .limit(1);
+
+    if (!bookingRecord) {
+      throw new NotFoundException('Booking not found');
+    }
+
+    // Get the address for this booking
+    const addressData = await this.getSeekerAddress(bookingRecord.seekerUserId, bookingId);
+
+    return {
+      ...bookingRecord,
+      address: addressData,
+    };
+  }
+
   async getBookings(requestId?: string, seekerUserId?: string) {
     // Base query with provider info
     const baseQuery = this.dbService.db

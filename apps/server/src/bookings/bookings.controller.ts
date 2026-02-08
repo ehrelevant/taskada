@@ -18,6 +18,11 @@ export class BookingsController {
     return await this.bookingsService.getBookings(requestId, seekerUserId);
   }
 
+  @Get(':id')
+  async getBookingById(@Param('id') id: string) {
+    return await this.bookingsService.getBookingById(id);
+  }
+
   @Post()
   async createBooking(@Session() { user }: UserSession, @Body() createBookingDto: CreateBookingDto) {
     // The provider is the current authenticated user
