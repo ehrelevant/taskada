@@ -1,13 +1,16 @@
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import { ActivityIndicator, Alert, KeyboardAvoidingView, Modal, Platform, ScrollView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import { apiFetch } from '@lib/helpers';
 import { ArrowLeft } from 'lucide-react-native';
+import { authClient } from '@lib/authClient';
 import { Button, Typography } from '@repo/components';
+import { chatSocket } from '@lib/chatSocket';
 import { colors, spacing } from '@repo/theme';
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RequestsStackParamList } from '@navigation/RequestsStack';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type FinalizeDetailsRouteProp = RouteProp<RequestsStackParamList, 'FinalizeDetails'>;
 type FinalizeDetailsNavigationProp = NativeStackNavigationProp<RequestsStackParamList, 'FinalizeDetails'>;
@@ -15,14 +18,60 @@ type FinalizeDetailsNavigationProp = NativeStackNavigationProp<RequestsStackPara
 export function FinalizeDetailsScreen() {
   const route = useRoute<FinalizeDetailsRouteProp>();
   const navigation = useNavigation<FinalizeDetailsNavigationProp>();
-  const { bookingId, seekerLocation } = route.params;
+  const { bookingId, seekerLocation, otherUser, requestId } = route.params;
 
   const [serviceCost, setServiceCost] = useState('');
   const [serviceSpecifications, setServiceSpecifications] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showWaitingModal, setShowWaitingModal] = useState(false);
 
   // Parse coordinates (stored as [lng, lat] in database, MapView expects {latitude, longitude})
   const [longitude, latitude] = seekerLocation.coordinates;
+
+  // WebSocket setup for waiting modal
+  useEffect(() => {
+    if (!showWaitingModal) return;
+
+    const setupSocket = async () => {
+      const session = await authClient.getSession();
+      const userId = session.data?.user?.id;
+      if (!userId) return;
+
+      await chatSocket.connect(userId, 'provider');
+      chatSocket.joinBooking(bookingId);
+
+      chatSocket.onProposalDeclined(data => {
+        if (data.bookingId === bookingId) {
+          setShowWaitingModal(false);
+          Alert.alert(
+            'Proposal Declined',
+            'The seeker has declined your service proposal. You can discuss further in chat.',
+            [
+              {
+                text: 'OK',
+                onPress: () => {
+                  navigation.replace('Chat', {
+                    bookingId,
+                    otherUser,
+                    requestId,
+                    address: seekerLocation,
+                  });
+                },
+              },
+            ],
+          );
+        }
+      });
+    };
+
+    setupSocket();
+
+    return () => {
+      chatSocket.leaveBooking(bookingId);
+      chatSocket.removeAllListeners();
+      chatSocket.disconnect();
+    };
+  }, [showWaitingModal, bookingId, otherUser, requestId, seekerLocation, navigation]);
 
   const handleSubmit = async () => {
     if (!serviceCost.trim() || !serviceSpecifications.trim()) {
@@ -31,10 +80,25 @@ export function FinalizeDetailsScreen() {
 
     setIsSubmitting(true);
 
-    // For now, this doesn't do anything as per requirements
-    console.log('Submitting:', { bookingId, serviceCost, serviceSpecifications });
+    try {
+      const response = await apiFetch(`/bookings/${bookingId}/proposal`, 'PATCH', {
+        body: JSON.stringify({
+          cost: parseFloat(serviceCost),
+          specifications: serviceSpecifications,
+        }),
+      });
 
-    setIsSubmitting(false);
+      if (response.ok) {
+        // Show waiting modal instead of navigating
+        setShowWaitingModal(true);
+      } else {
+        console.error('Failed to submit proposal');
+      }
+    } catch (error) {
+      console.error('Error submitting proposal:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const formatCurrency = (value: string) => {
@@ -146,6 +210,29 @@ export function FinalizeDetailsScreen() {
           />
         </View>
       </KeyboardAvoidingView>
+
+      {/* Waiting Modal */}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={showWaitingModal}
+        onRequestClose={() => {
+          // Modal cannot be closed by user - must wait for seeker response
+          return;
+        }}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <ActivityIndicator size="large" color={colors.actionPrimary} style={styles.modalLoader} />
+            <Typography variant="h6" style={styles.modalTitle}>
+              Waiting for Response
+            </Typography>
+            <Typography variant="body1" color={colors.textSecondary} style={styles.modalText}>
+              Waiting for the seeker to agree with the service cost and details submitted
+            </Typography>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -238,5 +325,28 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: colors.border,
     backgroundColor: colors.background,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: colors.background,
+    borderRadius: 16,
+    padding: spacing.xl,
+    width: '80%',
+    alignItems: 'center',
+  },
+  modalLoader: {
+    marginBottom: spacing.m,
+  },
+  modalTitle: {
+    marginBottom: spacing.s,
+    textAlign: 'center',
+  },
+  modalText: {
+    textAlign: 'center',
   },
 });

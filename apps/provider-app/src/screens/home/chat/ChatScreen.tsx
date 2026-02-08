@@ -158,6 +158,8 @@ export function ChatScreen() {
     navigation.navigate('FinalizeDetails', {
       bookingId,
       seekerLocation: address,
+      otherUser,
+      requestId,
     });
   };
 

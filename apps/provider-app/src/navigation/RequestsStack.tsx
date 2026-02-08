@@ -31,6 +31,13 @@ export type RequestsStackParamList = {
       label: string | null;
       coordinates: [number, number];
     };
+    otherUser: {
+      id: string;
+      firstName: string;
+      lastName: string;
+      avatarUrl: string | null;
+    };
+    requestId: string;
   };
   TransactionTransit: { bookingId: string };
   TransactionServing: { bookingId: string };

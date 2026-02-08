@@ -104,6 +104,18 @@ export function ChatScreen() {
           navigation.replace('Standby', { requestId });
         }
       });
+
+      chatSocket.onProposalSubmitted(data => {
+        if (data.bookingId === bookingId) {
+          // Navigate to ViewProposal screen
+          navigation.navigate('ViewProposal', {
+            bookingId,
+            providerInfo,
+            proposal: data.proposal,
+            requestId,
+          });
+        }
+      });
     };
 
     setupSocket();
@@ -113,7 +125,7 @@ export function ChatScreen() {
       chatSocket.removeAllListeners();
       chatSocket.disconnect();
     };
-  }, [bookingId, currentUserId, navigation, requestId, session.data]);
+  }, [bookingId, currentUserId, navigation, providerInfo, requestId, session.data]);
 
   const handleSendMessage = async () => {
     if (!inputText.trim() || isSending) return;

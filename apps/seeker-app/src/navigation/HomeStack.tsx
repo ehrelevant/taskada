@@ -5,6 +5,7 @@ import { RequestFormScreen } from '@screens/request-form/RequestFormScreen';
 import { ServiceDetailsScreen } from '@screens/service-details/ServiceDetailsScreen';
 import { ServiceTypesListScreen } from '@screens/service-types/ServiceTypesListScreen';
 import { StandbyScreen } from '@screens/standby/StandbyScreen';
+import { ViewProposalScreen } from '@screens/home/proposal/ViewProposalScreen';
 
 export type HomeStackParamList = {
   Home: undefined;
@@ -24,6 +25,27 @@ export type HomeStackParamList = {
       firstName: string;
       lastName: string;
       avatarUrl: string | null;
+    };
+    requestId: string;
+  };
+  ViewProposal: {
+    bookingId: string;
+    providerInfo: {
+      id: string;
+      firstName: string;
+      lastName: string;
+      avatarUrl: string | null;
+    };
+    proposal: {
+      cost: number;
+      specifications: string;
+      serviceTypeName: string;
+      address:
+        | {
+            label: string | null;
+            coordinates: [number, number];
+          }
+        | undefined;
     };
     requestId: string;
   };
@@ -81,6 +103,14 @@ export function HomeStack() {
         component={ChatScreen}
         options={{
           title: 'Chat',
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="ViewProposal"
+        component={ViewProposalScreen}
+        options={{
+          title: 'Service Proposal',
           headerShown: false,
         }}
       />
