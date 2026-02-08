@@ -1,4 +1,5 @@
 import { Controller, Get, Post, UsePipes } from '@nestjs/common';
+import { omit } from 'valibot';
 import { ProviderInsertSchema } from '@repo/database';
 import { Session, UserSession } from '@thallesp/nestjs-better-auth';
 import { ValibotPipe } from 'src/valibot/valibot.pipe';
@@ -15,7 +16,7 @@ export class SeekersController {
   }
 
   @Post()
-  @UsePipes(new ValibotPipe(ProviderInsertSchema))
+  @UsePipes(new ValibotPipe(omit(ProviderInsertSchema, ['userId'])))
   async createSeekerForUser(@Session() { user: { id: userId } }: UserSession) {
     return await this.seekersService.createSeeker(userId);
   }
