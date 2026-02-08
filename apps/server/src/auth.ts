@@ -13,7 +13,7 @@ const db = drizzle(pool, { schema, casing: 'snake_case' });
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: 'pg',
-    debugLogs: true,
+    debugLogs: false,
   }),
   plugins: [expo()],
   trustedOrigins: ['provider-app://'],
