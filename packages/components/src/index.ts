@@ -9,3 +9,4 @@ export * from './Avatar';
 export * from './ServiceTypeCard';
 export * from './FeaturedServiceCard';
 export * from './ReviewCard';
+export * from './StarRatingInput';
