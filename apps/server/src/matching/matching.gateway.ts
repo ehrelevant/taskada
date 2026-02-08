@@ -1,4 +1,12 @@
-import { ConnectedSocket, MessageBody, OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
+import {
+  ConnectedSocket,
+  MessageBody,
+  OnGatewayConnection,
+  OnGatewayDisconnect,
+  SubscribeMessage,
+  WebSocketGateway,
+  WebSocketServer,
+} from '@nestjs/websockets';
 import { Logger, UseGuards } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
 
@@ -224,5 +232,19 @@ export class MatchingGateway implements OnGatewayConnection, OnGatewayDisconnect
       providerId,
       providerName,
     });
+  }
+
+  // Notify seeker that their request is being settled (booking created)
+  async notifyRequestSettling(
+    requestId: string,
+    bookingId: string,
+    providerInfo: { id: string; firstName: string; lastName: string; avatarUrl: string | null },
+  ) {
+    this.server.to(`request:${requestId}`).emit('request_settling', {
+      requestId,
+      bookingId,
+      provider: providerInfo,
+    });
+    this.logger.log(`Notified seeker about request ${requestId} settling with booking ${bookingId}`);
   }
 }

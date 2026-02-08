@@ -4,6 +4,7 @@ import { booking, request, service, user } from '@repo/database';
 
 import { ChatGateway } from '../chat/chat.gateway';
 import { DatabaseService } from '../database/database.service';
+import { MatchingGateway } from '../matching/matching.gateway';
 
 import { UpdateBookingDto } from './dto/update-booking.dto';
 
@@ -12,6 +13,7 @@ export class BookingsService {
   constructor(
     private readonly dbService: DatabaseService,
     private readonly chatGateway: ChatGateway,
+    private readonly matchingGateway: MatchingGateway,
   ) {}
 
   private async getSeekerIdFromRequest(requestId: string) {
@@ -43,8 +45,10 @@ export class BookingsService {
     // Get provider info for notification
     const [providerInfo] = await this.dbService.db
       .select({
+        id: user.id,
         firstName: user.firstName,
         lastName: user.lastName,
+        avatarUrl: user.avatarUrl,
       })
       .from(user)
       .where(eq(user.id, providerId))
@@ -62,9 +66,12 @@ export class BookingsService {
       })
       .returning();
 
-    // Notify seeker about new booking via push notification
     if (providerInfo) {
+      // Notify seeker about new booking via push notification
       await this.chatGateway.broadcastNewBooking(newBooking.id, seekerUserId, providerInfo);
+
+      // Notify seeker via WebSocket that their request is being settled
+      await this.matchingGateway.notifyRequestSettling(requestId, newBooking.id, providerInfo);
     }
 
     return newBooking;
@@ -77,5 +84,91 @@ export class BookingsService {
       .where(eq(booking.id, bookingId))
       .returning();
     return updated;
+  }
+
+  async getBookings(requestId?: string, seekerUserId?: string) {
+    // Base query with provider info
+    const baseQuery = this.dbService.db
+      .select({
+        id: booking.id,
+        providerUserId: booking.providerUserId,
+        seekerUserId: booking.seekerUserId,
+        serviceId: booking.serviceId,
+        status: booking.status,
+        cost: booking.cost,
+        createdAt: booking.createdAt,
+        provider: {
+          id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          avatarUrl: user.avatarUrl,
+        },
+      })
+      .from(booking)
+      .leftJoin(user, eq(booking.providerUserId, user.id));
+
+    if (requestId) {
+      // Need to join with request table to filter by requestId
+      const bookingsWithRequest = await this.dbService.db
+        .select({
+          id: booking.id,
+          providerUserId: booking.providerUserId,
+          seekerUserId: booking.seekerUserId,
+          serviceId: booking.serviceId,
+          status: booking.status,
+          cost: booking.cost,
+          createdAt: booking.createdAt,
+          requestId: request.id,
+        })
+        .from(booking)
+        .innerJoin(request, eq(booking.seekerUserId, request.seekerUserId))
+        .where(eq(request.id, requestId));
+
+      // Get provider info for each booking
+      const bookingsWithProvider = await Promise.all(
+        bookingsWithRequest.map(async b => {
+          const [provider] = await this.dbService.db
+            .select({
+              id: user.id,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              avatarUrl: user.avatarUrl,
+            })
+            .from(user)
+            .where(eq(user.id, b.providerUserId))
+            .limit(1);
+          return { ...b, provider };
+        }),
+      );
+
+      return bookingsWithProvider;
+    }
+
+    if (seekerUserId) {
+      // Execute query with where clause for seekerUserId
+      const results = await this.dbService.db
+        .select({
+          id: booking.id,
+          providerUserId: booking.providerUserId,
+          seekerUserId: booking.seekerUserId,
+          serviceId: booking.serviceId,
+          status: booking.status,
+          cost: booking.cost,
+          createdAt: booking.createdAt,
+          provider: {
+            id: user.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            avatarUrl: user.avatarUrl,
+          },
+        })
+        .from(booking)
+        .leftJoin(user, eq(booking.providerUserId, user.id))
+        .where(eq(booking.seekerUserId, seekerUserId));
+
+      return results;
+    }
+
+    return await baseQuery;
   }
 }

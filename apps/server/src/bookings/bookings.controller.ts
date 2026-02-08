@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Patch, Post, UsePipes } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Query, UsePipes } from '@nestjs/common';
 import { BookingUpdateSchema } from '@repo/database';
 import { Session, UserSession } from '@thallesp/nestjs-better-auth';
 import { ValibotPipe } from 'src/valibot/valibot.pipe';
@@ -11,6 +11,11 @@ import { UpdateBookingDto } from './dto/update-booking.dto';
 @Controller('bookings')
 export class BookingsController {
   constructor(private readonly bookingsService: BookingsService) {}
+
+  @Get()
+  async getBookings(@Query('requestId') requestId?: string, @Query('seekerUserId') seekerUserId?: string) {
+    return await this.bookingsService.getBookings(requestId, seekerUserId);
+  }
 
   @Post()
   async createBooking(@Session() { user }: UserSession, @Body() createBookingDto: CreateBookingDto) {
