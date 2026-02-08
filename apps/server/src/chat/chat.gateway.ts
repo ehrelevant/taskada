@@ -392,4 +392,54 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     this.logger.log(`Broadcasted proposal_accepted for booking ${bookingId}`);
   }
+
+  @UseGuards(WsAuthGuard)
+  @SubscribeMessage('provider_arrived')
+  async handleProviderArrived(
+    @ConnectedSocket() client: AuthenticatedSocket,
+    @MessageBody() data: { bookingId: string },
+  ) {
+    if (!client.userId) {
+      client.emit('error', { message: 'Unauthorized: User not authenticated' });
+      return;
+    }
+
+    const { bookingId } = data;
+
+    try {
+      // Get booking participants to identify the seeker
+      const participants = await this.messagesService.getBookingParticipants(bookingId);
+
+      // Broadcast to all users in the booking room
+      await this.broadcastProviderArrived(bookingId, participants.seekerUserId);
+
+      this.logger.log(`Provider arrived for booking ${bookingId}`);
+    } catch (error) {
+      this.logger.error(`Error handling provider arrival: ${error.message}`);
+      client.emit('error', { message: error.message || 'Failed to process arrival' });
+    }
+  }
+
+  // Method to broadcast provider_arrived event to seeker
+  async broadcastProviderArrived(bookingId: string, seekerUserId: string) {
+    const roomName = `booking:${bookingId}`;
+
+    // Broadcast to all users in the booking room
+    this.server.to(roomName).emit('provider_arrived', {
+      bookingId,
+    });
+
+    // Send push notification to seeker
+    await this.pushNotificationsService.sendPushNotification(
+      seekerUserId,
+      'Provider Has Arrived',
+      'Your service provider has arrived at your location and is ready to serve you.',
+      {
+        type: 'provider_arrived',
+        bookingId,
+      },
+    );
+
+    this.logger.log(`Broadcasted provider_arrived for booking ${bookingId}`);
+  }
 }
