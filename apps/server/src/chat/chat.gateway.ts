@@ -334,4 +334,62 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       client.emit('error', { message: error.message || 'Failed to decline proposal' });
     }
   }
+
+  @UseGuards(WsAuthGuard)
+  @SubscribeMessage('accept_proposal')
+  async handleAcceptProposal(
+    @ConnectedSocket() client: AuthenticatedSocket,
+    @MessageBody() data: { bookingId: string },
+  ) {
+    if (!client.userId) {
+      client.emit('error', { message: 'Unauthorized: User not authenticated' });
+      return;
+    }
+
+    const { bookingId } = data;
+
+    try {
+      // Get booking participants to identify the provider
+      const participants = await this.messagesService.getBookingParticipants(bookingId);
+
+      // Get seeker's address for the provider
+      const seekerLocation = await this.messagesService.getSeekerAddress(bookingId);
+
+      // Broadcast to all users in the booking room
+      await this.broadcastProposalAccepted(bookingId, participants.providerUserId, seekerLocation);
+
+      this.logger.log(`Proposal ${bookingId} accepted by seeker ${client.userId}`);
+    } catch (error) {
+      this.logger.error(`Error accepting proposal: ${error.message}`);
+      client.emit('error', { message: error.message || 'Failed to accept proposal' });
+    }
+  }
+
+  // Method to broadcast proposal_accepted event to provider
+  async broadcastProposalAccepted(
+    bookingId: string,
+    providerUserId: string,
+    seekerLocation: { label: string | null; coordinates: unknown } | undefined,
+  ) {
+    const roomName = `booking:${bookingId}`;
+
+    // Broadcast to all users in the booking room
+    this.server.to(roomName).emit('proposal_accepted', {
+      bookingId,
+      seekerLocation,
+    });
+
+    // Send push notification to provider
+    await this.pushNotificationsService.sendPushNotification(
+      providerUserId,
+      'Proposal Accepted',
+      'The seeker has accepted your service proposal. Head to their location now!',
+      {
+        type: 'proposal_accepted',
+        bookingId,
+      },
+    );
+
+    this.logger.log(`Broadcasted proposal_accepted for booking ${bookingId}`);
+  }
 }

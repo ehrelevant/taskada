@@ -1,4 +1,4 @@
-import { booking, message, user } from '@repo/database';
+import { address, booking, message, request, user } from '@repo/database';
 import { desc, eq, sql } from 'drizzle-orm';
 import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 
@@ -27,12 +27,7 @@ export interface CreateMessageData {
 export class MessagesService {
   constructor(private readonly dbService: DatabaseService) {}
 
-  async getMessagesForBooking(
-    bookingId: string,
-    userId: string,
-    limit = 50,
-    offset = 0,
-  ) {
+  async getMessagesForBooking(bookingId: string, userId: string, limit = 50, offset = 0) {
     // Verify user is part of this booking
     await this.verifyUserInBooking(bookingId, userId);
 
@@ -134,7 +129,7 @@ export class MessagesService {
     }
   }
 
-  async getBookingParticipants(bookingId: string): Promise<{ providerUserId: string; seekerUserId: string }> {
+  async getBookingParticipants(bookingId: string) {
     const [bookingRecord] = await this.dbService.db
       .select({
         providerUserId: booking.providerUserId,
@@ -163,5 +158,22 @@ export class MessagesService {
       .limit(1);
 
     return userRecord || null;
+  }
+
+  async getSeekerAddress(bookingId: string) {
+    // Get the request associated with this booking to find the address
+    const [addressRecord] = await this.dbService.db
+      .select({
+        label: address.label,
+        coordinates: address.coordinates,
+      })
+      .from(request)
+      .innerJoin(address, eq(request.addressId, address.id))
+      .innerJoin(booking, eq(request.seekerUserId, booking.seekerUserId))
+      .where(eq(booking.id, bookingId))
+      .orderBy(request.createdAt)
+      .limit(1);
+
+    return addressRecord;
   }
 }
