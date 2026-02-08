@@ -52,4 +52,15 @@ export class RequestsController {
   async getRequestDetails(@Param('id') id: string) {
     return this.requestsService.getRequestById(id);
   }
+
+  @Delete(':id')
+  async deleteRequest(@Param('id') id: string) {
+    const success = await this.matchingService.deleteRequest(id);
+
+    if (!success) {
+      return { error: 'Request not found or already deleted' };
+    }
+
+    return { success: true, message: 'Request deleted successfully' };
+  }
 }
