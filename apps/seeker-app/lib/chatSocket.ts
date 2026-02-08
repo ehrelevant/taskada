@@ -11,6 +11,7 @@ export class ChatSocketClient {
   private userLeftHandlers: ((data: { userId: string; bookingId: string }) => void)[] = [];
   private bookingDeclinedHandlers: ((data: { bookingId: string; requestId: string }) => void)[] = [];
   private proposalSubmittedHandlers: ((data: ProposalSubmittedData) => void)[] = [];
+  private proposalAcceptedHandlers: ((data: ProposalAcceptedData) => void)[] = [];
 
   async connect(userId: string, userRole: 'seeker' | 'provider'): Promise<void> {
     if (this.socket?.connected) {
@@ -62,6 +63,10 @@ export class ChatSocketClient {
       this.proposalSubmittedHandlers.forEach(handler => handler(data));
     });
 
+    this.socket.on('proposal_accepted', (data: ProposalAcceptedData) => {
+      this.proposalAcceptedHandlers.forEach(handler => handler(data));
+    });
+
     this.socket.on('error', (error: { message: string }) => {
       console.error('Chat socket error:', error);
     });
@@ -98,6 +103,10 @@ export class ChatSocketClient {
     this.socket?.emit('decline_proposal', { bookingId });
   }
 
+  acceptProposal(bookingId: string) {
+    this.socket?.emit('accept_proposal', { bookingId });
+  }
+
   onNewMessage(handler: (message: Message) => void) {
     this.messageHandlers.push(handler);
   }
@@ -122,6 +131,10 @@ export class ChatSocketClient {
     this.proposalSubmittedHandlers.push(handler);
   }
 
+  onProposalAccepted(handler: (data: ProposalAcceptedData) => void) {
+    this.proposalAcceptedHandlers.push(handler);
+  }
+
   removeAllListeners() {
     this.messageHandlers = [];
     this.typingHandlers = [];
@@ -129,7 +142,16 @@ export class ChatSocketClient {
     this.userLeftHandlers = [];
     this.bookingDeclinedHandlers = [];
     this.proposalSubmittedHandlers = [];
+    this.proposalAcceptedHandlers = [];
   }
+}
+
+export interface ProposalAcceptedData {
+  bookingId: string;
+  seekerLocation: {
+    label: string | null;
+    coordinates: [number, number];
+  };
 }
 
 export interface Message {
