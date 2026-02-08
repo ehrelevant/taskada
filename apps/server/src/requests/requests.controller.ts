@@ -1,6 +1,8 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Query } from '@nestjs/common';
 import { safeParse } from 'valibot';
 import { Session, UserSession } from '@thallesp/nestjs-better-auth';
+
+import { MatchingService } from '../matching/matching.service';
 
 import { RequestsService } from './requests.service';
 
@@ -8,7 +10,10 @@ import { CreateRequestDto, CreateRequestSchema } from './dto/create-request.dto'
 
 @Controller('requests')
 export class RequestsController {
-  constructor(private readonly requestsService: RequestsService) {}
+  constructor(
+    private readonly requestsService: RequestsService,
+    private readonly matchingService: MatchingService,
+  ) {}
 
   @Post()
   async createRequest(@Session() { user }: UserSession, @Body() body: CreateRequestDto) {

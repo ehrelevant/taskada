@@ -1,8 +1,9 @@
 import { address, request, requestImage, seeker, serviceType, user } from '@repo/database';
+import { and, desc, eq, inArray, or } from 'drizzle-orm';
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { desc, eq } from 'drizzle-orm';
 
 import { DatabaseService } from '../database/database.service';
+import { MatchingGateway } from '../matching/matching.gateway';
 
 import { CreateRequestDto } from './dto/create-request.dto';
 
@@ -10,7 +11,10 @@ type GeographyPoint = [number, number];
 
 @Injectable()
 export class RequestsService {
-  constructor(private readonly dbService: DatabaseService) {}
+  constructor(
+    private readonly dbService: DatabaseService,
+    private readonly matchingGateway: MatchingGateway,
+  ) {}
 
   async createAddress(label: string, lat: number, lng: number) {
     const [newAddress] = await this.dbService.db
@@ -58,6 +62,9 @@ export class RequestsService {
     if (dto.imageUrls && dto.imageUrls.length > 0) {
       await this.addRequestImages(newRequest.id, dto.imageUrls);
     }
+
+    // Broadcast the new request to relevant providers via WebSocket
+    this.matchingGateway.broadcastNewRequest(newRequest.id, dto.serviceTypeId, dto.serviceId);
 
     return newRequest;
   }
