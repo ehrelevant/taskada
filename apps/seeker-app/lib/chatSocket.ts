@@ -10,6 +10,7 @@ export class ChatSocketClient {
   private userJoinedHandlers: ((data: { userId: string; bookingId: string }) => void)[] = [];
   private userLeftHandlers: ((data: { userId: string; bookingId: string }) => void)[] = [];
   private bookingDeclinedHandlers: ((data: { bookingId: string; requestId: string }) => void)[] = [];
+  private proposalSubmittedHandlers: ((data: ProposalSubmittedData) => void)[] = [];
 
   async connect(userId: string, userRole: 'seeker' | 'provider'): Promise<void> {
     if (this.socket?.connected) {
@@ -57,6 +58,10 @@ export class ChatSocketClient {
       this.bookingDeclinedHandlers.forEach(handler => handler(data));
     });
 
+    this.socket.on('proposal_submitted', (data: ProposalSubmittedData) => {
+      this.proposalSubmittedHandlers.forEach(handler => handler(data));
+    });
+
     this.socket.on('error', (error: { message: string }) => {
       console.error('Chat socket error:', error);
     });
@@ -89,6 +94,10 @@ export class ChatSocketClient {
     this.socket?.emit('decline_booking', { bookingId, requestId });
   }
 
+  declineProposal(bookingId: string) {
+    this.socket?.emit('decline_proposal', { bookingId });
+  }
+
   onNewMessage(handler: (message: Message) => void) {
     this.messageHandlers.push(handler);
   }
@@ -109,12 +118,17 @@ export class ChatSocketClient {
     this.bookingDeclinedHandlers.push(handler);
   }
 
+  onProposalSubmitted(handler: (data: ProposalSubmittedData) => void) {
+    this.proposalSubmittedHandlers.push(handler);
+  }
+
   removeAllListeners() {
     this.messageHandlers = [];
     this.typingHandlers = [];
     this.userJoinedHandlers = [];
     this.userLeftHandlers = [];
     this.bookingDeclinedHandlers = [];
+    this.proposalSubmittedHandlers = [];
   }
 }
 
@@ -135,6 +149,27 @@ export interface TypingData {
   userId: string;
   bookingId: string;
   isTyping: boolean;
+}
+
+export interface ProposalSubmittedData {
+  bookingId: string;
+  providerInfo: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    avatarUrl: string | null;
+  };
+  proposal: {
+    cost: number;
+    specifications: string;
+    serviceTypeName: string;
+    address:
+      | {
+          label: string | null;
+          coordinates: [number, number];
+        }
+      | undefined;
+  };
 }
 
 export const chatSocket = new ChatSocketClient();
