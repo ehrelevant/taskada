@@ -210,6 +210,12 @@ export const ReviewImageSelectSchema = createSelectSchema(reviewImage);
 export const ReviewImageInsertSchema = v.omit(createInsertSchema(reviewImage), ['id']);
 export const ReviewImageUpdateSchema = v.omit(createUpdateSchema(reviewImage), ['id']);
 
+export const requestStatusEnum = pgEnum('request_status', [
+  'pending',
+  'settling',
+]);
+export type RequestStatus = (typeof requestStatusEnum.enumValues)[number];
+
 export const request = app.table('request', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
   serviceTypeId: uuid('service_type_id')
@@ -223,6 +229,7 @@ export const request = app.table('request', {
     .notNull()
     .references(() => address.id, { onUpdate: 'cascade', onDelete: 'cascade' }),
   description: text('description'),
+  status: requestStatusEnum('status').notNull().default('pending'),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true })
     .notNull()
@@ -249,8 +256,6 @@ export const RequestImageInsertSchema = v.omit(createInsertSchema(requestImage),
 export const RequestImageUpdateSchema = v.omit(createUpdateSchema(requestImage), ['id']);
 
 export const bookingStatusEnum = pgEnum('booking_status', [
-  'pending',
-  'accepted',
   'in_transit',
   'serving',
   'completed',
@@ -269,10 +274,7 @@ export const booking = app.table('booking', {
   seekerUserId: uuid('seeker_id')
     .notNull()
     .references(() => seeker.userId, { onUpdate: 'cascade', onDelete: 'cascade' }),
-  requestId: uuid('request_id')
-    .notNull()
-    .references(() => request.id, { onUpdate: 'cascade', onDelete: 'cascade' }),
-  status: bookingStatusEnum('status').notNull().default('pending'), // <--- ADDED
+  status: bookingStatusEnum('status').notNull().default('in_transit'),
   cost: numeric('cost', { mode: 'number', precision: 10, scale: 2 }).notNull().default(0),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true })
