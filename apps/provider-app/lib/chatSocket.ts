@@ -11,7 +11,7 @@ export class ChatSocketClient {
   private userLeftHandlers: ((data: { userId: string; bookingId: string }) => void)[] = [];
   private bookingDeclinedHandlers: ((data: { bookingId: string; requestId: string }) => void)[] = [];
 
-  async connect(): Promise<void> {
+  async connect(userId: string, userRole: 'seeker' | 'provider'): Promise<void> {
     if (this.socket?.connected) {
       return;
     }
@@ -23,6 +23,10 @@ export class ChatSocketClient {
       transports: ['websocket'],
       withCredentials: true,
       extraHeaders: cookie ? { Cookie: cookie } : undefined,
+      auth: {
+        userId,
+        userRole,
+      },
     });
 
     this.socket.on('connect', () => {
