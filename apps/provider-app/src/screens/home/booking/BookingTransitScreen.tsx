@@ -1,21 +1,28 @@
 import * as Location from 'expo-location';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import { Alert, ScrollView, StyleSheet, View } from 'react-native';
+import { apiFetch } from '@lib/helpers';
+import { authClient } from '@lib/authClient';
 import { Button, Typography } from '@repo/components';
+import { chatSocket } from '@lib/chatSocket';
 import { colors, spacing } from '@repo/theme';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RequestsStackParamList } from '@navigation/RequestsStack';
-import { RouteProp, useRoute } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ScrollView, StyleSheet, View } from 'react-native';
 import { useEffect, useState } from 'react';
 
 type BookingTransitRouteProp = RouteProp<RequestsStackParamList, 'BookingTransit'>;
+type BookingTransitNavigationProp = NativeStackNavigationProp<RequestsStackParamList, 'BookingTransit'>;
 
 export function BookingTransitScreen() {
   const route = useRoute<BookingTransitRouteProp>();
+  const navigation = useNavigation<BookingTransitNavigationProp>();
   const { bookingId, seekerLocation, address } = route.params;
 
   const [providerLocation, setProviderLocation] = useState<Location.LocationObjectCoords | null>(null);
   const [locationError, setLocationError] = useState<string | null>(null);
+  const [isArriving, setIsArriving] = useState(false);
 
   // Parse seeker coordinates (stored as [lng, lat] in database, MapView expects {latitude, longitude})
   const [seekerLongitude, seekerLatitude] = seekerLocation.coordinates;
@@ -42,9 +49,56 @@ export function BookingTransitScreen() {
     getCurrentLocation();
   }, []);
 
-  const handleArrived = () => {
-    // TODO: Implement arrival logic
-    console.log('Provider arrived at destination:', { bookingId });
+  // Setup WebSocket connection
+  useEffect(() => {
+    const setupSocket = async () => {
+      const session = await authClient.getSession();
+      const userId = session.data?.user?.id;
+      if (!userId || !bookingId) return;
+
+      await chatSocket.connect(userId, 'provider');
+      chatSocket.joinBooking(bookingId);
+    };
+
+    setupSocket();
+
+    return () => {
+      if (bookingId) {
+        chatSocket.leaveBooking(bookingId);
+        chatSocket.removeAllListeners();
+        chatSocket.disconnect();
+      }
+    };
+  }, [bookingId]);
+
+  const handleArrived = async () => {
+    if (isArriving) return;
+
+    setIsArriving(true);
+
+    try {
+      // Update booking status to 'serving'
+      const response = await apiFetch(`/bookings/${bookingId}`, 'PATCH', {
+        body: JSON.stringify({ status: 'serving' }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update booking status');
+      }
+
+      // Notify seeker via WebSocket
+      chatSocket.notifyArrival(bookingId);
+
+      // Navigate to TransactionServing screen
+      navigation.replace('TransactionServing', {
+        bookingId,
+      });
+    } catch (error) {
+      console.error('Error handling arrival:', error);
+      Alert.alert('Error', 'Failed to confirm arrival. Please try again.');
+    } finally {
+      setIsArriving(false);
+    }
   };
 
   // Calculate initial region to show both markers
@@ -138,7 +192,13 @@ export function BookingTransitScreen() {
 
       {/* Action Button */}
       <View style={styles.buttonContainer}>
-        <Button title="Press this Button if you have arrived" onPress={handleArrived} style={styles.arriveButton} />
+        <Button
+          title="Press this Button if you have arrived"
+          onPress={handleArrived}
+          isLoading={isArriving}
+          disabled={isArriving}
+          style={styles.arriveButton}
+        />
       </View>
     </SafeAreaView>
   );

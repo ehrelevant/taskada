@@ -1,3 +1,4 @@
+import { BookingDetailsScreen } from '@screens/home/booking/BookingDetailsScreen';
 import { BookingTransitScreen } from '@screens/home/booking/BookingTransitScreen';
 import { ChatScreen } from '@screens/home/chat/ChatScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -56,6 +57,9 @@ export type RequestsStackParamList = {
         }
       | undefined;
   };
+  BookingDetails: {
+    bookingId: string;
+  };
 };
 
 const Stack = createNativeStackNavigator<RequestsStackParamList>();
@@ -110,6 +114,7 @@ export function RequestsStack() {
         component={TransactionServingScreen}
         options={{
           title: 'Transaction Serving',
+          headerShown: false,
         }}
       />
       <Stack.Screen
@@ -124,6 +129,14 @@ export function RequestsStack() {
         component={BookingTransitScreen}
         options={{
           title: 'Navigating to Seeker',
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="BookingDetails"
+        component={BookingDetailsScreen}
+        options={{
+          title: 'Booking Details',
           headerShown: false,
         }}
       />

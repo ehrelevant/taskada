@@ -1,35 +1,78 @@
+import { authClient } from '@lib/authClient';
 import { Avatar, Rating, Typography } from '@repo/components';
+import { chatSocket } from '@lib/chatSocket';
 import { colors, spacing } from '@repo/theme';
 import { HomeStackParamList } from '@navigation/HomeStack';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView, StyleSheet, View } from 'react-native';
+import { useEffect, useState } from 'react';
 
 type BookingTransitRouteProp = RouteProp<HomeStackParamList, 'BookingTransit'>;
 
 export function BookingTransitScreen() {
   const route = useRoute<BookingTransitRouteProp>();
-  const { providerInfo, proposal } = route.params;
+  const { providerInfo, proposal, bookingId } = route.params;
 
   const { cost, specifications, serviceTypeName } = proposal;
 
   const providerName = `${providerInfo.firstName} ${providerInfo.lastName}`;
+  const [hasProviderArrived, setHasProviderArrived] = useState(false);
+
+  // Setup WebSocket listener for provider arrival
+  useEffect(() => {
+    const setupSocket = async () => {
+      const session = await authClient.getSession();
+      const userId = session.data?.user?.id;
+      if (!userId || !bookingId) return;
+
+      await chatSocket.connect(userId, 'seeker');
+      chatSocket.joinBooking(bookingId);
+
+      chatSocket.onProviderArrived(data => {
+        if (data.bookingId === bookingId) {
+          setHasProviderArrived(true);
+        }
+      });
+    };
+
+    setupSocket();
+
+    return () => {
+      if (bookingId) {
+        chatSocket.leaveBooking(bookingId);
+        chatSocket.removeAllListeners();
+        chatSocket.disconnect();
+      }
+    };
+  }, [bookingId]);
 
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <Typography variant="h6">Provider En Route</Typography>
+        <Typography variant="h6">{hasProviderArrived ? 'Provider Arrived' : 'Provider En Route'}</Typography>
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {/* Status Message */}
         <View style={styles.statusSection}>
+          {hasProviderArrived && (
+            <View style={styles.arrivalBadge}>
+              <Typography variant="body2" style={styles.arrivalBadgeText}>
+                ✓ Provider has arrived
+              </Typography>
+            </View>
+          )}
           <Typography variant="h5" style={styles.statusTitle}>
-            Your service provider is on their way
+            {hasProviderArrived
+              ? 'Your service provider has arrived and is currently serving!'
+              : 'Your service provider is on their way'}
           </Typography>
           <Typography variant="body1" color="textSecondary" style={styles.statusSubtitle}>
-            Please wait while your provider arrives at your location
+            {hasProviderArrived
+              ? 'The provider is ready to serve you. Please prepare for the service.'
+              : 'Please wait while your provider arrives at your location'}
           </Typography>
         </View>
 
@@ -130,6 +173,17 @@ const styles = StyleSheet.create({
   },
   statusSubtitle: {
     textAlign: 'center',
+  },
+  arrivalBadge: {
+    backgroundColor: '#4CAF50',
+    paddingHorizontal: spacing.m,
+    paddingVertical: spacing.s,
+    borderRadius: 20,
+    marginBottom: spacing.m,
+  },
+  arrivalBadgeText: {
+    color: colors.textInverse,
+    fontWeight: '600',
   },
   section: {
     marginBottom: spacing.l,
