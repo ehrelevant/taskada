@@ -11,6 +11,7 @@ import { MessagesModule } from './messages/messages.module';
 import { ProvidersModule } from './providers/providers.module';
 import { PushNotificationsModule } from './push-notifications/push-notifications.module';
 import { RequestsModule } from './requests/requests.module';
+import { ReviewsModule } from './reviews/reviews.module';
 import { SeekersModule } from './seekers/seekers.module';
 import { ServicesModule } from './services/services.module';
 import { ServiceTypesModule } from './service-types/service-types.module';
@@ -31,6 +32,7 @@ import { UsersModule } from './users/users.module';
     MessagesModule,
     ChatModule,
     PushNotificationsModule,
+    ReviewsModule,
   ],
 })
 export class AppModule {}
