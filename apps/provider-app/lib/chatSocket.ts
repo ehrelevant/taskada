@@ -108,6 +108,10 @@ export class ChatSocketClient {
     this.socket?.emit('provider_arrived', { bookingId });
   }
 
+  notifyBookingCompleted(bookingId: string) {
+    this.socket?.emit('booking_completed', { bookingId });
+  }
+
   onNewMessage(handler: (message: Message) => void) {
     this.messageHandlers.push(handler);
   }
