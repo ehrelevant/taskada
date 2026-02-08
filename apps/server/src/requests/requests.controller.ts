@@ -37,6 +37,17 @@ export class RequestsController {
     return this.requestsService.getNearbyRequests();
   }
 
+  @Get('pending')
+  async getPendingRequests(
+    @Query('serviceTypeIds') serviceTypeIdsParam?: string,
+    @Query('serviceIds') serviceIdsParam?: string,
+  ) {
+    const serviceTypeIds = serviceTypeIdsParam ? serviceTypeIdsParam.split(',') : [];
+    const serviceIds = serviceIdsParam ? serviceIdsParam.split(',') : [];
+
+    return this.requestsService.getPendingRequests(serviceTypeIds, serviceIds);
+  }
+
   @Get(':id')
   async getRequestDetails(@Param('id') id: string) {
     return this.requestsService.getRequestById(id);

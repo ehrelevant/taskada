@@ -125,4 +125,108 @@ export class RequestsService {
 
     return result[0];
   }
+
+  async getPendingRequests(serviceTypeIds: string[], serviceIds: string[]) {
+    const requests = await this.dbService.db
+      .select({
+        id: request.id,
+        serviceTypeId: request.serviceTypeId,
+        serviceId: request.serviceId,
+        seekerUserId: request.seekerUserId,
+        addressId: request.addressId,
+        description: request.description,
+        status: request.status,
+        createdAt: request.createdAt,
+      })
+      .from(request)
+      .where(and(
+        eq(request.status, 'pending'),
+        or(
+          serviceIds ? inArray(request.serviceId, serviceIds) : undefined,
+          serviceTypeIds ? inArray(request.serviceTypeId, serviceTypeIds) : undefined
+        )
+      ))
+      .orderBy(desc(request.createdAt));
+
+    // Get full details for each request
+    // TODO: Change this to a single query with joins for better performance
+    const detailedRequests = await Promise.all(
+      requests.map(async req => {
+        // Get service type
+        const [serviceTypeRecord] = await this.dbService.db
+          .select({
+            id: serviceType.id,
+            name: serviceType.name,
+            iconUrl: serviceType.iconUrl,
+          })
+          .from(serviceType)
+          .where(eq(serviceType.id, req.serviceTypeId))
+          .limit(1);
+
+        // Get seeker info
+        const [seekerRecord] = await this.dbService.db
+          .select({
+            userId: seeker.userId,
+          })
+          .from(seeker)
+          .where(eq(seeker.userId, req.seekerUserId))
+          .limit(1);
+
+        const [userRecord] = await this.dbService.db
+          .select({
+            firstName: user.firstName,
+            lastName: user.lastName,
+            avatarUrl: user.avatarUrl,
+            phoneNumber: user.phoneNumber,
+          })
+          .from(user)
+          .where(eq(user.id, req.seekerUserId))
+          .limit(1);
+
+        // Get address
+        const [addressRecord] = await this.dbService.db
+          .select({
+            id: address.id,
+            label: address.label,
+            coordinates: address.coordinates,
+          })
+          .from(address)
+          .where(eq(address.id, req.addressId))
+          .limit(1);
+
+        // Get images
+        const imageRecords = await this.dbService.db
+          .select({ image: requestImage.image })
+          .from(requestImage)
+          .where(eq(requestImage.requestId, req.id));
+
+        return {
+          id: req.id,
+          serviceTypeId: req.serviceTypeId,
+          serviceId: req.serviceId,
+          seekerUserId: req.seekerUserId,
+          addressId: req.addressId,
+          description: req.description,
+          status: req.status,
+          createdAt: req.createdAt,
+          serviceType: serviceTypeRecord || { id: '', name: 'Unknown', iconUrl: null },
+          seeker: {
+            id: seekerRecord?.userId || '',
+            firstName: userRecord?.firstName || '',
+            lastName: userRecord?.lastName || '',
+            avatarUrl: userRecord?.avatarUrl || null,
+            phoneNumber: userRecord?.phoneNumber || '',
+          },
+          address: {
+            id: addressRecord?.id || '',
+            label: addressRecord?.label || null,
+            coordinates: addressRecord?.coordinates || [0, 0],
+          },
+          images: imageRecords.map(img => img.image),
+        };
+      }),
+    );
+
+    return detailedRequests;
+  }
 }
