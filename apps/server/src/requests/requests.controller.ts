@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { safeParse } from 'valibot';
 import { Session, UserSession } from '@thallesp/nestjs-better-auth';
 
@@ -67,5 +67,11 @@ export class RequestsController {
     }
 
     return { success: true, message: 'Request deleted successfully' };
+  }
+
+  @Patch(':id/status')
+  async updateRequestStatus(@Param('id') id: string, @Body() body: { status: 'pending' | 'settling' }) {
+    await this.requestsService.updateRequestStatus(id, body.status);
+    return { success: true, message: `Request status updated to ${body.status}` };
   }
 }

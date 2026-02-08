@@ -1,6 +1,6 @@
 import { address, request, requestImage, seeker, serviceType, user } from '@repo/database';
 import { and, desc, eq, inArray, or } from 'drizzle-orm';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 
 import { DatabaseService } from '../database/database.service';
 import { MatchingGateway } from '../matching/matching.gateway';
@@ -146,13 +146,15 @@ export class RequestsService {
         createdAt: request.createdAt,
       })
       .from(request)
-      .where(and(
-        eq(request.status, 'pending'),
-        or(
-          serviceIds ? inArray(request.serviceId, serviceIds) : undefined,
-          serviceTypeIds ? inArray(request.serviceTypeId, serviceTypeIds) : undefined
-        )
-      ))
+      .where(
+        and(
+          eq(request.status, 'pending'),
+          or(
+            serviceIds ? inArray(request.serviceId, serviceIds) : undefined,
+            serviceTypeIds ? inArray(request.serviceTypeId, serviceTypeIds) : undefined,
+          ),
+        ),
+      )
       .orderBy(desc(request.createdAt));
 
     // Get full details for each request
@@ -235,5 +237,17 @@ export class RequestsService {
     );
 
     return detailedRequests;
+  }
+
+  async updateRequestStatus(requestId: string, status: 'pending' | 'settling'): Promise<void> {
+    const [updatedRequest] = await this.dbService.db
+      .update(request)
+      .set({ status })
+      .where(eq(request.id, requestId))
+      .returning();
+
+    if (!updatedRequest) {
+      throw new NotFoundException('Request not found');
+    }
   }
 }
