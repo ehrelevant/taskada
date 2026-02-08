@@ -1,3 +1,4 @@
+import { BookingTransitScreen } from '@screens/home/booking/BookingTransitScreen';
 import { ChatScreen } from '@screens/home/chat/ChatScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { HomeScreen } from '@screens/home/HomeScreen';
@@ -48,6 +49,26 @@ export type HomeStackParamList = {
         | undefined;
     };
     requestId: string;
+  };
+  BookingTransit: {
+    bookingId: string;
+    providerInfo: {
+      id: string;
+      firstName: string;
+      lastName: string;
+      avatarUrl: string | null;
+    };
+    proposal: {
+      cost: number;
+      specifications: string;
+      serviceTypeName: string;
+      address:
+        | {
+            label: string | null;
+            coordinates: [number, number];
+          }
+        | undefined;
+    };
   };
 };
 
@@ -111,6 +132,14 @@ export function HomeStack() {
         component={ViewProposalScreen}
         options={{
           title: 'Service Proposal',
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="BookingTransit"
+        component={BookingTransitScreen}
+        options={{
+          title: 'Provider In Transit',
           headerShown: false,
         }}
       />

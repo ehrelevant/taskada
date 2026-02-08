@@ -1,3 +1,4 @@
+import { BookingTransitScreen } from '@screens/home/booking/BookingTransitScreen';
 import { ChatScreen } from '@screens/home/chat/ChatScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { FinalizeDetailsScreen } from '@screens/home/booking/FinalizeDetailsScreen';
@@ -42,6 +43,19 @@ export type RequestsStackParamList = {
   TransactionTransit: { bookingId: string };
   TransactionServing: { bookingId: string };
   TransactionDone: undefined;
+  BookingTransit: {
+    bookingId: string;
+    seekerLocation: {
+      label: string | null;
+      coordinates: [number, number];
+    };
+    address:
+      | {
+          label: string | null;
+          coordinates: [number, number];
+        }
+      | undefined;
+  };
 };
 
 const Stack = createNativeStackNavigator<RequestsStackParamList>();
@@ -103,6 +117,14 @@ export function RequestsStack() {
         component={TransactionDoneScreen}
         options={{
           title: 'Transaction Done',
+        }}
+      />
+      <Stack.Screen
+        name="BookingTransit"
+        component={BookingTransitScreen}
+        options={{
+          title: 'Navigating to Seeker',
+          headerShown: false,
         }}
       />
     </Stack.Navigator>

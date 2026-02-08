@@ -1,5 +1,16 @@
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import { ActivityIndicator, Alert, KeyboardAvoidingView, Modal, Platform, ScrollView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Alert,
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { apiFetch } from '@lib/helpers';
 import { ArrowLeft } from 'lucide-react-native';
 import { authClient } from '@lib/authClient';
@@ -60,6 +71,17 @@ export function FinalizeDetailsScreen() {
               },
             ],
           );
+        }
+      });
+
+      chatSocket.onProposalAccepted(data => {
+        if (data.bookingId === bookingId) {
+          setShowWaitingModal(false);
+          navigation.replace('BookingTransit', {
+            bookingId,
+            seekerLocation: data.seekerLocation,
+            address: seekerLocation,
+          });
         }
       });
     };

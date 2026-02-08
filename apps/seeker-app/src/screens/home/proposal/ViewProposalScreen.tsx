@@ -23,9 +23,15 @@ export function ViewProposalScreen() {
   const [longitude, latitude] = coordinates || [0, 0];
 
   const handleAccept = () => {
-    // For now, this doesn't do anything as per requirements
-    // The user stays on this screen
-    console.log('Accepting proposal:', { bookingId });
+    // Emit acceptance event via WebSocket
+    chatSocket.acceptProposal(bookingId);
+
+    // Navigate to the Provider En Route screen
+    navigation.replace('BookingTransit', {
+      bookingId,
+      providerInfo,
+      proposal,
+    });
   };
 
   const handleDecline = () => {
