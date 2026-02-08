@@ -210,10 +210,7 @@ export const ReviewImageSelectSchema = createSelectSchema(reviewImage);
 export const ReviewImageInsertSchema = v.omit(createInsertSchema(reviewImage), ['id']);
 export const ReviewImageUpdateSchema = v.omit(createUpdateSchema(reviewImage), ['id']);
 
-export const requestStatusEnum = pgEnum('request_status', [
-  'pending',
-  'settling',
-]);
+export const requestStatusEnum = pgEnum('request_status', ['pending', 'settling']);
 export type RequestStatus = (typeof requestStatusEnum.enumValues)[number];
 
 export const request = app.table('request', {
@@ -255,12 +252,7 @@ export const RequestImageSelectSchema = createSelectSchema(requestImage);
 export const RequestImageInsertSchema = v.omit(createInsertSchema(requestImage), ['id']);
 export const RequestImageUpdateSchema = v.omit(createUpdateSchema(requestImage), ['id']);
 
-export const bookingStatusEnum = pgEnum('booking_status', [
-  'in_transit',
-  'serving',
-  'completed',
-  'cancelled',
-]);
+export const bookingStatusEnum = pgEnum('booking_status', ['in_transit', 'serving', 'completed', 'cancelled']);
 export type BookingStatus = (typeof bookingStatusEnum.enumValues)[number];
 
 export const booking = app.table('booking', {
@@ -351,3 +343,22 @@ export type NewPaymentMethod = typeof paymentMethod.$inferInsert;
 export const PaymentMethodSelectSchema = createSelectSchema(paymentMethod);
 export const PaymentMethodInsertSchema = v.omit(createInsertSchema(paymentMethod), ['id']);
 export const PaymentMethodUpdateSchema = v.omit(createUpdateSchema(paymentMethod), ['id']);
+
+export const pushToken = app.table('push_token', {
+  id: uuid('id').primaryKey().notNull().defaultRandom(),
+  userId: uuid('user_id')
+    .notNull()
+    .references(() => user.id, { onUpdate: 'cascade', onDelete: 'cascade' }),
+  token: text('token').notNull(),
+  platform: text('platform').notNull(), // 'ios' or 'android'
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+});
+export type PushToken = typeof pushToken.$inferSelect;
+export type NewPushToken = typeof pushToken.$inferInsert;
+export const PushTokenSelectSchema = createSelectSchema(pushToken);
+export const PushTokenInsertSchema = v.omit(createInsertSchema(pushToken), ['id', 'createdAt', 'updatedAt']);
+export const PushTokenUpdateSchema = v.omit(createUpdateSchema(pushToken), ['id', 'createdAt', 'updatedAt']);
