@@ -11,7 +11,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   newArchEnabled: true,
   scheme: "provider-app",
   splash: {
-    "image": "./lib/assets/splash-icon.png",
+    "image": "./lib/assets/splash-icon-dark.png",
     "resizeMode": "contain",
     "backgroundColor": "#ffffff"
   },
