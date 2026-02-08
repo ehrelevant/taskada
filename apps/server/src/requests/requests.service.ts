@@ -51,6 +51,7 @@ export class RequestsService {
         seekerUserId,
         addressId: newAddress.id,
         description: dto.description,
+        status: 'pending',
       })
       .returning();
 
@@ -93,7 +94,10 @@ export class RequestsService {
     const result = await this.dbService.db
       .select({
         id: request.id,
+        serviceId: request.serviceId,
+        seekerUserId: request.seekerUserId,
         description: request.description,
+        status: request.status,
         serviceType: {
           id: serviceType.id,
           name: serviceType.name,
