@@ -1,5 +1,5 @@
-import { address, booking, request, service, serviceType, user } from '@repo/database';
-import { and, eq } from 'drizzle-orm';
+import { address, booking, request, review, service, serviceType, user } from '@repo/database';
+import { and, eq, sql } from 'drizzle-orm';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 
 import { ChatGateway } from '../chat/chat.gateway';
@@ -194,9 +194,22 @@ export class BookingsService {
     // Get the address for this booking
     const addressData = await this.getSeekerAddress(bookingRecord.seekerUserId, bookingId);
 
+    // Get service rating info
+    const [serviceRating] = await this.dbService.db
+      .select({
+        avgRating: sql`COALESCE(AVG(${review.rating}), 0)`.mapWith(Number),
+        reviewCount: sql`COUNT(DISTINCT ${review.id})`.mapWith(Number),
+      })
+      .from(review)
+      .where(eq(review.serviceId, bookingRecord.serviceId));
+
     return {
       ...bookingRecord,
       address: addressData,
+      serviceRating: {
+        avgRating: serviceRating?.avgRating ?? 0,
+        reviewCount: serviceRating?.reviewCount ?? 0,
+      },
     };
   }
 
