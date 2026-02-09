@@ -43,7 +43,7 @@ export type RequestsStackParamList = {
   };
   TransactionTransit: { bookingId: string };
   TransactionServing: { bookingId: string };
-  TransactionDone: undefined;
+  TransactionDone: { bookingId: string };
   BookingTransit: {
     bookingId: string;
     seekerLocation: {
@@ -122,6 +122,7 @@ export function RequestsStack() {
         component={TransactionDoneScreen}
         options={{
           title: 'Transaction Done',
+          headerShown: false,
         }}
       />
       <Stack.Screen

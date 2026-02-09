@@ -1,5 +1,6 @@
 import { ActivityIndicator, Alert, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { apiFetch } from '@lib/helpers';
+import { chatSocket } from '@lib/chatSocket';
 import { colors, spacing } from '@repo/theme';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RequestsStackParamList } from '@navigation/RequestsStack';
@@ -72,6 +73,12 @@ export function TransactionServingScreen() {
       }
 
       setIsPaid(true);
+
+      // Emit booking completed event via websocket
+      chatSocket.notifyBookingCompleted(bookingId);
+
+      // Navigate to TransactionDone screen
+      navigation.navigate('TransactionDone', { bookingId });
     } catch (error) {
       console.error('Error updating status:', error);
       Alert.alert('Error', 'Failed to update status. Please try again.');

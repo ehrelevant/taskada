@@ -1,16 +1,17 @@
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import { ActivityIndicator, Alert, ScrollView, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Alert, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { apiFetch } from '@lib/helpers';
-import { Button, Typography } from '@repo/components';
+import { ChevronLeft } from 'lucide-react-native';
 import { colors, spacing } from '@repo/theme';
+import { HomeStackParamList } from '@navigation/HomeStack';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RequestsStackParamList } from '@navigation/RequestsStack';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Typography } from '@repo/components';
 import { useEffect, useState } from 'react';
 
-type BookingDetailsRouteProp = RouteProp<RequestsStackParamList, 'BookingDetails'>;
-type BookingDetailsNavigationProp = NativeStackNavigationProp<RequestsStackParamList, 'BookingDetails'>;
+type BookingDetailsRouteProp = RouteProp<HomeStackParamList, 'BookingDetails'>;
+type BookingDetailsNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'BookingDetails'>;
 
 interface BookingData {
   id: string;
@@ -18,6 +19,7 @@ interface BookingData {
   cost: number;
   specifications: string | null;
   createdAt: string;
+  serviceId: string;
   provider: {
     id: string;
     firstName: string;
@@ -28,6 +30,10 @@ interface BookingData {
     label: string | null;
     coordinates: [number, number];
   } | null;
+  serviceRating: {
+    avgRating: number;
+    reviewCount: number;
+  };
 }
 
 export function BookingDetailsScreen() {
@@ -96,7 +102,11 @@ export function BookingDetailsScreen() {
     <SafeAreaView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
+        <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
+          <ChevronLeft size={24} color={colors.textPrimary} />
+        </TouchableOpacity>
         <Typography variant="h6">Booking Details</Typography>
+        <View style={styles.headerSpacer} />
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -176,11 +186,6 @@ export function BookingDetailsScreen() {
           </View>
         </View>
       </ScrollView>
-
-      {/* Back Button */}
-      <View style={styles.buttonContainer}>
-        <Button title="Go Back" onPress={handleGoBack} />
-      </View>
     </SafeAreaView>
   );
 }
@@ -201,11 +206,17 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     paddingHorizontal: spacing.m,
     paddingVertical: spacing.s,
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
+  },
+  backButton: {
+    padding: spacing.xs,
+  },
+  headerSpacer: {
+    width: 40,
   },
   scrollContent: {
     padding: spacing.m,
@@ -267,11 +278,5 @@ const styles = StyleSheet.create({
   },
   specificationsText: {
     lineHeight: 22,
-  },
-  buttonContainer: {
-    padding: spacing.m,
-    borderTopWidth: 1,
-    borderTopColor: colors.border,
-    backgroundColor: colors.background,
   },
 });

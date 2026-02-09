@@ -3,15 +3,18 @@ import { Avatar, Rating, Typography } from '@repo/components';
 import { chatSocket } from '@lib/chatSocket';
 import { colors, spacing } from '@repo/theme';
 import { HomeStackParamList } from '@navigation/HomeStack';
-import { RouteProp, useRoute } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { useEffect, useState } from 'react';
 
 type BookingTransitRouteProp = RouteProp<HomeStackParamList, 'BookingTransit'>;
+type BookingTransitNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'BookingTransit'>;
 
 export function BookingTransitScreen() {
   const route = useRoute<BookingTransitRouteProp>();
+  const navigation = useNavigation<BookingTransitNavigationProp>();
   const { providerInfo, proposal, bookingId } = route.params;
 
   const { cost, specifications, serviceTypeName } = proposal;
@@ -34,6 +37,18 @@ export function BookingTransitScreen() {
           setHasProviderArrived(true);
         }
       });
+
+      chatSocket.onBookingCompleted(data => {
+        if (data.bookingId === bookingId) {
+          // Navigate to BookingComplete screen
+          navigation.replace('BookingComplete', {
+            bookingId,
+            providerInfo,
+            serviceTypeName,
+            cost,
+          });
+        }
+      });
     };
 
     setupSocket();
@@ -45,7 +60,7 @@ export function BookingTransitScreen() {
         chatSocket.disconnect();
       }
     };
-  }, [bookingId]);
+  }, [bookingId, cost, navigation, providerInfo, serviceTypeName]);
 
   return (
     <SafeAreaView style={styles.container}>

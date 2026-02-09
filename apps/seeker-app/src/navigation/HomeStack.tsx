@@ -1,3 +1,5 @@
+import { BookingCompleteScreen } from '@screens/home/booking/BookingCompleteScreen';
+import { BookingDetailsScreen } from '@screens/home/booking/BookingDetailsScreen';
 import { BookingTransitScreen } from '@screens/home/booking/BookingTransitScreen';
 import { ChatScreen } from '@screens/home/chat/ChatScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -70,6 +72,20 @@ export type HomeStackParamList = {
         | undefined;
     };
   };
+  BookingComplete: {
+    bookingId: string;
+    providerInfo: {
+      id: string;
+      firstName: string;
+      lastName: string;
+      avatarUrl: string | null;
+    };
+    serviceTypeName: string;
+    cost: number;
+  };
+  BookingDetails: {
+    bookingId: string;
+  };
 };
 
 const Stack = createNativeStackNavigator<HomeStackParamList>();
@@ -140,6 +156,22 @@ export function HomeStack() {
         component={BookingTransitScreen}
         options={{
           title: 'Provider In Transit',
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="BookingComplete"
+        component={BookingCompleteScreen}
+        options={{
+          title: 'Service Complete',
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="BookingDetails"
+        component={BookingDetailsScreen}
+        options={{
+          title: 'Booking Details',
           headerShown: false,
         }}
       />
