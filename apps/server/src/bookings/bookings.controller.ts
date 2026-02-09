@@ -18,6 +18,16 @@ export class BookingsController {
     return await this.bookingsService.getBookings(requestId, seekerUserId);
   }
 
+  @Get('history')
+  async getBookingHistory(@Session() { user }: UserSession) {
+    return await this.bookingsService.getBookingHistory(user.id, 'seeker');
+  }
+
+  @Get('provider/history')
+  async getProviderBookingHistory(@Session() { user }: UserSession) {
+    return await this.bookingsService.getBookingHistory(user.id, 'provider');
+  }
+
   @Get(':id')
   async getBookingById(@Param('id') id: string) {
     return await this.bookingsService.getBookingById(id);
@@ -49,5 +59,15 @@ export class BookingsController {
       submitProposalDto.cost,
       submitProposalDto.specifications,
     );
+  }
+
+  @Get(':id/request-details')
+  async getBookingRequestDetails(@Session() { user }: UserSession, @Param('id') id: string) {
+    return await this.bookingsService.getBookingRequestDetails(id, user.id);
+  }
+
+  @Get(':id/chat-logs')
+  async getBookingChatLogs(@Session() { user }: UserSession, @Param('id') id: string) {
+    return await this.bookingsService.getBookingChatLogs(id, user.id);
   }
 }

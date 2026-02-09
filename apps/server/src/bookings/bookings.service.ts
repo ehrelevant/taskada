@@ -1,5 +1,5 @@
-import { address, booking, request, review, service, serviceType, user } from '@repo/database';
-import { and, eq, sql } from 'drizzle-orm';
+import { address, booking, message, request, requestImage, review, service, serviceType, user } from '@repo/database';
+import { and, desc, eq, or, sql } from 'drizzle-orm';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 
 import { ChatGateway } from '../chat/chat.gateway';
@@ -297,5 +297,206 @@ export class BookingsService {
     }
 
     return await baseQuery;
+  }
+
+  async getBookingHistory(userId: string, role: 'provider' | 'seeker') {
+    const whereCondition =
+      role === 'provider'
+        ? and(eq(booking.providerUserId, userId), or(eq(booking.status, 'completed'), eq(booking.status, 'cancelled')))
+        : and(eq(booking.seekerUserId, userId), or(eq(booking.status, 'completed'), eq(booking.status, 'cancelled')));
+
+    const results = await this.dbService.db
+      .select({
+        id: booking.id,
+        providerUserId: booking.providerUserId,
+        seekerUserId: booking.seekerUserId,
+        serviceId: booking.serviceId,
+        status: booking.status,
+        cost: booking.cost,
+        specifications: booking.specifications,
+        createdAt: booking.createdAt,
+        provider: {
+          id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          avatarUrl: user.avatarUrl,
+        },
+        serviceType: {
+          id: serviceType.id,
+          name: serviceType.name,
+          iconUrl: serviceType.iconUrl,
+        },
+      })
+      .from(booking)
+      .leftJoin(user, eq(booking.providerUserId, user.id))
+      .innerJoin(service, eq(booking.serviceId, service.id))
+      .innerJoin(serviceType, eq(service.serviceTypeId, serviceType.id))
+      .where(whereCondition)
+      .orderBy(desc(booking.createdAt));
+
+    // For seeker view, also get service rating info
+    if (role === 'seeker') {
+      const resultsWithRating = await Promise.all(
+        results.map(async b => {
+          const [serviceRating] = await this.dbService.db
+            .select({
+              avgRating: sql`COALESCE(AVG(${review.rating}), 0)`.mapWith(Number),
+              reviewCount: sql`COUNT(DISTINCT ${review.id})`.mapWith(Number),
+            })
+            .from(review)
+            .where(eq(review.serviceId, b.serviceId));
+
+          return {
+            ...b,
+            serviceRating: {
+              avgRating: serviceRating?.avgRating ?? 0,
+              reviewCount: serviceRating?.reviewCount ?? 0,
+            },
+          };
+        }),
+      );
+      return resultsWithRating;
+    }
+
+    return results;
+  }
+
+  async getBookingRequestDetails(bookingId: string, userId: string) {
+    // Verify user is part of this booking
+    const [bookingRecord] = await this.dbService.db
+      .select({
+        id: booking.id,
+        providerUserId: booking.providerUserId,
+        seekerUserId: booking.seekerUserId,
+        status: booking.status,
+      })
+      .from(booking)
+      .where(eq(booking.id, bookingId))
+      .limit(1);
+
+    if (!bookingRecord) {
+      throw new NotFoundException('Booking not found');
+    }
+
+    if (bookingRecord.providerUserId !== userId && bookingRecord.seekerUserId !== userId) {
+      throw new BadRequestException('You are not authorized to access this booking');
+    }
+
+    // Get the most recent request associated with this seeker (the one that led to this booking)
+    const [requestRecord] = await this.dbService.db
+      .select({
+        id: request.id,
+        serviceTypeId: request.serviceTypeId,
+        description: request.description,
+        createdAt: request.createdAt,
+        serviceTypeName: serviceType.name,
+        serviceTypeIcon: serviceType.iconUrl,
+      })
+      .from(request)
+      .innerJoin(serviceType, eq(request.serviceTypeId, serviceType.id))
+      .where(eq(request.seekerUserId, bookingRecord.seekerUserId))
+      .orderBy(desc(request.createdAt))
+      .limit(1);
+
+    if (!requestRecord) {
+      throw new NotFoundException('Request details not found');
+    }
+
+    // Get address
+    const [addressRecord] = await this.dbService.db
+      .select({
+        label: address.label,
+        coordinates: address.coordinates,
+      })
+      .from(request)
+      .innerJoin(address, eq(request.addressId, address.id))
+      .where(eq(request.id, requestRecord.id))
+      .limit(1);
+
+    // Get request images
+    const images = await this.dbService.db
+      .select({
+        image: requestImage.image,
+      })
+      .from(requestImage)
+      .where(eq(requestImage.requestId, requestRecord.id));
+
+    // Get seeker info
+    const [seekerInfo] = await this.dbService.db
+      .select({
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        avatarUrl: user.avatarUrl,
+        phoneNumber: user.phoneNumber,
+      })
+      .from(user)
+      .where(eq(user.id, bookingRecord.seekerUserId))
+      .limit(1);
+
+    return {
+      id: requestRecord.id,
+      serviceTypeId: requestRecord.serviceTypeId,
+      serviceTypeName: requestRecord.serviceTypeName,
+      serviceTypeIcon: requestRecord.serviceTypeIcon,
+      description: requestRecord.description,
+      createdAt: requestRecord.createdAt,
+      address: addressRecord || null,
+      images: images.map(img => img.image),
+      seeker: seekerInfo || null,
+    };
+  }
+
+  async getBookingChatLogs(bookingId: string, userId: string) {
+    // Verify user is part of this booking
+    const [bookingRecord] = await this.dbService.db
+      .select({
+        id: booking.id,
+        providerUserId: booking.providerUserId,
+        seekerUserId: booking.seekerUserId,
+      })
+      .from(booking)
+      .where(eq(booking.id, bookingId))
+      .limit(1);
+
+    if (!bookingRecord) {
+      throw new NotFoundException('Booking not found');
+    }
+
+    if (bookingRecord.providerUserId !== userId && bookingRecord.seekerUserId !== userId) {
+      throw new BadRequestException('You are not authorized to access this booking');
+    }
+
+    // Get all messages for this booking
+    const messages = await this.dbService.db
+      .select({
+        id: message.id,
+        userId: message.userId,
+        message: message.message,
+        createdAt: message.createdAt,
+        senderFirstName: user.firstName,
+        senderLastName: user.lastName,
+        senderAvatarUrl: user.avatarUrl,
+      })
+      .from(message)
+      .innerJoin(user, eq(message.userId, user.id))
+      .where(eq(message.bookingId, bookingId))
+      .orderBy(message.createdAt);
+
+    return {
+      messages: messages.map(msg => ({
+        id: msg.id,
+        userId: msg.userId,
+        message: msg.message,
+        createdAt: msg.createdAt,
+        sender: {
+          id: msg.userId,
+          firstName: msg.senderFirstName,
+          lastName: msg.senderLastName,
+          avatarUrl: msg.senderAvatarUrl,
+        },
+      })),
+      total: messages.length,
+    };
   }
 }
