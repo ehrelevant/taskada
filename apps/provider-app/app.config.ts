@@ -2,18 +2,18 @@ import { ConfigContext, ExpoConfig } from '@expo/config';
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
-  name: "provider-app",
-  slug: "provider-app",
-  version: "1.0.0",
-  orientation: "portrait",
-  icon: "./lib/assets/icon.png",
-  userInterfaceStyle: "light",
+  name: 'provider-app',
+  slug: 'provider-app',
+  version: '1.0.0',
+  orientation: 'portrait',
+  icon: './lib/assets/icon.png',
+  userInterfaceStyle: 'light',
   newArchEnabled: true,
-  scheme: "provider-app",
+  scheme: 'provider-app',
   splash: {
-    image: "./lib/assets/splash-icon-dark.png",
-    resizeMode: "contain",
-    backgroundColor: "#ffffff"
+    image: './lib/assets/splash-icon-dark.png',
+    resizeMode: 'contain',
+    backgroundColor: '#ffffff',
   },
   ios: {
     supportsTablet: true,

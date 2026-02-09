@@ -11,9 +11,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   newArchEnabled: true,
   scheme: 'seeker-app',
   splash: {
-    image: "./lib/assets/splash-icon-dark.png",
-    resizeMode: "contain",
-    backgroundColor: "#ffffff"
+    image: './lib/assets/splash-icon-dark.png',
+    resizeMode: 'contain',
+    backgroundColor: '#ffffff',
   },
   ios: {
     supportsTablet: true,

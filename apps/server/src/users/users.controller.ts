@@ -4,10 +4,7 @@ import { ValibotPipe } from 'src/valibot/valibot.pipe';
 
 import { UsersService } from './users.service';
 
-import {
-  ChangePasswordSchema,
-  UpdateUserProfileSchema,
-} from './dto/user.dto';
+import { ChangePasswordSchema, UpdateUserProfileSchema } from './dto/user.dto';
 import { ChangePasswordSwaggerDto, UpdateUserProfileSwaggerDto } from './dto/user-swagger.dto';
 
 @Controller('users')
