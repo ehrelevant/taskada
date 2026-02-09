@@ -1,5 +1,5 @@
 import { BottomTabBarProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { ClipboardList, HardHat, Menu } from 'lucide-react-native';
+import { ClipboardList, HardHat, History, Menu } from 'lucide-react-native';
 import { colors, palette } from '@repo/theme';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Typography } from '@repo/components';
@@ -7,10 +7,12 @@ import { Typography } from '@repo/components';
 import { OptionsStack } from './OptionsStack';
 import { RequestsStack } from './RequestsStack';
 import { ServicesStack } from './ServicesStack';
+import { TransactionHistoryStack } from './TransactionHistoryStack';
 
 export type DashboardTabsParamList = {
   RequestsStack: undefined;
   ServicesStack: undefined;
+  TransactionHistoryStack: undefined;
   OptionsStack: undefined;
 };
 
@@ -53,6 +55,8 @@ function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
             return <ClipboardList {...iconProps} />;
           } else if (route.name === 'ServicesStack') {
             return <HardHat {...iconProps} />;
+          } else if (route.name === 'TransactionHistoryStack') {
+            return <History {...iconProps} />;
           } else {
             return <Menu {...iconProps} />;
           }
@@ -94,6 +98,7 @@ export function DashboardTabs() {
     >
       <Tab.Screen name="RequestsStack" component={RequestsStack} options={{ title: 'Requests' }} />
       <Tab.Screen name="ServicesStack" component={ServicesStack} options={{ title: 'Services' }} />
+      <Tab.Screen name="TransactionHistoryStack" component={TransactionHistoryStack} options={{ title: 'History' }} />
       <Tab.Screen name="OptionsStack" component={OptionsStack} options={{ title: 'Options' }} />
     </Tab.Navigator>
   );
