@@ -1,5 +1,5 @@
 import { PartialType } from '@nestjs/swagger';
 
-import { CreateSeekerDto } from './create-seeker.dto';
+import { CreateSeekerSwaggerDto } from './create-seeker.dto';
 
-export class UpdateSeekerDto extends PartialType(CreateSeekerDto) {}
+export class UpdateSeekerSwaggerDto extends PartialType(CreateSeekerSwaggerDto) {}

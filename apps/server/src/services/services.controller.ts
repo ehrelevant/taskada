@@ -7,8 +7,8 @@ import { ValibotPipe } from 'src/valibot/valibot.pipe';
 
 import { ServicesService } from './services.service';
 
-import { CreateServiceDto } from './dto/create-service.dto';
-import { UpdateServiceDto } from './dto/update-service.dto';
+import { CreateServiceSwaggerDto } from './dto/create-service.dto';
+import { UpdateServiceSwaggerDto } from './dto/update-service.dto';
 
 @Controller('services')
 export class ServicesController {
@@ -42,7 +42,7 @@ export class ServicesController {
 
   @Post()
   @UsePipes(new ValibotPipe(omit(ServiceInsertSchema, ['providerUserId'])))
-  async createService(@Session() { user }: UserSession, @Body() createServiceDto: CreateServiceDto) {
+  async createService(@Session() { user }: UserSession, @Body() createServiceDto: CreateServiceSwaggerDto) {
     return await this.servicesService.createService({
       ...createServiceDto,
       providerUserId: user.id,
@@ -51,7 +51,7 @@ export class ServicesController {
 
   @Patch(':id')
   @UsePipes(new ValibotPipe(ServiceUpdateSchema))
-  async updateService(@Param('id') id: string, @Body() updateServiceDto: UpdateServiceDto) {
+  async updateService(@Param('id') id: string, @Body() updateServiceDto: UpdateServiceSwaggerDto) {
     return await this.servicesService.updateService(id, updateServiceDto);
   }
 

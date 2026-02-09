@@ -4,7 +4,7 @@ import { seeker, user, userRole } from '@repo/database';
 
 import { DatabaseService } from '../database/database.service';
 
-import { UpdateSeekerDto } from './dto/update-seeker.dto';
+import { UpdateSeekerSwaggerDto } from './dto/update-seeker.dto';
 
 @Injectable()
 export class SeekersService {
@@ -76,7 +76,7 @@ export class SeekersService {
     return foundSeeker;
   }
 
-  async updateSeeker(userId: string, updateSeekerDto: UpdateSeekerDto) {
+  async updateSeeker(userId: string, updateSeekerDto: UpdateSeekerSwaggerDto) {
     const [updatedSeeker] = await this.dbService.db
       .update(seeker)
       .set(updateSeekerDto)

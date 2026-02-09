@@ -1,5 +1,11 @@
-import { PartialType } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
+import { type BookingStatus } from '@repo/database';
 
-import { CreateBookingDto } from './create-booking.dto';
-
-export class UpdateBookingDto extends PartialType(CreateBookingDto) {}
+export class UpdateBookingSwaggerDto {
+  @ApiProperty({
+    description: 'The status of the booking',
+    enum: ['in_transit', 'serving', 'completed', 'cancelled'],
+    example: 'serving',
+  })
+  status: BookingStatus;
+}

@@ -4,14 +4,14 @@ import { ConflictException, Injectable, NotFoundException } from '@nestjs/common
 
 import { DatabaseService } from '../database/database.service';
 
-import { CreateProviderDto } from './dto/create-provider.dto';
-import { UpdateProviderDto } from './dto/update-provider.dto';
+import { CreateProviderSwaggerDto } from './dto/create-provider.dto';
+import { UpdateProviderSwaggerDto } from './dto/update-provider.dto';
 
 @Injectable()
 export class ProvidersService {
   constructor(private readonly dbService: DatabaseService) {}
 
-  async createProvider(userId: string, { agencyId, isAccepting }: CreateProviderDto) {
+  async createProvider(userId: string, { agencyId, isAccepting }: CreateProviderSwaggerDto) {
     // Check if user exists
     const [existingUser] = await this.dbService.db.select().from(user).where(eq(user.id, userId));
 
@@ -89,7 +89,7 @@ export class ProvidersService {
     return foundProvider;
   }
 
-  async updateProvider(userId: string, updateProviderDto: UpdateProviderDto) {
+  async updateProvider(userId: string, updateProviderDto: UpdateProviderSwaggerDto) {
     const [updatedProvider] = await this.dbService.db
       .update(provider)
       .set(updateProviderDto)

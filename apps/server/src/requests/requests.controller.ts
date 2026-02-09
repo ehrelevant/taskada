@@ -1,12 +1,13 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
-import { safeParse } from 'valibot';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UsePipes } from '@nestjs/common';
 import { Session, UserSession } from '@thallesp/nestjs-better-auth';
+import { ValibotPipe } from 'src/valibot/valibot.pipe';
 
 import { MatchingService } from '../matching/matching.service';
 
 import { RequestsService } from './requests.service';
 
-import { CreateRequestDto, CreateRequestSchema } from './dto/create-request.dto';
+import { CreateRequestSchema } from './dto/create-request.dto';
+import { CreateRequestSwaggerDto } from './dto/create-request-swagger.dto';
 
 @Controller('requests')
 export class RequestsController {
@@ -16,15 +17,9 @@ export class RequestsController {
   ) {}
 
   @Post()
-  async createRequest(@Session() { user }: UserSession, @Body() body: CreateRequestDto) {
-    const result = safeParse(CreateRequestSchema, body);
-
-    if (!result.success) {
-      const errorMessages = result.issues.map(issue => issue.message).join(', ');
-      return { error: errorMessages };
-    }
-
-    return this.requestsService.createRequest(result.output, user.id);
+  @UsePipes(new ValibotPipe(CreateRequestSchema))
+  async createRequest(@Session() { user }: UserSession, @Body() body: CreateRequestSwaggerDto) {
+    return this.requestsService.createRequest(body, user.id);
   }
 
   @Post(':id/images')

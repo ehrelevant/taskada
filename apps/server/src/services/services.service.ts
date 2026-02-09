@@ -4,8 +4,8 @@ import { provider, review, service, serviceType, user } from '@repo/database';
 
 import { DatabaseService } from '../database/database.service';
 
-import { CreateServiceDto } from './dto/create-service.dto';
-import { UpdateServiceDto } from './dto/update-service.dto';
+import { CreateServiceSwaggerDto } from './dto/create-service.dto';
+import { UpdateServiceSwaggerDto } from './dto/update-service.dto';
 
 @Injectable()
 export class ServicesService {
@@ -124,7 +124,7 @@ export class ServicesService {
     return reviews;
   }
 
-  async createService(createServiceDto: CreateServiceDto) {
+  async createService(createServiceDto: CreateServiceSwaggerDto) {
     const [newService] = await this.dbService.db.insert(service).values(createServiceDto).returning();
     return newService;
   }
@@ -150,7 +150,7 @@ export class ServicesService {
     return services;
   }
 
-  async updateService(id: string, updateServiceDto: UpdateServiceDto) {
+  async updateService(id: string, updateServiceDto: UpdateServiceSwaggerDto) {
     const [updatedService] = await this.dbService.db
       .update(service)
       .set(updateServiceDto)

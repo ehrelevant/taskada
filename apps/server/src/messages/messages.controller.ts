@@ -4,7 +4,8 @@ import { ValibotPipe } from 'src/valibot/valibot.pipe';
 
 import { MessagesService } from './messages.service';
 
-import { CreateMessageDto, CreateMessageSchema } from './dto/create-message.dto';
+import { CreateMessageSchema } from './dto/create-message.dto';
+import { CreateMessageSwaggerDto } from './dto/create-message-swagger.dto';
 
 @Controller('bookings/:bookingId/messages')
 export class MessagesController {
@@ -27,7 +28,7 @@ export class MessagesController {
   @UsePipes(new ValibotPipe(CreateMessageSchema))
   async createMessage(
     @Param('bookingId') bookingId: string,
-    @Body() createMessageDto: CreateMessageDto,
+    @Body() createMessageDto: CreateMessageSwaggerDto,
     @Session() { user }: UserSession,
   ) {
     return await this.messagesService.createMessage({

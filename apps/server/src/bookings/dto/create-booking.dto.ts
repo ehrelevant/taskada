@@ -1,22 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { type BookingStatus, NewBooking } from '@repo/database';
 
-export class CreateBookingDto implements NewBooking {
-  @ApiProperty()
-  providerUserId: string;
-
-  @ApiProperty()
-  serviceId: string;
-
-  @ApiProperty()
-  seekerUserId: string;
-
-  @ApiProperty()
+export class CreateBookingSwaggerDto {
+  @ApiProperty({
+    description: 'The ID of the request this booking is for',
+    example: '550e8400-e29b-41d4-a716-446655440000',
+  })
   requestId: string;
 
-  @ApiProperty()
-  status: BookingStatus;
-
-  @ApiProperty()
-  cost: number;
+  @ApiProperty({
+    description: 'The ID of the service being booked',
+    example: '550e8400-e29b-41d4-a716-446655440001',
+  })
+  serviceId: string;
 }

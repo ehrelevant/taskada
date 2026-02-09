@@ -5,9 +5,9 @@ import { ValibotPipe } from 'src/valibot/valibot.pipe';
 
 import { BookingsService } from './bookings.service';
 
-import { CreateBookingDto } from './dto/create-booking.dto';
+import { CreateBookingSwaggerDto } from './dto/create-booking.dto';
 import { SubmitProposalDto } from './dto/submit-proposal.dto';
-import { UpdateBookingDto } from './dto/update-booking.dto';
+import { UpdateBookingSwaggerDto } from './dto/update-booking.dto';
 
 @Controller('bookings')
 export class BookingsController {
@@ -34,14 +34,14 @@ export class BookingsController {
   }
 
   @Post()
-  async createBooking(@Session() { user }: UserSession, @Body() createBookingDto: CreateBookingDto) {
+  async createBooking(@Session() { user }: UserSession, @Body() createBookingDto: CreateBookingSwaggerDto) {
     // The provider is the current authenticated user
     return await this.bookingsService.createBooking(user.id, createBookingDto.requestId, createBookingDto.serviceId);
   }
 
   @Patch(':id')
   @UsePipes(new ValibotPipe(BookingUpdateSchema))
-  async updateStatus(@Param('id') id: string, @Body() updateStatusDto: UpdateBookingDto) {
+  async updateStatus(@Param('id') id: string, @Body() updateStatusDto: UpdateBookingSwaggerDto) {
     return await this.bookingsService.updateBooking(id, {
       status: updateStatusDto.status,
     });

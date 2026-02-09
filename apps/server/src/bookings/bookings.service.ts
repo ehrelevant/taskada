@@ -6,7 +6,7 @@ import { ChatGateway } from '../chat/chat.gateway';
 import { DatabaseService } from '../database/database.service';
 import { MatchingGateway } from '../matching/matching.gateway';
 
-import { UpdateBookingDto } from './dto/update-booking.dto';
+import { UpdateBookingSwaggerDto } from './dto/update-booking.dto';
 
 @Injectable()
 export class BookingsService {
@@ -77,7 +77,7 @@ export class BookingsService {
     return newBooking;
   }
 
-  async updateBooking(bookingId: string, updateBookingDto: UpdateBookingDto) {
+  async updateBooking(bookingId: string, updateBookingDto: UpdateBookingSwaggerDto) {
     const [updated] = await this.dbService.db
       .update(booking)
       .set(updateBookingDto)

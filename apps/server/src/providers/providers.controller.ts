@@ -6,7 +6,7 @@ import { ValibotPipe } from 'src/valibot/valibot.pipe';
 
 import { ProvidersService } from './providers.service';
 
-import { CreateProviderDto } from './dto/create-provider.dto';
+import { CreateProviderSwaggerDto } from './dto/create-provider.dto';
 
 @Controller('providers')
 export class ProvidersController {
@@ -21,7 +21,7 @@ export class ProvidersController {
   @UsePipes(new ValibotPipe(omit(ProviderInsertSchema, ['userId'])))
   async createProviderForUser(
     @Session() { user: { id: userId } }: UserSession,
-    @Body() createProviderDto: CreateProviderDto,
+    @Body() createProviderDto: CreateProviderSwaggerDto,
   ) {
     return await this.providersService.createProvider(userId, createProviderDto);
   }
