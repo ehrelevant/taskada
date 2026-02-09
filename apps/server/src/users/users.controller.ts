@@ -4,7 +4,11 @@ import { ValibotPipe } from 'src/valibot/valibot.pipe';
 
 import { UsersService } from './users.service';
 
-import { ChangePasswordSchema, UpdateUserProfileSchema } from './dto/user.dto';
+import {
+  ChangePasswordSchema,
+  UpdateUserProfileSchema,
+} from './dto/user.dto';
+import { ChangePasswordSwaggerDto, UpdateUserProfileSwaggerDto } from './dto/user-swagger.dto';
 
 @Controller('users')
 export class UsersController {
@@ -19,7 +23,7 @@ export class UsersController {
   @UsePipes(new ValibotPipe(UpdateUserProfileSchema))
   async updateUserProfile(
     @Session() { user: { id: userId } }: UserSession,
-    @Body() updateData: Record<string, unknown>,
+    @Body() updateData: UpdateUserProfileSwaggerDto,
   ) {
     return await this.usersService.updateUserProfile(userId, updateData);
   }
@@ -28,7 +32,7 @@ export class UsersController {
   @UsePipes(new ValibotPipe(ChangePasswordSchema))
   async changePassword(
     @Session() { user: { id: userId } }: UserSession,
-    @Body() passwordData: { oldPassword: string; newPassword: string },
+    @Body() passwordData: ChangePasswordSwaggerDto,
   ) {
     return await this.usersService.changePassword(userId, passwordData.oldPassword, passwordData.newPassword);
   }

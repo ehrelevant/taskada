@@ -4,6 +4,14 @@ import { user } from '@repo/database';
 
 import { DatabaseService } from '../database/database.service';
 
+export interface UpdateUserProfileData {
+  firstName: string;
+  middleName?: string;
+  lastName: string;
+  phoneNumber: string;
+  avatarUrl?: string;
+}
+
 @Injectable()
 export class UsersService {
   constructor(private readonly dbService: DatabaseService) {}
@@ -32,17 +40,17 @@ export class UsersService {
     return foundUser;
   }
 
-  async updateUserProfile(userId: string, updateData: Record<string, unknown>) {
+  async updateUserProfile(userId: string, updateData: UpdateUserProfileData) {
     try {
       // For now, let's update directly in database since Better Auth's updateUser API is limited
       const [updatedUser] = await this.dbService.db
         .update(user)
         .set({
-          firstName: updateData.firstName as string,
-          middleName: updateData.middleName as string | undefined,
-          lastName: updateData.lastName as string,
-          phoneNumber: updateData.phoneNumber as string,
-          avatarUrl: updateData.avatarUrl as string | undefined,
+          firstName: updateData.firstName,
+          middleName: updateData.middleName,
+          lastName: updateData.lastName,
+          phoneNumber: updateData.phoneNumber,
+          avatarUrl: updateData.avatarUrl,
           updatedAt: new Date(),
         })
         .where(eq(user.id, userId))
@@ -65,7 +73,7 @@ export class UsersService {
 
       return updatedUser;
     } catch (error) {
-      throw new BadRequestException(`Failed to update profile: ${error.message}`);
+      throw new BadRequestException(`Failed to update profile: ${(error as Error).message}`);
     }
   }
 

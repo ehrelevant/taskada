@@ -9,6 +9,10 @@ import { CreateRequestDto } from './dto/create-request.dto';
 
 type GeographyPoint = [number, number];
 
+function createGeographyPoint(lng: number, lat: number): GeographyPoint {
+  return [lng, lat];
+}
+
 export interface PendingRequestDetails {
   id: string;
   serviceTypeId: string;
@@ -50,7 +54,7 @@ export class RequestsService {
       .insert(address)
       .values({
         label,
-        coordinates: [lng, lat] as GeographyPoint,
+        coordinates: createGeographyPoint(lng, lat),
       })
       .returning();
 
@@ -72,7 +76,7 @@ export class RequestsService {
       .insert(address)
       .values({
         label: dto.addressLabel,
-        coordinates: [dto.longitude, dto.latitude] as GeographyPoint,
+        coordinates: createGeographyPoint(dto.longitude, dto.latitude),
       })
       .returning();
 
