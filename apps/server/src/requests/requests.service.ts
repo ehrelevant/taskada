@@ -9,6 +9,35 @@ import { CreateRequestDto } from './dto/create-request.dto';
 
 type GeographyPoint = [number, number];
 
+export interface PendingRequestDetails {
+  id: string;
+  serviceTypeId: string;
+  serviceId: string | null;
+  seekerUserId: string;
+  addressId: string;
+  description: string | null;
+  status: string;
+  createdAt: Date;
+  serviceType: {
+    id: string;
+    name: string;
+    iconUrl: string | null;
+  };
+  seeker: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    avatarUrl: string | null;
+    phoneNumber: string;
+  };
+  address: {
+    id: string;
+    label: string | null;
+    coordinates: GeographyPoint;
+  };
+  images: string[];
+}
+
 @Injectable()
 export class RequestsService {
   constructor(
@@ -134,7 +163,7 @@ export class RequestsService {
   }
 
   async getPendingRequests(serviceTypeIds: string[], serviceIds: string[]) {
-    const requests = await this.dbService.db
+    const rows = await this.dbService.db
       .select({
         id: request.id,
         serviceTypeId: request.serviceTypeId,
@@ -144,99 +173,80 @@ export class RequestsService {
         description: request.description,
         status: request.status,
         createdAt: request.createdAt,
+        serviceTypeId_st: serviceType.id,
+        serviceTypeName: serviceType.name,
+        serviceTypeIconUrl: serviceType.iconUrl,
+        seekerUserId_sk: seeker.userId,
+        userFirstName: user.firstName,
+        userLastName: user.lastName,
+        userAvatarUrl: user.avatarUrl,
+        userPhoneNumber: user.phoneNumber,
+        addressId_ad: address.id,
+        addressLabel: address.label,
+        addressCoordinates: address.coordinates,
+        requestImage: requestImage.image,
       })
       .from(request)
+      .leftJoin(serviceType, eq(request.serviceTypeId, serviceType.id))
+      .leftJoin(seeker, eq(request.seekerUserId, seeker.userId))
+      .leftJoin(user, eq(seeker.userId, user.id))
+      .leftJoin(address, eq(request.addressId, address.id))
+      .leftJoin(requestImage, eq(request.id, requestImage.requestId))
       .where(
         and(
           eq(request.status, 'pending'),
           or(
-            serviceIds ? inArray(request.serviceId, serviceIds) : undefined,
-            serviceTypeIds ? inArray(request.serviceTypeId, serviceTypeIds) : undefined,
+            serviceIds.length > 0 ? inArray(request.serviceId, serviceIds) : undefined,
+            serviceTypeIds.length > 0 ? inArray(request.serviceTypeId, serviceTypeIds) : undefined,
           ),
         ),
       )
       .orderBy(desc(request.createdAt));
 
-    // Get full details for each request
-    // TODO: Change this to a single query with joins for better performance
-    const detailedRequests = await Promise.all(
-      requests.map(async req => {
-        // Get service type
-        const [serviceTypeRecord] = await this.dbService.db
-          .select({
-            id: serviceType.id,
-            name: serviceType.name,
-            iconUrl: serviceType.iconUrl,
-          })
-          .from(serviceType)
-          .where(eq(serviceType.id, req.serviceTypeId))
-          .limit(1);
+    // Group rows by request ID and aggregate images
+    const requestMap = new Map<string, PendingRequestDetails>();
 
-        // Get seeker info
-        const [seekerRecord] = await this.dbService.db
-          .select({
-            userId: seeker.userId,
-          })
-          .from(seeker)
-          .where(eq(seeker.userId, req.seekerUserId))
-          .limit(1);
-
-        const [userRecord] = await this.dbService.db
-          .select({
-            firstName: user.firstName,
-            lastName: user.lastName,
-            avatarUrl: user.avatarUrl,
-            phoneNumber: user.phoneNumber,
-          })
-          .from(user)
-          .where(eq(user.id, req.seekerUserId))
-          .limit(1);
-
-        // Get address
-        const [addressRecord] = await this.dbService.db
-          .select({
-            id: address.id,
-            label: address.label,
-            coordinates: address.coordinates,
-          })
-          .from(address)
-          .where(eq(address.id, req.addressId))
-          .limit(1);
-
-        // Get images
-        const imageRecords = await this.dbService.db
-          .select({ image: requestImage.image })
-          .from(requestImage)
-          .where(eq(requestImage.requestId, req.id));
-
-        return {
-          id: req.id,
-          serviceTypeId: req.serviceTypeId,
-          serviceId: req.serviceId,
-          seekerUserId: req.seekerUserId,
-          addressId: req.addressId,
-          description: req.description,
-          status: req.status,
-          createdAt: req.createdAt,
-          serviceType: serviceTypeRecord || { id: '', name: 'Unknown', iconUrl: null },
+    for (const row of rows) {
+      if (!requestMap.has(row.id)) {
+        requestMap.set(row.id, {
+          id: row.id,
+          serviceTypeId: row.serviceTypeId,
+          serviceId: row.serviceId,
+          seekerUserId: row.seekerUserId,
+          addressId: row.addressId,
+          description: row.description,
+          status: row.status,
+          createdAt: row.createdAt,
+          serviceType: {
+            id: row.serviceTypeId_st || '',
+            name: row.serviceTypeName || 'Unknown',
+            iconUrl: row.serviceTypeIconUrl || null,
+          },
           seeker: {
-            id: seekerRecord?.userId || '',
-            firstName: userRecord?.firstName || '',
-            lastName: userRecord?.lastName || '',
-            avatarUrl: userRecord?.avatarUrl || null,
-            phoneNumber: userRecord?.phoneNumber || '',
+            id: row.seekerUserId_sk || '',
+            firstName: row.userFirstName || '',
+            lastName: row.userLastName || '',
+            avatarUrl: row.userAvatarUrl || null,
+            phoneNumber: row.userPhoneNumber || '',
           },
           address: {
-            id: addressRecord?.id || '',
-            label: addressRecord?.label || null,
-            coordinates: addressRecord?.coordinates || [0, 0],
+            id: row.addressId_ad || '',
+            label: row.addressLabel || null,
+            coordinates: row.addressCoordinates || [0, 0],
           },
-          images: imageRecords.map(img => img.image),
-        };
-      }),
-    );
+          images: [] as string[],
+        });
+      }
 
-    return detailedRequests;
+      if (row.requestImage) {
+        const requestDetails = requestMap.get(row.id);
+        if (requestDetails) {
+          requestDetails.images.push(row.requestImage);
+        }
+      }
+    }
+
+    return Array.from(requestMap.values());
   }
 
   async updateRequestStatus(requestId: string, status: 'pending' | 'settling'): Promise<void> {
