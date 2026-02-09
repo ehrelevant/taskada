@@ -6,7 +6,7 @@ import { ValibotPipe } from 'src/valibot/valibot.pipe';
 import { BookingsService } from './bookings.service';
 
 import { CreateBookingSwaggerDto } from './dto/create-booking.dto';
-import { SubmitProposalDto } from './dto/submit-proposal.dto';
+import { SubmitProposalSchema, SubmitProposalSwaggerDto } from './dto/submit-proposal.dto';
 import { UpdateBookingSwaggerDto } from './dto/update-booking.dto';
 
 @Controller('bookings')
@@ -48,10 +48,11 @@ export class BookingsController {
   }
 
   @Patch(':id/proposal')
+  @UsePipes(new ValibotPipe(SubmitProposalSchema))
   async submitProposal(
     @Session() { user }: UserSession,
     @Param('id') id: string,
-    @Body() submitProposalDto: SubmitProposalDto,
+    @Body() submitProposalDto: SubmitProposalSwaggerDto,
   ) {
     return await this.bookingsService.submitProposal(
       user.id,

@@ -1,4 +1,4 @@
-import { array, InferOutput, minLength, number, object, optional, pipe, string } from 'valibot';
+import { array, InferOutput, literal, minLength, number, object, optional, pipe, string, union } from 'valibot';
 
 export const CreateRequestSchema = object({
   serviceTypeId: string(),
@@ -11,3 +11,9 @@ export const CreateRequestSchema = object({
 });
 
 export type CreateRequestDto = InferOutput<typeof CreateRequestSchema>;
+
+export const UpdateRequestStatusSchema = object({
+  status: union([literal('pending'), literal('settling')]),
+});
+
+export type UpdateRequestStatusDto = InferOutput<typeof UpdateRequestStatusSchema>;

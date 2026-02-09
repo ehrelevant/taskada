@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UsePipes } from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, Patch, Post, Query, UsePipes } from '@nestjs/common';
 import { Session, UserSession } from '@thallesp/nestjs-better-auth';
 import { ValibotPipe } from 'src/valibot/valibot.pipe';
 
@@ -6,8 +6,10 @@ import { MatchingService } from '../matching/matching.service';
 
 import { RequestsService } from './requests.service';
 
-import { CreateRequestSchema } from './dto/create-request.dto';
+import { CreateRequestSchema, UpdateRequestStatusSchema } from './dto/create-request.dto';
 import { CreateRequestSwaggerDto } from './dto/create-request-swagger.dto';
+import { UpdateRequestStatusSwaggerDto } from './dto/update-request-status-swagger.dto';
+import { UploadRequestImagesSchema, UploadRequestImagesSwaggerDto } from './dto/upload-request-images.dto';
 
 @Controller('requests')
 export class RequestsController {
@@ -23,13 +25,10 @@ export class RequestsController {
   }
 
   @Post(':id/images')
-  async uploadRequestImages(@Param('id') id: string, @Body() body: { imageUrls: string[] }) {
-    if (!body.imageUrls || !Array.isArray(body.imageUrls)) {
-      return { error: 'imageUrls array is required' };
-    }
-
+  @UsePipes(new ValibotPipe(UploadRequestImagesSchema))
+  async uploadRequestImages(@Param('id') id: string, @Body() body: UploadRequestImagesSwaggerDto) {
     await this.requestsService.addRequestImages(id, body.imageUrls);
-    return { success: true };
+    return { message: 'Images uploaded successfully' };
   }
 
   @Get()
@@ -58,15 +57,16 @@ export class RequestsController {
     const success = await this.matchingService.deleteRequest(id);
 
     if (!success) {
-      return { error: 'Request not found or already deleted' };
+      throw new NotFoundException('Request not found or already deleted');
     }
 
-    return { success: true, message: 'Request deleted successfully' };
+    return { message: 'Request deleted successfully' };
   }
 
   @Patch(':id/status')
-  async updateRequestStatus(@Param('id') id: string, @Body() body: { status: 'pending' | 'settling' }) {
+  @UsePipes(new ValibotPipe(UpdateRequestStatusSchema))
+  async updateRequestStatus(@Param('id') id: string, @Body() body: UpdateRequestStatusSwaggerDto) {
     await this.requestsService.updateRequestStatus(id, body.status);
-    return { success: true, message: `Request status updated to ${body.status}` };
+    return { message: `Request status updated to ${body.status}` };
   }
 }
