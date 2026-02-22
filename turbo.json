@@ -6,7 +6,12 @@
     "EXPO_PUBLIC_API_URL",
     "PORT",
     "GOOGLE_MAPS_API_KEY",
-    "EXPO_PUBLIC_GOOGLE_MAPS_API_KEY"
+    "EXPO_PUBLIC_GOOGLE_MAPS_API_KEY",
+    "AWS_REGION",
+    "AWS_ACCESS_KEY_ID",
+    "AWS_SECRET_ACCESS_KEY",
+    "S3_BUCKET_NAME",
+    "S3_PUBLIC_URL"
   ],
   "tasks": {
     "dev": {
