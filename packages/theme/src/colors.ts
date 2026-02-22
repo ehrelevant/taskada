@@ -1,11 +1,11 @@
 export const palette = {
   // Core colors
-  primary: '#5E60CE',
-  primaryDark: '#4D4DBA',
-  primaryLight: '#7B78ED',
-  secondary: '#64DFDF',
-  secondaryDark: '#48BABA',
-  secondaryLight: '#80FFFF',
+  primary: '#1B334F',
+  primaryDark: '#142638',
+  primaryLight: '#2A4A6F',
+  secondary: '#E29578',
+  secondaryDark: '#C77A5F',
+  secondaryLight: '#F0B09A',
 
   // Neutrals
   black: '#000000',
