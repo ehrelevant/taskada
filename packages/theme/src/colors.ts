@@ -25,6 +25,7 @@ export const palette = {
   warning: '#FFC107',
   error: '#F44336',
   info: '#2196F3',
+  pending: '#FF9800',
 
   // Transparent
   transparent: 'transparent',
@@ -53,6 +54,7 @@ export const colors = {
   warning: palette.warning,
   error: palette.error,
   info: palette.info,
+  pending: palette.pending,
 
   // Borders
   border: palette.gray300,
