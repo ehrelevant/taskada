@@ -145,10 +145,10 @@ export class RequestsService {
         },
         seeker: {
           id: seeker.userId,
-          name: user.firstName,
+          firstName: user.firstName,
           lastName: user.lastName,
-          avatar: user.avatarUrl,
-          phone: user.phoneNumber,
+          avatarUrl: user.avatarUrl,
+          phoneNumber: user.phoneNumber,
         },
         address: {
           label: address.label,
