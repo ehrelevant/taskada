@@ -7,14 +7,14 @@ export const fontFamily = {
 };
 
 export const fontSize = {
-  xs: 10,
-  s: 12,
-  m: 14,
-  l: 16,
-  xl: 18,
-  xxl: 20,
-  xxxl: 24,
-  display: 32,
+  xs: 12,
+  s: 14,
+  m: 16,
+  l: 18,
+  xl: 20,
+  xxl: 22,
+  xxxl: 28,
+  display: 36,
 };
 
 export const fontWeight = {
@@ -25,11 +25,11 @@ export const fontWeight = {
 };
 
 export const lineHeight = {
-  xs: 16,
-  s: 20,
-  m: 22,
-  l: 24,
-  xl: 28,
-  xxl: 32,
-  xxxl: 38,
+  xs: 18,
+  s: 22,
+  m: 24,
+  l: 26,
+  xl: 30,
+  xxl: 34,
+  xxxl: 42,
 };
