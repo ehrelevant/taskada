@@ -1,4 +1,5 @@
 import { address, booking, message, request, requestImage, review, service, serviceType, user } from '@repo/database';
+import { alias } from 'drizzle-orm/pg-core';
 import { and, desc, eq, or, sql } from 'drizzle-orm';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 
@@ -7,6 +8,9 @@ import { DatabaseService } from '../database/database.service';
 import { MatchingGateway } from '../matching/matching.gateway';
 
 import { UpdateBookingSwaggerDto } from './dto/update-booking.dto';
+
+const providerUser = alias(user, 'provider_user');
+const seekerUser = alias(user, 'seeker_user');
 
 @Injectable()
 export class BookingsService {
@@ -316,10 +320,16 @@ export class BookingsService {
         specifications: booking.specifications,
         createdAt: booking.createdAt,
         provider: {
-          id: user.id,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          avatarUrl: user.avatarUrl,
+          id: providerUser.id,
+          firstName: providerUser.firstName,
+          lastName: providerUser.lastName,
+          avatarUrl: providerUser.avatarUrl,
+        },
+        seeker: {
+          id: seekerUser.id,
+          firstName: seekerUser.firstName,
+          lastName: seekerUser.lastName,
+          avatarUrl: seekerUser.avatarUrl,
         },
         serviceType: {
           id: serviceType.id,
@@ -328,7 +338,8 @@ export class BookingsService {
         },
       })
       .from(booking)
-      .leftJoin(user, eq(booking.providerUserId, user.id))
+      .leftJoin(providerUser, eq(booking.providerUserId, providerUser.id))
+      .leftJoin(seekerUser, eq(booking.seekerUserId, seekerUser.id))
       .innerJoin(service, eq(booking.serviceId, service.id))
       .innerJoin(serviceType, eq(service.serviceTypeId, serviceType.id))
       .where(whereCondition)
