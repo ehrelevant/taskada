@@ -12,7 +12,7 @@ import {
 } from '@lib/helpers';
 import { HomeStackParamList } from '@navigation/HomeStack';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
 export function HomeScreen() {
@@ -69,12 +69,87 @@ export function HomeScreen() {
     setShowSearchResults(false);
   }, []);
 
-  const navigateToService = (serviceId: string) => {
-    setShowSearchResults(false);
-    setSearchQuery('');
-    setSearchResults([]);
-    navigation.navigate('ServiceDetails', { serviceId });
-  };
+  const navigateToService = useCallback(
+    (serviceId: string) => {
+      setShowSearchResults(false);
+      setSearchQuery('');
+      setSearchResults([]);
+      navigation.navigate('ServiceDetails', { serviceId });
+    },
+    [navigation],
+  );
+
+  const handleServiceTypePress = useCallback(
+    (serviceTypeId: string) => {
+      navigation.navigate('RequestForm', { serviceTypeId });
+    },
+    [navigation],
+  );
+
+  const navigateToServiceTypesList = useCallback(() => {
+    navigation.navigate('ServiceTypesList');
+  }, [navigation]);
+
+  const renderSearchResultItem = useCallback(
+    ({ item }: { item: SearchResult }) => (
+      <TouchableOpacity
+        style={styles.searchResultItem}
+        onPress={() => navigateToService(item.serviceId)}
+        activeOpacity={0.7}
+      >
+        <View style={{ flex: 1 }}>
+          <Typography variant="body2" weight="medium">
+            {item.serviceTypeName}
+          </Typography>
+          <Typography variant="caption" color="textSecondary">
+            by {item.providerName}
+          </Typography>
+        </View>
+        <Rating value={item.avgRating} size={12} />
+      </TouchableOpacity>
+    ),
+    [navigateToService],
+  );
+
+  const renderServiceTypeItem = useCallback(
+    ({ item }: { item: ServiceType }) => (
+      <ServiceTypeCard name={item.name} iconUrl={item.iconUrl} onPress={() => handleServiceTypePress(item.id)} />
+    ),
+    [handleServiceTypePress],
+  );
+
+  const renderFeaturedServiceItem = useCallback(
+    ({ item }: { item: FeaturedService }) => (
+      <FeaturedServiceCard
+        serviceTypeName={item.serviceTypeName}
+        providerName={item.providerName}
+        providerAvatar={item.providerAvatar}
+        rating={item.avgRating}
+        reviewCount={item.reviewCount}
+        serviceId={item.serviceId}
+        onPress={() => navigateToService(item.serviceId)}
+      />
+    ),
+    [navigateToService],
+  );
+
+  const serviceTypeKeyExtractor = useCallback((item: ServiceType) => item.id, []);
+  const featuredServiceKeyExtractor = useCallback((item: FeaturedService) => item.serviceId, []);
+  const searchResultKeyExtractor = useCallback((item: SearchResult) => item.serviceId, []);
+
+  const serviceTypeListHeader = useMemo(
+    () => (
+      <View style={styles.sectionHeader}>
+        <Typography variant="h6">Services</Typography>
+        <TouchableOpacity onPress={navigateToServiceTypesList}>
+          <Typography variant="body2" color="actionPrimary">
+            View All
+          </Typography>
+        </TouchableOpacity>
+      </View>
+    ),
+    [navigateToServiceTypesList],
+  );
 
   if (loading) {
     return (
@@ -123,21 +198,13 @@ export function HomeScreen() {
             ) : searchResults.length > 0 ? (
               <FlatList
                 data={searchResults}
-                keyExtractor={item => item.serviceId}
-                renderItem={({ item }) => (
-                  <TouchableOpacity style={styles.searchResultItem} onPress={() => navigateToService(item.serviceId)}>
-                    <View style={{ flex: 1 }}>
-                      <Typography variant="body2" weight="medium">
-                        {item.serviceTypeName}
-                      </Typography>
-                      <Typography variant="caption" color="textSecondary">
-                        by {item.providerName}
-                      </Typography>
-                    </View>
-                    <Rating value={item.avgRating} size={12} />
-                  </TouchableOpacity>
-                )}
+                keyExtractor={searchResultKeyExtractor}
+                renderItem={renderSearchResultItem}
                 keyboardShouldPersistTaps="handled"
+                maxToRenderPerBatch={8}
+                windowSize={5}
+                initialNumToRender={5}
+                removeClippedSubviews={true}
               />
             ) : (
               <View style={styles.noResults}>
@@ -152,29 +219,21 @@ export function HomeScreen() {
 
       <FlatList
         data={serviceTypes}
-        keyExtractor={item => item.id}
+        keyExtractor={serviceTypeKeyExtractor}
         numColumns={4}
         columnWrapperStyle={styles.serviceTypeGrid}
         contentContainerStyle={styles.serviceTypesContent}
-        ListHeaderComponent={
-          <View style={styles.sectionHeader}>
-            <Typography variant="h6">Services</Typography>
-            <TouchableOpacity onPress={() => navigation.navigate('ServiceTypesList')}>
-              <Typography variant="body2" color="actionPrimary">
-                View All
-              </Typography>
-            </TouchableOpacity>
-          </View>
-        }
-        renderItem={({ item }) => (
-          <ServiceTypeCard
-            name={item.name}
-            iconUrl={item.iconUrl}
-            onPress={() => {
-              navigation.navigate('RequestForm', { serviceTypeId: item.id });
-            }}
-          />
-        )}
+        ListHeaderComponent={serviceTypeListHeader}
+        renderItem={renderServiceTypeItem}
+        getItemLayout={(_, index) => ({
+          length: 100,
+          offset: 100 * Math.floor(index / 4),
+          index,
+        })}
+        maxToRenderPerBatch={8}
+        windowSize={6}
+        initialNumToRender={12}
+        removeClippedSubviews={true}
       />
 
       <View style={styles.section}>
@@ -184,19 +243,15 @@ export function HomeScreen() {
         {featuredServices.length > 0 ? (
           <FlatList
             data={featuredServices}
-            contentContainerStyle={{ gap: spacing.m }}
-            keyExtractor={item => item.serviceId}
-            renderItem={({ item }) => (
-              <FeaturedServiceCard
-                serviceTypeName={item.serviceTypeName}
-                providerName={item.providerName}
-                providerAvatar={item.providerAvatar}
-                rating={item.avgRating}
-                reviewCount={item.reviewCount}
-                serviceId={item.serviceId}
-                onPress={() => navigateToService(item.serviceId)}
-              />
-            )}
+            contentContainerStyle={{ gap: spacing.m, width: '100%' }}
+            keyExtractor={featuredServiceKeyExtractor}
+            renderItem={renderFeaturedServiceItem}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            maxToRenderPerBatch={4}
+            windowSize={3}
+            initialNumToRender={4}
+            removeClippedSubviews={true}
           />
         ) : (
           <Typography variant="body2" color="textSecondary">

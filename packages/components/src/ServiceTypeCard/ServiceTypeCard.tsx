@@ -1,5 +1,6 @@
 import { colors, palette, radius, spacing } from '@repo/theme';
 import { Image, TouchableOpacity, TouchableOpacityProps, View } from 'react-native';
+import { memo } from 'react';
 
 import { Typography } from '../Typography';
 
@@ -8,13 +9,13 @@ export interface ServiceTypeCardProps extends TouchableOpacityProps {
   iconUrl?: string | null;
 }
 
-export function ServiceTypeCard({ name, iconUrl, style, ...rest }: ServiceTypeCardProps) {
+export const ServiceTypeCard = memo(function ServiceTypeCard({ name, iconUrl, style, ...rest }: ServiceTypeCardProps) {
   return (
     <TouchableOpacity
       style={[
         {
-          width: 80,
-          paddingVertical: spacing.s,
+          width: 100,
+          padding: spacing.s,
           alignItems: 'center',
           borderRadius: radius.m,
           backgroundColor: colors.background,
@@ -45,9 +46,9 @@ export function ServiceTypeCard({ name, iconUrl, style, ...rest }: ServiceTypeCa
           <View style={{ width: 32, height: 32, backgroundColor: palette.gray300, borderRadius: 16 }} />
         )}
       </View>
-      <Typography variant="caption" color="textPrimary" align="center" numberOfLines={2}>
+      <Typography variant="caption" color="textPrimary" align="center" weight="bold">
         {name}
       </Typography>
     </TouchableOpacity>
   );
-}
+});

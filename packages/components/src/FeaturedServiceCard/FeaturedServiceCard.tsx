@@ -1,5 +1,6 @@
 import { colors, palette, radius, spacing } from '@repo/theme';
 import { Image, TouchableOpacity, TouchableOpacityProps, View } from 'react-native';
+import { memo } from 'react';
 
 import { Avatar } from '../Avatar';
 import { Rating } from '../Rating';
@@ -14,7 +15,7 @@ export interface FeaturedServiceCardProps extends TouchableOpacityProps {
   serviceId: string;
 }
 
-export function FeaturedServiceCard({
+export const FeaturedServiceCard = memo(function FeaturedServiceCard({
   serviceTypeName,
   providerName,
   providerAvatar,
@@ -62,4 +63,4 @@ export function FeaturedServiceCard({
       </View>
     </TouchableOpacity>
   );
-}
+});
