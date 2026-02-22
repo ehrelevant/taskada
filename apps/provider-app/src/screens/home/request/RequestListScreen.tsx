@@ -1,8 +1,7 @@
 import { apiFetch } from '@lib/helpers';
 import { authClient } from '@lib/authClient';
-import { Button, Typography } from '@repo/components';
-import { colors } from '@repo/theme';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { BottomActionBar, Button, EmptyState, Header, ScreenContainer } from '@repo/components';
+import { FlatList, View } from 'react-native';
 import { matchingSocket } from '@lib/websocket';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Provider } from '@repo/database';
@@ -10,6 +9,8 @@ import { RequestListing } from '@lib/components/RequestListing';
 import { RequestsStackParamList } from '@navigation/RequestsStack';
 import { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
+
+import { styles } from './RequestListScreen.styles';
 
 interface IncomingRequest {
   id: string;
@@ -204,7 +205,7 @@ export function RequestListScreen() {
 
   if (isAccepting) {
     return (
-      <View style={styles.screen}>
+      <ScreenContainer padding="none" useSafeArea={false} style={styles.container}>
         <FlatList
           data={requests}
           keyExtractor={item => item.id}
@@ -216,82 +217,35 @@ export function RequestListScreen() {
               onViewDetails={() => handleViewDetails(item)}
             />
           )}
-          ListEmptyComponent={
-            <View style={styles.emptyContainer}>
-              <Typography variant="body1" color="textSecondary" style={styles.emptyText}>
-                No requests yet. Waiting for seekers...
-              </Typography>
-            </View>
-          }
+          ListEmptyComponent={<EmptyState message="No requests yet. Waiting for seekers..." />}
         />
 
-        <View style={styles.bottomButtonContainer}>
+        <BottomActionBar>
           <Button
             title="Stop Receiving Requests"
             variant="outline"
             onPress={disableRequests}
             isLoading={isConnecting}
           />
-        </View>
-      </View>
+        </BottomActionBar>
+      </ScreenContainer>
     );
   }
 
   return (
-    <View style={styles.screen}>
-      <View style={styles.center}>
-        <View style={styles.textContainer}>
-          <Typography variant="h4">To start receiving requests, press</Typography>
-          <Typography variant="h4">&quot;Start Receiving Requests&quot;</Typography>
-        </View>
+    <ScreenContainer padding="none" useSafeArea={false} style={styles.centeredContainer}>
+      <View style={styles.centeredContent}>
+        <Header
+          title="Ready to Work?"
+          subtitle="Start receiving service requests from nearby seekers"
+          align="center"
+          size="large"
+        />
       </View>
 
-      <View style={styles.bottomButtonContainer}>
+      <BottomActionBar>
         <Button title="Start Receiving Requests" onPress={enableRequests} isLoading={isConnecting} />
-      </View>
-    </View>
+      </BottomActionBar>
+    </ScreenContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-  },
-  center: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 24,
-  },
-  logo: {
-    width: '100%',
-    height: 100,
-  },
-  textContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: '10%',
-  },
-  bottomButtonContainer: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    padding: 8,
-    borderTopColor: colors.border,
-    borderTopWidth: 2,
-    backgroundColor: colors.backgroundSecondary,
-  },
-  requestsListContainer: {
-    paddingBottom: 80,
-  },
-  emptyContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingTop: 100,
-  },
-  emptyText: {
-    textAlign: 'center',
-  },
-});

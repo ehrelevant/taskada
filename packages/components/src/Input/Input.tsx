@@ -10,6 +10,7 @@ export interface InputProps extends TextInputProps {
   helperText?: string;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
+  inputContainerStyle?: StyleProp<ViewStyle>;
   containerStyle?: StyleProp<ViewStyle>;
   onIconPress?: () => void;
 }
@@ -20,6 +21,7 @@ export function Input({
   helperText,
   leftIcon,
   rightIcon,
+  inputContainerStyle,
   containerStyle,
   onIconPress,
   style,
@@ -31,7 +33,7 @@ export function Input({
   return (
     <View style={[styles.container, containerStyle]}>
       {label && <Text style={styles.label}>{label}</Text>}
-      <View style={styles.inputContainer}>
+      <View style={[styles.inputContainer, inputContainerStyle]}>
         {leftIcon && <View style={styles.leftIcon}>{leftIcon}</View>}
         <TextInput
           style={[styles.input, style]}

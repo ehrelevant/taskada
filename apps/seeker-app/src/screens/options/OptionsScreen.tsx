@@ -1,13 +1,14 @@
 import { authClient } from '@lib/authClient';
-import { Button, Typography } from '@repo/components';
+import { Avatar, Button, MenuButton, ScreenContainer, Typography } from '@repo/components';
 import { colors } from '@repo/theme';
-import { CreditCard, FileClock, MessageSquareWarning, UserPen } from 'lucide-react-native';
-import { Image, StyleSheet, View } from 'react-native';
+import { CreditCard, FileClock, LogOut, MessageSquareWarning, UserPen } from 'lucide-react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { OptionsStackParamList } from '@navigation/OptionsStack';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLoading } from '@contexts/LoadingContext';
 import { useNavigation } from '@react-navigation/native';
+import { View } from 'react-native';
+
+import { styles } from './OptionsScreen.styles';
 
 type OptionsNavProp = NativeStackNavigationProp<OptionsStackParamList, 'Options'>;
 
@@ -24,74 +25,68 @@ export function OptionsScreen() {
   const { data: userSession } = authClient.useSession();
 
   if (userSession === null) {
-    return <View style={styles.container} />;
+    return <View style={styles.emptyContainer} />;
   }
 
   const { user } = userSession;
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.avatarContainer}>
-        <Image source={require('@lib/assets/default-profile.jpg')} style={styles.avatar} />
-        <Typography variant="h1">
+    <ScreenContainer scrollable padding="m">
+      <View style={styles.profileSection}>
+        <Avatar source={user.image ? { uri: user.image } : null} name={`${user.name} ${user.lastName}`} size={100} />
+        <Typography variant="h4" weight="bold" style={styles.userName}>
           {user.name} {user.lastName}
+        </Typography>
+        <Typography variant="body2" color="textSecondary">
+          {user.email}
         </Typography>
       </View>
 
-      <View style={styles.buttonsContainer}>
-        <Button
+      <View style={styles.menuSection}>
+        <Typography variant="h6" style={styles.sectionTitle}>
+          Account
+        </Typography>
+
+        <MenuButton
           title="Manage Profile"
-          variant="outline"
-          style={styles.button}
-          leftIcon={<UserPen size={24} color={colors.actionPrimary} />}
+          icon={<UserPen size={24} color={colors.actionPrimary} />}
           onPress={() => navigation.navigate('Profile')}
+          style={styles.menuButton}
         />
-        <Button
+        <MenuButton
           title="Manage Payment Methods"
-          variant="outline"
-          style={styles.button}
-          leftIcon={<CreditCard size={24} color={colors.actionPrimary} />}
+          icon={<CreditCard size={24} color={colors.actionPrimary} />}
           onPress={() => navigation.navigate('PaymentMethods')}
+          style={styles.menuButton}
         />
-        <Button
+        <MenuButton
           title="View Transaction History"
-          variant="outline"
-          style={styles.button}
-          leftIcon={<FileClock size={24} color={colors.actionPrimary} />}
-          onPress={() => navigation.navigate('TransactionHistory')}
+          icon={<FileClock size={24} color={colors.actionPrimary} />}
+          onPress={() => undefined}
+          style={styles.menuButton}
         />
-        <Button
+
+        <Typography variant="h6" style={styles.sectionTitle}>
+          Support
+        </Typography>
+
+        <MenuButton
           title="Report Issue"
-          variant="outline"
-          style={styles.button}
-          leftIcon={<MessageSquareWarning size={24} color={colors.actionPrimary} />}
+          icon={<MessageSquareWarning size={24} color={colors.actionPrimary} />}
+          onPress={() => undefined}
+          style={styles.menuButton}
         />
-        <Button title="Sign Out" variant="primary" onPress={signOut} />
       </View>
-    </SafeAreaView>
+
+      <View style={styles.footer}>
+        <Button
+          title="Sign Out"
+          variant="outline"
+          onPress={signOut}
+          leftIcon={<LogOut size={20} color={colors.error} />}
+          style={styles.signOutButton}
+        />
+      </View>
+    </ScreenContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    gap: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 10,
-  },
-  avatarContainer: {
-    alignItems: 'center',
-  },
-  avatar: {
-    width: 200,
-    height: 200,
-    borderRadius: 100,
-  },
-  buttonsContainer: {
-    gap: 6,
-  },
-  button: {
-    gap: 10,
-  },
-});

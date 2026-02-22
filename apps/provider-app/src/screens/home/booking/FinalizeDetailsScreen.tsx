@@ -114,10 +114,22 @@ export function FinalizeDetailsScreen() {
         // Show waiting modal instead of navigating
         setShowWaitingModal(true);
       } else {
-        console.error('Failed to submit proposal');
+        const errorData = await response.json().catch(() => null);
+        console.error('Failed to submit proposal:', {
+          status: response.status,
+          statusText: response.statusText,
+          error: errorData,
+          bookingId,
+          cost: parseFloat(serviceCost),
+        });
       }
     } catch (error) {
-      console.error('Error submitting proposal:', error);
+      console.error('Error submitting proposal:', {
+        error,
+        bookingId,
+        cost: parseFloat(serviceCost),
+        specifications: serviceSpecifications,
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -344,6 +356,7 @@ const styles = StyleSheet.create({
   },
   submitContainer: {
     padding: spacing.m,
+    marginBottom: spacing.m,
     borderTopWidth: 1,
     borderTopColor: colors.border,
     backgroundColor: colors.background,

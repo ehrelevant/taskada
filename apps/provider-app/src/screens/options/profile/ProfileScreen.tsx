@@ -265,7 +265,7 @@ export function ProfileScreen({ navigation }: ProfileScreenProps) {
             Account Information
           </Typography>
 
-          <Input label="Email" value={profileData.email} editable={false} style={styles.readonlyInput} />
+          <Input label="Email" value={profileData.email} editable={false} inputContainerStyle={styles.readonlyInput} />
         </View>
 
         {/* Password Change Section */}
