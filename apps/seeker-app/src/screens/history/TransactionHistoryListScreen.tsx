@@ -1,6 +1,6 @@
-import { ActivityIndicator, FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native';
 import { apiFetch } from '@lib/helpers';
-import { Avatar, Card, Typography } from '@repo/components';
+import { Avatar, Button, Card, Typography } from '@repo/components';
 import { colors, palette, spacing } from '@repo/theme';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -85,8 +85,8 @@ export function TransactionHistoryListScreen() {
         <View style={styles.providerHeader}>
           <Avatar
             source={item.provider?.avatarUrl ? { uri: item.provider.avatarUrl } : null}
-            size={50}
             name={providerName}
+            size={50}
           />
           <View style={styles.providerInfo}>
             <Typography variant="subtitle1" weight="medium">
@@ -95,27 +95,33 @@ export function TransactionHistoryListScreen() {
             <Typography variant="body2" color="textSecondary">
               {item.serviceType.name}
             </Typography>
-            <View style={[styles.statusBadge, { backgroundColor: getStatusColor(item.status) }]}>
-              <Typography variant="caption" color="textInverse" style={styles.statusText}>
-                {item.status.toUpperCase()}
-              </Typography>
-            </View>
+          </View>
+          <View style={styles.costContainer}>
+            <Typography variant="h6" weight="bold" color="actionPrimary">
+              ₱{item.cost?.toFixed(2) || '0.00'}
+            </Typography>
           </View>
         </View>
 
-        {/* Date and Time */}
-        <View style={styles.dateSection}>
+        {/* Status and Date Row */}
+        <View style={styles.statusDateRow}>
+          <View style={[styles.statusBadge, { backgroundColor: getStatusColor(item.status) }]}>
+            <Typography variant="caption" color="textInverse" style={styles.statusText}>
+              {item.status.toUpperCase()}
+            </Typography>
+          </View>
           <Typography variant="body2" color="textSecondary">
             {formatDateTime(item.createdAt)}
           </Typography>
         </View>
 
         {/* View Details Button */}
-        <TouchableOpacity style={styles.detailsButton} onPress={() => handleViewDetails(item.id)}>
-          <Typography variant="body2" color="actionPrimary" weight="medium">
-            View Details
-          </Typography>
-        </TouchableOpacity>
+        <Button
+          title="View Details"
+          variant="outline"
+          onPress={() => handleViewDetails(item.id)}
+          style={styles.detailsButton}
+        />
       </Card>
     );
   };
@@ -195,11 +201,20 @@ const styles = StyleSheet.create({
   providerHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: spacing.s,
+    marginBottom: spacing.m,
   },
   providerInfo: {
     flex: 1,
     marginLeft: spacing.m,
+  },
+  costContainer: {
+    alignItems: 'flex-end',
+  },
+  statusDateRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: spacing.m,
   },
   statusBadge: {
     paddingHorizontal: spacing.s,
@@ -211,12 +226,8 @@ const styles = StyleSheet.create({
   statusText: {
     fontWeight: '600',
   },
-  dateSection: {
-    marginBottom: spacing.s,
-  },
   detailsButton: {
-    alignSelf: 'flex-end',
-    paddingVertical: spacing.xs,
+    marginTop: spacing.xs,
   },
   emptyContainer: {
     flex: 1,

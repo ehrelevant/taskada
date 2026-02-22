@@ -1,7 +1,7 @@
 import { ActivityIndicator, FlatList, Image, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { apiFetch } from '@lib/helpers';
 import { authClient } from '@lib/authClient';
-import { Button, Typography } from '@repo/components';
+import { Avatar, Button, Typography } from '@repo/components';
 import { chatSocket, Message } from '@lib/chatSocket';
 import { colors, spacing } from '@repo/theme';
 import { KeyboardStickyView } from 'react-native-keyboard-controller';
@@ -197,9 +197,13 @@ export function ChatScreen() {
     <SafeAreaView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        {otherUser.avatarUrl && <Image source={{ uri: otherUser.avatarUrl }} style={styles.headerAvatar} />}
+        <Avatar
+          source={otherUser.avatarUrl ? { uri: otherUser.avatarUrl } : null}
+          name={`${otherUser.firstName} ${otherUser.lastName}`}
+          size={56}
+        />
         <View style={styles.headerInfo}>
-          <Typography variant="h6" numberOfLines={1}>
+          <Typography variant="h5" weight="bold" numberOfLines={1}>
             {otherUser.firstName} {otherUser.lastName}
           </Typography>
           {isTyping && (
@@ -261,18 +265,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: spacing.m,
-    paddingVertical: spacing.s,
+    paddingVertical: spacing.m,
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
   },
   backButton: {
     padding: spacing.s,
-  },
-  headerAvatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginLeft: spacing.s,
   },
   headerInfo: {
     marginLeft: spacing.m,

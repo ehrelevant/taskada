@@ -1,6 +1,7 @@
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { ActivityIndicator, Image, ScrollView, StyleSheet, View } from 'react-native';
 import { apiFetch } from '@lib/helpers';
-import { Button, Typography } from '@repo/components';
+import { Avatar, Button, Typography } from '@repo/components';
 import { colors, spacing } from '@repo/theme';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RequestsStackParamList } from '@navigation/RequestsStack';
@@ -194,21 +195,25 @@ export function RequestDetailsScreen() {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
       {/* Service Type Header */}
-      <View style={styles.headerSection}>
-        <Typography variant="h5" style={styles.serviceTypeName}>
+      <View style={styles.headerContainer}>
+        <Typography variant="h1" style={styles.serviceTypeName}>
           {request.serviceType.name}
         </Typography>
       </View>
 
       {/* Seeker Information */}
-      <View style={styles.section}>
-        <Typography variant="h6" style={styles.sectionTitle}>
+      <View style={styles.sectionCard}>
+        <Typography variant="subtitle2" style={styles.sectionLabel}>
           Seeker Information
         </Typography>
         <View style={styles.seekerInfo}>
-          {request.seeker.avatarUrl && <Image source={{ uri: request.seeker.avatarUrl }} style={styles.avatar} />}
+          <Avatar
+            source={request.seeker.avatarUrl ? { uri: request.seeker.avatarUrl } : null}
+            name={`${request.seeker.firstName} ${request.seeker.lastName}`}
+            size={56}
+          />
           <View style={styles.seekerDetails}>
-            <Typography variant="body1" weight="medium">
+            <Typography variant="h2" weight="bold">
               {request.seeker.firstName} {request.seeker.lastName}
             </Typography>
             <Typography variant="body2" color="textSecondary">
@@ -219,29 +224,57 @@ export function RequestDetailsScreen() {
       </View>
 
       {/* Location */}
-      <View style={styles.section}>
-        <Typography variant="h6" style={styles.sectionTitle}>
+      <View style={styles.sectionCard}>
+        <Typography variant="subtitle2" style={styles.sectionLabel}>
           Location
         </Typography>
-        <Typography variant="body1">{request.address.label || 'Address not specified'}</Typography>
+        {request.address.coordinates &&
+          request.address.coordinates[0] !== 0 &&
+          request.address.coordinates[1] !== 0 && (
+            <View style={styles.mapContainer}>
+              <MapView
+                provider={PROVIDER_GOOGLE}
+                style={styles.map}
+                initialRegion={{
+                  latitude: request.address.coordinates[1],
+                  longitude: request.address.coordinates[0],
+                  latitudeDelta: 0.01,
+                  longitudeDelta: 0.01,
+                }}
+                scrollEnabled={false}
+                zoomEnabled={false}
+                pitchEnabled={false}
+                rotateEnabled={false}
+              >
+                <Marker
+                  coordinate={{ latitude: request.address.coordinates[1], longitude: request.address.coordinates[0] }}
+                />
+              </MapView>
+            </View>
+          )}
+        <View style={styles.addressContainer}>
+          <Typography variant="body1">{request.address.label || 'Address not specified'}</Typography>
+        </View>
       </View>
 
       {/* Description */}
       {request.description && (
-        <View style={styles.section}>
-          <Typography variant="h6" style={styles.sectionTitle}>
+        <View style={styles.sectionCard}>
+          <Typography variant="subtitle2" style={styles.sectionLabel}>
             Description
           </Typography>
-          <Typography variant="body1" style={styles.description}>
-            {request.description}
-          </Typography>
+          <View style={styles.descriptionBox}>
+            <Typography variant="body1" style={styles.description}>
+              {request.description}
+            </Typography>
+          </View>
         </View>
       )}
 
       {/* Images */}
       {request.images && request.images.length > 0 && (
-        <View style={styles.section}>
-          <Typography variant="h6" style={styles.sectionTitle}>
+        <View style={styles.sectionCard}>
+          <Typography variant="subtitle2" style={styles.sectionLabel}>
             Photos ({request.images.length})
           </Typography>
           <View style={styles.imagesContainer}>
@@ -282,36 +315,42 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: spacing.l,
   },
-  headerSection: {
-    marginBottom: spacing.l,
-    paddingBottom: spacing.m,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+  headerContainer: {
+    flex: 1,
+    alignItems: 'center',
   },
   serviceTypeName: {
     marginBottom: spacing.xs,
   },
-  section: {
-    marginBottom: spacing.l,
+  sectionCard: {
+    backgroundColor: colors.surface,
+    padding: spacing.m,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: colors.border,
+    marginBottom: spacing.m,
   },
-  sectionTitle: {
+  sectionLabel: {
     marginBottom: spacing.s,
+    color: colors.textSecondary,
   },
   seekerInfo: {
     flexDirection: 'row',
     alignItems: 'center',
   },
-  avatar: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    marginRight: spacing.m,
-  },
   seekerDetails: {
     flex: 1,
+    marginLeft: spacing.m,
   },
   description: {
     lineHeight: 22,
+  },
+  descriptionBox: {
+    backgroundColor: colors.background,
+    padding: spacing.m,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   imagesContainer: {
     flexDirection: 'row',
@@ -323,18 +362,25 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 8,
   },
-  noteSection: {
-    backgroundColor: colors.backgroundSecondary,
-    padding: spacing.m,
+  mapContainer: {
+    height: 150,
     borderRadius: 8,
-    marginBottom: spacing.l,
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: colors.border,
+    marginBottom: spacing.s,
   },
-  noteText: {
-    textAlign: 'center',
-    fontStyle: 'italic',
+  map: {
+    flex: 1,
+  },
+  addressContainer: {
+    padding: spacing.s,
   },
   buttonContainer: {
     marginTop: spacing.m,
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
+    paddingTop: spacing.m,
   },
   button: {
     marginTop: spacing.s,

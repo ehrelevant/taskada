@@ -1,6 +1,7 @@
 import { ActivityIndicator, FlatList, Image, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { apiFetch } from '@lib/helpers';
 import { authClient } from '@lib/authClient';
+import { Avatar, Typography } from '@repo/components';
 import { chatSocket, Message } from '@lib/chatSocket';
 import { colors, spacing } from '@repo/theme';
 import { HomeStackParamList } from '@navigation/HomeStack';
@@ -9,7 +10,6 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Send } from 'lucide-react-native';
-import { Typography } from '@repo/components';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 type ChatRouteProp = RouteProp<HomeStackParamList, 'Chat'>;
@@ -178,9 +178,13 @@ export function ChatScreen() {
     <SafeAreaView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        {providerInfo.avatarUrl && <Image source={{ uri: providerInfo.avatarUrl }} style={styles.headerAvatar} />}
+        <Avatar
+          source={providerInfo.avatarUrl ? { uri: providerInfo.avatarUrl } : null}
+          name={`${providerInfo.firstName} ${providerInfo.lastName}`}
+          size={56}
+        />
         <View style={styles.headerInfo}>
-          <Typography variant="h6" numberOfLines={1}>
+          <Typography variant="h5" weight="bold" numberOfLines={1}>
             {providerInfo.firstName} {providerInfo.lastName}
           </Typography>
           {isTyping && (
@@ -237,18 +241,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: spacing.m,
-    paddingVertical: spacing.s,
+    paddingVertical: spacing.m,
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
   },
   backButton: {
     padding: spacing.s,
-  },
-  headerAvatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginLeft: spacing.s,
   },
   headerInfo: {
     marginLeft: spacing.m,

@@ -1,6 +1,6 @@
-import { ActivityIndicator, FlatList, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native';
 import { apiFetch } from '@lib/helpers';
-import { Card, Typography } from '@repo/components';
+import { Avatar, Button, Card, Typography } from '@repo/components';
 import { colors, palette, spacing } from '@repo/theme';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -15,6 +15,12 @@ interface BookingHistoryItem {
   status: 'completed' | 'cancelled';
   cost: number;
   createdAt: string;
+  seeker: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    avatarUrl: string | null;
+  } | null;
   provider: {
     id: string;
     firstName: string;
@@ -77,40 +83,47 @@ export function TransactionHistoryListScreen() {
   };
 
   const renderBookingCard = ({ item }: { item: BookingHistoryItem }) => {
+    const seekerName = item.seeker ? `${item.seeker.firstName} ${item.seeker.lastName}` : 'Unknown Seeker';
+
     return (
       <Card elevation="s" padding="m" style={styles.card}>
-        {/* Service Type Header */}
-        <View style={styles.serviceHeader}>
-          {item.serviceType.iconUrl ? (
-            <Image source={{ uri: item.serviceType.iconUrl }} style={styles.serviceIcon} />
-          ) : (
-            <View style={styles.serviceIconPlaceholder} />
-          )}
-          <View style={styles.serviceInfo}>
+        {/* Seeker Info Header */}
+        <View style={styles.providerHeader}>
+          <Avatar source={item.seeker?.avatarUrl ? { uri: item.seeker.avatarUrl } : null} name={seekerName} size={50} />
+          <View style={styles.providerInfo}>
             <Typography variant="subtitle1" weight="medium">
+              {seekerName}
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
               {item.serviceType.name}
             </Typography>
-            <View style={[styles.statusBadge, { backgroundColor: getStatusColor(item.status) }]}>
-              <Typography variant="caption" color="textInverse" style={styles.statusText}>
-                {item.status.toUpperCase()}
-              </Typography>
-            </View>
+          </View>
+          <View style={styles.costContainer}>
+            <Typography variant="h6" weight="bold" color="actionPrimary">
+              ₱{item.cost?.toFixed(2) || '0.00'}
+            </Typography>
           </View>
         </View>
 
-        {/* Date and Time */}
-        <View style={styles.dateSection}>
+        {/* Status and Date Row */}
+        <View style={styles.statusDateRow}>
+          <View style={[styles.statusBadge, { backgroundColor: getStatusColor(item.status) }]}>
+            <Typography variant="caption" color="textInverse" style={styles.statusText}>
+              {item.status.toUpperCase()}
+            </Typography>
+          </View>
           <Typography variant="body2" color="textSecondary">
             {formatDateTime(item.createdAt)}
           </Typography>
         </View>
 
         {/* View Details Button */}
-        <TouchableOpacity style={styles.detailsButton} onPress={() => handleViewDetails(item.id)}>
-          <Typography variant="body2" color="actionPrimary" weight="medium">
-            View Details
-          </Typography>
-        </TouchableOpacity>
+        <Button
+          title="View Details"
+          variant="outline"
+          onPress={() => handleViewDetails(item.id)}
+          style={styles.detailsButton}
+        />
       </Card>
     );
   };
@@ -187,29 +200,23 @@ const styles = StyleSheet.create({
   card: {
     marginBottom: spacing.m,
   },
-  serviceHeader: {
+  providerHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: spacing.s,
+    marginBottom: spacing.m,
   },
-  serviceIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 8,
-    marginRight: spacing.m,
-  },
-  serviceIconPlaceholder: {
-    width: 48,
-    height: 48,
-    borderRadius: 8,
-    backgroundColor: colors.surface,
-    marginRight: spacing.m,
-  },
-  serviceInfo: {
+  providerInfo: {
     flex: 1,
+    marginLeft: spacing.m,
+  },
+  costContainer: {
+    alignItems: 'flex-end',
+  },
+  statusDateRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginBottom: spacing.m,
   },
   statusBadge: {
     paddingHorizontal: spacing.s,
@@ -219,12 +226,8 @@ const styles = StyleSheet.create({
   statusText: {
     fontWeight: '600',
   },
-  dateSection: {
-    marginBottom: spacing.s,
-  },
   detailsButton: {
-    alignSelf: 'flex-end',
-    paddingVertical: spacing.xs,
+    marginTop: spacing.xs,
   },
   emptyContainer: {
     flex: 1,
