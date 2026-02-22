@@ -227,7 +227,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.actionPrimary,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#000',
+    shadowColor: colors.black,
     shadowOffset: {
       width: 0,
       height: 4,
@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   doneButton: {
-    backgroundColor: '#4CAF50', // Green for DONE state
+    backgroundColor: colors.success,
   },
   disabledButton: {
     opacity: 0.8,

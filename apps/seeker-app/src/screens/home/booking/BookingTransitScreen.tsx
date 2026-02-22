@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   arrivalBadge: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: colors.success,
     paddingHorizontal: spacing.m,
     paddingVertical: spacing.s,
     borderRadius: 20,

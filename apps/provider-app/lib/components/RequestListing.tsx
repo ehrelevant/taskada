@@ -54,13 +54,13 @@ const styles = StyleSheet.create({
   },
   distance: {
     marginTop: 4,
-    color: '#666',
+    color: colors.textSecondary,
   },
   address: {
     marginTop: 8,
-    color: '#666',
-    fontSize: 13,
-    lineHeight: 18,
+    color: colors.textSecondary,
+    fontSize: 14,
+    lineHeight: 20,
   },
   buttonWrap: {
     marginTop: 12,

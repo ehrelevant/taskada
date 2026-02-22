@@ -289,7 +289,6 @@ const styles = StyleSheet.create({
   },
   messageTime: {
     marginTop: spacing.xs,
-    fontSize: 10,
   },
   inputContainer: {
     flexDirection: 'row',

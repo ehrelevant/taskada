@@ -313,7 +313,6 @@ const styles = StyleSheet.create({
   },
   messageTime: {
     marginTop: spacing.xs,
-    fontSize: 10,
   },
   actionButtonsContainer: {
     flexDirection: 'row',
