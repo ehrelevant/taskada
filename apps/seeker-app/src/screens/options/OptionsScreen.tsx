@@ -83,7 +83,7 @@ export function OptionsScreen() {
           title="Sign Out"
           variant="outline"
           onPress={signOut}
-          leftIcon={<LogOut size={20} color={colors.error} />}
+          leftIcon={<LogOut size={20} color={colors.error.base} />}
           style={styles.signOutButton}
         />
       </View>

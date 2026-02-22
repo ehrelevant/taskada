@@ -43,7 +43,7 @@ export function PaymentMethodsScreen() {
                   </Typography>
                 </View>
                 <TouchableOpacity>
-                  <Trash2 color={colors.error} size={20} />
+                  <Trash2 color={colors.error.base} size={20} />
                 </TouchableOpacity>
               </Card>
             ))
@@ -78,7 +78,7 @@ export function PaymentMethodsScreen() {
           <TouchableOpacity onPress={() => navigation.navigate('AddEWallet')}>
             <Card style={styles.actionCard} padding="m">
               <View style={[styles.actionIcon, { backgroundColor: '#E8F5E9' }]}>
-                <Wallet color={colors.success} size={24} />
+                <Wallet color={colors.success.base} size={24} />
               </View>
               <View>
                 <Typography variant="subtitle2">E-Wallet</Typography>

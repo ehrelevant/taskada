@@ -1,7 +1,9 @@
 import { spacing } from '@repo/theme';
 import { StyleSheet, View } from 'react-native';
 
-import { Button, Card, Typography } from '../';
+import { Button } from '../Button';
+import { Card } from '../Card';
+import { Typography } from '../Typography';
 
 type Props = {
   title: string;

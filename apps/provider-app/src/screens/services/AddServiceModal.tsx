@@ -165,7 +165,7 @@ export function AddServiceModal({ visible, serviceToEdit, onClose, onSuccess }: 
                 />
               )}
               {errors.serviceTypeId && (
-                <Typography variant="caption" color={colors.error} style={{ marginTop: 4 }}>
+                <Typography variant="caption" color={colors.error.base} style={{ marginTop: 4 }}>
                   {errors.serviceTypeId.message}
                 </Typography>
               )}

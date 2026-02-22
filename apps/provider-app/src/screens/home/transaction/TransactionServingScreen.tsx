@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   doneButton: {
-    backgroundColor: colors.success,
+    backgroundColor: colors.success.base,
   },
   disabledButton: {
     opacity: 0.8,

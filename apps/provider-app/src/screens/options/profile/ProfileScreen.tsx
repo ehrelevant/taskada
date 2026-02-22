@@ -403,7 +403,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   errorText: {
-    color: colors.error,
+    color: colors.error.base,
     textAlign: 'center',
     marginVertical: 10,
   },

@@ -77,7 +77,7 @@ export function SignInScreen() {
       />
 
       {errorMessage !== '' && (
-        <Typography variant="body2" color={colors.error} style={styles.error}>
+        <Typography variant="body2" color={colors.error.base} style={styles.error}>
           {errorMessage}
         </Typography>
       )}

@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     width: 140,
     height: 140,
     borderRadius: 70,
-    backgroundColor: colors.success,
+    backgroundColor: colors.success.base,
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: colors.black,

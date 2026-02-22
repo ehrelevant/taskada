@@ -17,7 +17,7 @@ export function Rating({ value, size = 14, showValue = true, reviewCount, style 
 
   return (
     <View style={[{ flexDirection: 'row', alignItems: 'center', gap: 4 }, style]}>
-      <Star size={size} color={colors.warning} fill={colors.warning} />
+      <Star size={size} color={colors.warning.base} fill={colors.warning.base} />
       {showValue && (
         <Typography variant="body2" color="textPrimary" weight="medium">
           {formattedValue}

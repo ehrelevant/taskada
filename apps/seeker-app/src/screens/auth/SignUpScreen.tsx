@@ -89,7 +89,7 @@ export function SignUpScreen() {
       <Input label="Phone Number*" placeholder="Phone Number" value={phoneNumber} onChangeText={setPhoneNumber} />
 
       {errorMessage !== '' && (
-        <Typography variant="body1" color={colors.error}>
+        <Typography variant="body1" color={colors.error.base}>
           {errorMessage}
         </Typography>
       )}

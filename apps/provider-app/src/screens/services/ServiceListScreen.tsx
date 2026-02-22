@@ -94,13 +94,13 @@ export function ServiceListScreen() {
             <Pencil size={20} color={colors.textSecondary} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => handleDelete(item)} style={styles.iconButton}>
-            <Trash2 size={20} color={colors.error} />
+            <Trash2 size={20} color={colors.error.base} />
           </TouchableOpacity>
         </View>
       </View>
 
       <View style={styles.cardFooter}>
-        <Typography variant="caption" color={item.isEnabled ? colors.success : colors.textDisabled}>
+        <Typography variant="caption" color={item.isEnabled ? colors.success.base : colors.textDisabled}>
           {item.isEnabled ? 'Active' : 'Disabled'}
         </Typography>
         <Switch

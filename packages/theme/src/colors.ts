@@ -32,6 +32,22 @@ export const palette = {
 };
 
 export const colors = {
+  // Primary
+  primary: {
+    base: palette.primary,
+    light: palette.primaryLight,
+    dark: palette.primaryDark,
+    text: palette.white,
+  },
+
+  // Secondary
+  secondary: {
+    base: palette.secondary,
+    light: palette.secondaryLight,
+    dark: palette.secondaryDark,
+    text: palette.gray900,
+  },
+
   // UI elements
   background: palette.white,
   backgroundSecondary: palette.gray100,
@@ -49,12 +65,37 @@ export const colors = {
   actionSecondary: palette.secondary,
   actionDisabled: palette.gray400,
 
-  // Feedback
-  success: palette.success,
-  warning: palette.warning,
-  error: palette.error,
-  info: palette.info,
-  pending: palette.pending,
+  // Feedback - Enhanced with state variations
+  success: {
+    base: palette.success,
+    light: '#E8F5E9',
+    dark: '#388E3C',
+    text: palette.white,
+  },
+  warning: {
+    base: palette.warning,
+    light: '#FFF8E1',
+    dark: '#FFA000',
+    text: palette.gray900,
+  },
+  error: {
+    base: palette.error,
+    light: '#FFEBEE',
+    dark: '#D32F2F',
+    text: palette.white,
+  },
+  info: {
+    base: palette.info,
+    light: '#E3F2FD',
+    dark: '#1976D2',
+    text: palette.white,
+  },
+  pending: {
+    base: palette.pending,
+    light: '#FFF3E0',
+    dark: '#F57C00',
+    text: palette.gray900,
+  },
 
   // Borders
   border: palette.gray300,

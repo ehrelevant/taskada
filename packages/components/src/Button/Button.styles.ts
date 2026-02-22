@@ -1,8 +1,8 @@
-import { colors, fontFamily, fontSize, fontWeight, radius, spacing } from '@repo/theme';
+import { colors, fontFamily, fontSize, fontWeight, radius, spacing, touchTarget } from '@repo/theme';
 import { FlexStyle, StyleSheet } from 'react-native';
 
 export function createStyles(
-  variant: 'primary' | 'secondary' | 'outline' | 'text',
+  variant: 'primary' | 'secondary' | 'outline' | 'text' | 'danger',
   size: 'small' | 'medium' | 'large',
   isDisabled: boolean,
 ) {
@@ -24,7 +24,7 @@ export function createStyles(
     medium: {
       paddingVertical: spacing.s,
       paddingHorizontal: spacing.l,
-      minHeight: 44,
+      minHeight: touchTarget.minimum,
     },
     large: {
       paddingVertical: spacing.m,
@@ -36,20 +36,24 @@ export function createStyles(
   // Variant styles
   const variantStyles = {
     primary: {
-      backgroundColor: isDisabled ? colors.actionDisabled : colors.actionPrimary,
+      backgroundColor: isDisabled ? colors.actionDisabled : colors.primary.base,
       borderWidth: 0,
     },
     secondary: {
-      backgroundColor: isDisabled ? colors.actionDisabled : colors.actionSecondary,
+      backgroundColor: isDisabled ? colors.actionDisabled : colors.secondary.base,
       borderWidth: 0,
     },
     outline: {
       backgroundColor: colors.transparent,
       borderWidth: 1,
-      borderColor: isDisabled ? colors.actionDisabled : colors.actionPrimary,
+      borderColor: isDisabled ? colors.actionDisabled : colors.primary.base,
     },
     text: {
       backgroundColor: colors.transparent,
+      borderWidth: 0,
+    },
+    danger: {
+      backgroundColor: isDisabled ? colors.actionDisabled : colors.error.base,
       borderWidth: 0,
     },
   };
@@ -81,10 +85,13 @@ export function createStyles(
       color: colors.textInverse,
     },
     outline: {
-      color: isDisabled ? colors.textDisabled : colors.actionPrimary,
+      color: isDisabled ? colors.textDisabled : colors.primary.base,
     },
     text: {
-      color: isDisabled ? colors.textDisabled : colors.actionPrimary,
+      color: isDisabled ? colors.textDisabled : colors.primary.base,
+    },
+    danger: {
+      color: colors.textInverse,
     },
   };
 
@@ -102,6 +109,22 @@ export function createStyles(
     },
     icon: {
       marginRight: spacing.xs,
+    },
+    rightIcon: {
+      marginLeft: spacing.xs,
+    },
+    loadingContainer: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    loadingText: {
+      marginLeft: spacing.xs,
+      color: colors.textInverse,
+      fontSize: fontSize.s,
+    },
+    fullWidth: {
+      width: '100%',
     },
   });
 }

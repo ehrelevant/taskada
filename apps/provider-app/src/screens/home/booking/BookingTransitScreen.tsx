@@ -252,13 +252,13 @@ const styles = StyleSheet.create({
   errorSection: {
     marginBottom: spacing.l,
     padding: spacing.m,
-    backgroundColor: colors.error + '20',
+    backgroundColor: colors.error.light,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: colors.error + '40',
+    borderColor: colors.error.base + '40',
   },
   errorText: {
-    color: colors.error,
+    color: colors.error.base,
   },
   buttonContainer: {
     padding: spacing.m,

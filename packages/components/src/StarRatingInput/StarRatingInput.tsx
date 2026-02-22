@@ -55,8 +55,8 @@ export function StarRatingInput({
           >
             <Star
               size={size}
-              color={colors.warning}
-              fill={isFilled ? colors.warning : 'transparent'}
+              color={colors.warning.base}
+              fill={isFilled ? colors.warning.base : 'transparent'}
               strokeWidth={isFilled ? 0 : 2}
             />
           </TouchableOpacity>

@@ -19,7 +19,7 @@ export function createStyles(error?: string, isFocused?: boolean) {
       width: '100%',
       minHeight: 48,
       borderWidth: 1,
-      borderColor: error ? colors.error : isFocused ? colors.borderFocus : colors.border,
+      borderColor: error ? colors.error.base : isFocused ? colors.borderFocus : colors.border,
       borderRadius: radius.m,
       backgroundColor: colors.background,
       paddingHorizontal: spacing.m,
@@ -39,7 +39,7 @@ export function createStyles(error?: string, isFocused?: boolean) {
     errorText: {
       fontFamily: fontFamily.regular,
       fontSize: fontSize.xs,
-      color: colors.error,
+      color: colors.error.base,
       marginTop: spacing.xs,
     },
     helperText: {

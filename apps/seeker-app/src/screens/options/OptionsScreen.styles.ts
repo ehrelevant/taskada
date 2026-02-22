@@ -30,6 +30,6 @@ export const styles = StyleSheet.create({
     marginBottom: spacing.m,
   },
   signOutButton: {
-    borderColor: colors.error,
+    borderColor: colors.error.base,
   },
 });

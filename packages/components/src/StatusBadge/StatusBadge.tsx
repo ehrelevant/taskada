@@ -11,11 +11,11 @@ type Props = {
 };
 
 const statusColors: Record<StatusType, { background: string; text: string }> = {
-  success: { background: colors.success + '20', text: colors.success },
-  warning: { background: colors.warning + '20', text: colors.warning },
-  error: { background: colors.error + '20', text: colors.error },
-  info: { background: colors.info + '20', text: colors.info },
-  pending: { background: colors.pending + '20', text: colors.pending },
+  success: { background: colors.success.light, text: colors.success.base },
+  warning: { background: colors.warning.light, text: colors.warning.base },
+  error: { background: colors.error.light, text: colors.error.base },
+  info: { background: colors.info.light, text: colors.info.base },
+  pending: { background: colors.pending.light, text: colors.pending.base },
   default: { background: colors.actionSecondary, text: colors.textPrimary },
 };
 

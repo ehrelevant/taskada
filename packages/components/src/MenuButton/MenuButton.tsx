@@ -11,7 +11,7 @@ interface MenuButtonProps extends TouchableOpacityProps {
 }
 
 export function MenuButton({ title, icon, variant = 'default', style, ...rest }: MenuButtonProps) {
-  const textColor = variant === 'danger' ? colors.error : colors.textPrimary;
+  const textColor = variant === 'danger' ? colors.error.base : colors.textPrimary;
 
   return (
     <TouchableOpacity style={[styles.container, style]} {...rest}>
