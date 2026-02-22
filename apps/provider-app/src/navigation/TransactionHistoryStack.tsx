@@ -34,7 +34,6 @@ export function TransactionHistoryStack() {
         component={TransactionHistoryListScreen}
         options={{
           title: 'Transaction History',
-          headerShown: false,
         }}
       />
       <Stack.Screen

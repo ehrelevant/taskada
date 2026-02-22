@@ -1,7 +1,7 @@
 import { authClient } from '@lib/authClient';
 import { Avatar, Button, MenuButton, ScreenContainer, Typography } from '@repo/components';
 import { colors } from '@repo/theme';
-import { CreditCard, FileClock, LogOut, MessageSquareWarning, UserPen } from 'lucide-react-native';
+import { CreditCard, LogOut, MessageSquareWarning, UserPen } from 'lucide-react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { OptionsStackParamList } from '@navigation/OptionsStack';
 import { useLoading } from '@contexts/LoadingContext';
@@ -31,7 +31,7 @@ export function OptionsScreen() {
   const { user } = userSession;
 
   return (
-    <ScreenContainer scrollable padding="m">
+    <ScreenContainer scrollable padding="m" verticalPadding="none">
       <View style={styles.profileSection}>
         <Avatar source={user.image ? { uri: user.image } : null} name={`${user.name} ${user.lastName}`} size={100} />
         <Typography variant="h4" weight="bold" style={styles.userName}>
@@ -57,12 +57,6 @@ export function OptionsScreen() {
           title="Manage Payment Methods"
           icon={<CreditCard size={24} color={colors.actionPrimary} />}
           onPress={() => navigation.navigate('PaymentMethods')}
-          style={styles.menuButton}
-        />
-        <MenuButton
-          title="View Transaction History"
-          icon={<FileClock size={24} color={colors.actionPrimary} />}
-          onPress={() => undefined}
           style={styles.menuButton}
         />
 

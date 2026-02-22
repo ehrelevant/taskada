@@ -9,6 +9,7 @@ interface ScreenContainerProps extends ViewProps {
   useSafeArea?: boolean;
   backgroundColor?: string;
   padding?: 'none' | 's' | 'm' | 'l';
+  verticalPadding?: 'none' | 's' | 'm' | 'l';
 }
 
 export function ScreenContainer({
@@ -17,6 +18,7 @@ export function ScreenContainer({
   useSafeArea = true,
   backgroundColor = colors.background,
   padding = 'm',
+  verticalPadding,
   style,
   ...rest
 }: ScreenContainerProps) {
@@ -27,7 +29,14 @@ export function ScreenContainer({
     l: spacing.l,
   };
 
-  const containerStyles = [styles.container, { backgroundColor, padding: paddingValues[padding] }, style];
+  const horizontalPadding = paddingValues[padding];
+  const vertical = verticalPadding !== undefined ? paddingValues[verticalPadding] : horizontalPadding;
+
+  const containerStyles = [
+    styles.container,
+    { backgroundColor, paddingHorizontal: horizontalPadding, paddingVertical: vertical },
+    style,
+  ];
 
   const content = scrollable ? (
     <ScrollView

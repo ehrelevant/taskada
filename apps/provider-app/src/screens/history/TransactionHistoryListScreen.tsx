@@ -141,12 +141,7 @@ export function TransactionHistoryListScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <Typography variant="h5">Transaction History</Typography>
-      </View>
-
+    <View style={styles.container}>
       {/* Booking List */}
       <FlatList
         data={bookings}
@@ -162,7 +157,7 @@ export function TransactionHistoryListScreen() {
           </View>
         }
       />
-    </SafeAreaView>
+    </View>
   );
 }
 
