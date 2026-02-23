@@ -209,7 +209,6 @@ export function RequestListScreen() {
         <FlatList
           data={requests}
           keyExtractor={item => item.id}
-          contentContainerStyle={styles.requestsListContainer}
           renderItem={({ item }) => (
             <RequestListing
               title={item.serviceType.name}

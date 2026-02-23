@@ -1,4 +1,19 @@
-import { Body, Controller, Delete, Get, NotFoundException, Param, Patch, Post, Query, UsePipes } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  NotFoundException,
+  Param,
+  Patch,
+  Post,
+  Query,
+  UploadedFiles,
+  UseInterceptors,
+  UsePipes,
+} from '@nestjs/common';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import { memoryStorage } from 'multer';
 import { Session, UserSession } from '@thallesp/nestjs-better-auth';
 import { ValibotPipe } from 'src/valibot/valibot.pipe';
 
@@ -9,7 +24,6 @@ import { RequestsService } from './requests.service';
 import { CreateRequestSchema, UpdateRequestStatusSchema } from './dto/create-request.dto';
 import { CreateRequestSwaggerDto } from './dto/create-request-swagger.dto';
 import { UpdateRequestStatusSwaggerDto } from './dto/update-request-status-swagger.dto';
-import { UploadRequestImagesSchema, UploadRequestImagesSwaggerDto } from './dto/upload-request-images.dto';
 
 @Controller('requests')
 export class RequestsController {
@@ -25,9 +39,26 @@ export class RequestsController {
   }
 
   @Post(':id/images')
-  @UsePipes(new ValibotPipe(UploadRequestImagesSchema))
-  async uploadRequestImages(@Param('id') id: string, @Body() body: UploadRequestImagesSwaggerDto) {
-    await this.requestsService.addRequestImages(id, body.imageUrls);
+  @UseInterceptors(
+    FilesInterceptor('files', 10, {
+      storage: memoryStorage(),
+      limits: {
+        fileSize: 5 * 1024 * 1024, // 5MB
+      },
+    }),
+  )
+  async uploadRequestImages(@Param('id') id: string, @UploadedFiles() files: Express.Multer.File[]) {
+    if (!files || files.length === 0) {
+      return { error: 'No files provided' };
+    }
+
+    const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+    const invalidFiles = files.filter(f => !allowedMimeTypes.includes(f.mimetype));
+    if (invalidFiles.length > 0) {
+      return { error: 'Invalid file type. Only JPEG, PNG, WebP, and GIF are allowed.' };
+    }
+
+    await this.requestsService.uploadRequestImages(id, files);
     return { message: 'Images uploaded successfully' };
   }
 

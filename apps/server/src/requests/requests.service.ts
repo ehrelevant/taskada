@@ -4,6 +4,7 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 
 import { DatabaseService } from '../database/database.service';
 import { MatchingGateway } from '../matching/matching.gateway';
+import { S3Service } from '../s3/s3.service';
 
 import { CreateRequestDto } from './dto/create-request.dto';
 
@@ -47,6 +48,7 @@ export class RequestsService {
   constructor(
     private readonly dbService: DatabaseService,
     private readonly matchingGateway: MatchingGateway,
+    private readonly s3Service: S3Service,
   ) {}
 
   async createAddress(label: string, lat: number, lng: number) {
@@ -111,6 +113,17 @@ export class RequestsService {
     await this.dbService.db.insert(requestImage).values(images);
   }
 
+  async uploadRequestImages(requestId: string, files: Express.Multer.File[]) {
+    const imageKeys: string[] = [];
+
+    for (const file of files) {
+      const result = await this.s3Service.uploadFile(file, 'requests', requestId);
+      imageKeys.push(result.key);
+    }
+
+    await this.addRequestImages(requestId, imageKeys);
+  }
+
   async getNearbyRequests() {
     return await this.dbService.db
       .select({
@@ -154,16 +167,41 @@ export class RequestsService {
           label: address.label,
           coordinates: address.coordinates,
         },
+        requestImage: requestImage.image,
       })
       .from(request)
       .innerJoin(serviceType, eq(request.serviceTypeId, serviceType.id))
       .innerJoin(seeker, eq(request.seekerUserId, seeker.userId))
       .innerJoin(user, eq(seeker.userId, user.id))
       .innerJoin(address, eq(request.addressId, address.id))
-      .where(eq(request.id, id))
-      .limit(1);
+      .leftJoin(requestImage, eq(request.id, requestImage.requestId))
+      .where(eq(request.id, id));
 
-    return result[0];
+    if (!result[0]) {
+      return null;
+    }
+
+    const baseData = result[0];
+
+    const imageUrls: string[] = [];
+    for (const row of result) {
+      if (row.requestImage) {
+        const signedUrl = await this.s3Service.getSignedUrl(row.requestImage);
+        imageUrls.push(signedUrl);
+      }
+    }
+
+    return {
+      id: baseData.id,
+      serviceId: baseData.serviceId,
+      seekerUserId: baseData.seekerUserId,
+      description: baseData.description,
+      status: baseData.status,
+      serviceType: baseData.serviceType,
+      seeker: baseData.seeker,
+      address: baseData.address,
+      images: imageUrls,
+    };
   }
 
   async getPendingRequests(serviceTypeIds: string[], serviceIds: string[]) {
@@ -245,7 +283,8 @@ export class RequestsService {
       if (row.requestImage) {
         const requestDetails = requestMap.get(row.id);
         if (requestDetails) {
-          requestDetails.images.push(row.requestImage);
+          const signedUrl = await this.s3Service.getSignedUrl(row.requestImage);
+          requestDetails.images.push(signedUrl);
         }
       }
     }

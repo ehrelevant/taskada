@@ -1,4 +1,4 @@
-import { array, type InferOutput, maxLength, minLength, number, object, optional, pipe, string } from 'valibot';
+import { type InferOutput, maxLength, minLength, number, object, optional, pipe, string } from 'valibot';
 
 export const requestFormSchema = object({
   serviceTypeId: string('Service type is required'),
@@ -11,7 +11,6 @@ export const requestFormSchema = object({
   latitude: number('Invalid location'),
   longitude: number('Invalid location'),
   addressLabel: pipe(string('Address is required'), minLength(5, 'Please enter a valid address')),
-  imageUrls: optional(array(string())),
 });
 
 export type RequestFormData = InferOutput<typeof requestFormSchema>;

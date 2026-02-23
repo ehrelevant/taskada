@@ -14,8 +14,4 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: spacing.xl,
   },
-  requestsListContainer: {
-    padding: spacing.m,
-    paddingBottom: 100,
-  },
 });

@@ -1,10 +1,10 @@
 import * as ImagePicker from 'expo-image-picker';
 import { ActivityIndicator, FlatList, Image, Modal, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { addRequestImages, createRequest, type SearchResult, searchServices } from '@lib/helpers';
 import { Button, Input, Typography } from '@repo/components';
 import { Camera, X } from 'lucide-react-native';
 import { colors, radius, spacing } from '@repo/theme';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
-import { createRequest, type SearchResult, searchServices } from '@lib/helpers';
 import { HomeStackParamList } from '@navigation/HomeStack';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -41,7 +41,6 @@ export function RequestFormScreen() {
       latitude: 0,
       longitude: 0,
       addressLabel: '',
-      imageUrls: [],
     },
   });
 
@@ -136,22 +135,24 @@ export function RequestFormScreen() {
       const newImages = result.assets.map(a => a.uri);
       const updatedImages = [...images, ...newImages];
       setImages(updatedImages);
-      setValue('imageUrls', updatedImages);
     }
   };
 
   const removeImage = (index: number) => {
     const updatedImages = images.filter((_, i) => i !== index);
     setImages(updatedImages);
-    setValue('imageUrls', updatedImages);
   };
 
   const onSubmit = async (data: RequestFormData) => {
     try {
       setLoading(true);
+
       const newRequest = await createRequest(data);
 
-      // Navigate to standby screen
+      if (images.length > 0) {
+        await addRequestImages(newRequest.id, images);
+      }
+
       navigation.replace('Standby', {
         requestId: newRequest.id,
       });
