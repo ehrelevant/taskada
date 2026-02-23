@@ -12,6 +12,7 @@ import { ProvidersModule } from './providers/providers.module';
 import { PushNotificationsModule } from './push-notifications/push-notifications.module';
 import { RequestsModule } from './requests/requests.module';
 import { ReviewsModule } from './reviews/reviews.module';
+import { S3Module } from './s3/s3.module';
 import { SeekersModule } from './seekers/seekers.module';
 import { ServicesModule } from './services/services.module';
 import { ServiceTypesModule } from './service-types/service-types.module';
@@ -21,6 +22,7 @@ import { UsersModule } from './users/users.module';
   imports: [
     DatabaseModule,
     AuthModule.forRoot({ auth }),
+    S3Module,
     UsersModule,
     ProvidersModule,
     SeekersModule,
