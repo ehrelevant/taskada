@@ -1,10 +1,10 @@
 import * as ImagePicker from 'expo-image-picker';
 import { ActivityIndicator, FlatList, Image, Modal, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { addRequestImages, createRequest, type SearchResult, searchServices } from '@lib/helpers';
-import { Button, Input, Typography } from '@repo/components';
+import { Button, ImageViewer, Input, Typography } from '@repo/components';
 import { Camera, X } from 'lucide-react-native';
 import { colors, radius, spacing } from '@repo/theme';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
+import { createRequest, type SearchResult, searchServices, uploadRequestImages } from '@lib/helpers';
 import { HomeStackParamList } from '@navigation/HomeStack';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -30,6 +30,7 @@ export function RequestFormScreen() {
   const [serviceSearchResults, setServiceSearchResults] = useState<SearchResult[]>([]);
   const [serviceSearchLoading, setServiceSearchLoading] = useState(false);
   const [serviceSearchQuery, setServiceSearchQuery] = useState('');
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const initialLoadAttempted = useRef(false);
 
   const methods = useForm<RequestFormData>({
@@ -150,7 +151,7 @@ export function RequestFormScreen() {
       const newRequest = await createRequest(data);
 
       if (images.length > 0) {
-        await addRequestImages(newRequest.id, images);
+        await uploadRequestImages(newRequest.id, images);
       }
 
       navigation.replace('Standby', {
@@ -226,7 +227,9 @@ export function RequestFormScreen() {
                 keyExtractor={(_, index) => index.toString()}
                 renderItem={({ item, index }) => (
                   <View style={styles.imageContainer}>
-                    <Image source={{ uri: item }} style={styles.image} />
+                    <TouchableOpacity onPress={() => setSelectedImage(item)} activeOpacity={0.8}>
+                      <Image source={{ uri: item }} style={styles.image} />
+                    </TouchableOpacity>
                     <TouchableOpacity style={styles.removeImage} onPress={() => removeImage(index)}>
                       <X size={16} color={colors.white} />
                     </TouchableOpacity>
@@ -309,6 +312,12 @@ export function RequestFormScreen() {
           </View>
         </View>
       </Modal>
+
+      <ImageViewer
+        visible={selectedImage !== null}
+        imageUri={selectedImage || ''}
+        onClose={() => setSelectedImage(null)}
+      />
     </KeyboardAwareScrollView>
   );
 }

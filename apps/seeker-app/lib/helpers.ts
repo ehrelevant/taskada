@@ -66,6 +66,37 @@ export async function uploadAvatar(uri: string): Promise<{ avatarUrl: string }> 
   return response.json();
 }
 
+export async function uploadRequestImages(requestId: string, imageUris: string[]): Promise<void> {
+  const cookies = authClient.getCookie();
+
+  const formData = new FormData();
+
+  for (const uri of imageUris) {
+    const filename = uri.split('/').pop() || 'image.jpg';
+    const match = /\.(\w+)$/.exec(filename);
+    const type = match ? `image/${match[1]}` : 'image/jpeg';
+
+    formData.append('files', {
+      uri,
+      name: filename,
+      type,
+    } as unknown as Blob);
+  }
+
+  const response = await fetch(`${API_URL}/requests/${requestId}/images`, {
+    method: 'POST',
+    headers: {
+      Cookie: cookies,
+    },
+    body: formData,
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || 'Failed to upload images');
+  }
+}
+
 export async function deleteAvatar(): Promise<void> {
   const response = await apiFetch('/users/avatar', 'DELETE');
   if (!response.ok) {

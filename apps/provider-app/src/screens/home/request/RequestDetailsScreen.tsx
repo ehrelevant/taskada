@@ -1,7 +1,7 @@
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import { ActivityIndicator, Image, ScrollView, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { apiFetch } from '@lib/helpers';
-import { Avatar, Button, Typography } from '@repo/components';
+import { Avatar, Button, ImageViewer, Typography } from '@repo/components';
 import { colors, spacing } from '@repo/theme';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RequestsStackParamList } from '@navigation/RequestsStack';
@@ -44,6 +44,7 @@ export function RequestDetailsScreen() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isCreatingBooking, setIsCreatingBooking] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   useEffect(() => {
     loadRequestDetails();
@@ -65,6 +66,7 @@ export function RequestDetailsScreen() {
       }
 
       const data = await response.json();
+      console.log(data);
       setRequest(data);
     } catch (err) {
       console.error('Failed to load request details:', err);
@@ -279,7 +281,9 @@ export function RequestDetailsScreen() {
           </Typography>
           <View style={styles.imagesContainer}>
             {request.images.map((image, index) => (
-              <Image key={index} source={{ uri: image }} style={styles.image} resizeMode="cover" />
+              <TouchableOpacity key={index} onPress={() => setSelectedImage(image)} activeOpacity={0.8}>
+                <Image source={{ uri: image }} style={styles.image} resizeMode="cover" />
+              </TouchableOpacity>
             ))}
           </View>
         </View>
@@ -296,6 +300,12 @@ export function RequestDetailsScreen() {
         />
         <Button title="Go Back" variant="outline" onPress={handleGoBack} style={styles.button} />
       </View>
+
+      <ImageViewer
+        visible={selectedImage !== null}
+        imageUri={selectedImage || ''}
+        onClose={() => setSelectedImage(null)}
+      />
     </ScrollView>
   );
 }
