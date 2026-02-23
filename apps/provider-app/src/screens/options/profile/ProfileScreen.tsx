@@ -1,13 +1,13 @@
 import * as ImagePicker from 'expo-image-picker';
 import { apiFetch, deleteAvatar, uploadAvatar } from '@lib/helpers';
 import { authClient } from '@lib/authClient';
-import { Button, Input, Typography } from '@repo/components';
+import { Avatar, Button, Input, Typography } from '@repo/components';
 import { Camera, Eye, EyeOff, X } from 'lucide-react-native';
 import { colors } from '@repo/theme';
-import { Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { OptionsStackParamList } from '@navigation/OptionsStack';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useEffect, useState } from 'react';
 import { useLoading } from '@contexts/LoadingContext';
 
@@ -233,11 +233,9 @@ export function ProfileScreen({ navigation }: ProfileScreenProps) {
         {/* Profile Picture Section */}
         <View style={[styles.section, styles.avatarSection]}>
           <View style={styles.avatarContainer}>
-            <Image
-              source={
-                profileData.avatarUrl ? { uri: profileData.avatarUrl } : require('@lib/assets/default-profile.jpg')
-              }
-              style={styles.avatar}
+            <Avatar
+              source={profileData?.avatarUrl ? { uri: profileData.avatarUrl } : null}
+              size={100}
             />
             <TouchableOpacity style={styles.cameraButton} onPress={pickImage}>
               <Camera size={20} color={colors.white} />
