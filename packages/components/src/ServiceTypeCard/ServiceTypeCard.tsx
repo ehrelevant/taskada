@@ -1,6 +1,6 @@
-import { colors, palette, radius, spacing } from '@repo/theme';
-import { Image, TouchableOpacity, TouchableOpacityProps, View } from 'react-native';
+import { colors, palette, radius, SERVICE_TYPE_ICONS, spacing } from '@repo/theme';
 import { memo } from 'react';
+import { TouchableOpacity, TouchableOpacityProps, View } from 'react-native';
 
 import { Typography } from '../Typography';
 
@@ -9,12 +9,17 @@ export interface ServiceTypeCardProps extends TouchableOpacityProps {
   iconUrl?: string | null;
 }
 
-export const ServiceTypeCard = memo(function ServiceTypeCard({ name, iconUrl, style, ...rest }: ServiceTypeCardProps) {
+export const ServiceTypeCard = memo(function ServiceTypeCard({
+  name,
+  iconUrl: _iconUrl,
+  style,
+  ...rest
+}: ServiceTypeCardProps) {
   return (
     <TouchableOpacity
       style={[
         {
-          width: 100,
+          width: 108,
           padding: spacing.s,
           alignItems: 'center',
           borderRadius: radius.m,
@@ -31,8 +36,8 @@ export const ServiceTypeCard = memo(function ServiceTypeCard({ name, iconUrl, st
     >
       <View
         style={{
-          width: 48,
-          height: 48,
+          width: 64,
+          height: 64,
           borderRadius: 24,
           backgroundColor: colors.backgroundSecondary,
           justifyContent: 'center',
@@ -40,13 +45,15 @@ export const ServiceTypeCard = memo(function ServiceTypeCard({ name, iconUrl, st
           marginBottom: spacing.xs,
         }}
       >
-        {iconUrl ? (
-          <Image source={{ uri: iconUrl }} style={{ width: 32, height: 32 }} resizeMode="contain" />
-        ) : (
-          <View style={{ width: 32, height: 32, backgroundColor: palette.gray300, borderRadius: 16 }} />
-        )}
+        {(() => {
+          const IconComponent = SERVICE_TYPE_ICONS[name];
+          if (IconComponent) {
+            return <IconComponent size={48} color={colors.textPrimary} />;
+          }
+          return <View style={{ width: 64, height: 64, backgroundColor: palette.gray300, borderRadius: 14 }} />;
+        })()}
       </View>
-      <Typography variant="caption" color="textPrimary" align="center" weight="bold">
+      <Typography variant="body2" color="textPrimary" align="center" weight="bold">
         {name}
       </Typography>
     </TouchableOpacity>

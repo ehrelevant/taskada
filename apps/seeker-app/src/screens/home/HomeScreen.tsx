@@ -327,7 +327,7 @@ const styles = StyleSheet.create({
   },
   serviceTypeGrid: {
     justifyContent: 'center',
-    gap: spacing.m,
+    gap: spacing.s,
   },
   serviceTypesContent: {
     width: '100%',
