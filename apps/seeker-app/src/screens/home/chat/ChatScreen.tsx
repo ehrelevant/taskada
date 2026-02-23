@@ -1,15 +1,26 @@
-import { ActivityIndicator, FlatList, Image, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
-import { apiFetch } from '@lib/helpers';
+import * as ImagePicker from 'expo-image-picker';
+import {
+  ActivityIndicator,
+  Alert,
+  FlatList,
+  Image,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { apiFetch, uploadMessageImages } from '@lib/helpers';
 import { authClient } from '@lib/authClient';
-import { Avatar, Typography } from '@repo/components';
+import { Avatar, ImageViewer, Typography } from '@repo/components';
 import { chatSocket, Message } from '@lib/chatSocket';
 import { colors, spacing } from '@repo/theme';
 import { HomeStackParamList } from '@navigation/HomeStack';
+import { Image as ImageIcon, Send, X } from 'lucide-react-native';
 import { KeyboardStickyView } from 'react-native-keyboard-controller';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Send } from 'lucide-react-native';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 type ChatRouteProp = RouteProp<HomeStackParamList, 'Chat'>;
@@ -38,6 +49,8 @@ export function ChatScreen() {
   const [isTyping, setIsTyping] = useState(false);
   const [hasMoreMessages, setHasMoreMessages] = useState(false);
   const [offset, setOffset] = useState(0);
+  const [selectedImages, setSelectedImages] = useState<string[]>([]);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const flatListRef = useRef<FlatList>(null);
   const session = authClient.useSession();
@@ -128,15 +141,21 @@ export function ChatScreen() {
   }, [bookingId, currentUserId, navigation, providerInfo, requestId, session.data]);
 
   const handleSendMessage = async () => {
-    if (!inputText.trim() || isSending) return;
+    if ((!inputText.trim() && selectedImages.length === 0) || isSending) return;
 
     const messageText = inputText.trim();
     setInputText('');
     setIsSending(true);
 
     try {
-      // Send via WebSocket for real-time delivery
-      chatSocket.sendMessage(bookingId, messageText);
+      let imageKeys: string[] = [];
+
+      if (selectedImages.length > 0) {
+        imageKeys = await uploadMessageImages(bookingId, selectedImages);
+        setSelectedImages([]);
+      }
+
+      chatSocket.sendMessage(bookingId, messageText, imageKeys);
     } catch (error) {
       console.error('Failed to send message:', error);
     } finally {
@@ -150,6 +169,30 @@ export function ChatScreen() {
     }
   };
 
+  const handlePickImage = async () => {
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!permissionResult.granted) {
+      Alert.alert('Permission Required', 'Please allow access to your photo library to send images.');
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsMultipleSelection: true,
+      quality: 0.8,
+      selectionLimit: 4 - selectedImages.length,
+    });
+
+    if (!result.canceled && result.assets.length > 0) {
+      const newImages = result.assets.map(asset => asset.uri);
+      setSelectedImages(prev => [...prev, ...newImages].slice(0, 4));
+    }
+  };
+
+  const handleRemoveImage = (index: number) => {
+    setSelectedImages(prev => prev.filter((_, i) => i !== index));
+  };
+
   const renderMessage = ({ item }: { item: Message }) => {
     const isOwnMessage = item.userId === currentUserId;
 
@@ -159,9 +202,20 @@ export function ChatScreen() {
           <Image source={{ uri: item.sender.avatarUrl }} style={styles.messageAvatar} />
         )}
         <View style={[styles.messageBubble, isOwnMessage ? styles.ownBubble : styles.otherBubble]}>
-          <Typography variant="body2" color={isOwnMessage ? colors.textInverse : colors.textPrimary}>
-            {item.message}
-          </Typography>
+          {item.imageUrls && item.imageUrls.length > 0 && (
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.imageContainer}>
+              {item.imageUrls.map((imageUrl, index) => (
+                <TouchableOpacity key={index} onPress={() => setSelectedImage(imageUrl)}>
+                  <Image source={{ uri: imageUrl }} style={styles.messageImage} />
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          )}
+          {item.message && (
+            <Typography variant="body2" color={isOwnMessage ? colors.textInverse : colors.textPrimary}>
+              {item.message}
+            </Typography>
+          )}
           <Typography
             variant="caption"
             color={isOwnMessage ? colors.textInverse : colors.textPrimary}
@@ -209,7 +263,26 @@ export function ChatScreen() {
 
       {/* Input Area - Sticky to Keyboard */}
       <KeyboardStickyView>
+        {selectedImages.length > 0 && (
+          <ScrollView horizontal style={styles.selectedImagesContainer} showsHorizontalScrollIndicator={false}>
+            {selectedImages.map((uri, index) => (
+              <View key={index} style={styles.selectedImageWrapper}>
+                <Image source={{ uri }} style={styles.selectedImage} />
+                <TouchableOpacity style={styles.removeImageButton} onPress={() => handleRemoveImage(index)}>
+                  <X size={16} color={colors.textInverse} />
+                </TouchableOpacity>
+              </View>
+            ))}
+          </ScrollView>
+        )}
         <View style={styles.inputContainer}>
+          <TouchableOpacity
+            onPress={handlePickImage}
+            style={styles.imagePickerButton}
+            disabled={selectedImages.length >= 4}
+          >
+            <ImageIcon size={20} color={selectedImages.length >= 4 ? colors.actionDisabled : colors.actionPrimary} />
+          </TouchableOpacity>
           <TextInput
             style={styles.textInput}
             value={inputText}
@@ -221,13 +294,22 @@ export function ChatScreen() {
           />
           <TouchableOpacity
             onPress={handleSendMessage}
-            disabled={!inputText.trim() || isSending}
-            style={[styles.sendButton, (!inputText.trim() || isSending) && styles.sendButtonDisabled]}
+            disabled={(!inputText.trim() && selectedImages.length === 0) || isSending}
+            style={[
+              styles.sendButton,
+              ((!inputText.trim() && selectedImages.length === 0) || isSending) && styles.sendButtonDisabled,
+            ]}
           >
             <Send size={20} color={colors.textInverse} />
           </TouchableOpacity>
         </View>
       </KeyboardStickyView>
+
+      <ImageViewer
+        visible={selectedImage !== null}
+        imageUri={selectedImage || ''}
+        onClose={() => setSelectedImage(null)}
+      />
     </SafeAreaView>
   );
 }
@@ -287,6 +369,48 @@ const styles = StyleSheet.create({
   },
   messageTime: {
     marginTop: spacing.xs,
+  },
+  imageContainer: {
+    marginBottom: spacing.xs,
+  },
+  messageImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 8,
+    marginRight: spacing.xs,
+  },
+  selectedImagesContainer: {
+    flexDirection: 'row',
+    paddingHorizontal: spacing.m,
+    paddingVertical: spacing.s,
+    backgroundColor: colors.surface,
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
+    maxHeight: 100,
+  },
+  selectedImageWrapper: {
+    marginRight: spacing.s,
+    position: 'relative',
+  },
+  selectedImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 8,
+  },
+  removeImageButton: {
+    position: 'absolute',
+    top: -8,
+    right: -8,
+    backgroundColor: colors.error.base,
+    borderRadius: 12,
+    width: 24,
+    height: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  imagePickerButton: {
+    padding: spacing.s,
+    marginRight: spacing.s,
   },
   inputContainer: {
     flexDirection: 'row',

@@ -27,6 +27,7 @@ interface TypingData {
 interface SendMessageData {
   bookingId: string;
   message: string;
+  imageKeys?: string[];
 }
 
 interface JoinBookingData {
@@ -129,26 +130,28 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       return;
     }
 
-    const { bookingId, message } = data;
+    const { bookingId, message, imageKeys } = data;
+
+    if (imageKeys && imageKeys.length > 4) {
+      client.emit('error', { message: 'Maximum 4 images allowed' });
+      return;
+    }
 
     try {
-      // Save message to database
       const newMessage = await this.messagesService.createMessage({
         bookingId,
         userId: client.userId,
         message,
+        imageKeys: imageKeys || [],
       });
 
-      // Broadcast to all users in the booking room
       const roomName = `booking:${bookingId}`;
       this.server.to(roomName).emit('new_message', newMessage);
 
-      // Get booking participants to send push notification to the other user
       const participants = await this.messagesService.getBookingParticipants(bookingId);
       const otherUserId =
         participants.providerUserId === client.userId ? participants.seekerUserId : participants.providerUserId;
 
-      // Send push notification to the other user
       const senderName = `${newMessage.sender.firstName} ${newMessage.sender.lastName}`;
       await this.pushNotificationsService.sendChatMessageNotification(otherUserId, senderName, message, bookingId);
 

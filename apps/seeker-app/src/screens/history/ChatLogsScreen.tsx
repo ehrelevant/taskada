@@ -1,12 +1,12 @@
-import { ActivityIndicator, FlatList, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, FlatList, Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { apiFetch } from '@lib/helpers';
 import { ChevronLeft } from 'lucide-react-native';
 import { colors, spacing } from '@repo/theme';
+import { ImageViewer, Typography } from '@repo/components';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { TransactionHistoryStackParamList } from '@navigation/TransactionHistoryStack';
-import { Typography } from '@repo/components';
 import { useEffect, useState } from 'react';
 
 type ChatLogsRouteProp = RouteProp<TransactionHistoryStackParamList, 'ChatLogs'>;
@@ -23,6 +23,7 @@ interface Message {
     lastName: string;
     avatarUrl: string | null;
   };
+  imageUrls: string[];
 }
 
 export function ChatLogsScreen() {
@@ -33,6 +34,7 @@ export function ChatLogsScreen() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   useEffect(() => {
     loadChatLogs();
@@ -70,9 +72,20 @@ export function ChatLogsScreen() {
           <Image source={{ uri: item.sender.avatarUrl }} style={styles.messageAvatar} />
         )}
         <View style={[styles.messageBubble, isOtherUser ? styles.otherBubble : styles.ownBubble]}>
-          <Typography variant="body2" color={isOtherUser ? colors.textPrimary : colors.textInverse}>
-            {item.message}
-          </Typography>
+          {item.imageUrls && item.imageUrls.length > 0 && (
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.imageContainer}>
+              {item.imageUrls.map((imageUrl, index) => (
+                <TouchableOpacity key={index} onPress={() => setSelectedImage(imageUrl)}>
+                  <Image source={{ uri: imageUrl }} style={styles.messageImage} />
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          )}
+          {item.message && (
+            <Typography variant="body2" color={isOtherUser ? colors.textPrimary : colors.textInverse}>
+              {item.message}
+            </Typography>
+          )}
           <Typography
             variant="caption"
             color={isOtherUser ? colors.textSecondary : colors.textInverse}
@@ -142,6 +155,12 @@ export function ChatLogsScreen() {
             </Typography>
           </View>
         }
+      />
+
+      <ImageViewer
+        visible={selectedImage !== null}
+        imageUri={selectedImage || ''}
+        onClose={() => setSelectedImage(null)}
       />
     </SafeAreaView>
   );
@@ -214,6 +233,15 @@ const styles = StyleSheet.create({
   },
   messageTime: {
     marginTop: spacing.xs,
+  },
+  imageContainer: {
+    marginBottom: spacing.xs,
+  },
+  messageImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 8,
+    marginRight: spacing.xs,
   },
   emptyContainer: {
     flex: 1,

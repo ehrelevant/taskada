@@ -1,8 +1,9 @@
-import { address, booking, message, request, user } from '@repo/database';
+import { address, booking, message, messageImage, request, user } from '@repo/database';
 import { desc, eq, sql } from 'drizzle-orm';
 import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 
 import { DatabaseService } from '../database/database.service';
+import { S3Service } from '../s3/s3.service';
 
 export interface MessageWithSender {
   id: string;
@@ -15,29 +16,31 @@ export interface MessageWithSender {
     lastName: string;
     avatarUrl: string | null;
   };
+  imageUrls: string[];
 }
 
 export interface CreateMessageData {
   bookingId: string;
   userId: string;
   message: string;
+  imageKeys?: string[];
 }
 
 @Injectable()
 export class MessagesService {
-  constructor(private readonly dbService: DatabaseService) {}
+  constructor(
+    private readonly dbService: DatabaseService,
+    private readonly s3Service: S3Service,
+  ) {}
 
   async getMessagesForBooking(bookingId: string, userId: string, limit = 50, offset = 0) {
-    // Verify user is part of this booking
     await this.verifyUserInBooking(bookingId, userId);
 
-    // Get total count
     const [{ total }] = await this.dbService.db
       .select({ total: sql`COUNT(*)`.mapWith(Number) })
       .from(message)
       .where(eq(message.bookingId, bookingId));
 
-    // Get messages with sender info
     const messages = await this.dbService.db
       .select({
         id: message.id,
@@ -57,31 +60,57 @@ export class MessagesService {
 
     const hasMore = offset + messages.length < total;
 
-    const formattedMessages: MessageWithSender[] = messages.map(msg => ({
-      id: msg.id,
-      userId: msg.userId,
-      message: msg.message,
-      createdAt: msg.createdAt,
-      sender: {
-        id: msg.userId,
-        firstName: msg.senderFirstName,
-        lastName: msg.senderLastName,
-        avatarUrl: msg.senderAvatarUrl,
+    const messageIds = messages.map(m => m.id);
+    const images = await this.dbService.db
+      .select({
+        messageId: messageImage.messageId,
+        image: messageImage.image,
+      })
+      .from(messageImage)
+      .where(sql`${messageImage.messageId} IN ${messageIds}`);
+
+    const imagesByMessageId = images.reduce(
+      (acc, img) => {
+        if (!acc[img.messageId]) {
+          acc[img.messageId] = [];
+        }
+        acc[img.messageId].push(img.image);
+        return acc;
       },
-    }));
+      {} as Record<string, string[]>,
+    );
+
+    const formattedMessages: MessageWithSender[] = await Promise.all(
+      messages.map(async msg => {
+        const imageKeys = imagesByMessageId[msg.id] || [];
+        const imageUrls = await Promise.all(imageKeys.map(key => this.s3Service.getSignedUrl(key)));
+
+        return {
+          id: msg.id,
+          userId: msg.userId,
+          message: msg.message,
+          createdAt: msg.createdAt,
+          sender: {
+            id: msg.userId,
+            firstName: msg.senderFirstName,
+            lastName: msg.senderLastName,
+            avatarUrl: msg.senderAvatarUrl,
+          },
+          imageUrls,
+        };
+      }),
+    );
 
     return {
-      messages: formattedMessages.reverse(), // Return in chronological order
+      messages: formattedMessages.reverse(),
       total,
       hasMore,
     };
   }
 
   async createMessage(data: CreateMessageData): Promise<MessageWithSender> {
-    // Verify user is part of this booking
     await this.verifyUserInBooking(data.bookingId, data.userId);
 
-    // Insert message
     const [newMessage] = await this.dbService.db
       .insert(message)
       .values({
@@ -91,7 +120,17 @@ export class MessagesService {
       })
       .returning();
 
-    // Get sender info
+    const imageKeys = data.imageKeys || [];
+
+    if (imageKeys.length > 0) {
+      await this.dbService.db.insert(messageImage).values(
+        imageKeys.map(key => ({
+          messageId: newMessage.id,
+          image: key,
+        })),
+      );
+    }
+
     const [sender] = await this.dbService.db
       .select({
         firstName: user.firstName,
@@ -101,6 +140,8 @@ export class MessagesService {
       .from(user)
       .where(eq(user.id, data.userId))
       .limit(1);
+
+    const imageUrls = await Promise.all(imageKeys.map(key => this.s3Service.getSignedUrl(key)));
 
     return {
       id: newMessage.id,
@@ -113,6 +154,7 @@ export class MessagesService {
         lastName: sender.lastName,
         avatarUrl: sender.avatarUrl,
       },
+      imageUrls,
     };
   }
 

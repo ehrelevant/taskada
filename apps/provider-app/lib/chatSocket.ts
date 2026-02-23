@@ -92,8 +92,8 @@ export class ChatSocketClient {
     this.socket?.emit('leave_booking_chat', { bookingId });
   }
 
-  sendMessage(bookingId: string, message: string) {
-    this.socket?.emit('send_message', { bookingId, message });
+  sendMessage(bookingId: string, message: string, imageKeys?: string[]) {
+    this.socket?.emit('send_message', { bookingId, message, imageKeys: imageKeys || [] });
   }
 
   sendTyping(bookingId: string, isTyping: boolean) {
@@ -175,6 +175,7 @@ export interface Message {
     lastName: string;
     avatarUrl: string | null;
   };
+  imageUrls: string[];
 }
 
 export interface TypingData {
