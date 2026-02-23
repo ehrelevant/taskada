@@ -20,4 +20,5 @@ export * from './StatusBadge';
 export * from './CenteredLoading';
 export * from './CenteredError';
 export * from './ModalHeader';
+export * from './ImageViewer';
 export * from './RequestListing';
