@@ -1,8 +1,8 @@
 import * as ImagePicker from 'expo-image-picker';
-import { apiFetch } from '@lib/helpers';
+import { apiFetch, deleteAvatar, uploadAvatar } from '@lib/helpers';
 import { authClient } from '@lib/authClient';
 import { Button, Input, Typography } from '@repo/components';
-import { Camera, Eye, EyeOff } from 'lucide-react-native';
+import { Camera, Eye, EyeOff, X } from 'lucide-react-native';
 import { colors } from '@repo/theme';
 import { Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -67,17 +67,21 @@ export function ProfileScreen({ navigation }: ProfileScreenProps) {
 
   useEffect(() => {
     if (userSession?.user) {
-      const { user } = userSession;
-      const data = {
-        firstName: user.name || '',
-        middleName: user.middleName || '',
-        lastName: user.lastName || '',
-        email: user.email || '',
-        phoneNumber: user.phoneNumber || '',
-        avatarUrl: user.image || '',
-      };
-      setProfileData(data);
-      setOriginalProfileData(data);
+      apiFetch('/users/profile', 'GET')
+        .then(res => res.json())
+        .then(data => {
+          const profileData = {
+            firstName: data.firstName || '',
+            middleName: data.middleName || '',
+            lastName: data.lastName || '',
+            email: data.email || '',
+            phoneNumber: data.phoneNumber || '',
+            avatarUrl: data.avatarUrl || '',
+          };
+          setProfileData(profileData);
+          setOriginalProfileData(profileData);
+        })
+        .catch(console.error);
     }
   }, [userSession]);
 
@@ -104,7 +108,31 @@ export function ProfileScreen({ navigation }: ProfileScreenProps) {
     });
 
     if (!result.canceled && result.assets[0]) {
-      setProfileData(prev => ({ ...prev, avatarUrl: result.assets[0].uri }));
+      setLoading(true);
+      try {
+        const uploaded = await uploadAvatar(result.assets[0].uri);
+        setProfileData(prev => ({ ...prev, avatarUrl: uploaded.avatarUrl }));
+      } catch (error) {
+        console.error('Failed to upload avatar:', error);
+        setErrors({ submit: 'Failed to upload avatar. Please try again.' });
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+  const handleRemoveAvatar = async () => {
+    if (!profileData.avatarUrl) return;
+
+    setLoading(true);
+    try {
+      await deleteAvatar();
+      setProfileData(prev => ({ ...prev, avatarUrl: '' }));
+    } catch (error) {
+      console.error('Failed to remove avatar:', error);
+      setErrors({ submit: 'Failed to remove avatar. Please try again.' });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -150,7 +178,6 @@ export function ProfileScreen({ navigation }: ProfileScreenProps) {
 
     setLoading(true);
     try {
-      // Update profile information
       const profileUpdateData = {
         firstName: profileData.firstName,
         middleName: profileData.middleName,
@@ -163,7 +190,6 @@ export function ProfileScreen({ navigation }: ProfileScreenProps) {
         body: JSON.stringify(profileUpdateData),
       });
 
-      // Update password if provided
       if (passwordData.oldPassword && passwordData.newPassword) {
         await apiFetch('/users/password', 'PUT', {
           body: JSON.stringify({
@@ -173,14 +199,11 @@ export function ProfileScreen({ navigation }: ProfileScreenProps) {
         });
       }
 
-      // Clear password fields after successful update
       setPasswordData({ oldPassword: '', newPassword: '', confirmPassword: '' });
       setErrors({});
 
-      // Refresh user session data
       refetch();
 
-      // Go back to options screen
       navigation.goBack();
     } catch (error) {
       console.error('Failed to update profile:', error);
@@ -219,6 +242,11 @@ export function ProfileScreen({ navigation }: ProfileScreenProps) {
             <TouchableOpacity style={styles.cameraButton} onPress={pickImage}>
               <Camera size={20} color={colors.white} />
             </TouchableOpacity>
+            {profileData.avatarUrl ? (
+              <TouchableOpacity style={styles.removeButton} onPress={handleRemoveAvatar}>
+                <X size={16} color={colors.white} />
+              </TouchableOpacity>
+            ) : null}
           </View>
           <Typography variant="h3" style={styles.sectionTitle}>
             Profile Picture
@@ -385,6 +413,17 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  removeButton: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    backgroundColor: colors.error.base,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
     justifyContent: 'center',
     alignItems: 'center',
   },

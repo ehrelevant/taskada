@@ -1,23 +1,24 @@
 import { ActivityIndicator, FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { apiFetch } from '@lib/helpers';
 import { authClient } from '@lib/authClient';
 import { Avatar, FeaturedServiceCard, Rating, SearchBar, ServiceTypeCard, Typography } from '@repo/components';
 import { colors, radius, spacing } from '@repo/theme';
-import {
-  type FeaturedService,
-  getFeaturedServices,
-  getServiceTypes,
-  type SearchResult,
-  type ServiceType,
-  searchServices,
-} from '@lib/helpers';
+import { type FeaturedService, getFeaturedServices, getServiceTypes, type SearchResult, type ServiceType, searchServices } from '@lib/helpers';
 import { HomeStackParamList } from '@navigation/HomeStack';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
+interface UserProfile {
+  firstName: string;
+  lastName: string;
+  avatarUrl: string | null;
+}
+
 export function HomeScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<HomeStackParamList>>();
   const { data: session } = authClient.useSession();
+  const [profile, setProfile] = useState<UserProfile | null>(null);
 
   const [serviceTypes, setServiceTypes] = useState<ServiceType[]>([]);
   const [featuredServices, setFeaturedServices] = useState<FeaturedService[]>([]);
@@ -26,6 +27,15 @@ export function HomeScreen() {
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [loading, setLoading] = useState(true);
   const [searchLoading, setSearchLoading] = useState(false);
+
+  useEffect(() => {
+    if (session) {
+      apiFetch('/users/profile', 'GET')
+        .then(res => res.json())
+        .then(data => setProfile(data))
+        .catch(console.error);
+    }
+  }, [session]);
 
   useEffect(() => {
     async function loadData() {
@@ -164,7 +174,7 @@ export function HomeScreen() {
       <View style={styles.header}>
         <View style={styles.greetingRow}>
           <Avatar
-            source={session?.user?.image ? { uri: session.user.image } : null}
+            source={profile?.avatarUrl ? { uri: profile.avatarUrl } : null}
             name={session?.user?.name + ' ' + session?.user?.lastName || 'User'}
             size={48}
           />
