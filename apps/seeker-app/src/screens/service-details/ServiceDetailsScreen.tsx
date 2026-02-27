@@ -131,6 +131,7 @@ export function ServiceDetailsScreen() {
               <ReviewCard
                 key={review.id}
                 reviewerName={review.reviewerName}
+                reviewerAvatar={review.reviewerAvatar}
                 rating={review.rating}
                 comment={review.comment}
                 date={review.createdAt}

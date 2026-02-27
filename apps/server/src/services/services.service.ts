@@ -1,6 +1,7 @@
 import { and, desc, eq, ilike, or, sql } from 'drizzle-orm';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { provider, review, service, serviceType, user } from '@repo/database';
+import { S3Service } from 'src/s3/s3.service';
 
 import { DatabaseService } from '../database/database.service';
 
@@ -9,7 +10,10 @@ import { UpdateServiceSwaggerDto } from './dto/update-service.dto';
 
 @Injectable()
 export class ServicesService {
-  constructor(private readonly dbService: DatabaseService) {}
+  constructor(
+    private readonly dbService: DatabaseService,
+    private readonly s3Service: S3Service,
+  ) {}
 
   async searchServices(query: string, serviceTypeId?: string) {
     if (!query && !serviceTypeId) {
@@ -50,6 +54,12 @@ export class ServicesService {
       .orderBy(desc(sql`AVG(${review.rating})`))
       .limit(20);
 
+    for (const service of services) {
+      if (service.providerAvatar) {
+        service.providerAvatar = await this.s3Service.getSignedUrl(service.providerAvatar);
+      }
+    }
+
     return services;
   }
 
@@ -75,6 +85,12 @@ export class ServicesService {
       .orderBy(desc(sql`AVG(${review.rating})`))
       .limit(limit);
 
+    for (const service of services) {
+      if (service.providerAvatar) {
+        service.providerAvatar = await this.s3Service.getSignedUrl(service.providerAvatar);
+      }
+    }
+
     return services;
   }
 
@@ -99,6 +115,10 @@ export class ServicesService {
       .where(eq(service.id, serviceId))
       .groupBy(service.id, user.id, serviceType.id);
 
+    if (serviceData.providerAvatar) {
+      serviceData.providerAvatar = await this.s3Service.getSignedUrl(serviceData.providerAvatar);
+    }
+
     if (!serviceData) {
       throw new NotFoundException(`Service with ID ${serviceId} not found`);
     }
@@ -114,12 +134,19 @@ export class ServicesService {
         comment: review.comment,
         createdAt: review.createdAt,
         reviewerName: sql<string>`CONCAT(${user.firstName}, ' ', ${user.lastName})`,
+        reviewerAvatar: user.avatarUrl,
       })
       .from(review)
       .innerJoin(user, eq(review.reviewerUserId, user.id))
       .where(eq(review.serviceId, serviceId))
       .orderBy(desc(review.createdAt))
       .limit(50);
+
+    for (const review of reviews) {
+      if (review.reviewerAvatar) {
+        review.reviewerAvatar = await this.s3Service.getSignedUrl(review.reviewerAvatar);
+      }
+    }
 
     return reviews;
   }

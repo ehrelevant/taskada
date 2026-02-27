@@ -184,6 +184,7 @@ export interface Review {
   comment?: string | null;
   createdAt: string;
   reviewerName: string;
+  reviewerAvatar?: string | null;
 }
 
 export async function getServiceTypes(): Promise<ServiceType[]> {

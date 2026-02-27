@@ -236,7 +236,7 @@ export function RequestListScreen() {
       <View style={styles.centeredContent}>
         <Header
           title="Ready to Work?"
-          subtitle="Start receiving service requests from nearby seekers"
+          subtitle="Start receiving requests from nearby seekers"
           align="center"
           size="large"
         />

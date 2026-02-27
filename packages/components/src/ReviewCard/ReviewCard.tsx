@@ -7,13 +7,14 @@ import { Typography } from '../Typography';
 
 export interface ReviewCardProps {
   reviewerName: string;
+  reviewerAvatar?: string | null;
   rating: number | null;
   comment?: string | null;
   date: string | Date;
   style?: StyleProp<ViewStyle>;
 }
 
-export function ReviewCard({ reviewerName, rating, comment, date, style }: ReviewCardProps) {
+export function ReviewCard({ reviewerName, reviewerAvatar, rating, comment, date, style }: ReviewCardProps) {
   const formattedDate = typeof date === 'string' ? date : date.toLocaleDateString();
 
   return (
@@ -28,7 +29,7 @@ export function ReviewCard({ reviewerName, rating, comment, date, style }: Revie
       ]}
     >
       <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
-        <Avatar name={reviewerName} size={36} />
+        <Avatar source={reviewerAvatar ? { uri: reviewerAvatar } : null} name={reviewerName} size={36} />
         <View style={{ flex: 1, marginLeft: spacing.s }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
             <Typography variant="body2" color="textPrimary" weight="medium">
