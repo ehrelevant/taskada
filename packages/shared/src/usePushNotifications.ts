@@ -1,10 +1,10 @@
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
-import { apiFetch } from '@lib/helpers';
 import { Platform } from 'react-native';
 import { useEffect } from 'react';
 
-// Configure how notifications should be presented when the app is in foreground
+import { API_URL } from './env';
+
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -22,19 +22,20 @@ export interface PushNotificationData {
 }
 
 export function usePushNotifications(
+  authCookie?: string,
   onNotificationReceived?: (notification: Notifications.Notification) => void,
   onNotificationResponse?: (response: Notifications.NotificationResponse) => void,
 ) {
   useEffect(() => {
-    registerForPushNotificationsAsync();
+    if (authCookie) {
+      registerForPushNotificationsAsync(authCookie);
+    }
 
-    // Listen for incoming notifications
     const notificationListener = Notifications.addNotificationReceivedListener(notification => {
       console.log('Notification received:', notification);
       onNotificationReceived?.(notification);
     });
 
-    // Listen for notification clicks/responses
     const responseListener = Notifications.addNotificationResponseReceivedListener(response => {
       console.log('Notification response received:', response);
       onNotificationResponse?.(response);
@@ -44,21 +45,19 @@ export function usePushNotifications(
       notificationListener.remove();
       responseListener.remove();
     };
-  }, [onNotificationReceived, onNotificationResponse]);
+  }, [authCookie, onNotificationReceived, onNotificationResponse]);
 }
 
-async function registerForPushNotificationsAsync() {
+async function registerForPushNotificationsAsync(authCookie: string) {
   if (!Device.isDevice) {
     console.log('Push notifications are not available on simulator');
     return;
   }
 
   try {
-    // Check existing permissions
     const { status: existingStatus } = await Notifications.getPermissionsAsync();
     let finalStatus = existingStatus;
 
-    // Request permissions if not granted
     if (existingStatus !== 'granted') {
       const { status } = await Notifications.requestPermissionsAsync();
       finalStatus = status;
@@ -69,16 +68,13 @@ async function registerForPushNotificationsAsync() {
       return;
     }
 
-    // Get Expo push token
     const tokenData = await Notifications.getExpoPushTokenAsync();
     const token = tokenData.data;
 
     console.log('Expo push token:', token);
 
-    // Register token with server
-    await registerTokenWithServer(token);
+    await registerTokenWithServer(token, authCookie);
 
-    // Configure for Android
     if (Platform.OS === 'android') {
       await Notifications.setNotificationChannelAsync('default', {
         name: 'default',
@@ -92,10 +88,15 @@ async function registerForPushNotificationsAsync() {
   }
 }
 
-async function registerTokenWithServer(token: string) {
+async function registerTokenWithServer(token: string, authCookie: string) {
   try {
     const platform = Platform.OS;
-    const response = await apiFetch('/push-notifications/register', 'POST', {
+    const response = await fetch(`${API_URL}/push-notifications/register`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: authCookie,
+      },
       body: JSON.stringify({ token, platform }),
     });
 
@@ -109,9 +110,14 @@ async function registerTokenWithServer(token: string) {
   }
 }
 
-export async function unregisterPushToken(token: string) {
+export async function unregisterPushToken(token: string, authCookie: string) {
   try {
-    const response = await apiFetch('/push-notifications/unregister', 'DELETE', {
+    const response = await fetch(`${API_URL}/push-notifications/unregister`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: authCookie,
+      },
       body: JSON.stringify({ token }),
     });
 

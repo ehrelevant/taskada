@@ -3,7 +3,8 @@ import { apiFetch } from '@lib/helpers';
 import { authClient } from '@lib/authClient';
 import { Avatar, FeaturedServiceCard, Rating, SearchBar, ServiceTypeCard, Typography } from '@repo/components';
 import { colors, radius, spacing } from '@repo/theme';
-import { type FeaturedService, getFeaturedServices, getServiceTypes, type SearchResult, type ServiceType, searchServices } from '@lib/helpers';
+import type { FeaturedService, SearchResult, ServiceType } from '@repo/types';
+import { getFeaturedServices, getServiceTypes, searchServices } from '@repo/shared';
 import { HomeStackParamList } from '@navigation/HomeStack';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -40,7 +41,10 @@ export function HomeScreen() {
   useEffect(() => {
     async function loadData() {
       try {
-        const [typesData, featuredData] = await Promise.all([getServiceTypes(), getFeaturedServices(10)]);
+        const [typesData, featuredData] = await Promise.all([
+          getServiceTypes(authClient),
+          getFeaturedServices(authClient, 10),
+        ]);
         setServiceTypes(typesData);
         setFeaturedServices(featuredData);
       } catch (error) {
@@ -63,7 +67,7 @@ export function HomeScreen() {
 
     setSearchLoading(true);
     try {
-      const results = await searchServices(query);
+      const results = await searchServices(authClient, query);
       setSearchResults(results);
       setShowSearchResults(true);
     } catch (error) {

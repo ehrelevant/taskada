@@ -3,7 +3,7 @@ import { colors, radius, spacing } from '@repo/theme';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Search, X } from 'lucide-react-native';
-import type { SearchResult } from '@lib/helpers';
+import type { SearchResult } from '@repo/types';
 
 interface ServiceSelectionProps {
   onOpenSearch: () => void;

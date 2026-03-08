@@ -5,7 +5,7 @@ import { Button, Input, ScreenContainer, Typography } from '@repo/components';
 import { colors } from '@repo/theme';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Pressable, Text } from 'react-native';
-import { useLoading } from '@contexts/LoadingContext';
+import { useLoading } from '@repo/shared';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 

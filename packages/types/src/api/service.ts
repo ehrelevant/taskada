@@ -2,7 +2,7 @@ export interface ServiceType {
   id: string;
   name: string;
   description: string | null;
-  iconUrl: string | null;
+  iconUrl?: string | null;
 }
 
 export interface FeaturedService {
@@ -10,7 +10,7 @@ export interface FeaturedService {
   serviceName: string;
   serviceTypeName: string;
   providerName: string;
-  providerAvatar: string | null;
+  providerAvatar?: string | null;
   initialCost: number;
   avgRating: number;
   reviewCount: number;
@@ -21,7 +21,7 @@ export interface SearchResult {
   serviceName: string;
   serviceTypeName: string;
   providerName: string;
-  providerAvatar: string | null;
+  providerAvatar?: string | null;
   initialCost: number;
   avgRating: number;
   reviewCount: number;
@@ -34,7 +34,7 @@ export interface ServiceDetails {
   serviceTypeId: string;
   serviceTypeName: string;
   providerName: string;
-  providerAvatar: string | null;
+  providerAvatar?: string | null;
   avgRating: number;
   reviewCount: number;
 }

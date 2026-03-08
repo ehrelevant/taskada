@@ -1,12 +1,22 @@
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import { ActivityIndicator, Alert, KeyboardAvoidingView, Modal, Platform, ScrollView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Alert,
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { apiFetch } from '@lib/helpers';
 import { ArrowLeft } from 'lucide-react-native';
 import { authClient } from '@lib/authClient';
 import { Button, Typography } from '@repo/components';
-import { chatSocket } from '@repo/shared';
+import { chatSocket, connectChatSocket } from '@repo/shared';
 import { colors, spacing } from '@repo/theme';
-import { connectChatSocket } from '@lib/socket';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RequestsStackParamList } from '@navigation/RequestsStack';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
@@ -38,7 +48,7 @@ export function FinalizeDetailsScreen() {
       const userId = session.data?.user?.id;
       if (!userId) return;
 
-      await connectChatSocket(userId, 'provider');
+      await connectChatSocket(authClient, userId, 'provider');
       chatSocket.joinBooking(bookingId);
 
       chatSocket.onProposalDeclined(data => {

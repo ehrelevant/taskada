@@ -6,7 +6,6 @@ export interface Request {
   seekerUserId: string;
   addressId: string;
   description: string;
-  status: RequestStatus;
   createdAt: string;
   updatedAt: string;
 }

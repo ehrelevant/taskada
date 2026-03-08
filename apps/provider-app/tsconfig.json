@@ -6,7 +6,6 @@
     "paths": {
       "@screens/*": ["src/screens/*"],
       "@navigation/*": ["src/navigation/*"],
-      "@contexts/*": ["src/contexts/*"],
       "@lib/*": ["lib/*"],
       "@assets/*": ["lib/assets/*"],
       "@components/*": ["lib/components/*"]

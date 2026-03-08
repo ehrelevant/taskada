@@ -1,10 +1,11 @@
 import { ActivityIndicator, Alert, ScrollView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
-import { apiFetch, Review } from '@lib/helpers';
+import { apiFetch } from '@lib/helpers';
 import { authClient } from '@lib/authClient';
 import { Avatar, Button, Card, Rating, ReviewCard, StarRatingInput, Typography } from '@repo/components';
 import { ChevronLeft } from 'lucide-react-native';
 import { colors, spacing } from '@repo/theme';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { Review } from '@repo/types';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { TransactionHistoryStackParamList } from '@navigation/TransactionHistoryStack';

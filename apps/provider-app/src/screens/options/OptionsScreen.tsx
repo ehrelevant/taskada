@@ -6,7 +6,7 @@ import { CreditCard, LogOut, MessageSquareWarning, UserPen } from 'lucide-react-
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { OptionsStackParamList } from '@navigation/OptionsStack';
 import { useEffect, useState } from 'react';
-import { useLoading } from '@contexts/LoadingContext';
+import { useLoading } from '@repo/shared';
 import { useNavigation } from '@react-navigation/native';
 import { View } from 'react-native';
 

@@ -1,11 +1,11 @@
 import * as ImagePicker from 'expo-image-picker';
 import { ActivityIndicator, Alert, FlatList, Image, ScrollView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
-import { apiFetch, uploadMessageImages } from '@lib/helpers';
+import { apiFetch } from '@lib/helpers';
 import { authClient } from '@lib/authClient';
 import { Avatar, Button, ImageViewer, Typography } from '@repo/components';
 import { chatSocket } from '@repo/shared';
 import { colors, spacing } from '@repo/theme';
-import { connectChatSocket } from '@lib/socket';
+import { connectChatSocket, uploadMessageImages } from '@repo/shared';
 import { Image as ImageIcon, Send, X } from 'lucide-react-native';
 import { KeyboardStickyView } from 'react-native-keyboard-controller';
 import type { Message } from '@repo/shared';
@@ -90,7 +90,7 @@ export function ChatScreen() {
     // Connect socket
     const setupSocket = async () => {
       if (!currentUserId) return;
-      await connectChatSocket(currentUserId, 'provider');
+      await connectChatSocket(authClient, currentUserId, 'provider');
       chatSocket.joinBooking(bookingId);
 
       chatSocket.onNewMessage(message => {
@@ -135,7 +135,7 @@ export function ChatScreen() {
       let imageKeys: string[] = [];
 
       if (selectedImages.length > 0) {
-        imageKeys = await uploadMessageImages(bookingId, selectedImages);
+        imageKeys = await uploadMessageImages(authClient, bookingId, selectedImages);
         setSelectedImages([]);
       }
 

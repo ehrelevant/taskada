@@ -1,9 +1,8 @@
 import { apiFetch } from '@lib/helpers';
 import { authClient } from '@lib/authClient';
 import { BottomActionBar, Button, EmptyState, Header, ScreenContainer } from '@repo/components';
-import { connectMatchingSocket } from '@lib/socket';
+import { connectMatchingSocket, matchingSocket } from '@repo/shared';
 import { FlatList, View } from 'react-native';
-import { matchingSocket } from '@repo/shared';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Provider } from '@repo/database';
 import { RequestListing } from '@repo/components';
@@ -86,7 +85,7 @@ export function RequestListScreen() {
       const userId = session.data.user.id;
 
       // Connect to WebSocket
-      await connectMatchingSocket(userId, 'provider');
+      await connectMatchingSocket(authClient, userId, 'provider');
 
       // Get provider's enabled services to join rooms
       const servicesResponse = await apiFetch('/services/my-services', 'GET');

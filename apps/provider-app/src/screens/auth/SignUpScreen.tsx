@@ -7,7 +7,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Pressable, StyleSheet, Text } from 'react-native';
 import { type Provider } from '@repo/database';
-import { useLoading } from '@contexts/LoadingContext';
+import { useLoading } from '@repo/shared';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 

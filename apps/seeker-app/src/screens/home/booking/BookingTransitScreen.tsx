@@ -1,8 +1,7 @@
 import { authClient } from '@lib/authClient';
 import { Avatar, Rating, Typography } from '@repo/components';
-import { chatSocket } from '@repo/shared';
+import { chatSocket, connectChatSocket } from '@repo/shared';
 import { colors, spacing } from '@repo/theme';
-import { connectChatSocket } from '@lib/socket';
 import { HomeStackParamList } from '@navigation/HomeStack';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
@@ -30,7 +29,7 @@ export function BookingTransitScreen() {
       const userId = session.data?.user?.id;
       if (!userId || !bookingId) return;
 
-      await connectChatSocket(userId, 'seeker');
+      await connectChatSocket(authClient, userId, 'seeker');
       chatSocket.joinBooking(bookingId);
 
       chatSocket.onProviderArrived(data => {

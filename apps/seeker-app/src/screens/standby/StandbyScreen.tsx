@@ -3,9 +3,8 @@ import { apiFetch } from '@lib/helpers';
 import { authClient } from '@lib/authClient';
 import { Button, Typography } from '@repo/components';
 import { colors, spacing } from '@repo/theme';
-import { connectMatchingSocket } from '@lib/socket';
+import { connectMatchingSocket, matchingSocket } from '@repo/shared';
 import { HomeStackParamList } from '@navigation/HomeStack';
-import { matchingSocket } from '@repo/shared';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
@@ -37,7 +36,7 @@ export function StandbyScreen() {
         const userId = session.data.user.id;
 
         // Connect to WebSocket
-        await connectMatchingSocket(userId, 'seeker');
+        await connectMatchingSocket(authClient, userId, 'seeker');
 
         // Start watching the request
         await matchingSocket.watchRequest(requestId);
