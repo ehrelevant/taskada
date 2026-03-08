@@ -1,7 +1,56 @@
-import { API_URL } from '@lib/env';
 import { io, Socket } from 'socket.io-client';
 
-import { authClient } from './authClient';
+import { API_URL } from '../env';
+
+// Types will be imported inline where needed to avoid cross-package type issues
+export type Message = {
+  id: string;
+  userId: string;
+  message: string | null;
+  createdAt: string;
+  sender: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    avatarUrl: string | null;
+  };
+  imageUrls: string[];
+};
+
+export type TypingData = {
+  userId: string;
+  bookingId: string;
+  isTyping: boolean;
+};
+
+export type ProposalAcceptedData = {
+  bookingId: string;
+  seekerLocation: {
+    label: string | null;
+    coordinates: [number, number];
+  };
+};
+
+export type ProposalSubmittedData = {
+  bookingId: string;
+  providerInfo: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    avatarUrl: string | null;
+  };
+  proposal: {
+    cost: number;
+    specifications: string;
+    serviceTypeName: string;
+    address:
+      | {
+          label: string | null;
+          coordinates: [number, number];
+        }
+      | undefined;
+  };
+};
 
 export class ChatSocketClient {
   private socket: Socket | null = null;
@@ -10,18 +59,16 @@ export class ChatSocketClient {
   private userJoinedHandlers: ((data: { userId: string; bookingId: string }) => void)[] = [];
   private userLeftHandlers: ((data: { userId: string; bookingId: string }) => void)[] = [];
   private bookingDeclinedHandlers: ((data: { bookingId: string; requestId: string }) => void)[] = [];
+  private proposalDeclinedHandlers: ((data: { bookingId: string }) => void)[] = [];
   private proposalSubmittedHandlers: ((data: ProposalSubmittedData) => void)[] = [];
   private proposalAcceptedHandlers: ((data: ProposalAcceptedData) => void)[] = [];
   private providerArrivedHandlers: ((data: { bookingId: string }) => void)[] = [];
   private bookingCompletedHandlers: ((data: { bookingId: string }) => void)[] = [];
 
-  async connect(userId: string, userRole: 'seeker' | 'provider'): Promise<void> {
+  async connect(cookie: string, userId: string, userRole: 'seeker' | 'provider'): Promise<void> {
     if (this.socket?.connected) {
       return;
     }
-
-    // Get the auth cookie
-    const cookie = await authClient.getCookie();
 
     this.socket = io(`${API_URL}/chat`, {
       transports: ['websocket'],
@@ -59,6 +106,10 @@ export class ChatSocketClient {
 
     this.socket.on('booking_declined', (data: { bookingId: string; requestId: string }) => {
       this.bookingDeclinedHandlers.forEach(handler => handler(data));
+    });
+
+    this.socket.on('proposal_declined', (data: { bookingId: string }) => {
+      this.proposalDeclinedHandlers.forEach(handler => handler(data));
     });
 
     this.socket.on('proposal_submitted', (data: ProposalSubmittedData) => {
@@ -117,6 +168,14 @@ export class ChatSocketClient {
     this.socket?.emit('accept_proposal', { bookingId });
   }
 
+  notifyArrival(bookingId: string) {
+    this.socket?.emit('provider_arrived', { bookingId });
+  }
+
+  notifyBookingCompleted(bookingId: string) {
+    this.socket?.emit('booking_completed', { bookingId });
+  }
+
   onNewMessage(handler: (message: Message) => void) {
     this.messageHandlers.push(handler);
   }
@@ -135,6 +194,10 @@ export class ChatSocketClient {
 
   onBookingDeclined(handler: (data: { bookingId: string; requestId: string }) => void) {
     this.bookingDeclinedHandlers.push(handler);
+  }
+
+  onProposalDeclined(handler: (data: { bookingId: string }) => void) {
+    this.proposalDeclinedHandlers.push(handler);
   }
 
   onProposalSubmitted(handler: (data: ProposalSubmittedData) => void) {
@@ -159,60 +222,12 @@ export class ChatSocketClient {
     this.userJoinedHandlers = [];
     this.userLeftHandlers = [];
     this.bookingDeclinedHandlers = [];
+    this.proposalDeclinedHandlers = [];
     this.proposalSubmittedHandlers = [];
     this.proposalAcceptedHandlers = [];
     this.providerArrivedHandlers = [];
     this.bookingCompletedHandlers = [];
   }
-}
-
-export interface ProposalAcceptedData {
-  bookingId: string;
-  seekerLocation: {
-    label: string | null;
-    coordinates: [number, number];
-  };
-}
-
-export interface Message {
-  id: string;
-  userId: string;
-  message: string | null;
-  createdAt: string;
-  sender: {
-    id: string;
-    firstName: string;
-    lastName: string;
-    avatarUrl: string | null;
-  };
-  imageUrls: string[];
-}
-
-export interface TypingData {
-  userId: string;
-  bookingId: string;
-  isTyping: boolean;
-}
-
-export interface ProposalSubmittedData {
-  bookingId: string;
-  providerInfo: {
-    id: string;
-    firstName: string;
-    lastName: string;
-    avatarUrl: string | null;
-  };
-  proposal: {
-    cost: number;
-    specifications: string;
-    serviceTypeName: string;
-    address:
-      | {
-          label: string | null;
-          coordinates: [number, number];
-        }
-      | undefined;
-  };
 }
 
 export const chatSocket = new ChatSocketClient();

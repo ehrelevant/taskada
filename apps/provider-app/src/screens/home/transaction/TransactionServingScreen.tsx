@@ -1,6 +1,6 @@
 import { ActivityIndicator, Alert, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { apiFetch } from '@lib/helpers';
-import { chatSocket } from '@lib/chatSocket';
+import { chatSocket } from '@repo/shared';
 import { colors, spacing } from '@repo/theme';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RequestsStackParamList } from '@navigation/RequestsStack';

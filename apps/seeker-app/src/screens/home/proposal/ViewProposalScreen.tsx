@@ -1,6 +1,6 @@
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { Button, Typography } from '@repo/components';
-import { chatSocket } from '@lib/chatSocket';
+import { chatSocket } from '@repo/shared';
 import { colors, spacing } from '@repo/theme';
 import { HomeStackParamList } from '@navigation/HomeStack';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';

@@ -1,22 +1,14 @@
 import * as ImagePicker from 'expo-image-picker';
-import {
-  ActivityIndicator,
-  Alert,
-  FlatList,
-  Image,
-  ScrollView,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { ActivityIndicator, Alert, FlatList, Image, ScrollView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { apiFetch, uploadMessageImages } from '@lib/helpers';
 import { authClient } from '@lib/authClient';
 import { Avatar, Button, ImageViewer, Typography } from '@repo/components';
-import { chatSocket, Message } from '@lib/chatSocket';
+import { chatSocket } from '@repo/shared';
 import { colors, spacing } from '@repo/theme';
+import { connectChatSocket } from '@lib/socket';
 import { Image as ImageIcon, Send, X } from 'lucide-react-native';
 import { KeyboardStickyView } from 'react-native-keyboard-controller';
+import type { Message } from '@repo/shared';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RequestsStackParamList } from '@navigation/RequestsStack';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
@@ -98,7 +90,7 @@ export function ChatScreen() {
     // Connect socket
     const setupSocket = async () => {
       if (!currentUserId) return;
-      await chatSocket.connect(currentUserId, 'provider');
+      await connectChatSocket(currentUserId, 'provider');
       chatSocket.joinBooking(bookingId);
 
       chatSocket.onNewMessage(message => {

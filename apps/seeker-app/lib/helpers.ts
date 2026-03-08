@@ -1,3 +1,5 @@
+import { apiFetch as sharedApiFetch } from '@repo/shared';
+
 import { API_URL, GOOGLE_MAPS_API_KEY } from './env';
 import { authClient } from './authClient';
 
@@ -9,30 +11,7 @@ export async function apiFetch(
   options?: Omit<RequestInit, 'method'>,
   authenticated = true,
 ) {
-  const headers: HeadersInit = {
-    'Content-Type': 'application/json',
-    ...(options?.headers || {}),
-  };
-
-  if (authenticated) {
-    const cookies = authClient.getCookie();
-
-    return fetch(`${API_URL}${endpoint}`, {
-      ...options,
-      method,
-      headers: {
-        ...headers,
-        Cookie: cookies,
-      },
-      credentials: 'omit',
-    });
-  }
-
-  return fetch(`${API_URL}${endpoint}`, {
-    ...options,
-    method,
-    headers,
-  });
+  return sharedApiFetch(authClient, endpoint, method, options, authenticated);
 }
 
 export async function uploadAvatar(uri: string): Promise<{ avatarUrl: string }> {
@@ -49,7 +28,6 @@ export async function uploadAvatar(uri: string): Promise<{ avatarUrl: string }> 
     type,
   } as unknown as Blob);
 
-  // TODO: Update apiFetch to allow different content-types
   const response = await fetch(`${API_URL}/users/avatar`, {
     method: 'POST',
     headers: {

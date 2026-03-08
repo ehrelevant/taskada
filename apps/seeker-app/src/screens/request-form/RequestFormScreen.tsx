@@ -8,7 +8,7 @@ import { createRequest, type SearchResult, searchServices, uploadRequestImages }
 import { HomeStackParamList } from '@navigation/HomeStack';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { type RequestFormData, requestFormSchema } from '@lib/validators';
+import { type RequestFormData, requestFormSchema } from '@repo/shared';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { valibotResolver } from '@hookform/resolvers/valibot';

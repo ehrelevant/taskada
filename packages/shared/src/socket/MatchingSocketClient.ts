@@ -1,14 +1,13 @@
-import { API_URL } from '@lib/env';
 import { io, Socket } from 'socket.io-client';
 
-import { authClient } from './authClient';
+import { API_URL } from '../env';
 
-interface AuthenticatedSocket extends Socket {
+export interface AuthenticatedSocket extends Socket {
   userId?: string;
   userRole?: string;
 }
 
-class MatchingSocketClient {
+export class MatchingSocketClient {
   private socket: AuthenticatedSocket | null = null;
   private static instance: MatchingSocketClient;
 
@@ -19,13 +18,10 @@ class MatchingSocketClient {
     return MatchingSocketClient.instance;
   }
 
-  async connect(userId: string, userRole: 'seeker' | 'provider'): Promise<AuthenticatedSocket> {
+  async connect(cookie: string, userId: string, userRole: 'seeker' | 'provider'): Promise<AuthenticatedSocket> {
     if (this.socket?.connected) {
       return this.socket;
     }
-
-    // Get the auth cookie
-    const cookie = await authClient.getCookie();
 
     this.socket = io(`${API_URL}/matching`, {
       transports: ['websocket'],
@@ -72,7 +68,6 @@ class MatchingSocketClient {
     return this.socket?.connected || false;
   }
 
-  // Seeker methods
   async watchRequest(requestId: string) {
     if (!this.isConnected()) {
       throw new Error('Socket not connected');
@@ -94,7 +89,6 @@ class MatchingSocketClient {
     this.socket!.emit('cancel_request', { requestId });
   }
 
-  // Provider methods
   async joinProviderRooms(serviceTypeIds: string[]) {
     if (!this.isConnected()) {
       throw new Error('Socket not connected');
@@ -109,7 +103,6 @@ class MatchingSocketClient {
     this.socket!.emit('leave_provider_rooms', { serviceTypeIds });
   }
 
-  // Event listeners
   onNewRequest(callback: (request: unknown) => void) {
     this.socket?.on('new_request', callback);
   }

@@ -4,8 +4,9 @@ import { Alert, ScrollView, StyleSheet, View } from 'react-native';
 import { apiFetch } from '@lib/helpers';
 import { authClient } from '@lib/authClient';
 import { Button, Typography } from '@repo/components';
-import { chatSocket } from '@lib/chatSocket';
+import { chatSocket } from '@repo/shared';
 import { colors, spacing } from '@repo/theme';
+import { connectChatSocket } from '@lib/socket';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RequestsStackParamList } from '@navigation/RequestsStack';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
@@ -56,7 +57,7 @@ export function BookingTransitScreen() {
       const userId = session.data?.user?.id;
       if (!userId || !bookingId) return;
 
-      await chatSocket.connect(userId, 'provider');
+      await connectChatSocket(userId, 'provider');
       chatSocket.joinBooking(bookingId);
     };
 
