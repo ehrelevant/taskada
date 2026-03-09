@@ -10,6 +10,7 @@
     "lint:fix": "eslint . --fix",
     "fmt": "prettier --experimental-cli --check .",
     "fmt:fix": "prettier --experimental-cli --write .",
+    "style": "pnpm fmt:fix && pnpm lint:fix",
     "db:generate": "pnpm --filter @repo/database generate",
     "db:migrate": "pnpm --filter @repo/database migrate",
     "db:studio": "pnpm --filter @repo/database studio"
