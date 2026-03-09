@@ -61,13 +61,17 @@ export class MessagesService {
     const hasMore = offset + messages.length < total;
 
     const messageIds = messages.map(m => m.id);
-    const images = await this.dbService.db
-      .select({
-        messageId: messageImage.messageId,
-        image: messageImage.image,
-      })
-      .from(messageImage)
-      .where(sql`${messageImage.messageId} IN ${messageIds}`);
+    let images: { messageId: string; image: string }[] = [];
+
+    if (messageIds.length > 0) {
+      images = await this.dbService.db
+        .select({
+          messageId: messageImage.messageId,
+          image: messageImage.image,
+        })
+        .from(messageImage)
+        .where(sql`${messageImage.messageId} IN ${messageIds}`);
+    }
 
     const imagesByMessageId = images.reduce(
       (acc, img) => {
