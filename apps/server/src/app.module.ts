@@ -8,6 +8,7 @@ import { ChatModule } from './chat/chat.module';
 import { DatabaseModule } from './database/database.module';
 import { MatchingModule } from './matching/matching.module';
 import { MessagesModule } from './messages/messages.module';
+import { PaymentEngineModule } from './payment-engine/payment-engine.module';
 import { ProvidersModule } from './providers/providers.module';
 import { PushNotificationsModule } from './push-notifications/push-notifications.module';
 import { RequestsModule } from './requests/requests.module';
@@ -34,6 +35,7 @@ import { UsersModule } from './users/users.module';
     MessagesModule,
     ChatModule,
     PushNotificationsModule,
+    PaymentEngineModule,
     ReviewsModule,
   ],
 })
