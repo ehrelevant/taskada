@@ -1,10 +1,10 @@
-import { apiFetch } from '@lib/helpers';
 import { authClient } from '@lib/authClient';
 import { AuthStackParamList } from '@navigation/AuthStack';
 import { Button, Input, ScreenContainer, Typography } from '@repo/components';
 import { colors } from '@repo/theme';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Pressable, Text } from 'react-native';
+import { providerClient } from '@lib/providerClient';
 import { useLoading } from '@repo/shared';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
@@ -39,11 +39,11 @@ export function SignInScreen() {
       return;
     }
 
-    const providerResponse = await apiFetch(`/providers`);
+    const providerResponse = await providerClient.apiFetch(`/providers`);
 
     if (providerResponse.status === 404) {
       // Means provider does not exist, create one
-      const createProviderResponse = await apiFetch('/providers', 'POST');
+      const createProviderResponse = await providerClient.apiFetch('/providers', 'POST');
       const newProviderData = await createProviderResponse.json();
       console.log(newProviderData);
     }

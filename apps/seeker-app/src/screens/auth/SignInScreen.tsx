@@ -1,10 +1,10 @@
-import { apiFetch } from '@lib/helpers';
 import { authClient } from '@lib/authClient';
 import { AuthStackParamList } from '@navigation/AuthStack';
 import { Button, Input, ScreenContainer, Typography } from '@repo/components';
 import { colors } from '@repo/theme';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Pressable, Text } from 'react-native';
+import { seekerClient } from '@lib/seekerClient';
 import { useLoading } from '@repo/shared';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
@@ -39,11 +39,11 @@ export function SignInScreen() {
       return;
     }
 
-    const seekerResponse = await apiFetch(`/seekers`);
+    const seekerResponse = await seekerClient.apiFetch(`/seekers`);
 
     if (seekerResponse.status === 404) {
       // Means seeker does not exist, create one
-      const createSeekerResponse = await apiFetch('/seekers', 'POST');
+      const createSeekerResponse = await seekerClient.apiFetch('/seekers', 'POST');
       const newSeekerData = await createSeekerResponse.json();
       console.log(newSeekerData);
     }

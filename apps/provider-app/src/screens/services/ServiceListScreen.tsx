@@ -1,8 +1,8 @@
 import { Alert, FlatList, StyleSheet, Switch, TouchableOpacity, View } from 'react-native';
-import { apiFetch } from '@lib/helpers';
 import { Card, Typography } from '@repo/components';
 import { colors, palette, shadows, spacing } from '@repo/theme';
 import { Pencil, Plus, Trash2, Wrench } from 'lucide-react-native';
+import { providerClient } from '@lib/providerClient';
 import { useEffect, useState } from 'react';
 
 import { AddServiceModal, type ProviderService } from './AddServiceModal';
@@ -17,7 +17,7 @@ export function ServiceListScreen() {
 
   const fetchServices = async () => {
     try {
-      const res = await apiFetch('/services/my-services', 'GET');
+      const res = await providerClient.apiFetch('/services/my-services', 'GET');
       if (res.ok) {
         setServices(await res.json());
       }
@@ -47,7 +47,7 @@ export function ServiceListScreen() {
           setServices(prev => prev.filter(s => s.id !== service.id));
 
           try {
-            const res = await apiFetch(`/services/${service.id}`, 'DELETE');
+            const res = await providerClient.apiFetch(`/services/${service.id}`, 'DELETE');
             if (!res.ok) throw new Error();
           } catch {
             Alert.alert('Error', 'Failed to delete service');
@@ -62,7 +62,9 @@ export function ServiceListScreen() {
     setServices(prev => prev.map(s => (s.id === id ? { ...s, isEnabled: !currentStatus } : s)));
 
     try {
-      const res = await apiFetch(`/services/${id}`, 'PATCH', { body: JSON.stringify({ isEnabled: !currentStatus }) });
+      const res = await providerClient.apiFetch(`/services/${id}`, 'PATCH', {
+        body: JSON.stringify({ isEnabled: !currentStatus }),
+      });
       if (!res.ok) throw new Error('API Error');
     } catch {
       setServices(prev => prev.map(s => (s.id === id ? { ...s, isEnabled: currentStatus } : s)));

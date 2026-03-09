@@ -1,5 +1,3 @@
-import { API_URL } from '../env';
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AuthClient = any;
 
@@ -7,6 +5,7 @@ type RequestMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
 
 export async function apiFetch(
   authClient: AuthClient,
+  baseUrl: string,
   endpoint: string,
   method: RequestMethod = 'GET',
   options?: Omit<RequestInit, 'method'>,
@@ -20,7 +19,7 @@ export async function apiFetch(
   if (authenticated) {
     const cookies = authClient.getCookie();
 
-    return fetch(`${API_URL}${endpoint}`, {
+    return fetch(`${baseUrl}${endpoint}`, {
       ...options,
       method,
       headers: {
@@ -31,7 +30,7 @@ export async function apiFetch(
     });
   }
 
-  return fetch(`${API_URL}${endpoint}`, {
+  return fetch(`${baseUrl}${endpoint}`, {
     ...options,
     method,
     headers,

@@ -1,12 +1,11 @@
 import { ActivityIndicator, FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { apiFetch } from '@lib/helpers';
 import { authClient } from '@lib/authClient';
 import { Avatar, FeaturedServiceCard, Rating, SearchBar, ServiceTypeCard, Typography } from '@repo/components';
 import { colors, radius, spacing } from '@repo/theme';
 import type { FeaturedService, SearchResult, ServiceType } from '@repo/types';
-import { getFeaturedServices, getServiceTypes, searchServices } from '@repo/shared';
 import { HomeStackParamList } from '@navigation/HomeStack';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { seekerClient } from '@lib/seekerClient';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
@@ -31,7 +30,8 @@ export function HomeScreen() {
 
   useEffect(() => {
     if (session) {
-      apiFetch('/users/profile', 'GET')
+      seekerClient
+        .apiFetch('/users/profile', 'GET')
         .then(res => res.json())
         .then(data => setProfile(data))
         .catch(console.error);
@@ -42,8 +42,8 @@ export function HomeScreen() {
     async function loadData() {
       try {
         const [typesData, featuredData] = await Promise.all([
-          getServiceTypes(authClient),
-          getFeaturedServices(authClient, 10),
+          seekerClient.getServiceTypes(),
+          seekerClient.getFeaturedServices(10),
         ]);
         setServiceTypes(typesData);
         setFeaturedServices(featuredData);
@@ -67,7 +67,7 @@ export function HomeScreen() {
 
     setSearchLoading(true);
     try {
-      const results = await searchServices(authClient, query);
+      const results = await seekerClient.searchServices(query);
       setSearchResults(results);
       setShowSearchResults(true);
     } catch (error) {

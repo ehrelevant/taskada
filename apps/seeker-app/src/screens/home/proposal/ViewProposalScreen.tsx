@@ -1,12 +1,12 @@
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { Button, Typography } from '@repo/components';
-import { chatSocket } from '@repo/shared';
 import { colors, spacing } from '@repo/theme';
 import { HomeStackParamList } from '@navigation/HomeStack';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView, StyleSheet, View } from 'react-native';
+import { seekerClient } from '@lib/seekerClient';
 
 type ViewProposalRouteProp = RouteProp<HomeStackParamList, 'ViewProposal'>;
 type ViewProposalNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'ViewProposal'>;
@@ -24,7 +24,7 @@ export function ViewProposalScreen() {
 
   const handleAccept = () => {
     // Emit acceptance event via WebSocket
-    chatSocket.acceptProposal(bookingId);
+    seekerClient.acceptProposal(bookingId);
 
     // Navigate to the Provider En Route screen
     navigation.replace('BookingTransit', {
@@ -36,7 +36,7 @@ export function ViewProposalScreen() {
 
   const handleDecline = () => {
     // Send decline event via WebSocket
-    chatSocket.declineProposal(bookingId);
+    seekerClient.declineProposal(bookingId);
     // Navigate back to chat
     navigation.navigate('Chat', {
       bookingId,

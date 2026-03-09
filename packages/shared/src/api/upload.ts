@@ -1,7 +1,6 @@
-import { API_URL } from '../env';
-
 export async function uploadAvatar(
   authClient: { getCookie: () => string },
+  baseUrl: string,
   uri: string,
 ): Promise<{ avatarUrl: string }> {
   const cookies = authClient.getCookie();
@@ -17,7 +16,7 @@ export async function uploadAvatar(
     type,
   } as unknown as Blob);
 
-  const response = await fetch(`${API_URL}/users/avatar`, {
+  const response = await fetch(`${baseUrl}/users/avatar`, {
     method: 'POST',
     headers: {
       Cookie: cookies,
@@ -35,6 +34,7 @@ export async function uploadAvatar(
 
 export async function uploadMessageImages(
   authClient: { getCookie: () => string },
+  baseUrl: string,
   bookingId: string,
   imageUris: string[],
 ): Promise<string[]> {
@@ -54,7 +54,7 @@ export async function uploadMessageImages(
     } as unknown as Blob);
   }
 
-  const response = await fetch(`${API_URL}/bookings/${bookingId}/messages/images`, {
+  const response = await fetch(`${baseUrl}/bookings/${bookingId}/messages/images`, {
     method: 'POST',
     headers: {
       Cookie: cookies,
@@ -73,6 +73,7 @@ export async function uploadMessageImages(
 
 export async function uploadRequestImages(
   authClient: { getCookie: () => string },
+  baseUrl: string,
   requestId: string,
   imageUris: string[],
 ): Promise<void> {
@@ -92,7 +93,7 @@ export async function uploadRequestImages(
     } as unknown as Blob);
   }
 
-  const response = await fetch(`${API_URL}/requests/${requestId}/images`, {
+  const response = await fetch(`${baseUrl}/requests/${requestId}/images`, {
     method: 'POST',
     headers: {
       Cookie: cookies,
@@ -106,10 +107,10 @@ export async function uploadRequestImages(
   }
 }
 
-export async function deleteAvatar(authClient: { getCookie: () => string }): Promise<void> {
+export async function deleteAvatar(authClient: { getCookie: () => string }, baseUrl: string): Promise<void> {
   const cookies = authClient.getCookie();
 
-  const response = await fetch(`${API_URL}/users/avatar`, {
+  const response = await fetch(`${baseUrl}/users/avatar`, {
     method: 'DELETE',
     headers: {
       Cookie: cookies,

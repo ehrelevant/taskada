@@ -4,9 +4,10 @@ import { apiFetch } from './apiFetch';
 
 export async function createRequest(
   authClient: { getCookie: () => string },
+  baseUrl: string,
   payload: CreateRequestPayload,
 ): Promise<Request> {
-  const response = await apiFetch(authClient, '/requests', 'POST', {
+  const response = await apiFetch(authClient, baseUrl, '/requests', 'POST', {
     body: JSON.stringify(payload),
   });
   if (!response.ok) {
@@ -18,10 +19,11 @@ export async function createRequest(
 
 export async function addRequestImages(
   authClient: { getCookie: () => string },
+  baseUrl: string,
   requestId: string,
   imageUrls: string[],
 ): Promise<void> {
-  const response = await apiFetch(authClient, `/requests/${requestId}/images`, 'POST', {
+  const response = await apiFetch(authClient, baseUrl, `/requests/${requestId}/images`, 'POST', {
     body: JSON.stringify({ imageUrls }),
   });
   if (!response.ok) {

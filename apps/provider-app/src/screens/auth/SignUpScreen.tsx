@@ -1,4 +1,3 @@
-import { apiFetch } from '@lib/helpers';
 import { authClient } from '@lib/authClient';
 import { AuthStackParamList } from '@navigation/AuthStack';
 import { Button, Input, Typography } from '@repo/components';
@@ -7,6 +6,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Pressable, StyleSheet, Text } from 'react-native';
 import { type Provider } from '@repo/database';
+import { providerClient } from '@lib/providerClient';
 import { useLoading } from '@repo/shared';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
@@ -48,7 +48,7 @@ export function SignUpScreen() {
       setErrorMessage(error.message ?? '');
     }
 
-    const createProviderResponse = await apiFetch('/providers', 'POST');
+    const createProviderResponse = await providerClient.apiFetch('/providers', 'POST');
     const newProviderData: Provider | null = await createProviderResponse.json();
     console.log(newProviderData);
 

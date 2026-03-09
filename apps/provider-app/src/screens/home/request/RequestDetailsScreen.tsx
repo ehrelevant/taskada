@@ -1,9 +1,9 @@
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { ActivityIndicator, Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { apiFetch } from '@lib/helpers';
 import { Avatar, Button, ImageViewer, Typography } from '@repo/components';
 import { colors, spacing } from '@repo/theme';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { providerClient } from '@lib/providerClient';
 import { RequestsStackParamList } from '@navigation/RequestsStack';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
@@ -54,7 +54,7 @@ export function RequestDetailsScreen() {
   const loadRequestDetails = async () => {
     try {
       setIsLoading(true);
-      const response = await apiFetch(`/requests/${requestId}`, 'GET');
+      const response = await providerClient.apiFetch(`/requests/${requestId}`, 'GET');
 
       if (!response.ok) {
         if (response.status === 404) {
@@ -95,7 +95,10 @@ export function RequestDetailsScreen() {
       // Request is for a service type - need to find provider's matching service
       // Since providers only have one service per type, fetch it
       try {
-        const servicesResponse = await apiFetch(`/services/my-services?serviceTypeId=${request.serviceTypeId}`, 'GET');
+        const servicesResponse = await providerClient.apiFetch(
+          `/services/my-services?serviceTypeId=${request.serviceTypeId}`,
+          'GET',
+        );
         if (!servicesResponse.ok) {
           throw new Error('Failed to load your services');
         }
@@ -116,7 +119,7 @@ export function RequestDetailsScreen() {
 
     try {
       // 1. Create booking
-      const bookingResponse = await apiFetch('/bookings', 'POST', {
+      const bookingResponse = await providerClient.apiFetch('/bookings', 'POST', {
         body: JSON.stringify({
           requestId: request.id,
           serviceId: serviceId,
@@ -130,7 +133,7 @@ export function RequestDetailsScreen() {
       const booking = await bookingResponse.json();
 
       // 2. Update request status to 'settling'
-      const statusResponse = await apiFetch(`/requests/${request.id}/status`, 'PATCH', {
+      const statusResponse = await providerClient.apiFetch(`/requests/${request.id}/status`, 'PATCH', {
         body: JSON.stringify({ status: 'settling' }),
       });
 

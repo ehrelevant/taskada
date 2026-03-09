@@ -1,10 +1,10 @@
 import * as v from 'valibot';
 import { ActivityIndicator, Modal, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { apiFetch } from '@lib/helpers';
 import { Button, Input, Typography } from '@repo/components';
 import { colors, radius, spacing } from '@repo/theme';
 import { Controller, useForm } from 'react-hook-form';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
+import { providerClient } from '@lib/providerClient';
 import { useEffect, useState } from 'react';
 import { valibotResolver } from '@hookform/resolvers/valibot';
 
@@ -77,10 +77,11 @@ export function AddServiceModal({ visible, serviceToEdit, onClose, onSuccess }: 
       // Load types if not loaded
       if (serviceTypes.length === 0) {
         setIsLoadingTypes(true);
-        apiFetch('/service-types', 'GET')
-          .then(res => res.json())
-          .then(data => setServiceTypes(data))
-          .catch(err => console.error('Failed to load types:', err))
+        providerClient
+          .apiFetch('/service-types', 'GET')
+          .then((res: Response) => res.json())
+          .then((data: ServiceType[]) => setServiceTypes(data))
+          .catch((err: unknown) => console.error('Failed to load types:', err))
           .finally(() => setIsLoadingTypes(false));
       }
     }
@@ -96,11 +97,11 @@ export function AddServiceModal({ visible, serviceToEdit, onClose, onSuccess }: 
       };
 
       if (isEditing && serviceToEdit) {
-        res = await apiFetch(`/services/${serviceToEdit.id}`, 'PATCH', {
+        res = await providerClient.apiFetch(`/services/${serviceToEdit.id}`, 'PATCH', {
           body: JSON.stringify(payload),
         });
       } else {
-        res = await apiFetch('/services', 'POST', {
+        res = await providerClient.apiFetch('/services', 'POST', {
           body: JSON.stringify(payload),
         });
       }

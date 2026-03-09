@@ -1,10 +1,10 @@
-import { apiFetch } from '@lib/helpers';
 import { authClient } from '@lib/authClient';
 import { Avatar, Button, MenuButton, ScreenContainer, Typography } from '@repo/components';
 import { colors } from '@repo/theme';
 import { CreditCard, LogOut, MessageSquareWarning, UserPen } from 'lucide-react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { OptionsStackParamList } from '@navigation/OptionsStack';
+import { seekerClient } from '@lib/seekerClient';
 import { useEffect, useState } from 'react';
 import { useLoading } from '@repo/shared';
 import { useNavigation } from '@react-navigation/native';
@@ -36,7 +36,8 @@ export function OptionsScreen() {
 
   useEffect(() => {
     if (userSession) {
-      apiFetch('/users/profile', 'GET')
+      seekerClient
+        .apiFetch('/users/profile', 'GET')
         .then(res => res.json())
         .then(data => setProfile(data))
         .catch(console.error);

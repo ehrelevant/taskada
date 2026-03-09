@@ -2,7 +2,7 @@ import * as Location from 'expo-location';
 import MapView, { Marker, type MarkerDragStartEndEvent, PROVIDER_GOOGLE } from 'react-native-maps';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { colors, palette } from '@repo/theme';
-import { reverseGeocode } from '@repo/shared';
+import { seekerClient } from '@lib/seekerClient';
 import { useCallback, useEffect, useState } from 'react';
 
 interface MapSectionProps {
@@ -18,7 +18,7 @@ export function MapSection({ onLocationUpdate, initialLat, initialLng }: MapSect
 
   const fetchAddress = useCallback(
     async (lat: number, lng: number) => {
-      const addr = await reverseGeocode(lat, lng);
+      const addr = await seekerClient.reverseGeocode(lat, lng);
       setAddress(addr);
       onLocationUpdate(lat, lng, addr);
     },

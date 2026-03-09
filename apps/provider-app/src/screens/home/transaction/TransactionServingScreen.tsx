@@ -1,8 +1,7 @@
 import { ActivityIndicator, Alert, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { apiFetch } from '@lib/helpers';
-import { chatSocket } from '@repo/shared';
 import { colors, spacing } from '@repo/theme';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { providerClient } from '@lib/providerClient';
 import { RequestsStackParamList } from '@navigation/RequestsStack';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -39,7 +38,7 @@ export function TransactionServingScreen() {
   useEffect(() => {
     const fetchBookingDetails = async () => {
       try {
-        const response = await apiFetch(`/bookings/${bookingId}`, 'GET');
+        const response = await providerClient.apiFetch(`/bookings/${bookingId}`, 'GET');
         if (response.ok) {
           const data = await response.json();
           setBookingDetails(data);
@@ -64,7 +63,7 @@ export function TransactionServingScreen() {
 
     try {
       // Update booking status to 'completed'
-      const response = await apiFetch(`/bookings/${bookingId}`, 'PATCH', {
+      const response = await providerClient.apiFetch(`/bookings/${bookingId}`, 'PATCH', {
         body: JSON.stringify({ status: 'completed' }),
       });
 
@@ -75,7 +74,7 @@ export function TransactionServingScreen() {
       setIsPaid(true);
 
       // Emit booking completed event via websocket
-      chatSocket.notifyBookingCompleted(bookingId);
+      providerClient.notifyBookingCompleted(bookingId);
 
       // Navigate to TransactionDone screen
       navigation.navigate('TransactionDone', { bookingId });

@@ -4,16 +4,15 @@ import { createAuthClient } from 'better-auth/react';
 import { expoClient } from '@better-auth/expo/client';
 import { inferAdditionalFields } from 'better-auth/client/plugins';
 
-import { API_URL } from '../env';
-
 export interface AuthClientOptions {
+  baseURL: string;
   scheme: string;
   storagePrefix: string;
 }
 
 export function createAppAuthClient(options: AuthClientOptions) {
   return createAuthClient({
-    baseURL: API_URL,
+    baseURL: options.baseURL,
     plugins: [
       expoClient({
         scheme: options.scheme,

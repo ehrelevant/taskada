@@ -1,17 +1,16 @@
 import * as ImagePicker from 'expo-image-picker';
 import { ActivityIndicator, FlatList, Image, Modal, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { authClient } from '@lib/authClient';
 import { Button, ImageViewer, Input, Typography } from '@repo/components';
 import { Camera, X } from 'lucide-react-native';
 import { colors, radius, spacing } from '@repo/theme';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
-import { createRequest, searchServices, uploadRequestImages } from '@repo/shared';
 import { HomeStackParamList } from '@navigation/HomeStack';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { type RequestFormData, requestFormSchema } from '@repo/shared';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import type { SearchResult } from '@repo/types';
+import { seekerClient } from '@lib/seekerClient';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { valibotResolver } from '@hookform/resolvers/valibot';
 
@@ -68,7 +67,7 @@ export function RequestFormScreen() {
 
   const loadInitialService = async (serviceId: string) => {
     try {
-      const results = await searchServices(authClient, '', undefined);
+      const results = await seekerClient.searchServices('', undefined);
       const found = results.find(s => s.serviceId === serviceId);
       if (found) {
         setSelectedService(found);
@@ -105,7 +104,7 @@ export function RequestFormScreen() {
 
     setServiceSearchLoading(true);
     try {
-      const results = await searchServices(authClient, query, initialServiceTypeId);
+      const results = await seekerClient.searchServices(query, initialServiceTypeId);
       setServiceSearchResults(results);
     } catch (error) {
       console.error('Search failed:', error);
@@ -150,10 +149,10 @@ export function RequestFormScreen() {
     try {
       setLoading(true);
 
-      const newRequest = await createRequest(authClient, data);
+      const newRequest = await seekerClient.createRequest(data);
 
       if (images.length > 0) {
-        await uploadRequestImages(authClient, newRequest.id, images);
+        await seekerClient.uploadRequestImages(newRequest.id, images);
       }
 
       navigation.replace('Standby', {

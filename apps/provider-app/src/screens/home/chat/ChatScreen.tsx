@@ -1,15 +1,13 @@
 import * as ImagePicker from 'expo-image-picker';
 import { ActivityIndicator, Alert, FlatList, Image, ScrollView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
-import { apiFetch } from '@lib/helpers';
 import { authClient } from '@lib/authClient';
 import { Avatar, Button, ImageViewer, Typography } from '@repo/components';
-import { chatSocket } from '@repo/shared';
 import { colors, spacing } from '@repo/theme';
-import { connectChatSocket, uploadMessageImages } from '@repo/shared';
 import { Image as ImageIcon, Send, X } from 'lucide-react-native';
 import { KeyboardStickyView } from 'react-native-keyboard-controller';
 import type { Message } from '@repo/shared';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { providerClient } from '@lib/providerClient';
 import { RequestsStackParamList } from '@navigation/RequestsStack';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -56,7 +54,10 @@ export function ChatScreen() {
   const loadMessages = useCallback(
     async (loadOffset = 0) => {
       try {
-        const response = await apiFetch(`/bookings/${bookingId}/messages?limit=50&offset=${loadOffset}`, 'GET');
+        const response = await providerClient.apiFetch(
+          `/bookings/${bookingId}/messages?limit=50&offset=${loadOffset}`,
+          'GET',
+        );
         if (response.ok) {
           const data = await response.json();
           if (loadOffset === 0) {
@@ -90,10 +91,10 @@ export function ChatScreen() {
     // Connect socket
     const setupSocket = async () => {
       if (!currentUserId) return;
-      await connectChatSocket(authClient, currentUserId, 'provider');
-      chatSocket.joinBooking(bookingId);
+      await providerClient.connectChat(authClient.getCookie(), currentUserId, 'provider');
+      providerClient.joinBooking(bookingId);
 
-      chatSocket.onNewMessage(message => {
+      providerClient.onNewMessage(message => {
         setMessages(prev => [...prev, message]);
         // Scroll to bottom
         setTimeout(() => {
@@ -101,13 +102,13 @@ export function ChatScreen() {
         }, 100);
       });
 
-      chatSocket.onTyping(data => {
+      providerClient.onTyping(data => {
         if (data.userId !== currentUserId) {
           setIsTyping(data.isTyping);
         }
       });
 
-      chatSocket.onBookingDeclined(data => {
+      providerClient.onBookingDeclined(data => {
         if (data.bookingId === bookingId) {
           // Navigate back to request list
           navigation.replace('RequestList');
@@ -118,9 +119,9 @@ export function ChatScreen() {
     setupSocket();
 
     return () => {
-      chatSocket.leaveBooking(bookingId);
-      chatSocket.removeAllListeners();
-      chatSocket.disconnect();
+      providerClient.leaveBooking(bookingId);
+      providerClient.removeAllListeners();
+      providerClient.disconnectChat();
     };
   }, [bookingId, currentUserId, navigation, session.data]);
 
@@ -135,11 +136,11 @@ export function ChatScreen() {
       let imageKeys: string[] = [];
 
       if (selectedImages.length > 0) {
-        imageKeys = await uploadMessageImages(authClient, bookingId, selectedImages);
+        imageKeys = await providerClient.uploadMessageImages(bookingId, selectedImages);
         setSelectedImages([]);
       }
 
-      chatSocket.sendMessage(bookingId, messageText, imageKeys);
+      providerClient.sendMessage(bookingId, messageText, imageKeys);
     } catch (error) {
       console.error('Failed to send message:', error);
     } finally {
@@ -150,13 +151,13 @@ export function ChatScreen() {
   const handleDecline = async () => {
     try {
       // Update request status back to pending
-      const response = await apiFetch(`/requests/${requestId}/status`, 'PATCH', {
+      const response = await providerClient.apiFetch(`/requests/${requestId}/status`, 'PATCH', {
         body: JSON.stringify({ status: 'pending' }),
       });
 
       if (response.ok) {
         // Notify seeker via WebSocket
-        chatSocket.declineBooking(bookingId, requestId);
+        providerClient.declineBooking(bookingId, requestId);
         // Navigate back to request list
         navigation.replace('RequestList');
       }

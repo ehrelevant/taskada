@@ -1,7 +1,5 @@
 import { io, Socket } from 'socket.io-client';
 
-import { API_URL } from '../env';
-
 // Types will be imported inline where needed to avoid cross-package type issues
 export type Message = {
   id: string;
@@ -65,12 +63,12 @@ export class ChatSocketClient {
   private providerArrivedHandlers: ((data: { bookingId: string }) => void)[] = [];
   private bookingCompletedHandlers: ((data: { bookingId: string }) => void)[] = [];
 
-  async connect(cookie: string, userId: string, userRole: 'seeker' | 'provider'): Promise<void> {
+  async connect(baseUrl: string, cookie: string, userId: string, userRole: 'seeker' | 'provider'): Promise<void> {
     if (this.socket?.connected) {
       return;
     }
 
-    this.socket = io(`${API_URL}/chat`, {
+    this.socket = io(`${baseUrl}/chat`, {
       transports: ['websocket'],
       withCredentials: true,
       extraHeaders: cookie ? { Cookie: cookie } : undefined,

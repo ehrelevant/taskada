@@ -1,4 +1,3 @@
-import { apiFetch } from '@lib/helpers';
 import { authClient } from '@lib/authClient';
 import { AuthStackParamList } from '@navigation/AuthStack';
 import { Button, Input, Typography } from '@repo/components';
@@ -6,6 +5,7 @@ import { colors } from '@repo/theme';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Pressable, StyleSheet, Text } from 'react-native';
+import { seekerClient } from '@lib/seekerClient';
 import { useLoading } from '@repo/shared';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
@@ -47,7 +47,7 @@ export function SignUpScreen() {
       setErrorMessage(error.message ?? '');
     }
 
-    const createSeekerResponse = await apiFetch('/seekers', 'POST');
+    const createSeekerResponse = await seekerClient.apiFetch('/seekers', 'POST');
     const newSeekerData = await createSeekerResponse.json();
     console.log(newSeekerData);
 

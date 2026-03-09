@@ -1,7 +1,5 @@
 import { io, Socket } from 'socket.io-client';
 
-import { API_URL } from '../env';
-
 export interface AuthenticatedSocket extends Socket {
   userId?: string;
   userRole?: string;
@@ -18,12 +16,17 @@ export class MatchingSocketClient {
     return MatchingSocketClient.instance;
   }
 
-  async connect(cookie: string, userId: string, userRole: 'seeker' | 'provider'): Promise<AuthenticatedSocket> {
+  async connect(
+    baseUrl: string,
+    cookie: string,
+    userId: string,
+    userRole: 'seeker' | 'provider',
+  ): Promise<AuthenticatedSocket> {
     if (this.socket?.connected) {
       return this.socket;
     }
 
-    this.socket = io(`${API_URL}/matching`, {
+    this.socket = io(`${baseUrl}/matching`, {
       transports: ['websocket'],
       withCredentials: true,
       extraHeaders: cookie ? { Cookie: cookie } : undefined,

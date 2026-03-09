@@ -1,12 +1,11 @@
 import { ActivityIndicator, Alert, StyleSheet, View } from 'react-native';
-import { apiFetch } from '@lib/helpers';
 import { authClient } from '@lib/authClient';
 import { Button, Typography } from '@repo/components';
 import { colors, spacing } from '@repo/theme';
-import { connectMatchingSocket, matchingSocket } from '@repo/shared';
 import { HomeStackParamList } from '@navigation/HomeStack';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { seekerClient } from '@lib/seekerClient';
 import { useEffect, useState } from 'react';
 
 type StandbyRouteProp = RouteProp<HomeStackParamList, 'Standby'>;
@@ -36,24 +35,24 @@ export function StandbyScreen() {
         const userId = session.data.user.id;
 
         // Connect to WebSocket
-        await connectMatchingSocket(authClient, userId, 'seeker');
+        await seekerClient.connectMatching(authClient.getCookie(), userId, 'seeker');
 
         // Start watching the request
-        await matchingSocket.watchRequest(requestId);
+        await seekerClient.watchRequest(requestId);
 
         if (isMounted) {
           setIsConnecting(false);
         }
 
         // Set up event listeners
-        matchingSocket.onRequestCancelled(data => {
+        seekerClient.onRequestCancelled(data => {
           if (data.requestId === requestId) {
             Alert.alert('Request Cancelled', 'Your request has been cancelled.');
             navigation.navigate('Home');
           }
         });
 
-        matchingSocket.onRequestSettling(data => {
+        seekerClient.onRequestSettling(data => {
           if (data.requestId === requestId) {
             // Navigate to chat screen immediately when provider creates booking
             navigation.replace('Chat', {
@@ -69,7 +68,7 @@ export function StandbyScreen() {
           }
         });
 
-        matchingSocket.onError(err => {
+        seekerClient.onMatchingError(err => {
           console.error('Socket error:', err);
           setError(err.message);
         });
@@ -88,12 +87,12 @@ export function StandbyScreen() {
     // Poll for request status changes
     const checkRequestStatus = async () => {
       try {
-        const response = await apiFetch(`/requests/${requestId}`, 'GET');
+        const response = await seekerClient.apiFetch(`/requests/${requestId}`, 'GET');
         if (response.ok) {
           const request = await response.json();
           if (request.status === 'settling') {
             // Request is being settled, fetch booking info
-            const bookingsResponse = await apiFetch(`/bookings?requestId=${requestId}`, 'GET');
+            const bookingsResponse = await seekerClient.apiFetch(`/bookings?requestId=${requestId}`, 'GET');
             if (bookingsResponse.ok) {
               const bookings = await bookingsResponse.json();
               if (bookings.length > 0) {
@@ -126,7 +125,7 @@ export function StandbyScreen() {
 
     return () => {
       isMounted = false;
-      matchingSocket.unwatchRequest(requestId);
+      seekerClient.unwatchRequest(requestId);
       // Don't disconnect here, let other screens handle lifecycle
     };
   }, [requestId, navigation]);
@@ -144,11 +143,11 @@ export function StandbyScreen() {
           setIsCancelling(true);
           try {
             // Try WebSocket first
-            if (matchingSocket.isConnected()) {
-              await matchingSocket.cancelRequest(requestId);
+            if (seekerClient.isMatchingConnected()) {
+              await seekerClient.cancelRequest(requestId);
             } else {
               // Fallback to REST API
-              await apiFetch(`/requests/${requestId}`, 'DELETE');
+              await seekerClient.apiFetch(`/requests/${requestId}`, 'DELETE');
             }
 
             Alert.alert('Cancelled', 'Your request has been cancelled.');

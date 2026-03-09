@@ -1,5 +1,4 @@
-export * from './MatchingSocketClient';
-export * from './ChatSocketClient';
-export * from './connectSocket';
+export { MatchingSocketClient } from './MatchingSocketClient';
+export { ChatSocketClient } from './ChatSocketClient';
 
 export type { Message, TypingData, ProposalAcceptedData, ProposalSubmittedData } from './ChatSocketClient';

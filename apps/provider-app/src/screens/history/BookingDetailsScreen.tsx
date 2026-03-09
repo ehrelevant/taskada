@@ -1,10 +1,10 @@
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { ActivityIndicator, Alert, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { apiFetch } from '@lib/helpers';
 import { Button, Typography } from '@repo/components';
 import { ChevronLeft } from 'lucide-react-native';
 import { colors, spacing } from '@repo/theme';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { providerClient } from '@lib/providerClient';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { TransactionHistoryStackParamList } from '@navigation/TransactionHistoryStack';
@@ -53,7 +53,7 @@ export function BookingDetailsScreen() {
   useEffect(() => {
     const fetchBooking = async () => {
       try {
-        const response = await apiFetch(`/bookings/${bookingId}`, 'GET');
+        const response = await providerClient.apiFetch(`/bookings/${bookingId}`, 'GET');
         if (response.ok) {
           const data = await response.json();
           setBooking(data);

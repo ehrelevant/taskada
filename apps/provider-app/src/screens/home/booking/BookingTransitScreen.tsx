@@ -1,12 +1,11 @@
 import * as Location from 'expo-location';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { Alert, ScrollView, StyleSheet, View } from 'react-native';
-import { apiFetch } from '@lib/helpers';
 import { authClient } from '@lib/authClient';
 import { Button, Typography } from '@repo/components';
-import { chatSocket, connectChatSocket } from '@repo/shared';
 import { colors, spacing } from '@repo/theme';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { providerClient } from '@lib/providerClient';
 import { RequestsStackParamList } from '@navigation/RequestsStack';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -56,17 +55,17 @@ export function BookingTransitScreen() {
       const userId = session.data?.user?.id;
       if (!userId || !bookingId) return;
 
-      await connectChatSocket(authClient, userId, 'provider');
-      chatSocket.joinBooking(bookingId);
+      await providerClient.connectChat(authClient.getCookie(), userId, 'provider');
+      providerClient.joinBooking(bookingId);
     };
 
     setupSocket();
 
     return () => {
       if (bookingId) {
-        chatSocket.leaveBooking(bookingId);
-        chatSocket.removeAllListeners();
-        chatSocket.disconnect();
+        providerClient.leaveBooking(bookingId);
+        providerClient.removeAllListeners();
+        providerClient.disconnectChat();
       }
     };
   }, [bookingId]);
@@ -78,7 +77,7 @@ export function BookingTransitScreen() {
 
     try {
       // Update booking status to 'serving'
-      const response = await apiFetch(`/bookings/${bookingId}`, 'PATCH', {
+      const response = await providerClient.apiFetch(`/bookings/${bookingId}`, 'PATCH', {
         body: JSON.stringify({ status: 'serving' }),
       });
 
@@ -87,7 +86,7 @@ export function BookingTransitScreen() {
       }
 
       // Notify seeker via WebSocket
-      chatSocket.notifyArrival(bookingId);
+      providerClient.notifyArrival(bookingId);
 
       // Navigate to TransactionServing screen
       navigation.replace('TransactionServing', {

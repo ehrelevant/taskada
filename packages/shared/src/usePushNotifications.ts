@@ -3,8 +3,6 @@ import * as Notifications from 'expo-notifications';
 import { Platform } from 'react-native';
 import { useEffect } from 'react';
 
-import { API_URL } from './env';
-
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -22,13 +20,14 @@ export interface PushNotificationData {
 }
 
 export function usePushNotifications(
+  baseUrl: string,
   authCookie?: string,
   onNotificationReceived?: (notification: Notifications.Notification) => void,
   onNotificationResponse?: (response: Notifications.NotificationResponse) => void,
 ) {
   useEffect(() => {
     if (authCookie) {
-      registerForPushNotificationsAsync(authCookie);
+      registerForPushNotificationsAsync(baseUrl, authCookie);
     }
 
     const notificationListener = Notifications.addNotificationReceivedListener(notification => {
@@ -45,10 +44,10 @@ export function usePushNotifications(
       notificationListener.remove();
       responseListener.remove();
     };
-  }, [authCookie, onNotificationReceived, onNotificationResponse]);
+  }, [baseUrl, authCookie, onNotificationReceived, onNotificationResponse]);
 }
 
-async function registerForPushNotificationsAsync(authCookie: string) {
+async function registerForPushNotificationsAsync(baseUrl: string, authCookie: string) {
   if (!Device.isDevice) {
     console.log('Push notifications are not available on simulator');
     return;
@@ -73,7 +72,7 @@ async function registerForPushNotificationsAsync(authCookie: string) {
 
     console.log('Expo push token:', token);
 
-    await registerTokenWithServer(token, authCookie);
+    await registerTokenWithServer(baseUrl, token, authCookie);
 
     if (Platform.OS === 'android') {
       await Notifications.setNotificationChannelAsync('default', {
@@ -88,10 +87,10 @@ async function registerForPushNotificationsAsync(authCookie: string) {
   }
 }
 
-async function registerTokenWithServer(token: string, authCookie: string) {
+async function registerTokenWithServer(baseUrl: string, token: string, authCookie: string) {
   try {
     const platform = Platform.OS;
-    const response = await fetch(`${API_URL}/push-notifications/register`, {
+    const response = await fetch(`${baseUrl}/push-notifications/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -110,9 +109,9 @@ async function registerTokenWithServer(token: string, authCookie: string) {
   }
 }
 
-export async function unregisterPushToken(token: string, authCookie: string) {
+export async function unregisterPushToken(baseUrl: string, token: string, authCookie: string) {
   try {
-    const response = await fetch(`${API_URL}/push-notifications/unregister`, {
+    const response = await fetch(`${baseUrl}/push-notifications/unregister`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',

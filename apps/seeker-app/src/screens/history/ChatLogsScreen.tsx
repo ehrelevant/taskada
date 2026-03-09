@@ -1,11 +1,11 @@
 import { ActivityIndicator, FlatList, Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { apiFetch } from '@lib/helpers';
 import { ChevronLeft } from 'lucide-react-native';
 import { colors, spacing } from '@repo/theme';
 import { ImageViewer, Typography } from '@repo/components';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { seekerClient } from '@lib/seekerClient';
 import { TransactionHistoryStackParamList } from '@navigation/TransactionHistoryStack';
 import { useEffect, useState } from 'react';
 
@@ -43,7 +43,7 @@ export function ChatLogsScreen() {
   const loadChatLogs = async () => {
     try {
       setIsLoading(true);
-      const response = await apiFetch(`/bookings/${bookingId}/chat-logs`, 'GET');
+      const response = await seekerClient.apiFetch(`/bookings/${bookingId}/chat-logs`, 'GET');
 
       if (!response.ok) {
         throw new Error('Failed to load chat logs');

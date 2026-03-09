@@ -1,9 +1,9 @@
 import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native';
-import { apiFetch } from '@lib/helpers';
 import { Avatar, Button, Card, Typography } from '@repo/components';
 import { colors, palette, spacing } from '@repo/theme';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { seekerClient } from '@lib/seekerClient';
 import { TransactionHistoryStackParamList } from '@navigation/TransactionHistoryStack';
 import { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
@@ -41,7 +41,7 @@ export function TransactionHistoryListScreen() {
   const loadBookingHistory = async () => {
     try {
       setIsLoading(true);
-      const response = await apiFetch('/bookings/history', 'GET');
+      const response = await seekerClient.apiFetch('/bookings/history', 'GET');
 
       if (!response.ok) {
         throw new Error('Failed to load booking history');

@@ -1,23 +1,11 @@
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import {
-  ActivityIndicator,
-  Alert,
-  KeyboardAvoidingView,
-  Modal,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import { apiFetch } from '@lib/helpers';
+import { ActivityIndicator, Alert, KeyboardAvoidingView, Modal, Platform, ScrollView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { ArrowLeft } from 'lucide-react-native';
 import { authClient } from '@lib/authClient';
 import { Button, Typography } from '@repo/components';
-import { chatSocket, connectChatSocket } from '@repo/shared';
 import { colors, spacing } from '@repo/theme';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { providerClient } from '@lib/providerClient';
 import { RequestsStackParamList } from '@navigation/RequestsStack';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -48,10 +36,10 @@ export function FinalizeDetailsScreen() {
       const userId = session.data?.user?.id;
       if (!userId) return;
 
-      await connectChatSocket(authClient, userId, 'provider');
-      chatSocket.joinBooking(bookingId);
+      await providerClient.connectChat(authClient.getCookie(), userId, 'provider');
+      providerClient.joinBooking(bookingId);
 
-      chatSocket.onProposalDeclined(data => {
+      providerClient.onProposalDeclined(data => {
         if (data.bookingId === bookingId) {
           setShowWaitingModal(false);
           Alert.alert(
@@ -74,7 +62,7 @@ export function FinalizeDetailsScreen() {
         }
       });
 
-      chatSocket.onProposalAccepted(data => {
+      providerClient.onProposalAccepted(data => {
         if (data.bookingId === bookingId) {
           setShowWaitingModal(false);
           navigation.replace('BookingTransit', {
@@ -89,9 +77,9 @@ export function FinalizeDetailsScreen() {
     setupSocket();
 
     return () => {
-      chatSocket.leaveBooking(bookingId);
-      chatSocket.removeAllListeners();
-      chatSocket.disconnect();
+      providerClient.leaveBooking(bookingId);
+      providerClient.removeAllListeners();
+      providerClient.disconnectChat();
     };
   }, [showWaitingModal, bookingId, otherUser, requestId, seekerLocation, navigation]);
 
@@ -103,7 +91,7 @@ export function FinalizeDetailsScreen() {
     setIsSubmitting(true);
 
     try {
-      const response = await apiFetch(`/bookings/${bookingId}/proposal`, 'PATCH', {
+      const response = await providerClient.apiFetch(`/bookings/${bookingId}/proposal`, 'PATCH', {
         body: JSON.stringify({
           cost: parseFloat(serviceCost),
           specifications: serviceSpecifications,

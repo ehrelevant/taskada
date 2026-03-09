@@ -1,12 +1,12 @@
 import { authClient } from '@lib/authClient';
 import { Avatar, Rating, Typography } from '@repo/components';
-import { chatSocket, connectChatSocket } from '@repo/shared';
 import { colors, spacing } from '@repo/theme';
 import { HomeStackParamList } from '@navigation/HomeStack';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView, StyleSheet, View } from 'react-native';
+import { seekerClient } from '@lib/seekerClient';
 import { useEffect, useState } from 'react';
 
 type BookingTransitRouteProp = RouteProp<HomeStackParamList, 'BookingTransit'>;
@@ -29,16 +29,16 @@ export function BookingTransitScreen() {
       const userId = session.data?.user?.id;
       if (!userId || !bookingId) return;
 
-      await connectChatSocket(authClient, userId, 'seeker');
-      chatSocket.joinBooking(bookingId);
+      await seekerClient.connectChat(authClient.getCookie(), userId, 'seeker');
+      seekerClient.joinBooking(bookingId);
 
-      chatSocket.onProviderArrived(data => {
+      seekerClient.onProviderArrived(data => {
         if (data.bookingId === bookingId) {
           setHasProviderArrived(true);
         }
       });
 
-      chatSocket.onBookingCompleted(data => {
+      seekerClient.onBookingCompleted(data => {
         if (data.bookingId === bookingId) {
           // Navigate to BookingComplete screen
           navigation.replace('BookingComplete', {
@@ -55,9 +55,9 @@ export function BookingTransitScreen() {
 
     return () => {
       if (bookingId) {
-        chatSocket.leaveBooking(bookingId);
-        chatSocket.removeAllListeners();
-        chatSocket.disconnect();
+        seekerClient.leaveBooking(bookingId);
+        seekerClient.removeAllListeners();
+        seekerClient.disconnectChat();
       }
     };
   }, [bookingId, cost, navigation, providerInfo, serviceTypeName]);

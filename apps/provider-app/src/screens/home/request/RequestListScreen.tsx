@@ -1,10 +1,9 @@
-import { apiFetch } from '@lib/helpers';
 import { authClient } from '@lib/authClient';
 import { BottomActionBar, Button, EmptyState, Header, ScreenContainer } from '@repo/components';
-import { connectMatchingSocket, matchingSocket } from '@repo/shared';
 import { FlatList, View } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Provider } from '@repo/database';
+import { providerClient } from '@lib/providerClient';
 import { RequestListing } from '@repo/components';
 import { RequestsStackParamList } from '@navigation/RequestsStack';
 import { useEffect, useState } from 'react';
@@ -48,7 +47,7 @@ export function RequestListScreen() {
 
     const loadProviderState = async () => {
       try {
-        const response = await apiFetch(`/providers`, 'GET');
+        const response = await providerClient.apiFetch(`/providers`, 'GET');
         const providerData: Provider = await response.json();
 
         if (isMounted) {
@@ -68,7 +67,7 @@ export function RequestListScreen() {
 
     return () => {
       isMounted = false;
-      matchingSocket.disconnect();
+      providerClient.disconnectMatching();
     };
   }, []);
 
@@ -85,10 +84,10 @@ export function RequestListScreen() {
       const userId = session.data.user.id;
 
       // Connect to WebSocket
-      await connectMatchingSocket(authClient, userId, 'provider');
+      await providerClient.connectMatching(authClient.getCookie(), userId, 'provider');
 
       // Get provider's enabled services to join rooms
-      const servicesResponse = await apiFetch('/services/my-services', 'GET');
+      const servicesResponse = await providerClient.apiFetch('/services/my-services', 'GET');
       const services = await servicesResponse.json();
 
       type ServiceWithType = {
@@ -107,12 +106,12 @@ export function RequestListScreen() {
       console.log('Service IDs:', serviceIds);
 
       if (serviceTypeIds.length > 0) {
-        await matchingSocket.joinProviderRooms(serviceTypeIds);
+        await providerClient.joinProviderRooms(serviceTypeIds);
       }
 
       // Fetch existing pending requests before setting up listeners
       if (serviceTypeIds.length > 0 || serviceIds.length > 0) {
-        const pendingResponse = await apiFetch(
+        const pendingResponse = await providerClient.apiFetch(
           `/requests/pending?serviceTypeIds=${serviceTypeIds.join(',')}&serviceIds=${serviceIds.join(',')}`,
           'GET',
         );
@@ -125,7 +124,7 @@ export function RequestListScreen() {
       }
 
       // Set up event listeners
-      matchingSocket.onNewRequest((request: unknown) => {
+      providerClient.onNewRequest((request: unknown) => {
         const typedRequest = request as IncomingRequest;
         setRequests(prev => {
           // Check if request already exists
@@ -136,11 +135,11 @@ export function RequestListScreen() {
         });
       });
 
-      matchingSocket.onRequestRemoved((data: { requestId: string }) => {
+      providerClient.onRequestRemoved((data: { requestId: string }) => {
         setRequests(prev => prev.filter(r => r.id !== data.requestId));
       });
 
-      matchingSocket.onError(error => {
+      providerClient.onMatchingError(error => {
         console.error('Socket error:', error);
       });
     } catch (error) {
@@ -153,7 +152,7 @@ export function RequestListScreen() {
   const disconnectWebSocket = async () => {
     try {
       // Get provider's services to leave rooms
-      const servicesResponse = await apiFetch('/services/my-services', 'GET');
+      const servicesResponse = await providerClient.apiFetch('/services/my-services', 'GET');
       const services = await servicesResponse.json();
 
       const serviceTypeIds: string[] = [
@@ -161,10 +160,9 @@ export function RequestListScreen() {
       ];
 
       if (serviceTypeIds.length > 0) {
-        await matchingSocket.leaveProviderRooms(serviceTypeIds);
+        await providerClient.leaveProviderRooms(serviceTypeIds);
       }
-
-      matchingSocket.disconnect();
+      providerClient.disconnectMatching();
     } catch (error) {
       console.error('Failed to disconnect WebSocket:', error);
     }
@@ -172,7 +170,7 @@ export function RequestListScreen() {
 
   const enableRequests = async () => {
     try {
-      const response = await apiFetch(`/providers/enable`, 'PUT');
+      const response = await providerClient.apiFetch(`/providers/enable`, 'PUT');
       const { isAccepting: newIsAccepting }: Provider = await response.json();
       setIsAccepting(newIsAccepting);
 
@@ -186,7 +184,7 @@ export function RequestListScreen() {
 
   const disableRequests = async () => {
     try {
-      const response = await apiFetch(`/providers/disable`, 'PUT');
+      const response = await providerClient.apiFetch(`/providers/disable`, 'PUT');
       const { isAccepting: newIsAccepting }: Provider = await response.json();
       setIsAccepting(newIsAccepting);
 

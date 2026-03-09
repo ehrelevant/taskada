@@ -1,8 +1,8 @@
 import { ActivityIndicator, Image, ScrollView, StyleSheet, View } from 'react-native';
-import { apiFetch } from '@lib/helpers';
 import { Avatar, Button, Card, Typography } from '@repo/components';
 import { colors, spacing } from '@repo/theme';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { providerClient } from '@lib/providerClient';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { TransactionHistoryStackParamList } from '@navigation/TransactionHistoryStack';
@@ -51,7 +51,7 @@ export function RequestDetailsSummaryScreen() {
   const loadRequestDetails = async () => {
     try {
       setIsLoading(true);
-      const response = await apiFetch(`/bookings/${bookingId}/request-details`, 'GET');
+      const response = await providerClient.apiFetch(`/bookings/${bookingId}/request-details`, 'GET');
 
       if (!response.ok) {
         throw new Error('Failed to load request details');

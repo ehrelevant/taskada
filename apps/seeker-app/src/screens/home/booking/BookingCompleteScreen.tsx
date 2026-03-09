@@ -1,21 +1,11 @@
-import {
-  ActivityIndicator,
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import { apiFetch } from '@lib/helpers';
+import { ActivityIndicator, Alert, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { Avatar, Button, Rating, StarRatingInput, Typography } from '@repo/components';
 import { colors, spacing } from '@repo/theme';
 import { HomeStackParamList } from '@navigation/HomeStack';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { seekerClient } from '@lib/seekerClient';
 import { useEffect, useState } from 'react';
 import { X } from 'lucide-react-native';
 
@@ -49,7 +39,7 @@ export function BookingCompleteScreen() {
   useEffect(() => {
     const fetchBookingDetails = async () => {
       try {
-        const response = await apiFetch(`/bookings/${bookingId}`, 'GET');
+        const response = await seekerClient.apiFetch(`/bookings/${bookingId}`, 'GET');
         if (response.ok) {
           const data = await response.json();
           setBookingData(data);
@@ -89,7 +79,7 @@ export function BookingCompleteScreen() {
       const serviceId = bookingData.serviceId;
 
       // Submit review
-      const response = await apiFetch('/reviews', 'POST', {
+      const response = await seekerClient.apiFetch('/reviews', 'POST', {
         body: JSON.stringify({
           serviceId,
           bookingId,

@@ -1,14 +1,13 @@
 import * as ImagePicker from 'expo-image-picker';
-import { apiFetch } from '@lib/helpers';
 import { authClient } from '@lib/authClient';
 import { Avatar, Button, Input, Typography } from '@repo/components';
 import { Camera, Eye, EyeOff, X } from 'lucide-react-native';
 import { colors } from '@repo/theme';
-import { deleteAvatar, uploadAvatar } from '@repo/shared';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { OptionsStackParamList } from '@navigation/OptionsStack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { seekerClient } from '@lib/seekerClient';
 import { useEffect, useState } from 'react';
 import { useLoading } from '@repo/shared';
 
@@ -68,7 +67,8 @@ export function ProfileScreen({ navigation }: ProfileScreenProps) {
 
   useEffect(() => {
     if (userSession?.user) {
-      apiFetch('/users/profile', 'GET')
+      seekerClient
+        .apiFetch('/users/profile', 'GET')
         .then(res => res.json())
         .then(data => {
           const profileData = {
@@ -111,7 +111,7 @@ export function ProfileScreen({ navigation }: ProfileScreenProps) {
     if (!result.canceled && result.assets[0]) {
       setLoading(true);
       try {
-        const uploaded = await uploadAvatar(authClient, result.assets[0].uri);
+        const uploaded = await seekerClient.uploadAvatar(result.assets[0].uri);
         setProfileData(prev => ({ ...prev, avatarUrl: uploaded.avatarUrl }));
       } catch (error) {
         console.error('Failed to upload avatar:', error);
@@ -127,7 +127,7 @@ export function ProfileScreen({ navigation }: ProfileScreenProps) {
 
     setLoading(true);
     try {
-      await deleteAvatar(authClient);
+      await seekerClient.deleteAvatar();
       setProfileData(prev => ({ ...prev, avatarUrl: '' }));
     } catch (error) {
       console.error('Failed to remove avatar:', error);
@@ -187,12 +187,12 @@ export function ProfileScreen({ navigation }: ProfileScreenProps) {
         avatarUrl: profileData.avatarUrl,
       };
 
-      await apiFetch('/users/profile', 'PUT', {
+      await seekerClient.apiFetch('/users/profile', 'PUT', {
         body: JSON.stringify(profileUpdateData),
       });
 
       if (passwordData.oldPassword && passwordData.newPassword) {
-        await apiFetch('/users/password', 'PUT', {
+        await seekerClient.apiFetch('/users/password', 'PUT', {
           body: JSON.stringify({
             oldPassword: passwordData.oldPassword,
             newPassword: passwordData.newPassword,

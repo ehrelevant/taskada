@@ -1,13 +1,12 @@
 import { ActivityIndicator, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { authClient } from '@lib/authClient';
 import { Avatar, Button, Rating, ReviewCard, Typography } from '@repo/components';
 import { Check } from 'lucide-react-native';
 import { colors, spacing } from '@repo/theme';
-import { getServiceDetails, getServiceReviews } from '@repo/shared';
 import { HomeStackParamList } from '@navigation/HomeStack';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { Review, ServiceDetails } from '@repo/types';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { seekerClient } from '@lib/seekerClient';
 import { useEffect, useState } from 'react';
 
 type ServiceDetailsRouteProp = RouteProp<
@@ -29,8 +28,8 @@ export function ServiceDetailsScreen() {
     async function loadData() {
       try {
         const [detailsData, reviewsData] = await Promise.all([
-          getServiceDetails(authClient, serviceId),
-          getServiceReviews(authClient, serviceId),
+          seekerClient.getServiceDetails(serviceId),
+          seekerClient.getServiceReviews(serviceId),
         ]);
         setDetails(detailsData);
         setReviews(reviewsData);

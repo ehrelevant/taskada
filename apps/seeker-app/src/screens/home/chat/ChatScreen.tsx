@@ -1,9 +1,7 @@
 import * as ImagePicker from 'expo-image-picker';
 import { ActivityIndicator, Alert, FlatList, Image, ScrollView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
-import { apiFetch } from '@lib/helpers';
 import { authClient } from '@lib/authClient';
 import { Avatar, ImageViewer, Typography } from '@repo/components';
-import { chatSocket, connectChatSocket, uploadMessageImages } from '@repo/shared';
 import { colors, spacing } from '@repo/theme';
 import { HomeStackParamList } from '@navigation/HomeStack';
 import { Image as ImageIcon, Send, X } from 'lucide-react-native';
@@ -12,6 +10,7 @@ import type { Message } from '@repo/shared';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { seekerClient } from '@lib/seekerClient';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 type ChatRouteProp = RouteProp<HomeStackParamList, 'Chat'>;
@@ -51,7 +50,10 @@ export function ChatScreen() {
   const loadMessages = useCallback(
     async (loadOffset = 0) => {
       try {
-        const response = await apiFetch(`/bookings/${bookingId}/messages?limit=50&offset=${loadOffset}`, 'GET');
+        const response = await seekerClient.apiFetch(
+          `/bookings/${bookingId}/messages?limit=50&offset=${loadOffset}`,
+          'GET',
+        );
         if (response.ok) {
           const data = await response.json();
           if (loadOffset === 0) {
@@ -85,10 +87,10 @@ export function ChatScreen() {
     // Connect socket
     const setupSocket = async () => {
       if (!currentUserId) return;
-      await connectChatSocket(authClient, currentUserId, 'seeker');
-      chatSocket.joinBooking(bookingId);
+      await seekerClient.connectChat(authClient.getCookie(), currentUserId, 'seeker');
+      seekerClient.joinBooking(bookingId);
 
-      chatSocket.onNewMessage(message => {
+      seekerClient.onNewMessage(message => {
         setMessages(prev => [...prev, message]);
         // Scroll to bottom
         setTimeout(() => {
@@ -96,20 +98,20 @@ export function ChatScreen() {
         }, 100);
       });
 
-      chatSocket.onTyping(data => {
+      seekerClient.onTyping(data => {
         if (data.userId !== currentUserId) {
           setIsTyping(data.isTyping);
         }
       });
 
-      chatSocket.onBookingDeclined(data => {
+      seekerClient.onBookingDeclined(data => {
         if (data.bookingId === bookingId) {
-          // Navigate back to standby screen
-          navigation.replace('Standby', { requestId });
+          Alert.alert('Booking Declined', 'The provider has declined the booking.');
+          navigation.goBack();
         }
       });
 
-      chatSocket.onProposalSubmitted(data => {
+      seekerClient.onProposalSubmitted(data => {
         if (data.bookingId === bookingId) {
           // Navigate to ViewProposal screen
           navigation.navigate('ViewProposal', {
@@ -125,9 +127,9 @@ export function ChatScreen() {
     setupSocket();
 
     return () => {
-      chatSocket.leaveBooking(bookingId);
-      chatSocket.removeAllListeners();
-      chatSocket.disconnect();
+      seekerClient.leaveBooking(bookingId);
+      seekerClient.removeAllListeners();
+      seekerClient.disconnectChat();
     };
   }, [bookingId, currentUserId, navigation, providerInfo, requestId, session.data]);
 
@@ -142,11 +144,11 @@ export function ChatScreen() {
       let imageKeys: string[] = [];
 
       if (selectedImages.length > 0) {
-        imageKeys = await uploadMessageImages(authClient, bookingId, selectedImages);
+        imageKeys = await seekerClient.uploadMessageImages(bookingId, selectedImages);
         setSelectedImages([]);
       }
 
-      chatSocket.sendMessage(bookingId, messageText, imageKeys);
+      seekerClient.sendMessage(bookingId, messageText, imageKeys);
     } catch (error) {
       console.error('Failed to send message:', error);
     } finally {

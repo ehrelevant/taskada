@@ -1,14 +1,13 @@
 import { KeyboardProvider } from 'react-native-keyboard-controller';
-import { LoadingProvider } from '@repo/shared';
-import { queryClient } from '@repo/shared';
+import { LoadingProvider, queryClient } from '@repo/shared';
 import { QueryClientProvider } from 'react-query';
 import { RootNavigator } from '@navigation/RootNavigator';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { usePushNotifications } from '@repo/shared';
 
 export default function App() {
   // Initialize push notifications
-  usePushNotifications();
+  // TODO: Re-add Push notifications
+  // usePushNotifications(API_URL);
 
   return (
     <QueryClientProvider client={queryClient}>

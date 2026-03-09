@@ -1,5 +1,4 @@
 import { ActivityIndicator, Alert, ScrollView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
-import { apiFetch } from '@lib/helpers';
 import { authClient } from '@lib/authClient';
 import { Avatar, Button, Card, Rating, ReviewCard, StarRatingInput, Typography } from '@repo/components';
 import { ChevronLeft } from 'lucide-react-native';
@@ -8,6 +7,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Review } from '@repo/types';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { seekerClient } from '@lib/seekerClient';
 import { TransactionHistoryStackParamList } from '@navigation/TransactionHistoryStack';
 import { useEffect, useState } from 'react';
 
@@ -68,7 +68,7 @@ export function TransactionDetailsScreen() {
   useEffect(() => {
     const fetchTransaction = async () => {
       try {
-        const response = await apiFetch(`/bookings/${bookingId}`, 'GET');
+        const response = await seekerClient.apiFetch(`/bookings/${bookingId}`, 'GET');
         if (response.ok) {
           const data = await response.json();
           setTransaction(data);
@@ -92,7 +92,7 @@ export function TransactionDetailsScreen() {
 
       try {
         setIsLoadingReviews(true);
-        const response = await apiFetch(`/services/${transaction.serviceId}/reviews`, 'GET');
+        const response = await seekerClient.apiFetch(`/services/${transaction.serviceId}/reviews`, 'GET');
         if (response.ok) {
           const data = await response.json();
           setReviews(data);
@@ -144,7 +144,7 @@ export function TransactionDetailsScreen() {
 
     setIsSubmitting(true);
     try {
-      const response = await apiFetch('/reviews', 'POST', {
+      const response = await seekerClient.apiFetch('/reviews', 'POST', {
         body: JSON.stringify({
           serviceId: transaction.serviceId,
           bookingId,
