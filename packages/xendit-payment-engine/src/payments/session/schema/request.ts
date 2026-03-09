@@ -2,8 +2,8 @@ import * as v from 'valibot';
 import { CustomerIdFieldSchema } from '@customer/schema';
 import { MetadataSchema } from '@standard/schema';
 
-import { CustomerDetailsSchema } from './customer';
 import { ItemSchema } from './item';
+import { SessionCustomerDetailsSchema } from './customer';
 
 export const CreateSessionRequestSchema = v.pipe(
   v.object({
@@ -16,7 +16,7 @@ export const CreateSessionRequestSchema = v.pipe(
       ),
     ),
     customer_id: CustomerIdFieldSchema,
-    customer: v.pipe(CustomerDetailsSchema, v.description('Customer details object for the payment session.')),
+    customer: v.pipe(SessionCustomerDetailsSchema, v.description('Customer details object for the payment session.')),
     session_type: v.pipe(
       v.picklist(['SAVE', 'PAY']),
       v.description(

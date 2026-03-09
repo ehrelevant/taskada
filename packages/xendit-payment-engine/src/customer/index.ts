@@ -74,3 +74,4 @@ async function update_customer(request: UpdateCustomerRequest): Promise<Customer
 }
 
 export { get_customer, get_customer_list, create_customer, update_customer };
+export * from './types';

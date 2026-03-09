@@ -1,6 +1,6 @@
 import * as v from 'valibot';
 
-export const IndividualDetailSchema = v.object({
+export const SessionIndividualDetailSchema = v.object({
   given_names: v.pipe(
     v.string(),
     v.regex(/^[a-zA-Z]{1,50}$/),

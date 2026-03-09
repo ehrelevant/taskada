@@ -2,7 +2,7 @@ import * as v from 'valibot';
 
 import { MetadataSchema } from '@standard/schema';
 
-export const CustomerDetailsSchema = v.object({
+export const SessionCustomerDetailsSchema = v.object({
   type: v.pipe(v.picklist(['INDIVIDUAL']), v.description('Type of customer.')),
   reference_id: v.pipe(
     v.string(),

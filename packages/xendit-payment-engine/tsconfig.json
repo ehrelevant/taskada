@@ -3,13 +3,13 @@
   "compilerOptions": {
     // File Layout
     // "rootDir": "./src",
-    "outDir": "dist",
+    "outDir": "./dist",
 
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
     "module": "esnext",
     "target": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "types": ["node", "jest"],
     // For nodejs:
     // "lib": ["esnext"],

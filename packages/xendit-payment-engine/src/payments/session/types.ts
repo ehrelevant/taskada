@@ -1,23 +1,13 @@
-import type z from 'zod';
+import * as v from 'valibot';
 
-import {
-  CancelSessionRequestSchema,
-  ChannelPropertiesPaySchema,
-  ChannelPropertiesSaveSchema,
-  CreateSessionRequestSchema,
-  CustomerDetailsSchema,
-  GetSessionStatusRequestSchema,
-  IndividualDetailSchema,
-  ItemSchema,
-  SessionResponseSchema,
-} from './schema';
+import { CancelSessionRequestSchema, ChannelPropertiesPaySchema, ChannelPropertiesSaveSchema, CreateSessionRequestSchema, GetSessionStatusRequestSchema, ItemSchema, SessionCustomerDetailsSchema, SessionIndividualDetailSchema, SessionResponseSchema } from './schema';
 
-export type Customer = z.infer<typeof CustomerDetailsSchema>;
-export type IndividualDetail = z.infer<typeof IndividualDetailSchema>;
-export type CreateSessionRequest = z.infer<typeof CreateSessionRequestSchema>;
-export type Item = z.infer<typeof ItemSchema>;
-export type CancelSessionRequest = z.infer<typeof CancelSessionRequestSchema>;
-export type ChannelPropertiesPay = z.infer<typeof ChannelPropertiesPaySchema>;
-export type ChannelPropertiesSave = z.infer<typeof ChannelPropertiesSaveSchema>;
-export type GetSessionStatusRequest = z.infer<typeof GetSessionStatusRequestSchema>;
-export type SessionResponse = z.infer<typeof SessionResponseSchema>;
+export type SessionCustomer = v.InferInput<typeof SessionCustomerDetailsSchema>;
+export type SessionIndividualDetail = v.InferInput<typeof SessionIndividualDetailSchema>;
+export type CreateSessionRequest = v.InferInput<typeof CreateSessionRequestSchema>;
+export type Item = v.InferInput<typeof ItemSchema>;
+export type CancelSessionRequest = v.InferInput<typeof CancelSessionRequestSchema>;
+export type ChannelPropertiesPay = v.InferInput<typeof ChannelPropertiesPaySchema>;
+export type ChannelPropertiesSave = v.InferInput<typeof ChannelPropertiesSaveSchema>;
+export type GetSessionStatusRequest = v.InferInput<typeof GetSessionStatusRequestSchema>;
+export type SessionResponse = v.InferInput<typeof SessionResponseSchema>;
