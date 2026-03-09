@@ -15,7 +15,7 @@
     "fmt": "prettier --experimental-cli --check .",
     "fmt:fix": "prettier --experimental-cli --write .",
     "style": "pnpm fmt:fix && pnpm lint:fix",
-    "build": "tsup src/index.ts src/client.ts",
+    "build": "tsup",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "test:watch": "pnpm test --watch",
     "test:cov": "pnpm test --coverage"

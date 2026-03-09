@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { type BookingStatus } from '@repo/database';
+import type { BookingStatus } from '@repo/database';
 
 export class UpdateBookingSwaggerDto {
   @ApiProperty({
