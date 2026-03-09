@@ -88,8 +88,8 @@ export function BookingTransitScreen() {
       // Notify seeker via WebSocket
       providerClient.notifyArrival(bookingId);
 
-      // Navigate to TransactionServing screen
-      navigation.replace('TransactionServing', {
+      // Navigate to BookingServing screen
+      navigation.replace('BookingServing', {
         bookingId,
       });
     } catch (error) {

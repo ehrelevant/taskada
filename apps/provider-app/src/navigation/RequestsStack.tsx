@@ -1,13 +1,12 @@
 import { BookingDetailsScreen } from '@screens/home/booking/BookingDetailsScreen';
+import { BookingDoneScreen } from '@screens/home/booking/BookingDoneScreen';
+import { BookingServingScreen } from '@screens/home/booking/BookingServingScreen';
 import { BookingTransitScreen } from '@screens/home/booking/BookingTransitScreen';
 import { ChatScreen } from '@screens/home/chat/ChatScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { FinalizeDetailsScreen } from '@screens/home/booking/FinalizeDetailsScreen';
 import { RequestDetailsScreen } from '@screens/home/request/RequestDetailsScreen';
 import { RequestListScreen } from '@screens/home/request/RequestListScreen';
-import { TransactionDoneScreen } from '@screens/home/transaction/TransactionDoneScreen';
-import { TransactionServingScreen } from '@screens/home/transaction/TransactionServingScreen';
-import { TransactionTransitScreen } from '@screens/home/transaction/TransactionTransitScreen';
 
 export type RequestsStackParamList = {
   Home: undefined;
@@ -41,9 +40,8 @@ export type RequestsStackParamList = {
     };
     requestId: string;
   };
-  TransactionTransit: { bookingId: string };
-  TransactionServing: { bookingId: string };
-  TransactionDone: { bookingId: string };
+  BookingDone: { bookingId: string };
+  BookingServing: { bookingId: string };
   BookingTransit: {
     bookingId: string;
     seekerLocation: {
@@ -103,25 +101,18 @@ export function RequestsStack() {
         }}
       />
       <Stack.Screen
-        name="TransactionTransit"
-        component={TransactionTransitScreen}
+        name="BookingServing"
+        component={BookingServingScreen}
         options={{
-          title: 'Transaction Transit',
-        }}
-      />
-      <Stack.Screen
-        name="TransactionServing"
-        component={TransactionServingScreen}
-        options={{
-          title: 'Transaction Serving',
+          title: 'Serving',
           headerShown: false,
         }}
       />
       <Stack.Screen
-        name="TransactionDone"
-        component={TransactionDoneScreen}
+        name="BookingDone"
+        component={BookingDoneScreen}
         options={{
-          title: 'Transaction Done',
+          title: 'Completed',
           headerShown: false,
         }}
       />

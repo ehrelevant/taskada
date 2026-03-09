@@ -1,4 +1,4 @@
-import { ActivityIndicator, Alert, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { colors, spacing } from '@repo/theme';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { providerClient } from '@lib/providerClient';
@@ -8,33 +8,36 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Typography } from '@repo/components';
 import { useEffect, useState } from 'react';
 
-type TransactionServingRouteProp = RouteProp<RequestsStackParamList, 'TransactionServing'>;
-type TransactionServingNavigationProp = NativeStackNavigationProp<RequestsStackParamList, 'TransactionServing'>;
+type BookingDoneRouteProp = RouteProp<RequestsStackParamList, 'BookingDone'>;
+type BookingDoneNavigationProp = NativeStackNavigationProp<RequestsStackParamList, 'BookingDone'>;
 
 interface BookingDetails {
   id: string;
   status: string;
   cost: number;
-  specifications: string | null;
+  serviceId: string;
   provider: {
     id: string;
     firstName: string;
     lastName: string;
     avatarUrl: string | null;
   } | null;
+  service: {
+    id: string;
+    serviceType: {
+      name: string;
+    } | null;
+  } | null;
 }
 
-export function TransactionServingScreen() {
-  const route = useRoute<TransactionServingRouteProp>();
-  const navigation = useNavigation<TransactionServingNavigationProp>();
+export function BookingDoneScreen() {
+  const route = useRoute<BookingDoneRouteProp>();
+  const navigation = useNavigation<BookingDoneNavigationProp>();
   const { bookingId } = route.params;
 
   const [bookingDetails, setBookingDetails] = useState<BookingDetails | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isPaid, setIsPaid] = useState(false);
-  const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
 
-  // Fetch booking details
   useEffect(() => {
     const fetchBookingDetails = async () => {
       try {
@@ -47,7 +50,6 @@ export function TransactionServingScreen() {
         }
       } catch (error) {
         console.error('Error fetching booking details:', error);
-        Alert.alert('Error', 'Failed to load booking details');
       } finally {
         setIsLoading(false);
       }
@@ -56,34 +58,8 @@ export function TransactionServingScreen() {
     fetchBookingDetails();
   }, [bookingId]);
 
-  const handlePaidPress = async () => {
-    if (isUpdatingStatus) return;
-
-    setIsUpdatingStatus(true);
-
-    try {
-      // Update booking status to 'completed'
-      const response = await providerClient.apiFetch(`/bookings/${bookingId}`, 'PATCH', {
-        body: JSON.stringify({ status: 'completed' }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to update booking status');
-      }
-
-      setIsPaid(true);
-
-      // Emit booking completed event via websocket
-      providerClient.notifyBookingCompleted(bookingId);
-
-      // Navigate to TransactionDone screen
-      navigation.navigate('TransactionDone', { bookingId });
-    } catch (error) {
-      console.error('Error updating status:', error);
-      Alert.alert('Error', 'Failed to update status. Please try again.');
-    } finally {
-      setIsUpdatingStatus(false);
-    }
+  const handleReturn = () => {
+    navigation.navigate('RequestList');
   };
 
   const handleViewDetails = () => {
@@ -109,43 +85,27 @@ export function TransactionServingScreen() {
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.centeredContent}>
-          {/* Header */}
           <View style={styles.header}>
-            <Typography variant="h5" style={styles.headerTitle}>
-              Currently Serving!
+            <Typography variant="h4" style={styles.headerTitle}>
+              Well Done, Provider!
             </Typography>
           </View>
 
-          {/* Instruction Text */}
-          <View style={styles.instructionContainer}>
-            <Typography variant="body1" style={styles.instructionText}>
-              Please click the Paid button below if the seeker gave cash payment to you.
+          <View style={styles.messageContainer}>
+            <Typography variant="body1" style={styles.messageText}>
+              You successfully completed this service. You may go back to the requests list.
             </Typography>
           </View>
 
-          {/* Large Circular PAID/DONE Button */}
           <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              onPress={handlePaidPress}
-              disabled={isPaid || isUpdatingStatus}
-              style={[
-                styles.circularButton,
-                isPaid && styles.doneButton,
-                (isPaid || isUpdatingStatus) && styles.disabledButton,
-              ]}
-            >
-              {isUpdatingStatus ? (
-                <ActivityIndicator size="large" color={colors.textInverse} />
-              ) : (
-                <Typography variant="h4" style={styles.buttonText}>
-                  {isPaid ? 'DONE' : 'PAID'}
-                </Typography>
-              )}
+            <TouchableOpacity onPress={handleReturn} style={styles.circularButton}>
+              <Typography variant="h4" style={styles.buttonText}>
+                Return
+              </Typography>
             </TouchableOpacity>
           </View>
         </View>
 
-        {/* Bottom Section - Service Info */}
         <View style={styles.bottomSection}>
           <View style={styles.infoRow}>
             <View style={styles.infoItem}>
@@ -153,7 +113,7 @@ export function TransactionServingScreen() {
                 Service Type
               </Typography>
               <Typography variant="body1" weight="medium">
-                {bookingDetails?.provider?.firstName || 'Service'}
+                {bookingDetails?.service?.serviceType?.name || 'Service'}
               </Typography>
             </View>
             <View style={styles.infoItem}>
@@ -166,7 +126,6 @@ export function TransactionServingScreen() {
             </View>
           </View>
 
-          {/* View Booking Details Button */}
           <TouchableOpacity onPress={handleViewDetails} style={styles.detailsButton}>
             <Typography variant="body1" style={styles.detailsButtonText}>
               View Booking Details
@@ -206,24 +165,28 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     textAlign: 'center',
+    color: colors.actionPrimary,
+    fontWeight: '700',
   },
-  instructionContainer: {
+  messageContainer: {
     alignItems: 'center',
     marginBottom: spacing.xl,
     paddingHorizontal: spacing.m,
   },
-  instructionText: {
+  messageText: {
     textAlign: 'center',
     lineHeight: 24,
+    color: colors.textSecondary,
   },
   buttonContainer: {
     alignItems: 'center',
+    marginTop: spacing.l,
   },
   circularButton: {
     width: 140,
     height: 140,
     borderRadius: 70,
-    backgroundColor: colors.actionPrimary,
+    backgroundColor: colors.success.base,
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: colors.black,
@@ -235,18 +198,9 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 8,
   },
-  doneButton: {
-    backgroundColor: colors.success.base,
-  },
-  disabledButton: {
-    opacity: 0.8,
-  },
   buttonText: {
     color: colors.textInverse,
     fontWeight: '700',
-  },
-  spacer: {
-    flex: 1,
   },
   bottomSection: {
     marginTop: spacing.l,
