@@ -1,6 +1,6 @@
-import * as v from "valibot";
+import * as v from 'valibot';
 
-import { ErrorResponseSchema, MetadataSchema, PhoneNumberSchema } from "./schema";
+import { ErrorResponseSchema, MetadataSchema, PhoneNumberSchema } from './schema';
 
 export type Metadata = v.InferInput<typeof MetadataSchema>;
 export type PhoneNumber = v.InferInput<typeof PhoneNumberSchema>;

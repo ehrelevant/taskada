@@ -1,22 +1,22 @@
-import * as v from "valibot";
+import * as v from 'valibot';
 
 import {
-    BusinessDetailSchema,
-    CreateCustomerRequestSchema,
-    CustomerIdFieldSchema,
-    CustomerSchema,
-    DateofRegistrationSchema,
-    DescriptionSchema,
-    EmploymentSchema,
-    GetCustomerListRequestSchema,
-    GetCustomerListResponseSchema,
-    GetCustomerRequestSchema,
-    IdentityAccountSchema,
-    IndividualDetailSchema,
-    KycDocumentsObjectSchema,
-    StandardAddressSchema,
-    UpdateCustomerRequestSchema,
-} from "./schema";
+  BusinessDetailSchema,
+  CreateCustomerRequestSchema,
+  CustomerIdFieldSchema,
+  CustomerSchema,
+  DateofRegistrationSchema,
+  DescriptionSchema,
+  EmploymentSchema,
+  GetCustomerListRequestSchema,
+  GetCustomerListResponseSchema,
+  GetCustomerRequestSchema,
+  IdentityAccountSchema,
+  IndividualDetailSchema,
+  KycDocumentsObjectSchema,
+  StandardAddressSchema,
+  UpdateCustomerRequestSchema,
+} from './schema';
 
 export type Employment = v.InferInput<typeof EmploymentSchema>;
 export type IndividualDetail = v.InferInput<typeof IndividualDetailSchema>;

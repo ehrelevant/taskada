@@ -1,45 +1,45 @@
 {
-    "name": "xendit-payment-engine",
-    "version": "1.0.0",
-    "description": "",
-    "type": "module",
-    "scripts": {
-        "lint": "eslint src/**",
-        "lint:fix": "eslint src/** --fix",
-        "fmt": "prettier --experimental-cli --check .",
-        "fmt:fix": "prettier --experimental-cli --write .",
-        "style": "pnpm fmt:fix && pnpm lint:fix",
-        "build": "pnpm exec tsc",
-        "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-        "test:watch": "pnpm test --watch",
-        "test:cov": "pnpm test --coverage"
-    },
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
-    "packageManager": "pnpm@10.25.0",
-    "dependencies": {
-        "ky": "^1.14.3",
-        "uuid": "^13.0.0",
-        "valibot": "^1.2.0"
-    },
-    "devDependencies": {
-        "@bastidood/eslint-plugin-imsort": "^0.10.1",
-        "@jest/globals": "^30.2.0",
-        "@types/jest": "^30.0.0",
-        "jest": "^30.2.0",
-        "tsx": "^4.21.0",
-        "ts-jest": "^29.4.6",
-        "@eslint/js": "^9.36.0",
-        "@types/node": "^25.3.3",
-        "eslint": "^9.36.0",
-        "eslint-config-prettier": "^10.1.8",
-        "eslint-plugin-react": "^7.37.5",
-        "globals": "^16.4.0",
-        "jiti": "^2.6.1",
-        "typescript": "^5.9.3",
-        "prettier": "^3.6.2",
-        "prettier-plugin-tailwindcss": "^0.5.14",
-        "typescript-eslint": "^8.45.0"
-    }
+  "name": "xendit-payment-engine",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint src/**",
+    "lint:fix": "eslint src/** --fix",
+    "fmt": "prettier --experimental-cli --check .",
+    "fmt:fix": "prettier --experimental-cli --write .",
+    "style": "pnpm fmt:fix && pnpm lint:fix",
+    "build": "pnpm exec tsc",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test:watch": "pnpm test --watch",
+    "test:cov": "pnpm test --coverage"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.25.0",
+  "dependencies": {
+    "ky": "^1.14.3",
+    "uuid": "^13.0.0",
+    "valibot": "^1.2.0"
+  },
+  "devDependencies": {
+    "@bastidood/eslint-plugin-imsort": "^0.10.1",
+    "@jest/globals": "^30.2.0",
+    "@types/jest": "^30.0.0",
+    "jest": "^30.2.0",
+    "tsx": "^4.21.0",
+    "ts-jest": "^29.4.6",
+    "@eslint/js": "^9.36.0",
+    "@types/node": "^25.3.3",
+    "eslint": "^9.36.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^16.4.0",
+    "jiti": "^2.6.1",
+    "typescript": "^5.9.3",
+    "prettier": "^3.6.2",
+    "prettier-plugin-tailwindcss": "^0.5.14",
+    "typescript-eslint": "^8.45.0"
+  }
 }

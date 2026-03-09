@@ -1,4 +1,4 @@
-import { PaymentSchema } from "./payment";
+import { PaymentSchema } from './payment';
 
 const GetPaymentStatusResponseSchema = PaymentSchema;
 const CancelPaymentResponseSchema = PaymentSchema;

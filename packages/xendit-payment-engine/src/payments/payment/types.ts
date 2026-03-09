@@ -1,15 +1,15 @@
-import * as v from "valibot";
+import * as v from 'valibot';
 
 import {
-    CancelPaymentRequestSchema,
-    CancelPaymentResponseSchema,
-    CapturePaymentRequestSchema,
-    CapturePaymentResponseSchema,
-    CaptureSchema,
-    GetPaymentStatusRequestSchema,
-    GetPaymentStatusResponseSchema,
-    PaymentSchema,
-} from "./schema";
+  CancelPaymentRequestSchema,
+  CancelPaymentResponseSchema,
+  CapturePaymentRequestSchema,
+  CapturePaymentResponseSchema,
+  CaptureSchema,
+  GetPaymentStatusRequestSchema,
+  GetPaymentStatusResponseSchema,
+  PaymentSchema,
+} from './schema';
 
 export type Payment = v.InferInput<typeof PaymentSchema>;
 export type CancelPaymentResponse = v.InferInput<typeof CancelPaymentResponseSchema>;
