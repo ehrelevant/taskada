@@ -233,10 +233,7 @@ export function ProfileScreen({ navigation }: ProfileScreenProps) {
         {/* Profile Picture Section */}
         <View style={[styles.section, styles.avatarSection]}>
           <View style={styles.avatarContainer}>
-            <Avatar
-              source={profileData?.avatarUrl ? { uri: profileData.avatarUrl } : null}
-              size={100}
-            />
+            <Avatar source={profileData?.avatarUrl ? { uri: profileData.avatarUrl } : null} size={100} />
             <TouchableOpacity style={styles.cameraButton} onPress={pickImage}>
               <Camera size={20} color={colors.white} />
             </TouchableOpacity>

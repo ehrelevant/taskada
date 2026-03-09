@@ -1,18 +1,11 @@
 import * as v from 'valibot';
-import {
-  pgSchema,
-  text,
-  timestamp,
-  uuid,
-} from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-valibot';
+import { pgSchema, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
-import { booking } from "./booking"
-import { user } from "./user"
+import { booking } from './booking';
+import { user } from './user';
 
 const app = pgSchema('app');
-
-
 
 export const message = app.table('message', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),

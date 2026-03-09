@@ -3,7 +3,14 @@ import { apiFetch } from '@lib/helpers';
 import { authClient } from '@lib/authClient';
 import { Avatar, FeaturedServiceCard, Rating, SearchBar, ServiceTypeCard, Typography } from '@repo/components';
 import { colors, radius, spacing } from '@repo/theme';
-import { type FeaturedService, getFeaturedServices, getServiceTypes, type SearchResult, type ServiceType, searchServices } from '@lib/helpers';
+import {
+  type FeaturedService,
+  getFeaturedServices,
+  getServiceTypes,
+  type SearchResult,
+  type ServiceType,
+  searchServices,
+} from '@lib/helpers';
 import { HomeStackParamList } from '@navigation/HomeStack';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useCallback, useEffect, useMemo, useState } from 'react';

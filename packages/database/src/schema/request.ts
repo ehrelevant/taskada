@@ -1,25 +1,15 @@
-
 import * as v from 'valibot';
-import {
-  pgEnum,
-  pgSchema,
-  text,
-  timestamp,
-  uuid,
-} from 'drizzle-orm/pg-core';
-
-
 import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-valibot';
+import { pgEnum, pgSchema, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
-import { serviceType } from "./service"
-import { seeker } from "./seeker"
-import { address } from "./address"
-import { service } from "./service"
+import { address } from './address';
+import { seeker } from './seeker';
+import { service } from './service';
+import { serviceType } from './service';
 
 const app = pgSchema('app');
 
 export const requestStatusEnum = pgEnum('request_status', ['pending', 'settling']);
-
 
 export const request = app.table('request', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),

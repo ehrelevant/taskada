@@ -1,18 +1,9 @@
-
 import * as v from 'valibot';
-import {
-  boolean,
-  check,
-  pgSchema,
-  primaryKey,
-  text,
-  timestamp,
-  uuid,
-} from 'drizzle-orm/pg-core';
+import { boolean, check, pgSchema, primaryKey, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-valibot';
 import { sql } from 'drizzle-orm';
-import { roleEnum } from './role';
 
+import { roleEnum } from './role';
 
 const app = pgSchema('app');
 
@@ -67,4 +58,3 @@ export const userRole = app.table(
 export const UserRoleSelectSchema = createSelectSchema(userRole);
 export const UserRoleInsertSchema = v.omit(createInsertSchema(userRole), ['assigned_at']);
 export const UserRoleUpdateSchema = v.omit(createUpdateSchema(userRole), ['assigned_at']);
-

@@ -19,8 +19,6 @@ export * from './user';
 
 // TODO: Add relation.ts
 
-import {
-  pgSchema,
-} from 'drizzle-orm/pg-core';
+import { pgSchema } from 'drizzle-orm/pg-core';
 
 export const app = pgSchema('app');

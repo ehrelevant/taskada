@@ -1,17 +1,10 @@
 import * as v from 'valibot';
-import {
-  numeric,
-  pgEnum,
-  pgSchema,
-  text,
-  timestamp,
-  uuid,
-} from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-valibot';
+import { numeric, pgEnum, pgSchema, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
-import { provider } from "./provider"
-import { seeker } from "./seeker"
-import { service } from "./service"
+import { provider } from './provider';
+import { seeker } from './seeker';
+import { service } from './service';
 
 const app = pgSchema('app');
 

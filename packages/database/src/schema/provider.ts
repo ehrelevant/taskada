@@ -1,12 +1,8 @@
-import {
-  boolean,
-  pgSchema,
-  uuid,
-} from 'drizzle-orm/pg-core';
+import { boolean, pgSchema, uuid } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-valibot';
 
-import { user } from "./user"
-import { agency } from "./agency"
+import { agency } from './agency';
+import { user } from './user';
 
 const app = pgSchema('app');
 
@@ -21,4 +17,3 @@ export const provider = app.table('provider', {
 export const ProviderSelectSchema = createSelectSchema(provider);
 export const ProviderInsertSchema = createInsertSchema(provider);
 export const ProviderUpdateSchema = createUpdateSchema(provider);
-

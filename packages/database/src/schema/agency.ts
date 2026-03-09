@@ -1,11 +1,6 @@
-
 import * as v from 'valibot';
-import {
-  pgSchema,
-  text,
-  uuid,
-} from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-valibot';
+import { pgSchema, text, uuid } from 'drizzle-orm/pg-core';
 
 const app = pgSchema('app');
 

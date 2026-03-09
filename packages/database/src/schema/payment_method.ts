@@ -1,14 +1,8 @@
 import * as v from 'valibot';
-import {
-  jsonb,
-  pgSchema,
-  text,
-  timestamp,
-  uuid,
-} from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-valibot';
+import { jsonb, pgSchema, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
-import { user } from "./user"
+import { user } from './user';
 
 const app = pgSchema('app');
 

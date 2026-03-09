@@ -1,5 +1,32 @@
-import {user, userRole, roleEnum, session, account, verification, agency, provider, seeker, service, portfolio, portfolioImage, review, reviewImage, request, requestImage, requestStatusEnum, bookingStatusEnum, booking, interestStatusEnum, providerInterest, address, message, messageImage, paymentMethod, pushToken, serviceType } from "./schema"
-
+import {
+  account,
+  address,
+  agency,
+  booking,
+  bookingStatusEnum,
+  interestStatusEnum,
+  message,
+  messageImage,
+  paymentMethod,
+  portfolio,
+  portfolioImage,
+  provider,
+  providerInterest,
+  pushToken,
+  request,
+  requestImage,
+  requestStatusEnum,
+  review,
+  reviewImage,
+  roleEnum,
+  seeker,
+  service,
+  serviceType,
+  session,
+  user,
+  userRole,
+  verification,
+} from './schema';
 
 export type User = typeof user.$inferSelect;
 export type NewUser = typeof user.$inferInsert;
@@ -24,14 +51,11 @@ export type NewAgency = typeof agency.$inferInsert;
 export type Provider = typeof provider.$inferSelect;
 export type NewProvider = typeof provider.$inferInsert;
 
-
 export type Seeker = typeof seeker.$inferSelect;
 export type NewSeeker = typeof seeker.$inferInsert;
 
-
 export type Service = typeof service.$inferSelect;
 export type NewService = typeof service.$inferInsert;
-
 
 export type ServiceType = typeof serviceType.$inferSelect;
 export type NewServiceType = typeof serviceType.$inferInsert;
