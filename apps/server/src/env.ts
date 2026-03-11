@@ -1,10 +1,8 @@
 import { optional, parse, string } from 'valibot';
 
-
 function get_required_env_variable(name: string) {
-    return parse(string(`Environment variable ${name.toUpperCase()} is missing.`), process.env[name.toUpperCase()])
+  return parse(string(`Environment variable ${name.toUpperCase()} is missing.`), process.env[name.toUpperCase()]);
 }
-
 
 export const XENDIT_CLIENT_SECRET = get_required_env_variable('XENDIT_CLIENT_SECRET');
 
