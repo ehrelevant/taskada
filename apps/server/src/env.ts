@@ -1,15 +1,21 @@
 import { optional, parse, string } from 'valibot';
 
-export const XENDIT_SECRET_KEY = parse(string(), process.env.XENDIT_SECRET_KEY);
 
-export const GOOGLE_MAPS_API_KEY = parse(string(), process.env.GOOGLE_MAPS_API_KEY);
+function get_required_env_variable(name: string) {
+    return parse(string(`Environment variable ${name.toUpperCase()} is missing.`), process.env[name.toUpperCase()])
+}
 
-export const AWS_REGION = parse(string(), process.env.AWS_REGION);
 
-export const AWS_ACCESS_KEY_ID = parse(string(), process.env.AWS_ACCESS_KEY_ID);
+export const XENDIT_CLIENT_SECRET = get_required_env_variable('XENDIT_CLIENT_SECRET');
 
-export const AWS_SECRET_ACCESS_KEY = parse(string(), process.env.AWS_SECRET_ACCESS_KEY);
+export const GOOGLE_MAPS_API_KEY = get_required_env_variable('GOOGLE_MAPS_API_KEY');
 
-export const S3_BUCKET_NAME = parse(string(), process.env.S3_BUCKET_NAME);
+export const AWS_REGION = get_required_env_variable('AWS_REGION');
+
+export const AWS_ACCESS_KEY_ID = get_required_env_variable('AWS_ACCESS_KEY_ID');
+
+export const AWS_SECRET_ACCESS_KEY = get_required_env_variable('AWS_SECRET_ACCESS_KEY');
+
+export const S3_BUCKET_NAME = get_required_env_variable('S3_BUCKET_NAME');
 
 export const S3_PUBLIC_URL = parse(optional(string()), process.env.S3_PUBLIC_URL);
