@@ -3,12 +3,13 @@
     "outDir": "dist",
     "declaration": true,
     "module": "esnext",
-    "moduleResolution": "node",
     "target": "esnext",
+    "moduleResolution": "node",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": "."
   },
   "include": ["src"]
 }
