@@ -1,5 +1,5 @@
 // Mock environment
-process.env.API_URL = 'https://api.example.com';
+process.env.XENDIT_API_URL = 'https://api.example.com';
 process.env.XENDIT_CLIENT_SECRET = 'mock_secret';
 
 import * as v from 'valibot';

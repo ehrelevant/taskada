@@ -13,7 +13,7 @@
     "S3_BUCKET_NAME",
     "S3_PUBLIC_URL",
     "XENDIT_CLIENT_SECRET",
-    "API_URL"
+    "XENDIT_API_URL"
   ],
   "tasks": {
     "dev": {
