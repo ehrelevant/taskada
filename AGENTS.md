@@ -12,6 +12,7 @@ This is a monorepo containing a service platform connecting seekers with provide
 - **packages/database**: Drizzle ORM schema and migrations
 - **packages/components**: Shared React Native UI components
 - **packages/theme**: Shared theme constants (colors, spacing, typography)
+- **packages/xendit-payment-engine**: Valibot enforced SDK for interfacing with the relevant Xendit components
 
 ## Build, Lint, and Test Commands
 
@@ -118,8 +119,19 @@ Button/
 - Parse environment variables with Valibot schemas:
 
 ```typescript
-import { parse, string } from 'valibot';
 export const XENDIT_SECRET_KEY = parse(string(), process.env.XENDIT_SECRET_KEY);
+```
+
+- Ensure that Valibot errors are always readable and traceable.
+
+```typescript
+import { parse, string } from 'valibot';
+// Good
+const ENV_KEY = parse(string('Environment variable `ENV_KEY` is missing.'), process.env.ENV_KEY);
+const UrlSchema = v.pipe(v.string('A URL must be string.'), v.url('The URL is badly formatted.'));
+
+// Bad
+const EmailSchema = v.pipe(v.string(), v.nonEmpty(), v.email(), v.maxLength(30));
 ```
 
 - Use Valibot pipes for NestJS request validation
