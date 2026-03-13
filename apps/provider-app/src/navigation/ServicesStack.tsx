@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { ServiceListScreen } from '@screens/services/ServiceListScreen';
+import { ServiceListScreen } from '@screens/services/Services';
 
 export type OptionsStackParamList = {
   ServiceList: undefined;

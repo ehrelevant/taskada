@@ -1,12 +1,12 @@
-import { BookingDetailsScreen } from '@screens/home/booking/BookingDetailsScreen';
-import { BookingDoneScreen } from '@screens/home/booking/BookingDoneScreen';
-import { BookingServingScreen } from '@screens/home/booking/BookingServingScreen';
-import { BookingTransitScreen } from '@screens/home/booking/BookingTransitScreen';
-import { ChatScreen } from '@screens/home/chat/ChatScreen';
+import { BookingDetailsScreen } from '@screens/home/booking/details/BookingDetails';
+import { BookingDoneScreen } from '@screens/home/booking/done/BookingDone';
+import { BookingServingScreen } from '@screens/home/booking/serving/BookingServing';
+import { BookingTransitScreen } from '@screens/home/booking/transit/BookingTransit';
+import { ChatScreen } from '@screens/home/booking/chat/BookingChat';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { FinalizeDetailsScreen } from '@screens/home/booking/FinalizeDetailsScreen';
-import { RequestDetailsScreen } from '@screens/home/request/RequestDetailsScreen';
-import { RequestListScreen } from '@screens/home/request/RequestListScreen';
+import { FinalizeDetailsScreen } from '@screens/home/booking/finalize/BookingFinalize';
+import { RequestDetailsScreen } from '@screens/home/request/details/RequestDetails';
+import { RequestListScreen } from '@screens/home/request/list/RequestList';
 
 export type RequestsStackParamList = {
   Home: undefined;
