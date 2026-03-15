@@ -7,6 +7,7 @@ import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import ts from 'typescript-eslint';
 import turbo from 'eslint-plugin-turbo';
+import unusedImports from 'eslint-plugin-unused-imports';
 import { defineConfig } from 'eslint/config';
 
 export default defineConfig([
@@ -15,11 +16,11 @@ export default defineConfig([
   {
     files: ['**/*.{js,jsx,cjs,mjs,ts,tsx}'],
     extends: [js.configs.recommended, ...ts.configs.recommended, ...ts.configs.stylistic, imsort.configs.all, prettier],
-    plugins: { js, '@bastidood/imsort': imsort, "unused-imports": unusedImports, },
+    plugins: { js, '@bastidood/imsort': imsort, 'unused-imports': unusedImports },
     rules: {
       '@typescript-eslint/no-require-imports': 'off',
       '@typescript-eslint/consistent-type-definitions': 'off',
-      "unused-imports/no-unused-imports": "error",
+      'unused-imports/no-unused-imports': 'error',
       '@typescript-eslint/no-unused-vars': ['error', { varsIgnorePattern: '^_', argsIgnorePattern: '^_' }],
     },
   },
