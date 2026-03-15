@@ -2,7 +2,7 @@ import defaultClient from '@src/client';
 import { ErrorResponseSchema } from '@standard/schema';
 import { v4 as uuid4 } from 'uuid';
 
-import type { CreateCustomerRequest, Customer, GetCustomerListRequest, GetCustomerListResponse, GetCustomerRequest, UpdateCustomerRequest } from './types';
+import type { CreateCustomerRequest, CreateCustomerResponse, GetCustomerListRequest, GetCustomerListResponse, GetCustomerRequest, GetCustomerResponse, UpdateCustomerRequest, UpdateCustomerResponse } from './types';
 import { CreateCustomerRequestSchema, CustomerSchema, GetCustomerListRequestSchema, GetCustomerListResponseSchema, GetCustomerRequestSchema, UpdateCustomerRequestSchema } from './schema';
 
 const client = defaultClient.create({
@@ -11,7 +11,7 @@ const client = defaultClient.create({
   },
 });
 
-async function get_customer(request: GetCustomerRequest): Promise<Customer> {
+async function get_customer(request: GetCustomerRequest): Promise<GetCustomerResponse> {
   const validated_request = GetCustomerRequestSchema.parse(request);
   const response = await client.get(`customers/${validated_request.customer_id}`);
 
@@ -32,7 +32,7 @@ async function get_customer_list(request: GetCustomerListRequest): Promise<GetCu
   return GetCustomerListResponseSchema.parse(await response.json());
 }
 
-async function create_customer(request: CreateCustomerRequest): Promise<Customer> {
+async function create_customer(request: CreateCustomerRequest): Promise<CreateCustomerResponse> {
   const validated_request = CreateCustomerRequestSchema.parse(request);
   const response = await client.post('customers', {
     body: JSON.stringify(validated_request),
@@ -45,7 +45,7 @@ async function create_customer(request: CreateCustomerRequest): Promise<Customer
   return CustomerSchema.parse(await response.json());
 }
 
-async function update_customer(request: UpdateCustomerRequest): Promise<Customer> {
+async function update_customer(request: UpdateCustomerRequest): Promise<UpdateCustomerResponse> {
   const validated_request = UpdateCustomerRequestSchema.parse(request);
   const response = await client.post('customers', {
     body: JSON.stringify(validated_request),

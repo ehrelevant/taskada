@@ -1,22 +1,6 @@
 import * as z from 'zod';
 
-import {
-  BusinessDetailSchema,
-  CreateCustomerRequestSchema,
-  CustomerIdFieldSchema,
-  CustomerSchema,
-  DateofRegistrationSchema,
-  DescriptionSchema,
-  EmploymentSchema,
-  GetCustomerListRequestSchema,
-  GetCustomerListResponseSchema,
-  GetCustomerRequestSchema,
-  IdentityAccountSchema,
-  IndividualDetailSchema,
-  KycDocumentsObjectSchema,
-  StandardAddressSchema,
-  UpdateCustomerRequestSchema,
-} from './schema';
+import { BusinessDetailSchema, CreateCustomerRequestSchema, CreateCustomerResponseSchema, CustomerIdFieldSchema, CustomerSchema, DateofRegistrationSchema, DescriptionSchema, EmploymentSchema, GetCustomerListRequestSchema, GetCustomerListResponseSchema, GetCustomerRequestSchema, GetCustomerResponseSchema, IdentityAccountSchema, IndividualDetailSchema, KycDocumentsObjectSchema, StandardAddressSchema, UpdateCustomerRequestSchema, UpdateCustomerResponseSchema } from './schema';
 
 export type Employment = z.infer<typeof EmploymentSchema>;
 export type IndividualDetail = z.infer<typeof IndividualDetailSchema>;
@@ -33,3 +17,6 @@ export type DateofRegistration = z.infer<typeof DateofRegistrationSchema>;
 export type Description = z.infer<typeof DescriptionSchema>;
 export type UpdateCustomerRequest = z.input<typeof UpdateCustomerRequestSchema>;
 export type CustomerIdField = z.infer<typeof CustomerIdFieldSchema>;
+export type GetCustomerResponse = z.infer<typeof GetCustomerResponseSchema>;
+export type CreateCustomerResponse = z.infer<typeof CreateCustomerResponseSchema>;
+export type UpdateCustomerResponse = z.infer<typeof UpdateCustomerResponseSchema>;
