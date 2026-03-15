@@ -59,9 +59,7 @@ describe('standard schema index exports', () => {
     });
 
     it('rejects non-JSON values like functions or undefined', () => {
-      // @ts-ignore - intentional invalid value
-      expect(JSONField.safeParse(() => {}).success).toBe(false);
-      // @ts-ignore - undefined
+      expect(JSONField.safeParse(() => null).success).toBe(false);
       expect(JSONField.safeParse(undefined).success).toBe(false);
     });
 
@@ -73,15 +71,12 @@ describe('standard schema index exports', () => {
 
     it('rejects functions, undefined, and BigInt', () => {
       // function
-      // @ts-ignore - intentional invalid value
-      expect(JSONField.safeParse(() => {}).success).toBe(false);
+      expect(JSONField.safeParse(() => null).success).toBe(false);
 
       // undefined
-      // @ts-ignore - intentional invalid value
       expect(JSONField.safeParse(undefined).success).toBe(false);
 
       // BigInt is not a JSON value
-      // @ts-ignore - intentional invalid value
       expect(JSONField.safeParse(1n).success).toBe(false);
     });
   });

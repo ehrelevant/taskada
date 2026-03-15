@@ -1,6 +1,25 @@
 import * as z from 'zod';
 
-import { BusinessDetailSchema, CreateCustomerRequestSchema, CreateCustomerResponseSchema, CustomerIdFieldSchema, CustomerSchema, DateofRegistrationSchema, DescriptionSchema, EmploymentSchema, GetCustomerListRequestSchema, GetCustomerListResponseSchema, GetCustomerRequestSchema, GetCustomerResponseSchema, IdentityAccountSchema, IndividualDetailSchema, KycDocumentsObjectSchema, StandardAddressSchema, UpdateCustomerRequestSchema, UpdateCustomerResponseSchema } from './schema';
+import {
+  BusinessDetailSchema,
+  CreateCustomerRequestSchema,
+  CreateCustomerResponseSchema,
+  CustomerIdFieldSchema,
+  CustomerSchema,
+  DateofRegistrationSchema,
+  DescriptionSchema,
+  EmploymentSchema,
+  GetCustomerListRequestSchema,
+  GetCustomerListResponseSchema,
+  GetCustomerRequestSchema,
+  GetCustomerResponseSchema,
+  IdentityAccountSchema,
+  IndividualDetailSchema,
+  KycDocumentsObjectSchema,
+  StandardAddressSchema,
+  UpdateCustomerRequestSchema,
+  UpdateCustomerResponseSchema,
+} from './schema';
 
 export type Employment = z.infer<typeof EmploymentSchema>;
 export type IndividualDetail = z.infer<typeof IndividualDetailSchema>;

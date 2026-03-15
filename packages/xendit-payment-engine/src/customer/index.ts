@@ -2,8 +2,24 @@ import defaultClient from '@src/client';
 import { ErrorResponseSchema } from '@standard/schema';
 import { v4 as uuid4 } from 'uuid';
 
-import type { CreateCustomerRequest, CreateCustomerResponse, GetCustomerListRequest, GetCustomerListResponse, GetCustomerRequest, GetCustomerResponse, UpdateCustomerRequest, UpdateCustomerResponse } from './types';
-import { CreateCustomerRequestSchema, CustomerSchema, GetCustomerListRequestSchema, GetCustomerListResponseSchema, GetCustomerRequestSchema, UpdateCustomerRequestSchema } from './schema';
+import type {
+  CreateCustomerRequest,
+  CreateCustomerResponse,
+  GetCustomerListRequest,
+  GetCustomerListResponse,
+  GetCustomerRequest,
+  GetCustomerResponse,
+  UpdateCustomerRequest,
+  UpdateCustomerResponse,
+} from './types';
+import {
+  CreateCustomerRequestSchema,
+  CustomerSchema,
+  GetCustomerListRequestSchema,
+  GetCustomerListResponseSchema,
+  GetCustomerRequestSchema,
+  UpdateCustomerRequestSchema,
+} from './schema';
 
 const client = defaultClient.create({
   headers: {
