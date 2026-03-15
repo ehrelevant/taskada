@@ -48,8 +48,8 @@
       "@customer/*": ["src/customer/*"],
       "@payment/*": ["src/payments/*"],
       "@payouts/*": ["src/payouts/*"],
-      "@src/*": ["src/*"],
-      "@standard/*": ["src/standard/*"]
+      "@standard/*": ["src/standard/*"],
+      "@src/*": ["src/*"]
     }
   },
   "include": ["./jest.config.ts", "./src/"]

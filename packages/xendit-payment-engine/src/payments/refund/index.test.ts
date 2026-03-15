@@ -2,7 +2,6 @@
 process.env.XENDIT_API_URL = 'https://api.example.com';
 process.env.XENDIT_CLIENT_SECRET = 'mock_secret';
 
-import * as v from 'valibot';
 import { mockPost, partial_mockKyResponse } from '@src/tests';
 
 import { CreateRefundResponseSchema } from './schema';
@@ -12,9 +11,9 @@ const { refund_payment } = await import('.');
 const payment_request_sample = {
   reference_id: '90392f42-d98a-49ef-a7f3-abcezas123',
   payment_request_id: 'pr-90392f42-d98a-49ef-a7f3-abcezas123',
-  currency: 'IDR',
+  currency: 'IDR' as const,
   amount: 10000,
-  reason: 'REQUESTED_BY_CUSTOMER',
+  reason: 'REQUESTED_BY_CUSTOMER' as const,
 };
 
 describe('refund_payment', () => {
@@ -39,7 +38,7 @@ describe('refund_payment', () => {
   it('refund_payment - success', async () => {
     mockPost.mockResolvedValueOnce(partial_mockKyResponse({ status: 201, json: async () => refundResponse }));
     const res = await refund_payment(payment_request_sample);
-    expect(res).toEqual(v.parse(CreateRefundResponseSchema, refundResponse));
+    expect(res).toEqual(CreateRefundResponseSchema.parse(refundResponse));
   });
 
   it('refund_payment - API error', async () => {

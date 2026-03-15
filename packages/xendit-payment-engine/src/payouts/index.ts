@@ -1,4 +1,3 @@
-import * as v from 'valibot';
 import client from '@src/client';
 import { handle_error } from '@src/standard';
 import { v4 as uuid4 } from 'uuid';
@@ -29,48 +28,44 @@ import {
 } from './schema';
 
 async function create_payout(request: CreatePayoutRequest): Promise<CreatePayoutResponse> {
-  const validated_request = v.parse(CreatePayoutRequestSchema, request);
+  const validated_request = CreatePayoutRequestSchema.parse(request);
   const response = await client.post(`v2/payouts`, {
     body: JSON.stringify(validated_request),
     headers: { 'idempotency-key': uuid4() },
   });
 
   await handle_error(response, 'Failed to create payout');
-
-  return v.parse(CreatePayoutResponseSchema, await response.json());
+  return CreatePayoutResponseSchema.parse(await response.json());
 }
 
 async function get_payout(request: GetPayoutRequest): Promise<GetPayoutResponse> {
-  const validated_request = v.parse(GetPayoutRequestSchema, request);
+  const validated_request = GetPayoutRequestSchema.parse(request);
   const response = await client.get(`v2/payouts/${validated_request.payout_id}`);
 
   await handle_error(response, 'Failed to retrieve payout');
-
-  return v.parse(GetPayoutResponseSchema, await response.json());
+  return GetPayoutResponseSchema.parse(await response.json());
 }
 
 async function get_payout_by_reference_id(request: ListPayoutsRequest): Promise<ListPayoutsResponse> {
-  const validated_request = v.parse(ListPayoutsRequestSchema, request);
+  const validated_request = ListPayoutsRequestSchema.parse(request);
   const response = await client.get(`v2/payouts/`, {
     searchParams: { reference_id: validated_request.reference_id },
   });
 
   await handle_error(response, 'Failed to list payouts');
-
-  return v.parse(ListPayoutsResponseSchema, await response.json());
+  return ListPayoutsResponseSchema.parse(await response.json());
 }
 
 async function cancel_payout(request: CancelPayoutRequest): Promise<CancelPayoutResponse> {
-  const validated_request = v.parse(CancelPayoutRequestSchema, request);
+  const validated_request = CancelPayoutRequestSchema.parse(request);
   const response = await client.post(`v2/payouts/${validated_request.payout_id}/cancel`);
 
   await handle_error(response, 'Failed to cancel payout');
-
-  return v.parse(CancelPayoutResponseSchema, await response.json());
+  return CancelPayoutResponseSchema.parse(await response.json());
 }
 
 async function get_payment_channels(request: GetPaymentChannelsRequest): Promise<GetPaymentChannelsResponse> {
-  const validated_request = v.parse(GetPaymentChannelsRequestSchema, request);
+  const validated_request = GetPaymentChannelsRequestSchema.parse(request);
   const params: Record<string, string> = {};
   if (validated_request.channel_name) params.channel_name = validated_request.channel_name;
   if (validated_request.channel_category) params.channel_category = validated_request.channel_category;
@@ -80,7 +75,7 @@ async function get_payment_channels(request: GetPaymentChannelsRequest): Promise
 
   await handle_error(response, 'Failed to retrieve payout channels');
 
-  return v.parse(GetPaymentChannelsResponseSchema, await response.json());
+  return GetPaymentChannelsResponseSchema.parse(await response.json());
 }
 
 export { create_payout, get_payout, get_payout_by_reference_id, cancel_payout, get_payment_channels };

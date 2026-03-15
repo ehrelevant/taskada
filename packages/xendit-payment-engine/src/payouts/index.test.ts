@@ -2,7 +2,6 @@
 process.env.XENDIT_API_URL = 'https://api.example.com';
 process.env.XENDIT_CLIENT_SECRET = 'mock_secret';
 
-import * as v from 'valibot';
 import { mockGet, mockPost, partial_mockKyResponse } from '@src/tests';
 
 import {
@@ -93,13 +92,13 @@ describe('payouts/index', () => {
       partial_mockKyResponse({ status: 200, json: async () => CreatePayoutResponseExample }),
     );
     const res = await create_payout(CreatePayoutRequestExample);
-    expect(res).toEqual(v.parse(CreatePayoutResponseSchema, CreatePayoutResponseExample));
+    expect(res).toEqual(CreatePayoutResponseSchema.parse(CreatePayoutResponseExample));
   });
 
   it('get_payout - success', async () => {
     mockGet.mockResolvedValueOnce(partial_mockKyResponse({ status: 200, json: async () => GetPayoutResponseExample }));
     const res = await get_payout({ payout_id: GetPayoutResponseExample.id });
-    expect(res).toEqual(v.parse(GetPayoutResponseSchema, GetPayoutResponseExample));
+    expect(res).toEqual(GetPayoutResponseSchema.parse(GetPayoutResponseExample));
   });
 
   it('get_payout_by_reference_id - success', async () => {
@@ -107,7 +106,7 @@ describe('payouts/index', () => {
       partial_mockKyResponse({ status: 200, json: async () => ListPayoutsResponseExample }),
     );
     const res = await get_payout_by_reference_id({ reference_id: CreatePayoutRequestExample.reference_id });
-    expect(res).toEqual(v.parse(ListPayoutsResponseSchema, ListPayoutsResponseExample));
+    expect(res).toEqual(ListPayoutsResponseSchema.parse(ListPayoutsResponseExample));
   });
 
   it('cancel_payout - success', async () => {
@@ -115,7 +114,7 @@ describe('payouts/index', () => {
       partial_mockKyResponse({ status: 200, json: async () => CancelPayoutResponseExample }),
     );
     const res = await cancel_payout({ payout_id: CancelPayoutResponseExample.id });
-    expect(res).toEqual(v.parse(CancelPayoutResponseSchema, CancelPayoutResponseExample));
+    expect(res).toEqual(CancelPayoutResponseSchema.parse(CancelPayoutResponseExample));
   });
 
   it('get_payment_channels - success', async () => {
@@ -123,7 +122,7 @@ describe('payouts/index', () => {
       partial_mockKyResponse({ status: 200, json: async () => GetPaymnentChannelsExample }),
     );
     const res = await get_payment_channels({});
-    expect(res).toEqual(v.parse(GetPaymentChannelsResponseSchema, GetPaymnentChannelsExample));
+    expect(res).toEqual(GetPaymentChannelsResponseSchema.parse(GetPaymnentChannelsExample));
   });
 
   it('get_payment_channels - builds search params correctly (all fields)', async () => {
@@ -131,7 +130,7 @@ describe('payouts/index', () => {
       partial_mockKyResponse({ status: 200, json: async () => GetPaymnentChannelsExample }),
     );
 
-    const req = { channel_name: 'Bank Syariah', channel_category: 'BANK', channel_code: 'ID_BSI' };
+    const req = { channel_name: 'Bank Syariah' as const, channel_category: 'BANK' as const, channel_code: 'ID_BSI' };
     await get_payment_channels(req);
 
     expect(mockGet).toHaveBeenCalledWith('v2/payouts/channels', {

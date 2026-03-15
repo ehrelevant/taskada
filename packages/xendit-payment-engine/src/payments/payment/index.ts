@@ -1,7 +1,14 @@
-import * as v from 'valibot';
 import defaultClient from '@src/client';
 import { handle_error } from '@src/standard';
 
+import type {
+  CancelPaymentRequest,
+  CancelPaymentResponse,
+  CapturePaymentRequest,
+  CapturePaymentResponse,
+  GetPaymentStatusRequest,
+  GetPaymentStatusResponse,
+} from './types';
 import {
   CancelPaymentRequestSchema,
   CancelPaymentResponseSchema,
@@ -10,14 +17,6 @@ import {
   GetPaymentStatusRequestSchema,
   GetPaymentStatusResponseSchema,
 } from './schema';
-import type {
-  CancelPaymentResponse,
-  CancelPaymentStatusRequest,
-  CapturePaymentRequest,
-  CapturePaymentResponse,
-  GetPaymentStatusRequest,
-  GetPaymentStatusResponse,
-} from './types';
 
 const client = defaultClient.create({
   headers: {
@@ -26,35 +25,35 @@ const client = defaultClient.create({
 });
 
 export async function capture_payment(request: CapturePaymentRequest): Promise<CapturePaymentResponse> {
-  const validated_request = v.parse(CapturePaymentRequestSchema, request);
+  const validated_request = CapturePaymentRequestSchema.parse(request);
 
-  const { capture_amount } = validated_request;
+  const { capture_amount } = validated_request as { capture_amount: number; payment_id: string };
   const response = await client.post(`v3/payments/${validated_request.payment_id}/capture`, {
     body: JSON.stringify({ capture_amount }),
   });
 
   await handle_error(response);
 
-  return v.parse(CapturePaymentResponseSchema, await response.json());
+  return CapturePaymentResponseSchema.parse(await response.json());
 }
 
-export async function cancel_payment(request: CancelPaymentStatusRequest): Promise<CancelPaymentResponse> {
-  const validated_request = v.parse(CancelPaymentRequestSchema, request);
+export async function cancel_payment(request: CancelPaymentRequest): Promise<CancelPaymentResponse> {
+  const validated_request = CancelPaymentRequestSchema.parse(request);
   const response = await client.post(`v3/payments/${validated_request.payment_id}/cancel`);
 
   await handle_error(response);
 
-  return v.parse(CancelPaymentResponseSchema, await response.json());
+  return CancelPaymentResponseSchema.parse(await response.json());
 }
 
 export async function get_payment_status(request: GetPaymentStatusRequest): Promise<GetPaymentStatusResponse> {
-  const validated_request = v.parse(GetPaymentStatusRequestSchema, request);
+  const validated_request = GetPaymentStatusRequestSchema.parse(request);
 
   const response = await client.get(`v3/payments/${validated_request.payment_id}`);
 
   await handle_error(response);
 
-  return v.parse(GetPaymentStatusResponseSchema, await response.json());
+  return GetPaymentStatusResponseSchema.parse(await response.json());
 }
 
 export * from './types';

@@ -2,7 +2,6 @@
 process.env.XENDIT_API_URL = 'https://api.example.com';
 process.env.XENDIT_CLIENT_SECRET = 'mock_secret';
 
-import * as v from 'valibot';
 import { jest } from '@jest/globals';
 import { mockGet, mockPost, partial_mockKyResponse } from '@src/tests';
 
@@ -26,7 +25,7 @@ describe('payments/payment', () => {
       capture_amount: SampleCapturePaymentCardsResponse.captures[0]!.capture_amount,
     };
     const res = await capture_payment(req);
-    expect(res).toEqual(v.parse(CapturePaymentResponseSchema, SampleCapturePaymentCardsResponse));
+    expect(res).toEqual(CapturePaymentResponseSchema.parse(SampleCapturePaymentCardsResponse));
   });
 
   it('cancel_payment - success', async () => {
@@ -35,7 +34,7 @@ describe('payments/payment', () => {
     );
     const req = { payment_id: SampleCancelPaymentCardsResponse.payment_id };
     const res = await cancel_payment(req);
-    expect(res).toEqual(v.parse(CancelPaymentResponseSchema, SampleCancelPaymentCardsResponse));
+    expect(res).toEqual(CancelPaymentResponseSchema.parse(SampleCancelPaymentCardsResponse));
   });
 
   it('get_payment_status - success', async () => {
@@ -44,7 +43,7 @@ describe('payments/payment', () => {
     );
     const req = { payment_id: SampleGetPaymentRedirectResponse.payment_id };
     const res = await get_payment_status(req);
-    expect(res).toEqual(v.parse(GetPaymentStatusResponseSchema, SampleGetPaymentRedirectResponse));
+    expect(res).toEqual(GetPaymentStatusResponseSchema.parse(SampleGetPaymentRedirectResponse));
   });
 
   it('capture_payment - API error', async () => {

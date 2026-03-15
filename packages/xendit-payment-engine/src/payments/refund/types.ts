@@ -1,6 +1,6 @@
-import * as v from 'valibot';
+import * as z from 'zod';
 
 import { CreateRefundRequestSchema, CreateRefundResponseSchema } from './schema';
 
-export type CreateRefundRequest = v.InferInput<typeof CreateRefundRequestSchema>;
-export type CreateRefundResponse = v.InferInput<typeof CreateRefundResponseSchema>;
+export type CreateRefundRequest = z.input<typeof CreateRefundRequestSchema>;
+export type CreateRefundResponse = z.infer<typeof CreateRefundResponseSchema>;

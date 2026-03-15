@@ -1,7 +1,7 @@
-import * as v from 'valibot';
+import * as z from 'zod';
 
-export const ErrorResponseSchema = v.object({
-  error_code: v.string(),
-  message: v.string(),
-  errors: v.array(v.union([v.string(), v.object({})])),
+export const ErrorResponseSchema = z.object({
+  error_code: z.string(),
+  message: z.string(),
+  errors: z.array(z.union([z.string(), z.record(z.string(), z.any())])),
 });

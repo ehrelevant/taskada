@@ -1,8 +1,10 @@
-import * as v from 'valibot';
+import * as z from 'zod';
 
 import { CustomerSchema } from './customer';
 
-export const GetCustomerListResponseSchema = v.object({
-  data: v.array(CustomerSchema),
-  has_more: v.boolean(),
-});
+export const GetCustomerListResponseSchema = z
+  .object({
+    data: z.array(CustomerSchema),
+    has_more: z.boolean(),
+  })
+  .meta({ description: 'Response for listing customers' });

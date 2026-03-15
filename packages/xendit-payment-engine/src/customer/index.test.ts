@@ -2,7 +2,6 @@
 process.env.XENDIT_API_URL = 'https://api.example.com';
 process.env.XENDIT_CLIENT_SECRET = 'mock_secret';
 
-import * as v from 'valibot';
 import { jest } from '@jest/globals';
 import { mockGet, mockPost, partial_mockKyResponse } from '@src/tests';
 
@@ -57,7 +56,7 @@ describe('get_customer', () => {
     mockGet.mockResolvedValueOnce(partial_mockKyResponse({ status: 200, json: async () => mockCustomer }));
 
     const result = await get_customer({ customer_id: 'cust-123' });
-    expect(result).toEqual(v.parse(CustomerSchema, mockCustomer));
+    expect(result).toEqual(CustomerSchema.parse(mockCustomer));
   });
 
   it('should throw if customer response fails schema', async () => {
@@ -126,7 +125,7 @@ describe('get_customer_list', () => {
     mockGet.mockResolvedValueOnce(partial_mockKyResponse({ status: 200, json: async () => mock_customer_list }));
 
     const result = await get_customer_list({ reference_id: '69a2bab89b9e1c193978c114' });
-    expect(result).toEqual(v.parse(GetCustomerListResponseSchema, mock_customer_list));
+    expect(result).toEqual(GetCustomerListResponseSchema.parse(mock_customer_list));
   });
 
   it('should throw if customer list response fails schema', async () => {
@@ -229,7 +228,7 @@ describe('create_customer', () => {
     mockPost.mockResolvedValueOnce(partial_mockKyResponse({ status: 201, json: async () => mockCustomer }));
 
     const result = await create_customer(createRequest);
-    expect(result).toEqual(v.parse(CustomerSchema, mockCustomer));
+    expect(result).toEqual(CustomerSchema.parse(mockCustomer));
   });
 
   it('should throw with API error when create response is not ok', async () => {
@@ -361,7 +360,7 @@ describe('update_customer', () => {
     mockPost.mockResolvedValueOnce(partial_mockKyResponse({ status: 200, json: async () => updatedCustomer }));
 
     const result = await (await import('.')).update_customer(updateRequest);
-    expect(result).toEqual(v.parse(CustomerSchema, updatedCustomer));
+    expect(result).toEqual(CustomerSchema.parse(updatedCustomer));
   });
 
   it('should throw with API error when update response is not ok', async () => {

@@ -1,4 +1,4 @@
-import * as v from 'valibot';
+import * as z from 'zod';
 
 import {
   CancelPaymentRequestSchema,
@@ -11,11 +11,11 @@ import {
   PaymentSchema,
 } from './schema';
 
-export type Payment = v.InferInput<typeof PaymentSchema>;
-export type CancelPaymentResponse = v.InferInput<typeof CancelPaymentResponseSchema>;
-export type CapturePaymentResponse = v.InferInput<typeof CapturePaymentResponseSchema>;
-export type GetPaymentStatusRequest = v.InferInput<typeof GetPaymentStatusRequestSchema>;
-export type GetPaymentStatusResponse = v.InferInput<typeof GetPaymentStatusResponseSchema>;
-export type Capture = v.InferInput<typeof CaptureSchema>;
-export type CancelPaymentStatusRequest = v.InferInput<typeof CancelPaymentRequestSchema>;
-export type CapturePaymentRequest = v.InferInput<typeof CapturePaymentRequestSchema>;
+export type Payment = z.infer<typeof PaymentSchema>;
+export type CancelPaymentResponse = z.infer<typeof CancelPaymentResponseSchema>;
+export type CapturePaymentResponse = z.infer<typeof CapturePaymentResponseSchema>;
+export type GetPaymentStatusRequest = z.input<typeof GetPaymentStatusRequestSchema>;
+export type GetPaymentStatusResponse = z.infer<typeof GetPaymentStatusResponseSchema>;
+export type Capture = z.infer<typeof CaptureSchema>;
+export type CancelPaymentRequest = z.input<typeof CancelPaymentRequestSchema>;
+export type CapturePaymentRequest = z.input<typeof CapturePaymentRequestSchema>;

@@ -1,4 +1,4 @@
-import * as v from 'valibot';
+import * as z from 'zod';
 
 import {
   CancelPayoutRequestSchema,
@@ -14,14 +14,14 @@ import {
   PayoutSchema,
 } from './schema';
 
-export type Payout = v.InferInput<typeof PayoutSchema>;
-export type CancelPayoutRequest = v.InferInput<typeof CancelPayoutRequestSchema>;
-export type CancelPayoutResponse = v.InferInput<typeof CancelPayoutResponseSchema>;
-export type CreatePayoutRequest = v.InferInput<typeof CreatePayoutRequestSchema>;
-export type CreatePayoutResponse = v.InferInput<typeof CreatePayoutResponseSchema>;
-export type GetPaymentChannelsRequest = v.InferInput<typeof GetPaymentChannelsRequestSchema>;
-export type GetPaymentChannelsResponse = v.InferInput<typeof GetPaymentChannelsResponseSchema>;
-export type GetPayoutRequest = v.InferInput<typeof GetPayoutRequestSchema>;
-export type GetPayoutResponse = v.InferInput<typeof GetPayoutResponseSchema>;
-export type ListPayoutsRequest = v.InferInput<typeof ListPayoutsRequestSchema>;
-export type ListPayoutsResponse = v.InferInput<typeof ListPayoutsResponseSchema>;
+export type Payout = z.infer<typeof PayoutSchema>;
+export type CancelPayoutRequest = z.input<typeof CancelPayoutRequestSchema>;
+export type CancelPayoutResponse = z.infer<typeof CancelPayoutResponseSchema>;
+export type CreatePayoutRequest = z.input<typeof CreatePayoutRequestSchema>;
+export type CreatePayoutResponse = z.infer<typeof CreatePayoutResponseSchema>;
+export type GetPaymentChannelsRequest = z.input<typeof GetPaymentChannelsRequestSchema>;
+export type GetPaymentChannelsResponse = z.infer<typeof GetPaymentChannelsResponseSchema>;
+export type GetPayoutRequest = z.input<typeof GetPayoutRequestSchema>;
+export type GetPayoutResponse = z.infer<typeof GetPayoutResponseSchema>;
+export type ListPayoutsRequest = z.input<typeof ListPayoutsRequestSchema>;
+export type ListPayoutsResponse = z.infer<typeof ListPayoutsResponseSchema>;

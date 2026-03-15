@@ -1,20 +1,19 @@
-import * as v from 'valibot';
+import * as z from 'zod';
 
-export const CaptureSchema = v.object({
-  capture_timestamp: v.pipe(v.string(), v.isoTimestamp(), v.description('ISO 8601 date-time format.')),
-  capture_id: v.pipe(
-    v.string(),
-    v.minLength(1),
-    v.maxLength(255),
-    v.metadata({ example: 'cap-1502feb0-bb79-47ae-9d1e-e69394d3949c' }),
-    v.description('Xendit unique Capture ID generated as reference for a single capture.'),
-  ),
-  capture_amount: v.pipe(
-    v.number(),
-    v.minValue(0),
-    v.metadata({ example: 10000.0 }),
-    v.description(
-      'The payment amount captured for this payment. Maximum capture amount can only be equal or lesser than the authorized amount value.',
-    ),
-  ),
-});
+export const CaptureSchema = z
+  .object({
+    capture_timestamp: z.string().meta({ description: 'ISO 8601 date-time format.' }),
+    capture_id: z
+      .string()
+      .min(1)
+      .max(255)
+      .meta({
+        description: 'Xendit unique Capture ID generated as reference for a single capture.',
+        example: 'cap-...',
+      }),
+    capture_amount: z
+      .number()
+      .min(0)
+      .meta({ description: 'The payment amount captured for this payment.', example: 10000.0 }),
+  })
+  .meta({ description: 'Capture object', example: [{ capture_id: 'cap-...', capture_amount: 10000.0 }] });

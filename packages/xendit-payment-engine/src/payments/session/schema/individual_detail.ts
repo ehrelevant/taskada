@@ -1,33 +1,33 @@
-import * as v from 'valibot';
+import * as z from 'zod';
 
-export const SessionIndividualDetailSchema = v.object({
-  given_names: v.pipe(
-    v.string(),
-    v.regex(/^[a-zA-Z]{1,50}$/),
-    v.description('Primary or first name/s of customer. Alphanumeric. No special characters is allowed.'),
-  ),
-  surname: v.pipe(
-    v.string(),
-    v.regex(/^[a-zA-Z]{1,50}$/),
-    v.description('Last or family name of customer. Alphanumeric. No special characters is allowed.'),
-  ),
-  nationality: v.optional(
-    v.pipe(
-      v.string(),
-      v.regex(/^[A-Z]{2}$/),
-      v.description('Country code for customer nationality. ISO 3166-1 alpha-2 Country Code.'),
-    ),
-  ),
-  place_of_birth: v.optional(
-    v.pipe(
-      v.string(),
-      v.minLength(1),
-      v.maxLength(60),
-      v.description(
-        'City or other relevant location for the customer birth place. Alphanumeric. No special characters is allowed.',
-      ),
-    ),
-  ),
-  date_of_birth: v.optional(v.string()),
-  gender: v.optional(v.pipe(v.picklist(['MALE', 'FEMALE', 'OTHER']), v.description('Gender of customer.'))),
-});
+export const SessionIndividualDetailSchema = z
+  .object({
+    given_names: z
+      .string()
+      .regex(/^[a-zA-Z]{1,50}$/)
+      .meta({ description: 'Primary or first name/s of customer. Alphanumeric. No special characters is allowed.' }),
+    surname: z
+      .string()
+      .regex(/^[a-zA-Z]{1,50}$/)
+      .meta({ description: 'Last or family name of customer. Alphanumeric. No special characters is allowed.' }),
+    nationality: z
+      .string()
+      .regex(/^[A-Z]{2}$/)
+      .optional()
+      .meta({ description: 'Country code for customer nationality. ISO 3166-1 alpha-2 Country Code.' }),
+    place_of_birth: z
+      .string()
+      .min(1)
+      .max(60)
+      .optional()
+      .meta({
+        description:
+          'City or other relevant location for the customer birth place. Alphanumeric. No special characters is allowed.',
+      }),
+    date_of_birth: z.string().optional(),
+    gender: z.enum(['MALE', 'FEMALE', 'OTHER']).optional().meta({ description: 'Gender of customer.' }),
+  })
+  .meta({
+    description: 'Individual detail schema for session customer',
+    example: [{ given_names: 'First', surname: 'Last' }],
+  });
