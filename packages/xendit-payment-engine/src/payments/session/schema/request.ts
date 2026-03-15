@@ -1,7 +1,7 @@
 import * as z from 'zod';
 import { MetadataSchema } from '@standard/schema';
 
-import { ChannelPropertiesPaySchema, ChannelPropertiesSaveSchema } from './channel_properties';
+import { ChannelPropertiesSchema } from './channel_properties';
 import { ItemSchema } from './item';
 import { SessionCustomerDetailsSchema } from './customer';
 
@@ -38,10 +38,9 @@ export const CreateSessionRequestSchema = z
     country: z
       .enum(['ID', 'PH', 'VN', 'TH', 'SG', 'MY'])
       .meta({ description: 'ISO 3166-1 alpha-2 two-letter country code for the payment.' }),
-    channel_properties: z
-      .union([ChannelPropertiesPaySchema, ChannelPropertiesSaveSchema])
-      .optional()
-      .meta({ description: 'Channel properties object for the payment session.' }),
+    channel_properties: ChannelPropertiesSchema.optional().meta({
+      description: 'Channel properties object for the payment session.',
+    }),
     allowed_payment_channels: z.array(z.string()).optional(),
     expires_at: z.string().optional(),
     locale: z

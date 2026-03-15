@@ -60,7 +60,11 @@ const ChannelPropertiesPaySchema = z.union([
   EcpaySchoolPaySchema,
   EcpayPaySchema,
 ]);
-
 const ChannelPropertiesSaveSchema = z.union([CardsSaveSchema]);
+const ChannelPropertiesSchema = z.union([ChannelPropertiesPaySchema, ChannelPropertiesSaveSchema]);
 
-export { ChannelPropertiesPaySchema, ChannelPropertiesSaveSchema };
+// const ChannelPropertiesPaySchema = z.string()
+// const ChannelPropertiesSaveSchema = z.string()
+// const ChannelPropertiesSchema = z.string()
+
+export { ChannelPropertiesSchema, ChannelPropertiesPaySchema, ChannelPropertiesSaveSchema };

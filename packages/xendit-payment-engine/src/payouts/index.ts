@@ -79,5 +79,3 @@ async function get_payment_channels(request: GetPaymentChannelsRequest): Promise
 }
 
 export { create_payout, get_payout, get_payout_by_reference_id, cancel_payout, get_payment_channels };
-
-export * from './types';

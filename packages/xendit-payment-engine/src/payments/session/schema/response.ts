@@ -1,5 +1,7 @@
 import * as z from 'zod';
 
+import { ChannelPropertiesSchema } from './channel_properties';
+
 const SessionResponseSchema = z
   .object({
     payment_session_id: z
@@ -35,10 +37,9 @@ const SessionResponseSchema = z
       .enum(['AUTOMATIC', 'MANUAL'])
       .optional()
       .meta({ description: 'The method to capture the payment.' }),
-    channel_properties: z
-      .object({})
-      .optional()
-      .meta({ description: 'Optional channel specific properties to be sent to specific payment channel provider.' }),
+    channel_properties: ChannelPropertiesSchema.optional().meta({
+      description: 'Channel properties object for the payment session.',
+    }),
     allowed_payment_channels: z.array(z.string()).optional(),
     expires_at: z.string().optional().meta({ description: 'ISO 8601 date-time format.' }),
     locale: z.string().meta({ description: 'ISO 639-1 two-letter language code for Hosted Checkout page.' }),

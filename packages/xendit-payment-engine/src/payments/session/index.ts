@@ -54,5 +54,3 @@ export async function cancel_session(request: CancelSessionRequest): Promise<Can
 
   return CancelSessionResponseSchema.parse(await response.json());
 }
-
-export * from './types';

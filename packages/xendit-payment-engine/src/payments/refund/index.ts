@@ -12,5 +12,3 @@ export async function refund_payment(request: CreateRefundRequest): Promise<Crea
 
   return CreateRefundResponseSchema.parse(await response.json());
 }
-
-export * from './types';

@@ -55,5 +55,3 @@ export async function get_payment_status(request: GetPaymentStatusRequest): Prom
 
   return GetPaymentStatusResponseSchema.parse(await response.json());
 }
-
-export * from './types';

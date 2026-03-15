@@ -10,5 +10,3 @@ export async function handle_error(response: KyResponse, message?: string): Prom
     );
   }
 }
-
-export * from './types';
