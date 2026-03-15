@@ -42,7 +42,7 @@ export const SessionResponseSchema = z
     allowed_payment_channels: z.array(z.string()).optional(),
     expires_at: z.string().optional().meta({ description: 'ISO 8601 date-time format.' }),
     locale: z.string().meta({ description: 'ISO 639-1 two-letter language code for Hosted Checkout page.' }),
-    metadata: z.record(z.any()).meta({ description: 'Key-value entries for your custom data/information.' }),
+    metadata: z.record(z.string(), z.any()).meta({ description: 'Key-value entries for your custom data/information.' }),
     items: z.array(z.object({})).nullable().optional(),
     success_return_url: z
       .string()

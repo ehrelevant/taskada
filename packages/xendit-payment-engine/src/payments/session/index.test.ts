@@ -63,6 +63,23 @@ describe('payment session', () => {
     expect(res).toEqual(SessionResponseSchema.parse(sessionResp));
   });
 
+  it('create_session - SAVE with non-zero amount should fail validation', async () => {
+    const badReq = {
+      reference_id: 'ref-123',
+      customer_id: CUST_ID,
+      customer: { type: 'INDIVIDUAL', reference_id: 'ref-c', individual_detail: { given_names: 'First', surname: 'Last' } },
+      session_type: 'SAVE' as const,
+      currency: 'PHP' as const,
+      amount: 100,
+      mode: 'PAYMENT_LINK' as const,
+      country: 'PH' as const,
+      metadata: null,
+      items: null,
+    };
+
+    await expect(create_session(badReq)).rejects.toThrow('For SAVE session_type, the amount must be 0.');
+  });
+
   it('create_session - API error', async () => {
     mockPost.mockResolvedValueOnce(
       partial_mockKyResponse({
@@ -75,7 +92,7 @@ describe('payment session', () => {
       create_session({
         reference_id: 'ref-1',
         customer_id: CUST_ID,
-        customer: { type: 'INDIVIDUAL', reference_id: 'ref-c', individual_detail: {} },
+        customer: { type: 'INDIVIDUAL', reference_id: 'ref-c', individual_detail: {given_names: "Alice", surname:"Doe"} },
         session_type: 'PAY',
         currency: 'USD',
         amount: 100,

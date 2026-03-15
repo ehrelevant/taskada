@@ -61,7 +61,7 @@ export const CreateSessionRequestSchema = z
   .superRefine((data, ctx) => {
     if (data.session_type === 'SAVE' && data.amount !== 0) {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: "custom",
         message: 'For SAVE session_type, the amount must be 0.',
         path: ['amount'],
       });

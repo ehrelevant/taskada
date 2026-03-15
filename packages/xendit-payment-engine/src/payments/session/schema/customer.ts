@@ -1,5 +1,6 @@
 import * as z from 'zod';
 import { MetadataSchema } from '@standard/schema';
+import { SessionIndividualDetailSchema  } from './individual_detail';
 
 
 export const SessionCustomerDetailsSchema = z
@@ -21,7 +22,7 @@ export const SessionCustomerDetailsSchema = z
       .optional()
       .meta({ description: 'E-mail address of customer. Maximum length 50 characters.' }),
     mobile_number: MetadataSchema.optional(),
-    individual_detail: z.object({}).optional().meta({ description: 'Individual detail object for the customer.' }),
+    individual_detail: SessionIndividualDetailSchema,
   })
   .meta({
     description: 'Customer details for a payment session',
