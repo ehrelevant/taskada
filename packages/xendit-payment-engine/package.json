@@ -30,7 +30,6 @@
   "dependencies": {
     "ky": "^1.14.3",
     "uuid": "^13.0.0",
-    "valibot": "^1.2.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {
