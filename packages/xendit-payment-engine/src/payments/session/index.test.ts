@@ -4,7 +4,7 @@ process.env.XENDIT_CLIENT_SECRET = 'mock_secret';
 
 import { mockGet, mockPost, partial_mockKyResponse } from '@src/tests';
 
-import { SessionResponseSchema } from './schema/response';
+import { CancelSessionResponseSchema, CreateSessionResponseSchema, GetSessionStatusResponseSchema } from './schema';
 
 const { create_session, get_session_status, cancel_session } = await import('.');
 
@@ -60,7 +60,7 @@ describe('payment session', () => {
 
     mockPost.mockResolvedValueOnce(partial_mockKyResponse({ status: 201, json: async () => sessionResp }));
     const res = await create_session(req);
-    expect(res).toEqual(SessionResponseSchema.parse(sessionResp));
+    expect(res).toEqual(CreateSessionResponseSchema.parse(sessionResp));
   });
 
   it('create_session - SAVE with non-zero amount should fail validation', async () => {
@@ -116,7 +116,7 @@ describe('payment session', () => {
   it('get_session_status - success', async () => {
     mockGet.mockResolvedValueOnce(partial_mockKyResponse({ status: 200, json: async () => sessionResp }));
     const res = await get_session_status({ session_id: 'ps-661f87c614802d6c402cd82d' });
-    expect(res).toEqual(SessionResponseSchema.parse(sessionResp));
+    expect(res).toEqual(GetSessionStatusResponseSchema.parse(sessionResp));
   });
 
   it('get_session_status - API error', async () => {
@@ -134,7 +134,7 @@ describe('payment session', () => {
   it('cancel_session - success', async () => {
     mockPost.mockResolvedValueOnce(partial_mockKyResponse({ status: 200, json: async () => sessionResp }));
     const res = await cancel_session({ session_id: 'ps-661f87c614802d6c402cd82d' });
-    expect(res).toEqual(SessionResponseSchema.parse(sessionResp));
+    expect(res).toEqual(CancelSessionResponseSchema.parse(sessionResp));
   });
 
   it('cancel_session - API error', async () => {

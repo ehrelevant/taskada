@@ -1,6 +1,6 @@
 import * as z from 'zod';
 
-export const SessionResponseSchema = z
+const SessionResponseSchema = z
   .object({
     payment_session_id: z
       .string()
@@ -80,3 +80,7 @@ export const SessionResponseSchema = z
     business_id: z.string().nullable().optional().meta({ description: 'Business ID associated with the session.' }),
   })
   .meta({ description: 'Session response schema', example: [{ payment_session_id: 'ps-...', amount: 100 }] });
+
+export const GetSessionStatusResponseSchema = SessionResponseSchema;
+export const CancelSessionResponseSchema = SessionResponseSchema;
+export const CreateSessionResponseSchema = SessionResponseSchema;
