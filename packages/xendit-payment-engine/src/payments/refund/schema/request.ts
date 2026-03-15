@@ -2,14 +2,10 @@ import * as z from 'zod';
 
 export const CreateRefundRequestSchema = z
   .object({
-    payment_request_id: z
-      .string()
-      .min(1)
-      .max(255)
-      .meta({
-        description: 'Xendit unique Payment Request ID generated as reference after creation of payment request.',
-        example: 'pr-xxxxxxxx',
-      }),
+    payment_request_id: z.string().min(1).max(255).meta({
+      description: 'Xendit unique Payment Request ID generated as reference after creation of payment request.',
+      example: 'pr-xxxxxxxx',
+    }),
     reference_id: z
       .string()
       .min(1)

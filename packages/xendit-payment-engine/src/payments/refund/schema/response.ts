@@ -7,26 +7,18 @@ export const CreateRefundResponseSchema = z
       .min(1)
       .max(255)
       .meta({ description: 'Xendit unique Refund ID generated as reference after creation of refund.' }),
-    payment_request_id: z
-      .string()
-      .min(1)
-      .max(255)
-      .meta({
-        description: 'Xendit unique Payment Request ID generated as reference after creation of payment request.',
-      }),
+    payment_request_id: z.string().min(1).max(255).meta({
+      description: 'Xendit unique Payment Request ID generated as reference after creation of payment request.',
+    }),
     payment_id: z
       .string()
       .min(1)
       .max(255)
       .meta({ description: 'To be deprecated. Xendit unique Payment ID generated as reference for a payment.' }),
-    invoice_id: z
-      .string()
-      .min(1)
-      .max(255)
-      .meta({
-        description:
-          'To be deprecated. Xendit unique Invoice ID generated as reference after creation of an invoice or payment link.',
-      }),
+    invoice_id: z.string().min(1).max(255).meta({
+      description:
+        'To be deprecated. Xendit unique Invoice ID generated as reference after creation of an invoice or payment link.',
+    }),
     payment_method_type: z
       .enum(['CARD', 'EWALLET', 'DIRECT_DEBIT'])
       .meta({ description: 'To be deprecated. Type of the payment method used in the original payment.' }),

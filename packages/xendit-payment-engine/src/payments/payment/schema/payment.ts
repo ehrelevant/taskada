@@ -19,21 +19,13 @@ export const PaymentSchema = z
       .min(1)
       .max(255)
       .meta({ description: 'A Reference ID from merchants to identify their request.' }),
-    payment_request_id: z
-      .string()
-      .min(1)
-      .max(255)
-      .meta({
-        description: 'Xendit unique Payment Request ID generated as reference after creation of payment request.',
-      }),
-    payment_token_id: z
-      .string()
-      .min(1)
-      .max(255)
-      .meta({
-        description:
-          'Xendit unique Payment Token ID generated as reference for reusable payment details of the end user.',
-      }),
+    payment_request_id: z.string().min(1).max(255).meta({
+      description: 'Xendit unique Payment Request ID generated as reference after creation of payment request.',
+    }),
+    payment_token_id: z.string().min(1).max(255).meta({
+      description:
+        'Xendit unique Payment Token ID generated as reference for reusable payment details of the end user.',
+    }),
     customer_id: z
       .string()
       .min(1)

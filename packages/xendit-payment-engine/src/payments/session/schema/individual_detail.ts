@@ -15,15 +15,10 @@ export const SessionIndividualDetailSchema = z
       .regex(/^[A-Z]{2}$/)
       .optional()
       .meta({ description: 'Country code for customer nationality. ISO 3166-1 alpha-2 Country Code.' }),
-    place_of_birth: z
-      .string()
-      .min(1)
-      .max(60)
-      .optional()
-      .meta({
-        description:
-          'City or other relevant location for the customer birth place. Alphanumeric. No special characters is allowed.',
-      }),
+    place_of_birth: z.string().min(1).max(60).optional().meta({
+      description:
+        'City or other relevant location for the customer birth place. Alphanumeric. No special characters is allowed.',
+    }),
     date_of_birth: z.string().optional(),
     gender: z.enum(['MALE', 'FEMALE', 'OTHER']).optional().meta({ description: 'Gender of customer.' }),
   })
