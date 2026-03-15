@@ -3,12 +3,17 @@ process.env.XENDIT_API_URL = 'http://test.local';
 process.env.XENDIT_CLIENT_SECRET = 'test_secret';
 
 import { jest } from '@jest/globals';
-
-let get_payment_request_status: unknown;
-let cancel_payment_request: unknown;
-let simulate_payment: unknown;
-
 import { mockGet, mockPost, partial_mockKyResponse } from '@src/tests';
+
+import type {
+  cancel_payment_request as cancel_payment_request_fn,
+  get_payment_request_status as get_payment_request_status_fn,
+  simulate_payment as simulate_payment_fn,
+} from './index';
+
+let get_payment_request_status: typeof get_payment_request_status_fn;
+let cancel_payment_request: typeof cancel_payment_request_fn;
+let simulate_payment: typeof simulate_payment_fn;
 
 jest.unstable_mockModule('@src/client', () => ({
   __esModule: true,
