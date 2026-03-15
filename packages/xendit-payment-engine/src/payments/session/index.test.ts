@@ -67,7 +67,11 @@ describe('payment session', () => {
     const badReq = {
       reference_id: 'ref-123',
       customer_id: CUST_ID,
-      customer: { type: 'INDIVIDUAL' as const, reference_id: 'ref-c', individual_detail: { given_names: 'First', surname: 'Last' } },
+      customer: {
+        type: 'INDIVIDUAL' as const,
+        reference_id: 'ref-c',
+        individual_detail: { given_names: 'First', surname: 'Last' },
+      },
       session_type: 'SAVE' as const,
       currency: 'PHP' as const,
       amount: 100,
@@ -92,7 +96,11 @@ describe('payment session', () => {
       create_session({
         reference_id: 'ref-1',
         customer_id: CUST_ID,
-        customer: { type: 'INDIVIDUAL', reference_id: 'ref-c', individual_detail: {given_names: "Alice", surname:"Doe"} },
+        customer: {
+          type: 'INDIVIDUAL',
+          reference_id: 'ref-c',
+          individual_detail: { given_names: 'Alice', surname: 'Doe' },
+        },
         session_type: 'PAY',
         currency: 'USD',
         amount: 100,

@@ -1,6 +1,6 @@
 import * as z from 'zod';
 
-import { ErrorResponseSchema, MetadataSchema, PhoneNumberSchema, JSONField } from './schema';
+import { ErrorResponseSchema, JSONField, MetadataSchema, PhoneNumberSchema } from './schema';
 
 export type Metadata = z.infer<typeof MetadataSchema>;
 export type PhoneNumber = z.infer<typeof PhoneNumberSchema>;

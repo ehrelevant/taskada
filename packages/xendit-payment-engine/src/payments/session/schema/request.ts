@@ -25,12 +25,9 @@ export const CreateSessionRequestSchema = z
     currency: z
       .enum(['IDR', 'PHP', 'VND', 'THB', 'SGD', 'MYR', 'USD'])
       .meta({ description: 'ISO 4217 three-letter currency code for the payment.' }),
-    amount: z
-      .number()
-      .min(0)
-      .meta({
-        description: 'The payment amount to be collected from the customer. For SAVE session_type, amount must be 0.',
-      }),
+    amount: z.number().min(0).meta({
+      description: 'The payment amount to be collected from the customer. For SAVE session_type, amount must be 0.',
+    }),
     mode: z
       .enum(['PAYMENT_LINK', 'COMPONENTS'])
       .meta({ description: 'The frontend integration mode for Payment Session.' }),
@@ -61,7 +58,7 @@ export const CreateSessionRequestSchema = z
   .superRefine((data, ctx) => {
     if (data.session_type === 'SAVE' && data.amount !== 0) {
       ctx.addIssue({
-        code: "custom",
+        code: 'custom',
         message: 'For SAVE session_type, the amount must be 0.',
         path: ['amount'],
       });

@@ -1,20 +1,16 @@
 import * as z from 'zod';
 import { MetadataSchema } from '@standard/schema';
-import { SessionIndividualDetailSchema  } from './individual_detail';
 
+import { SessionIndividualDetailSchema } from './individual_detail';
 
 export const SessionCustomerDetailsSchema = z
   .object({
     type: z.enum(['INDIVIDUAL']).meta({ description: 'Type of customer.' }),
-    reference_id: z
-      .string()
-      .min(1)
-      .max(255)
-      .meta({
-        description:
-          'Merchant provided identifier for the customer. Must be unique. Alphanumeric no special characters allowed.',
-        example: 'cust-123',
-      }),
+    reference_id: z.string().min(1).max(255).meta({
+      description:
+        'Merchant provided identifier for the customer. Must be unique. Alphanumeric no special characters allowed.',
+      example: 'cust-123',
+    }),
     email: z
       .string()
       .min(4)
