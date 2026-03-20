@@ -11,8 +11,6 @@
     "dev:ios:seeker": "pnpm --filter seeker-app dev:ios",
     "dev:ios:provider": "pnpm --filter provider-app dev:ios",
     "dev:ios": "concurrently -k --raw -n db,server,seeker,provider -c magenta,blue,green,yellow \"pnpm dev:db\" \"pnpm dev:server --preserveWatchOutput\" \"pnpm dev:ios:seeker\" \"pnpm dev:ios:provider\"",
-    "adb:reverse": "adb reverse tcp:3000 tcp:3000",
-    "adb:reverse:all": "adb reverse tcp:3000 tcp:3000",
     "docker:dev": "docker compose up -d",
     "docker:down": "docker compose down",
     "lint": "eslint .",
