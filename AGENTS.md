@@ -28,8 +28,8 @@ This is a pnpm monorepo containing a service platform connecting seekers with pr
 - **Mobile:** Expo, React Navigation, React Query, React Hook Form, React Native Maps, Lucide icons, expo-location, expo-notifications, expo-image-picker
 - **Auth:** `better-auth` with `@better-auth/expo` for mobile
 - **Database:** PostgreSQL with PostGIS extension (Docker image: `postgis/postgis:18-3.6-alpine`)
-- **Validation:** Valibot (runtime validation and NestJS request pipes)
-- **Schema ORM:** Drizzle ORM with `drizzle-valibot` for schema-to-validator generation
+- **Validation:** Zod (runtime validation and NestJS request pipes)
+- **Schema ORM:** Drizzle ORM with `drizzle-zod` for schema-to-validator generation
 
 ## Environment Variables
 
@@ -171,15 +171,14 @@ Button/
 
 ### Validation
 
-- Use **Valibot** for runtime validation
-- Parse environment variables with Valibot schemas:
+- Use **Zod** for runtime validation
+- Parse environment variables with Zod schemas:
 
 ```typescript
-import { parse, string } from 'valibot';
-export const XENDIT_SECRET_KEY = parse(string(), process.env.XENDIT_SECRET_KEY);
-```
+import { z } from 'zod';
 
-- Use Valibot pipes for NestJS request validation
+export const XENDIT_SECRET_KEY = z.string().parse(process.env.XENDIT_SECRET_KEY);
+```
 
 ### Error Handling
 
@@ -201,7 +200,6 @@ export const XENDIT_SECRET_KEY = parse(string(), process.env.XENDIT_SECRET_KEY);
 - Use dependency injection via decorators (`@Injectable()`, `@Inject()`)
 - Use constructor injection with `readonly` modifier
 - Organize modules by domain feature
-- Use `ValibotPipe` for request validation
 - Use `@Session()` decorator for authenticated user context
 
 ### Testing
