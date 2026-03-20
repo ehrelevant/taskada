@@ -4,43 +4,93 @@ This document provides guidelines for agentic coding agents working in this repo
 
 ## Project Overview
 
-This is a monorepo containing a service platform connecting seekers with providers:
+This is a pnpm monorepo containing a service platform connecting seekers with providers.
 
-- **apps/server**: NestJS backend with PostgreSQL (port 3000)
+**Package manager:** pnpm 10.17.1
+
+### Applications
+
+- **apps/server**: NestJS backend (port 3000)
 - **apps/seeker-app**: Expo/React Native mobile app (port 3200)
 - **apps/provider-app**: Expo/React Native mobile app (port 3100)
-- **packages/database**: Drizzle ORM schema and migrations
+
+### Packages
+
+- **packages/database**: Drizzle ORM schema and migrations (PostgreSQL/PostGIS)
 - **packages/components**: Shared React Native UI components
-- **packages/theme**: Shared theme constants (colors, spacing, typography)
+- **packages/theme**: Shared theme constants (colors, spacing, typography, shadows, service type icons)
+- **packages/shared**: Shared auth (`better-auth`), API client, socket client, React Query setup, validators
+- **packages/types**: Shared TypeScript types for API responses and socket events
+
+### Key Technologies
+
+- **Backend:** NestJS, Socket.io (real-time messaging), AWS S3 (file storage), Xendit (payments), `expo-server-sdk` (push notifications)
+- **Mobile:** Expo, React Navigation, React Query, React Hook Form, React Native Maps, Lucide icons, expo-location, expo-notifications, expo-image-picker
+- **Auth:** `better-auth` with `@better-auth/expo` for mobile
+- **Database:** PostgreSQL with PostGIS extension (Docker image: `postgis/postgis:18-3.6-alpine`)
+- **Validation:** Valibot (runtime validation and NestJS request pipes)
+- **Schema ORM:** Drizzle ORM with `drizzle-valibot` for schema-to-validator generation
+
+## Environment Variables
+
+Required env vars (set in root `.env`):
+
+```
+DATABASE_URL                  # PostgreSQL connection string
+XENDIT_SECRET_KEY             # Xendit payment gateway secret
+EXPO_PUBLIC_API_URL           # API URL exposed to mobile apps
+PORT                          # Server port (default: 3000)
+GOOGLE_MAPS_API_KEY           # Server-side Google Maps key
+EXPO_PUBLIC_GOOGLE_MAPS_API_KEY  # Client-side Google Maps key
+AWS_REGION                    # AWS S3 region
+AWS_ACCESS_KEY_ID             # AWS credentials
+AWS_SECRET_ACCESS_KEY         # AWS credentials
+S3_BUCKET_NAME                # S3 bucket for file uploads
+S3_PUBLIC_URL                 # Public URL for S3 assets
+```
+
+## Docker / Database
+
+```bash
+pnpm docker:dev               # Start PostgreSQL (PostGIS) via Docker Compose
+pnpm docker:down              # Stop Docker containers
+```
+
+The database runs on port 5432 with PostGIS spatial extensions enabled.
 
 ## Build, Lint, and Test Commands
 
 ### Root Commands (run from repository root)
 
 ```bash
-pnpm install              # Install all dependencies
-pnpm dev                  # Start all dev servers in parallel
-pnpm dev:android          # Start Android development builds
-pnpm dev:ios              # Start iOS development builds
-pnpm lint                 # Run ESLint on entire repo
-pnpm lint:fix             # Auto-fix linting issues
-pnpm fmt                  # Check formatting with Prettier
-pnpm fmt:fix              # Auto-fix formatting
-pnpm db:generate          # Generate Drizzle migrations
-pnpm db:migrate           # Apply database migrations
-pnpm db:studio            # Open Drizzle Studio GUI
+pnpm install                  # Install all dependencies
+pnpm dev:db                   # Start database package in watch mode
+pnpm dev:server               # Start NestJS server in watch mode
+pnpm dev:android:seeker       # Start seeker app on Android
+pnpm dev:android:provider     # Start provider app on Android
+pnpm dev:android              # Start all: db + server + both Android apps
+pnpm dev:ios:seeker           # Start seeker app on iOS
+pnpm dev:ios:provider         # Start provider app on iOS
+pnpm dev:ios                  # Start all: db + server + both iOS apps
+pnpm lint                     # Run ESLint on entire repo
+pnpm lint:fix                 # Auto-fix linting issues
+pnpm fmt                      # Check formatting with Prettier
+pnpm fmt:fix                  # Auto-fix formatting
+pnpm db:generate              # Generate Drizzle migrations
+pnpm db:migrate               # Apply database migrations
+pnpm db:studio                # Open Drizzle Studio GUI
 ```
 
 ### Server App Commands (apps/server)
 
 ```bash
 cd apps/server
-pnpm run dev              # Start NestJS with watch mode
-pnpm run build            # Build for production
-pnpm run test             # Run all Jest tests
-pnpm run test:watch       # Run tests in watch mode
-pnpm run test:cov         # Run tests with coverage
-pnpm run test:e2e         # Run end-to-end tests
+pnpm run dev                  # Start NestJS with watch mode
+pnpm run build                # Build for production
+pnpm run test                 # Run all Jest tests
+pnpm run test:watch           # Run tests in watch mode
+pnpm run test:cov             # Run tests with coverage
+pnpm run test:e2e             # Run end-to-end tests
 # Run single test file
 pnpm test -- <test-file-path>
 # Example: pnpm test -- users/users.service.spec.ts
@@ -50,12 +100,19 @@ pnpm test -- <test-file-path>
 
 ```bash
 cd packages/database
-pnpm run dev              # Watch mode for building
-pnpm run build            # Build TypeScript
-pnpm run generate         # Generate Drizzle migrations
-pnpm run migrate          # Apply migrations
-pnpm run studio           # Open database GUI
+pnpm run dev                  # Watch mode for building
+pnpm run build                # Build TypeScript
+pnpm run generate             # Generate Drizzle migrations
+pnpm run migrate              # Apply migrations
+pnpm run studio               # Open database GUI
 ```
+
+## CI/CD
+
+GitHub Actions runs on push to `main` and on pull requests:
+
+- `pnpm fmt` — Prettier formatting check
+- `pnpm lint` — ESLint check
 
 ## Code Style Guidelines
 
@@ -137,6 +194,7 @@ export const XENDIT_SECRET_KEY = parse(string(), process.env.XENDIT_SECRET_KEY);
 - Use explicit column selections in queries (avoid `select(*)`)
 - Use `eq()` and other operators from `drizzle-orm` for conditions
 - Always handle `null` cases explicitly
+- PostGIS geography types used for location/coordinate columns
 
 ### NestJS Patterns
 
