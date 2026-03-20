@@ -3,11 +3,11 @@ import { Avatar, Button, Card, Typography } from '@repo/components';
 import { colors } from '@repo/theme';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { BookingHistoryItem, useTransactionHistory } from './History.hooks';
+import { BookingHistoryItem, useHistory } from './History.hooks';
 import { styles } from './History.styles';
 
-export function TransactionHistoryListScreen() {
-  const { bookings, isLoading, error, formatDateTime, getStatusColor, handleViewDetails } = useTransactionHistory();
+export function HistoryScreen() {
+  const { bookings, isLoading, error, formatDateTime, getStatusColor, handleViewDetails } = useHistory();
 
   const renderBookingCard = ({ item }: { item: BookingHistoryItem }) => {
     const seekerName = item.seeker ? `${item.seeker.firstName} ${item.seeker.lastName}` : 'Unknown Seeker';

@@ -6,7 +6,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { TouchableOpacity, View } from 'react-native';
 
 import { styles } from './AddEWallet.styles';
-import { useAddEWalletScreen } from './AddEWallet.hooks';
+import { useAddEWallet } from './AddEWallet.hooks';
 
 const WALLETS = [
   { id: 'GCASH', name: 'GCash', color: '#007DFE' },
@@ -14,7 +14,7 @@ const WALLETS = [
 ];
 
 export function AddEWalletScreen() {
-  const { control, handleSubmit, setValue, errors, isSubmitting, selectedChannel, onSubmit } = useAddEWalletScreen();
+  const { control, handleSubmit, setValue, errors, isSubmitting, selectedChannel, onSubmit } = useAddEWallet();
 
   return (
     <View style={styles.container}>

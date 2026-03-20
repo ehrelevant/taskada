@@ -10,7 +10,7 @@ interface UserProfile {
   avatarUrl: string | null;
 }
 
-export function useOptionsScreen() {
+export function useOptions() {
   const { setLoading } = useLoading();
   const [profile, setProfile] = useState<UserProfile | null>(null);
 

@@ -4,11 +4,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView, View } from 'react-native';
 
 import { styles } from './BookingProposal.styles';
-import { useBookingProposalScreen } from './BookingProposal.hooks';
+import { useBookingProposal } from './BookingProposal.hooks';
 
-export function ViewProposalScreen() {
+export function BookingProposalScreen() {
   const { cost, specifications, serviceTypeName, address, longitude, latitude, handleAccept, handleDecline } =
-    useBookingProposalScreen();
+    useBookingProposal();
 
   return (
     <SafeAreaView style={styles.container}>

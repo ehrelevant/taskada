@@ -1,12 +1,12 @@
 import { Alert } from 'react-native';
+import { HistoryStackParamList } from '@navigation/HistoryStack';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { providerClient } from '@lib/providerClient';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { TransactionHistoryStackParamList } from '@navigation/TransactionHistoryStack';
 import { useCallback, useEffect, useState } from 'react';
 
-type BookingDetailsRouteProp = RouteProp<TransactionHistoryStackParamList, 'BookingDetails'>;
-type BookingDetailsNavigationProp = NativeStackNavigationProp<TransactionHistoryStackParamList, 'BookingDetails'>;
+type BookingDetailsRouteProp = RouteProp<HistoryStackParamList, 'BookingDetails'>;
+type BookingDetailsNavigationProp = NativeStackNavigationProp<HistoryStackParamList, 'BookingDetails'>;
 
 export interface BookingData {
   id: string;

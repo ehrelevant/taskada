@@ -2,7 +2,7 @@ import { seekerClient } from '@lib/seekerClient';
 import type { ServiceType } from '@repo/types';
 import { useEffect, useState } from 'react';
 
-export function useServiceTypesScreen() {
+export function useServiceTypes() {
   const [serviceTypes, setServiceTypes] = useState<ServiceType[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

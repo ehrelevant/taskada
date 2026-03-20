@@ -18,7 +18,7 @@ interface BookingData {
   };
 }
 
-export function useBookingDoneScreen() {
+export function useBookingDone() {
   const route = useRoute<BookingCompleteRouteProp>();
   const navigation = useNavigation<BookingCompleteNavigationProp>();
   const { bookingId, providerInfo, serviceTypeName, cost } = route.params;

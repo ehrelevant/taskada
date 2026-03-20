@@ -1,11 +1,11 @@
+import { HistoryStackParamList } from '@navigation/HistoryStack';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { providerClient } from '@lib/providerClient';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { TransactionHistoryStackParamList } from '@navigation/TransactionHistoryStack';
 import { useCallback, useEffect, useState } from 'react';
 
-type ChatLogsRouteProp = RouteProp<TransactionHistoryStackParamList, 'ChatLogs'>;
-type ChatLogsNavigationProp = NativeStackNavigationProp<TransactionHistoryStackParamList, 'ChatLogs'>;
+type ChatLogsRouteProp = RouteProp<HistoryStackParamList, 'ChatLogs'>;
+type ChatLogsNavigationProp = NativeStackNavigationProp<HistoryStackParamList, 'ChatLogs'>;
 
 export interface Message {
   id: string;

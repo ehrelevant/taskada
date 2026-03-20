@@ -5,10 +5,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Typography } from '@repo/components';
 
 import { styles } from './BookingDetails.styles';
-import { useBookingDetailsScreen } from './BookingDetails.hooks';
+import { useBookingDetails } from './BookingDetails.hooks';
 
 export function BookingDetailsScreen() {
-  const { booking, isLoading, handleGoBack, formatDateTime } = useBookingDetailsScreen();
+  const { booking, isLoading, handleGoBack, formatDateTime } = useBookingDetails();
 
   const coordinates = booking?.address?.coordinates;
   const [longitude, latitude] = coordinates || [0, 0];

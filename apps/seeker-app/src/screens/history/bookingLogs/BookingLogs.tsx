@@ -5,9 +5,9 @@ import { colors, spacing } from '@repo/theme';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { styles } from './BookingLogs.styles';
-import { useBookingLogsScreen } from './BookingLogs.hooks';
+import { useBookingLogs } from './BookingLogs.hooks';
 
-export function TransactionDetailsScreen() {
+export function BookingLogsScreen() {
   const {
     transaction,
     isLoading,
@@ -24,7 +24,7 @@ export function TransactionDetailsScreen() {
     handleViewChatLogs,
     handleSubmitReview,
     formatDateTime,
-  } = useBookingLogsScreen();
+  } = useBookingLogs();
 
   if (isLoading) {
     return (

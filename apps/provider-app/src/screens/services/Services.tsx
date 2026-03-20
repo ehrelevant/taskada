@@ -5,11 +5,11 @@ import { Pencil, Plus, Trash2, Wrench } from 'lucide-react-native';
 import type { ProviderService } from '@repo/types';
 
 import { styles } from './Services.styles';
-import { useServicesScreen } from './Services.hooks';
+import { useServices } from './Services.hooks';
 
 import { AddServiceModal } from './addModal/AddServiceModal';
 
-export function ServiceListScreen() {
+export function ServicesScreen() {
   const {
     services,
     isRefreshing,
@@ -21,7 +21,7 @@ export function ServiceListScreen() {
     toggleService,
     handleCloseModal,
     handleOpenModal,
-  } = useServicesScreen();
+  } = useServices();
 
   const renderItem = ({ item }: { item: ProviderService }) => (
     <Card style={styles.card} padding="m">

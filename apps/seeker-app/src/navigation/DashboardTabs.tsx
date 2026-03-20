@@ -4,13 +4,13 @@ import { History, Home, Menu } from 'lucide-react-native';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Typography } from '@repo/components';
 
+import { HistoryStack } from './HistoryStack';
 import { HomeStack } from './HomeStack';
 import { OptionsStack } from './OptionsStack';
-import { TransactionHistoryStack } from './TransactionHistoryStack';
 
 export type DashboardTabsParamList = {
   HomeStack: undefined;
-  TransactionHistoryStack: undefined;
+  HistoryStack: undefined;
   OptionsStack: undefined;
 };
 
@@ -51,7 +51,7 @@ function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
 
           if (route.name === 'HomeStack') {
             return <Home {...iconProps} />;
-          } else if (route.name === 'TransactionHistoryStack') {
+          } else if (route.name === 'HistoryStack') {
             return <History {...iconProps} />;
           } else {
             return <Menu {...iconProps} />;
@@ -93,7 +93,7 @@ export function DashboardTabs() {
       initialRouteName="HomeStack"
     >
       <Tab.Screen name="HomeStack" component={HomeStack} options={{ title: 'Home' }} />
-      <Tab.Screen name="TransactionHistoryStack" component={TransactionHistoryStack} options={{ title: 'History' }} />
+      <Tab.Screen name="HistoryStack" component={HistoryStack} options={{ title: 'History' }} />
       <Tab.Screen name="OptionsStack" component={OptionsStack} options={{ title: 'Options' }} />
     </Tab.Navigator>
   );

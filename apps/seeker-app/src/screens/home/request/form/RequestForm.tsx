@@ -6,7 +6,7 @@ import { Controller, FormProvider } from 'react-hook-form';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 
 import { styles } from './RequestForm.styles';
-import { useRequestFormScreen } from './RequestForm.hooks';
+import { useRequestForm } from './RequestForm.hooks';
 
 import { MapSection } from './mapSection/MapSection';
 import { ServiceSelection } from './serviceSelection/ServiceSelection';
@@ -33,7 +33,7 @@ export function RequestFormScreen() {
     pickImages,
     removeImage,
     handleSubmit,
-  } = useRequestFormScreen();
+  } = useRequestForm();
 
   return (
     <KeyboardAwareScrollView contentContainerStyle={styles.scrollContent}>

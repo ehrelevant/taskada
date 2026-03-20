@@ -11,7 +11,7 @@ type ServiceDetailsRouteProp = RouteProp<
   'ServiceDetails'
 >;
 
-export function useServiceDetailsScreen() {
+export function useServiceDetails() {
   const route = useRoute<ServiceDetailsRouteProp>();
   const navigation = useNavigation<NativeStackNavigationProp<HomeStackParamList>>();
   const { serviceId, returnTo } = route.params;

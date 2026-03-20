@@ -8,7 +8,7 @@ import { useState } from 'react';
 
 type SignInNavProp = NativeStackNavigationProp<AuthStackParamList, 'SignIn'>;
 
-export function useSignInScreen() {
+export function useSignIn() {
   const navigation = useNavigation<SignInNavProp>();
   const { withLoading } = useLoading();
   const [errorMessage, setErrorMessage] = useState('');

@@ -32,7 +32,7 @@ interface BookingData {
   };
 }
 
-export function useBookingDetailsScreen() {
+export function useBookingDetails() {
   const route = useRoute<BookingDetailsRouteProp>();
   const navigation = useNavigation<BookingDetailsNavigationProp>();
   const { bookingId } = route.params;

@@ -4,15 +4,15 @@ import { colors, palette } from '@repo/theme';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Typography } from '@repo/components';
 
+import { HistoryStack } from './HistoryStack';
 import { OptionsStack } from './OptionsStack';
 import { RequestsStack } from './RequestsStack';
 import { ServicesStack } from './ServicesStack';
-import { TransactionHistoryStack } from './TransactionHistoryStack';
 
 export type DashboardTabsParamList = {
   RequestsStack: undefined;
   ServicesStack: undefined;
-  TransactionHistoryStack: undefined;
+  HistoryStack: undefined;
   OptionsStack: undefined;
 };
 
@@ -55,7 +55,7 @@ function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
             return <ClipboardList {...iconProps} />;
           } else if (route.name === 'ServicesStack') {
             return <HardHat {...iconProps} />;
-          } else if (route.name === 'TransactionHistoryStack') {
+          } else if (route.name === 'HistoryStack') {
             return <History {...iconProps} />;
           } else {
             return <Menu {...iconProps} />;
@@ -98,7 +98,7 @@ export function DashboardTabs() {
     >
       <Tab.Screen name="RequestsStack" component={RequestsStack} options={{ title: 'Requests' }} />
       <Tab.Screen name="ServicesStack" component={ServicesStack} options={{ title: 'Services' }} />
-      <Tab.Screen name="TransactionHistoryStack" component={TransactionHistoryStack} options={{ title: 'History' }} />
+      <Tab.Screen name="HistoryStack" component={HistoryStack} options={{ title: 'History' }} />
       <Tab.Screen name="OptionsStack" component={OptionsStack} options={{ title: 'Options' }} />
     </Tab.Navigator>
   );

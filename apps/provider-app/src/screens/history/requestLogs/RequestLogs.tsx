@@ -6,7 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { styles } from './RequestLogs.styles';
 import { useRequestLogs } from './RequestLogs.hooks';
 
-export function RequestDetailsSummaryScreen() {
+export function RequestLogsScreen() {
   const { request, isLoading, error, handleGoBack } = useRequestLogs();
 
   if (isLoading) {

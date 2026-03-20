@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView, TouchableOpacity, View } from 'react-native';
 
 import { styles } from './Profile.styles';
-import { useProfileScreen } from './Profile.hooks';
+import { useProfile } from './Profile.hooks';
 
 export function ProfileScreen() {
   const {
@@ -22,7 +22,7 @@ export function ProfileScreen() {
     handleRemoveAvatar,
     handleSave,
     handleCancel,
-  } = useProfileScreen();
+  } = useProfile();
 
   if (!userSession) {
     return <View style={styles.container} />;

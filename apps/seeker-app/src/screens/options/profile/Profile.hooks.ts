@@ -22,7 +22,7 @@ interface PasswordData {
   confirmPassword: string;
 }
 
-export function useProfileScreen() {
+export function useProfile() {
   const { setLoading } = useLoading();
   const navigation = useNavigation<NativeStackScreenProps<OptionsStackParamList, 'Profile'>['navigation']>();
   const { data: userSession, refetch } = authClient.useSession();

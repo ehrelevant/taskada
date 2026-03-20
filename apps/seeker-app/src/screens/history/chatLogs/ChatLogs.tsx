@@ -5,10 +5,10 @@ import { ImageViewer, Typography } from '@repo/components';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { styles } from './ChatLogs.styles';
-import { useChatLogsScreen } from './ChatLogs.hooks';
+import { useChatLogs } from './ChatLogs.hooks';
 
 export function ChatLogsScreen() {
-  const { messages, isLoading, error, otherUser, selectedImage, setSelectedImage, handleGoBack } = useChatLogsScreen();
+  const { messages, isLoading, error, otherUser, selectedImage, setSelectedImage, handleGoBack } = useChatLogs();
 
   const renderMessage = ({
     item,

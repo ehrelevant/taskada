@@ -9,7 +9,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { styles } from './BookingChat.styles';
 import { useBookingChat } from './BookingChat.hooks';
 
-export function ChatScreen() {
+export function BookingChatScreen() {
   const {
     otherUser,
     messages,

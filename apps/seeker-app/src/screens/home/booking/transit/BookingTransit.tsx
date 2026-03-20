@@ -3,11 +3,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView, View } from 'react-native';
 
 import { styles } from './BookingTransit.styles';
-import { useBookingTransitScreen } from './BookingTransit.hooks';
+import { useBookingTransit } from './BookingTransit.hooks';
 
 export function BookingTransitScreen() {
   const { providerName, providerInfo, serviceTypeName, cost, specifications, hasProviderArrived } =
-    useBookingTransitScreen();
+    useBookingTransit();
 
   return (
     <SafeAreaView style={styles.container}>

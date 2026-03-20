@@ -3,10 +3,10 @@ import { colors } from '@repo/theme';
 import { Pressable, Text } from 'react-native';
 
 import { styles } from './SignIn.styles';
-import { useSignInScreen } from './SignIn.hooks';
+import { useSignIn } from './SignIn.hooks';
 
 export function SignInScreen() {
-  const { email, setEmail, password, setPassword, errorMessage, handleSignIn, navigation } = useSignInScreen();
+  const { email, setEmail, password, setPassword, errorMessage, handleSignIn, navigation } = useSignIn();
 
   return (
     <ScreenContainer scrollable padding="l" style={styles.container}>

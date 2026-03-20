@@ -4,7 +4,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { Pressable, Text } from 'react-native';
 
 import { styles } from './SignUp.styles';
-import { useSignUpScreen } from './SignUp.hooks';
+import { useSignUp } from './SignUp.hooks';
 
 export function SignUpScreen() {
   const {
@@ -23,7 +23,7 @@ export function SignUpScreen() {
     errorMessage,
     handleSignUp,
     navigation,
-  } = useSignUpScreen();
+  } = useSignUp();
 
   return (
     <KeyboardAwareScrollView contentContainerStyle={styles.scrollContainer} bottomOffset={50}>

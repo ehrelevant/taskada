@@ -9,7 +9,7 @@ const SAVED_METHODS = [
   { id: '2', type: 'EWALLET', label: 'GCash (0917 *** 8888)', icon: 'gcash' },
 ];
 
-export function usePaymentsScreen() {
+export function usePayments() {
   const navigation = useNavigation<NavProp>();
 
   return {

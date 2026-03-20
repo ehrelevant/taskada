@@ -4,10 +4,10 @@ import { CreditCard, Plus, Trash2, Wallet } from 'lucide-react-native';
 import { ScrollView, TouchableOpacity, View } from 'react-native';
 
 import { styles } from './Payments.styles';
-import { usePaymentsScreen } from './Payments.hooks';
+import { usePayments } from './Payments.hooks';
 
-export function PaymentMethodsScreen() {
-  const { savedMethods, navigation } = usePaymentsScreen();
+export function PaymentsScreen() {
+  const { savedMethods, navigation } = usePayments();
 
   return (
     <View style={styles.container}>

@@ -8,7 +8,7 @@ import { useState } from 'react';
 
 type SignUpNavProp = NativeStackNavigationProp<AuthStackParamList, 'SignUp'>;
 
-export function useSignUpScreen() {
+export function useSignUp() {
   const navigation = useNavigation<SignUpNavProp>();
   const { setLoading } = useLoading();
   const [errorMessage, setErrorMessage] = useState('');

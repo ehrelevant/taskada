@@ -3,7 +3,7 @@ import { providerClient } from '@lib/providerClient';
 import type { ProviderService } from '@repo/types';
 import { useEffect, useState } from 'react';
 
-export function useServicesScreen() {
+export function useServices() {
   const [services, setServices] = useState<ProviderService[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);

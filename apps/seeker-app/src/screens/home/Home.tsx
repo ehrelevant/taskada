@@ -5,7 +5,7 @@ import type { FeaturedService, SearchResult, ServiceType } from '@repo/types';
 import { useCallback, useMemo } from 'react';
 
 import { styles } from './Home.styles';
-import { useHomeScreen } from './Home.hooks';
+import { useHome } from './Home.hooks';
 
 export function HomeScreen() {
   const {
@@ -26,7 +26,7 @@ export function HomeScreen() {
     serviceTypeKeyExtractor,
     featuredServiceKeyExtractor,
     searchResultKeyExtractor,
-  } = useHomeScreen();
+  } = useHome();
 
   const renderSearchResultItem = useCallback(
     ({ item }: { item: SearchResult }) => (

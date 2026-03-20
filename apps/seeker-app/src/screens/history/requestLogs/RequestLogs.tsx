@@ -4,10 +4,10 @@ import { colors } from '@repo/theme';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { styles } from './RequestLogs.styles';
-import { useRequestLogsScreen } from './RequestLogs.hooks';
+import { useRequestLogs } from './RequestLogs.hooks';
 
-export function RequestDetailsSummaryScreen() {
-  const { request, isLoading, error, handleGoBack } = useRequestLogsScreen();
+export function RequestLogsScreen() {
+  const { request, isLoading, error, handleGoBack } = useRequestLogs();
 
   if (isLoading) {
     return (

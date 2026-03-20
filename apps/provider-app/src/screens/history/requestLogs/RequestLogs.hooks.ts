@@ -1,12 +1,12 @@
+import { HistoryStackParamList } from '@navigation/HistoryStack';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { providerClient } from '@lib/providerClient';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { TransactionHistoryStackParamList } from '@navigation/TransactionHistoryStack';
 import { useCallback, useEffect, useState } from 'react';
 
-type RequestDetailsRouteProp = RouteProp<TransactionHistoryStackParamList, 'RequestDetailsSummary'>;
+type RequestDetailsRouteProp = RouteProp<HistoryStackParamList, 'RequestDetailsSummary'>;
 type RequestDetailsNavigationProp = NativeStackNavigationProp<
-  TransactionHistoryStackParamList,
+  HistoryStackParamList,
   'RequestDetailsSummary'
 >;
 

@@ -10,7 +10,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 type StandbyRouteProp = RouteProp<HomeStackParamList, 'Standby'>;
 type StandbyNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'Standby'>;
 
-export function useStandbyScreen() {
+export function useStandby() {
   const route = useRoute<StandbyRouteProp>();
   const navigation = useNavigation<StandbyNavigationProp>();
   const { requestId } = route.params;

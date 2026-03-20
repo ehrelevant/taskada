@@ -3,10 +3,10 @@ import { Avatar, Button, Rating, ReviewCard, Typography } from '@repo/components
 import { colors, spacing } from '@repo/theme';
 
 import { styles } from './ServiceDetails.styles';
-import { useServiceDetailsScreen } from './ServiceDetails.hooks';
+import { useServiceDetails } from './ServiceDetails.hooks';
 
 export function ServiceDetailsScreen() {
-  const { details, reviews, loading, error, returnTo, handleRequestService } = useServiceDetailsScreen();
+  const { details, reviews, loading, error, returnTo, handleRequestService } = useServiceDetails();
 
   if (loading) {
     return (

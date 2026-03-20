@@ -23,7 +23,7 @@ interface ChatScreenParams {
   requestId: string;
 }
 
-export function useBookingChatScreen() {
+export function useBookingChat() {
   const route = useRoute<ChatRouteProp>();
   const navigation = useNavigation<ChatNavigationProp>();
   const { bookingId, providerInfo, requestId } = route.params as ChatScreenParams;

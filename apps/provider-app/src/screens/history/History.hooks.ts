@@ -1,11 +1,11 @@
+import { HistoryStackParamList } from '@navigation/HistoryStack';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { palette } from '@repo/theme';
 import { providerClient } from '@lib/providerClient';
-import { TransactionHistoryStackParamList } from '@navigation/TransactionHistoryStack';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
-type TransactionHistoryNavigationProp = NativeStackNavigationProp<TransactionHistoryStackParamList>;
+type HistoryNavigationProp = NativeStackNavigationProp<HistoryStackParamList>;
 
 export interface BookingHistoryItem {
   id: string;
@@ -31,7 +31,7 @@ export interface BookingHistoryItem {
   };
 }
 
-interface UseTransactionHistoryReturn {
+interface UseHistoryReturn {
   bookings: BookingHistoryItem[];
   isLoading: boolean;
   error: string | null;
@@ -41,8 +41,8 @@ interface UseTransactionHistoryReturn {
   loadBookingHistory: () => Promise<void>;
 }
 
-export function useTransactionHistory(): UseTransactionHistoryReturn {
-  const navigation = useNavigation<TransactionHistoryNavigationProp>();
+export function useHistory(): UseHistoryReturn {
+  const navigation = useNavigation<HistoryNavigationProp>();
   const [bookings, setBookings] = useState<BookingHistoryItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

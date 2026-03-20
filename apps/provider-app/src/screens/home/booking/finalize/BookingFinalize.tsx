@@ -1,5 +1,14 @@
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import { ActivityIndicator, KeyboardAvoidingView, Modal, Platform, ScrollView, TextInput, TouchableOpacity, View } from 'react-native';
+import {
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { ArrowLeft } from 'lucide-react-native';
 import { Button, Typography } from '@repo/components';
 import { colors } from '@repo/theme';
@@ -8,7 +17,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { styles } from './BookingFinalize.styles';
 import { useBookingFinalize } from './BookingFinalize.hooks';
 
-export function FinalizeDetailsScreen() {
+export function BookingFinalizeScreen() {
   const {
     serviceCost,
     serviceSpecifications,

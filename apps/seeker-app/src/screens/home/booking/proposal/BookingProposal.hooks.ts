@@ -8,7 +8,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 type ViewProposalRouteProp = RouteProp<HomeStackParamList, 'ViewProposal'>;
 type ViewProposalNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'ViewProposal'>;
 
-export function useBookingProposalScreen() {
+export function useBookingProposal() {
   const route = useRoute<ViewProposalRouteProp>();
   const navigation = useNavigation<ViewProposalNavigationProp>();
   const { bookingId, providerInfo, proposal, requestId } = route.params;

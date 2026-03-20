@@ -7,7 +7,7 @@ import type { Message } from '@repo/shared';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { styles } from './BookingChat.styles';
-import { useBookingChatScreen } from './BookingChat.hooks';
+import { useBookingChat } from './BookingChat.hooks';
 
 export function ChatScreen() {
   const {
@@ -27,7 +27,7 @@ export function ChatScreen() {
     handleLoadMore,
     handlePickImage,
     handleRemoveImage,
-  } = useBookingChatScreen();
+  } = useBookingChat();
 
   const renderMessage = ({ item }: { item: Message }) => {
     const isOwnMessage = item.userId === currentUserId;

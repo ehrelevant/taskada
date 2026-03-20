@@ -1,13 +1,13 @@
+import { HistoryStackParamList } from '@navigation/HistoryStack';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RouteProp } from '@react-navigation/native';
 import { seekerClient } from '@lib/seekerClient';
-import { TransactionHistoryStackParamList } from '@navigation/TransactionHistoryStack';
 import { useEffect, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-type RequestDetailsRouteProp = RouteProp<TransactionHistoryStackParamList, 'RequestDetailsSummary'>;
+type RequestDetailsRouteProp = RouteProp<HistoryStackParamList, 'RequestDetailsSummary'>;
 type RequestDetailsNavigationProp = NativeStackNavigationProp<
-  TransactionHistoryStackParamList,
+  HistoryStackParamList,
   'RequestDetailsSummary'
 >;
 
@@ -32,7 +32,7 @@ interface RequestDetailsData {
   } | null;
 }
 
-export function useRequestLogsScreen() {
+export function useRequestLogs() {
   const route = useRoute<RequestDetailsRouteProp>();
   const navigation = useNavigation<RequestDetailsNavigationProp>();
   const { bookingId } = route.params;

@@ -4,10 +4,10 @@ import { colors } from '@repo/theme';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { styles } from './History.styles';
-import { useHistoryScreen } from './History.hooks';
+import { useHistory } from './History.hooks';
 
-export function TransactionHistoryListScreen() {
-  const { bookings, isLoading, error, formatDateTime, getStatusColor, handleViewDetails } = useHistoryScreen();
+export function HistoryScreen() {
+  const { bookings, isLoading, error, formatDateTime, getStatusColor, handleViewDetails } = useHistory();
 
   const renderBookingCard = ({
     item,

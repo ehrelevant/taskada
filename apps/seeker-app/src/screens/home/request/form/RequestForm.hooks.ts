@@ -10,7 +10,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { valibotResolver } from '@hookform/resolvers/valibot';
 
-export function useRequestFormScreen() {
+export function useRequestForm() {
   const route = useRoute<RouteProp<HomeStackParamList, 'RequestForm'>>();
   const navigation = useNavigation<NativeStackNavigationProp<HomeStackParamList, 'RequestForm'>>();
   const { serviceTypeId: initialServiceTypeId, serviceId: initialServiceId } = route.params || {};

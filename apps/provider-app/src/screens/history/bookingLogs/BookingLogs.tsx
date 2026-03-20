@@ -8,7 +8,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { styles } from './BookingLogs.styles';
 import { useBookingLogs } from './BookingLogs.hooks';
 
-export function BookingDetailsScreen() {
+export function BookingLogsScreen() {
   const {
     booking,
     isLoading,

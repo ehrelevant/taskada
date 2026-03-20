@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { ServiceListScreen } from '@screens/services/Services';
+import { ServicesScreen } from '@screens/services/Services';
 
 export type OptionsStackParamList = {
   ServiceList: undefined;
@@ -18,7 +18,7 @@ export function ServicesStack() {
     >
       <Stack.Screen
         name="ServiceList"
-        component={ServiceListScreen}
+        component={ServicesScreen}
         options={{
           title: 'Services',
         }}

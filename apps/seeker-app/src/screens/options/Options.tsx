@@ -5,10 +5,10 @@ import { useNavigation } from '@react-navigation/native';
 import { View } from 'react-native';
 
 import { styles } from './Options.styles';
-import { useOptionsScreen } from './Options.hooks';
+import { useOptions } from './Options.hooks';
 
 export function OptionsScreen() {
-  const { userSession, profile, signOut } = useOptionsScreen();
+  const { userSession, profile, signOut } = useOptions();
   const navigation = useNavigation();
 
   if (userSession === null) {

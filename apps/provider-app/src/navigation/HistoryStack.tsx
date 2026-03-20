@@ -1,10 +1,10 @@
-import { BookingDetailsScreen } from '@screens/history/bookingLogs/BookingLogs';
+import { BookingLogsScreen } from '@screens/history/bookingLogs/BookingLogs';
 import { ChatLogsScreen } from '@screens/history/chatLogs/ChatLogs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { RequestDetailsSummaryScreen } from '@screens/history/requestLogs/RequestLogs';
-import { TransactionHistoryListScreen } from '@screens/history/History';
+import { HistoryScreen } from '@screens/history/History';
+import { RequestLogsScreen } from '@screens/history/requestLogs/RequestLogs';
 
-export type TransactionHistoryStackParamList = {
+export type HistoryStackParamList = {
   TransactionHistoryList: undefined;
   BookingDetails: { bookingId: string };
   RequestDetailsSummary: { bookingId: string };
@@ -19,9 +19,9 @@ export type TransactionHistoryStackParamList = {
   };
 };
 
-const Stack = createNativeStackNavigator<TransactionHistoryStackParamList>();
+const Stack = createNativeStackNavigator<HistoryStackParamList>();
 
-export function TransactionHistoryStack() {
+export function HistoryStack() {
   return (
     <Stack.Navigator
       initialRouteName="TransactionHistoryList"
@@ -31,14 +31,14 @@ export function TransactionHistoryStack() {
     >
       <Stack.Screen
         name="TransactionHistoryList"
-        component={TransactionHistoryListScreen}
+        component={HistoryScreen}
         options={{
           title: 'Transaction History',
         }}
       />
       <Stack.Screen
         name="BookingDetails"
-        component={BookingDetailsScreen}
+        component={BookingLogsScreen}
         options={{
           title: 'Booking Details',
           headerShown: false,
@@ -46,7 +46,7 @@ export function TransactionHistoryStack() {
       />
       <Stack.Screen
         name="RequestDetailsSummary"
-        component={RequestDetailsSummaryScreen}
+        component={RequestLogsScreen}
         options={{
           title: 'Request Details',
           headerShown: false,

@@ -1,5 +1,6 @@
-import { BookingCompleteScreen } from '@screens/home/booking/done/BookingDone';
 import { BookingDetailsScreen } from '@screens/home/booking/details/BookingDetails';
+import { BookingDoneScreen } from '@screens/home/booking/done/BookingDone';
+import { BookingProposalScreen } from '@screens/home/booking/proposal/BookingProposal';
 import { BookingTransitScreen } from '@screens/home/booking/transit/BookingTransit';
 import { ChatScreen } from '@screens/home/booking/chat/BookingChat';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -8,7 +9,6 @@ import { RequestFormScreen } from '@screens/home/request/form/RequestForm';
 import { ServiceDetailsScreen } from '@screens/home/service/details/ServiceDetails';
 import { ServiceTypesListScreen } from '@screens/home/service/types/ServiceTypes';
 import { StandbyScreen } from '@screens/home/request/standby/Standby';
-import { ViewProposalScreen } from '@screens/home/booking/proposal/BookingProposal';
 
 export type HomeStackParamList = {
   Home: undefined;
@@ -145,7 +145,7 @@ export function HomeStack() {
       />
       <Stack.Screen
         name="ViewProposal"
-        component={ViewProposalScreen}
+        component={BookingProposalScreen}
         options={{
           title: 'Service Proposal',
           headerShown: false,
@@ -161,7 +161,7 @@ export function HomeStack() {
       />
       <Stack.Screen
         name="BookingComplete"
-        component={BookingCompleteScreen}
+        component={BookingDoneScreen}
         options={{
           title: 'Service Complete',
           headerShown: false,

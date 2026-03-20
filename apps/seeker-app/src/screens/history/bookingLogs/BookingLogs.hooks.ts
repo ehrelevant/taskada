@@ -1,15 +1,15 @@
 import { Alert } from 'react-native';
 import { authClient } from '@lib/authClient';
+import { HistoryStackParamList } from '@navigation/HistoryStack';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RouteProp } from '@react-navigation/native';
 import { seekerClient } from '@lib/seekerClient';
-import { TransactionHistoryStackParamList } from '@navigation/TransactionHistoryStack';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-type TransactionDetailsRouteProp = RouteProp<TransactionHistoryStackParamList, 'TransactionDetails'>;
+type TransactionDetailsRouteProp = RouteProp<HistoryStackParamList, 'TransactionDetails'>;
 type TransactionDetailsNavigationProp = NativeStackNavigationProp<
-  TransactionHistoryStackParamList,
+  HistoryStackParamList,
   'TransactionDetails'
 >;
 
@@ -49,7 +49,7 @@ interface ReviewWithUser {
   createdAt: string;
 }
 
-export function useBookingLogsScreen() {
+export function useBookingLogs() {
   const navigation = useNavigation<TransactionDetailsNavigationProp>();
   const route = useRoute<TransactionDetailsRouteProp>();
   const { bookingId } = route.params;

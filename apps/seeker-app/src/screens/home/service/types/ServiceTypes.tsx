@@ -3,10 +3,10 @@ import type { ServiceType } from '@repo/types';
 import { ServiceTypeCard, Typography } from '@repo/components';
 
 import { styles } from './ServiceTypes.styles';
-import { useServiceTypesScreen } from './ServiceTypes.hooks';
+import { useServiceTypes } from './ServiceTypes.hooks';
 
 export function ServiceTypesListScreen() {
-  const { serviceTypes, loading, error } = useServiceTypesScreen();
+  const { serviceTypes, loading, error } = useServiceTypes();
 
   const renderItem = ({ item }: { item: ServiceType }) => (
     <ServiceTypeCard name={item.name} iconUrl={item.iconUrl} onPress={() => undefined} />

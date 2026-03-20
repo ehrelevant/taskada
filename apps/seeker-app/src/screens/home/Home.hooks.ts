@@ -12,7 +12,7 @@ interface UserProfile {
   avatarUrl: string | null;
 }
 
-export function useHomeScreen() {
+export function useHome() {
   const navigation = useNavigation<NativeStackNavigationProp<HomeStackParamList>>();
   const { data: session } = authClient.useSession();
   const [profile, setProfile] = useState<UserProfile | null>(null);

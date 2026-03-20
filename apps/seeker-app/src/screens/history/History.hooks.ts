@@ -1,6 +1,6 @@
+import { HistoryStackParamList } from '@navigation/HistoryStack';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { seekerClient } from '@lib/seekerClient';
-import { TransactionHistoryStackParamList } from '@navigation/TransactionHistoryStack';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
@@ -22,9 +22,9 @@ interface BookingHistoryItem {
   };
 }
 
-type TransactionHistoryNavigationProp = NativeStackNavigationProp<TransactionHistoryStackParamList>;
+type TransactionHistoryNavigationProp = NativeStackNavigationProp<HistoryStackParamList>;
 
-export function useHistoryScreen() {
+export function useHistory() {
   const navigation = useNavigation<TransactionHistoryNavigationProp>();
   const [bookings, setBookings] = useState<BookingHistoryItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);

@@ -2,7 +2,7 @@ import { AddCardScreen } from '@screens/options/payments/add/card/AddCard';
 import { AddEWalletScreen } from '@screens/options/payments/add/eWallet/AddEWallet';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { OptionsScreen } from '@screens/options/Options';
-import { PaymentMethodsScreen } from '@screens/options/payments/Payments';
+import { PaymentsScreen } from '@screens/options/payments/Payments';
 import { ProfileScreen } from '@screens/options/profile/Profile';
 
 export type OptionsStackParamList = {
@@ -39,7 +39,7 @@ export function OptionsStack() {
       />
       <Stack.Screen
         name="PaymentMethods"
-        component={PaymentMethodsScreen}
+        component={PaymentsScreen}
         options={{
           title: 'Payment Methods',
         }}

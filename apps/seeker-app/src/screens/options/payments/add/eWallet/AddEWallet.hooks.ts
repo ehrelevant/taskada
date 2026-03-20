@@ -12,7 +12,7 @@ const eWalletSchema = v.object({
 
 export type EWalletFormData = v.InferOutput<typeof eWalletSchema>;
 
-export function useAddEWalletScreen() {
+export function useAddEWallet() {
   const navigation = useNavigation();
   const [isSubmitting, setIsSubmitting] = useState(false);
 

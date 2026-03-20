@@ -9,7 +9,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 type BookingTransitRouteProp = RouteProp<HomeStackParamList, 'BookingTransit'>;
 type BookingTransitNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'BookingTransit'>;
 
-export function useBookingTransitScreen() {
+export function useBookingTransit() {
   const route = useRoute<BookingTransitRouteProp>();
   const navigation = useNavigation<BookingTransitNavigationProp>();
   const { providerInfo, proposal, bookingId } = route.params;

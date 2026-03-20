@@ -13,9 +13,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { X } from 'lucide-react-native';
 
 import { styles } from './BookingDone.styles';
-import { useBookingDoneScreen } from './BookingDone.hooks';
+import { useBookingDone } from './BookingDone.hooks';
 
-export function BookingCompleteScreen() {
+export function BookingDoneScreen() {
   const {
     providerInfo,
     serviceTypeName,
@@ -29,7 +29,7 @@ export function BookingCompleteScreen() {
     handleGoHome,
     handleViewDetails,
     handleSubmitReview,
-  } = useBookingDoneScreen();
+  } = useBookingDone();
 
   const providerName = `${providerInfo.firstName} ${providerInfo.lastName}`;
 

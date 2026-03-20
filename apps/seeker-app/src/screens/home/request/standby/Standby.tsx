@@ -4,10 +4,10 @@ import { colors } from '@repo/theme';
 import { useNavigation } from '@react-navigation/native';
 
 import { styles } from './Standby.styles';
-import { useStandbyScreen } from './Standby.hooks';
+import { useStandby } from './Standby.hooks';
 
 export function StandbyScreen() {
-  const { isConnecting, isCancelling, error, handleCancelRequest } = useStandbyScreen();
+  const { isConnecting, isCancelling, error, handleCancelRequest } = useStandby();
   const navigation = useNavigation();
 
   if (isConnecting) {

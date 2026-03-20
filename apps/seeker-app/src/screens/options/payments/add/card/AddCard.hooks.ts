@@ -14,7 +14,7 @@ const cardSchema = v.object({
 
 export type CardFormData = v.InferOutput<typeof cardSchema>;
 
-export function useAddCardScreen() {
+export function useAddCard() {
   const navigation = useNavigation();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
