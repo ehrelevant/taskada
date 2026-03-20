@@ -1,17 +1,17 @@
-import * as v from 'valibot';
 import { useForm } from 'react-hook-form';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
-import { valibotResolver } from '@hookform/resolvers/valibot';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-const cardSchema = v.object({
-  cardHolderName: v.pipe(v.string(), v.minLength(1, 'Cardholder name is required')),
-  cardNumber: v.pipe(v.string(), v.regex(/^\d{16}$/, 'Card number must be 16 digits')),
-  expiryDate: v.pipe(v.string(), v.regex(/^(0[1-9]|1[0-2])\/\d{2}$/, 'Format must be MM/YY')),
-  cvv: v.pipe(v.string(), v.regex(/^\d{3,4}$/, 'CVV must be 3 or 4 digits')),
+const cardSchema = z.object({
+  cardHolderName: z.string().min(1, 'Cardholder name is required'),
+  cardNumber: z.string().regex(/^\d{16}$/, 'Card number must be 16 digits'),
+  expiryDate: z.string().regex(/^(0[1-9]|1[0-2])\/\d{2}$/, 'Format must be MM/YY'),
+  cvv: z.string().regex(/^\d{3,4}$/, 'CVV must be 3 or 4 digits'),
 });
 
-type CardFormData = v.InferOutput<typeof cardSchema>;
+type CardFormData = z.infer<typeof cardSchema>;
 
 export function useAddCardScreen() {
   const navigation = useNavigation();
@@ -22,7 +22,7 @@ export function useAddCardScreen() {
     handleSubmit,
     formState: { errors },
   } = useForm<CardFormData>({
-    resolver: valibotResolver(cardSchema),
+    resolver: zodResolver(cardSchema),
     defaultValues: {
       cardHolderName: '',
       cardNumber: '',

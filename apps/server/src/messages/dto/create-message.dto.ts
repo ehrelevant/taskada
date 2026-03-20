@@ -1,11 +1,9 @@
-import { array, minLength, object, optional, pipe, string } from 'valibot';
+import { createZodDto } from 'nestjs-zod';
+import { z } from 'zod';
 
-export const CreateMessageSchema = object({
-  message: pipe(string(), minLength(1, 'Message cannot be empty')),
-  imageKeys: optional(array(string()), []),
+export const CreateMessageSchema = z.object({
+  message: z.string().min(1, 'Message cannot be empty'),
+  imageKeys: z.array(z.string()).default([]),
 });
 
-export type CreateMessageDto = {
-  message: string;
-  imageKeys: string[];
-};
+export class CreateMessageDto extends createZodDto(CreateMessageSchema) {}

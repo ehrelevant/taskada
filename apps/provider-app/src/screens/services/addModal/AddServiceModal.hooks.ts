@@ -1,20 +1,19 @@
-import * as v from 'valibot';
 import { providerClient } from '@lib/providerClient';
 import type { ProviderService, ServiceType } from '@repo/types';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { valibotResolver } from '@hookform/resolvers/valibot';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-const serviceSchema = v.object({
-  serviceTypeId: v.pipe(v.string(), v.minLength(1, 'Please select a service type')),
-  initialCost: v.pipe(
-    v.string(),
-    v.minLength(1, 'Price is required'),
-    v.regex(/^\d+(\.\d{1,2})?$/, 'Invalid price format (e.g. 100.00)'),
-  ),
+const serviceSchema = z.object({
+  serviceTypeId: z.string().min(1, 'Please select a service type'),
+  initialCost: z
+    .string()
+    .min(1, 'Price is required')
+    .regex(/^\d+(\.\d{1,2})?$/, 'Invalid price format (e.g. 100.00)'),
 });
 
-type ServiceFormData = v.InferOutput<typeof serviceSchema>;
+type ServiceFormData = z.infer<typeof serviceSchema>;
 
 type Props = {
   visible: boolean;
@@ -35,7 +34,7 @@ export function useAddServiceModal({ visible, serviceToEdit, onClose, onSuccess 
     setValue,
     formState: { errors, isSubmitting },
   } = useForm<ServiceFormData>({
-    resolver: valibotResolver(serviceSchema),
+    resolver: zodResolver(serviceSchema),
     defaultValues: {
       serviceTypeId: '',
       initialCost: '',

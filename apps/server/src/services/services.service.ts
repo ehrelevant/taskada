@@ -5,8 +5,8 @@ import { S3Service } from 'src/s3/s3.service';
 
 import { DatabaseService } from '../database/database.service';
 
-import { CreateServiceSwaggerDto } from './dto/create-service.dto';
-import { UpdateServiceSwaggerDto } from './dto/update-service.dto';
+import { CreateServiceDto } from './dto/create-service.dto';
+import { UpdateServiceDto } from './dto/update-service.dto';
 
 @Injectable()
 export class ServicesService {
@@ -151,7 +151,7 @@ export class ServicesService {
     return reviews;
   }
 
-  async createService(createServiceDto: CreateServiceSwaggerDto) {
+  async createService(createServiceDto: CreateServiceDto) {
     const [newService] = await this.dbService.db.insert(service).values(createServiceDto).returning();
     return newService;
   }
@@ -177,7 +177,7 @@ export class ServicesService {
     return services;
   }
 
-  async updateService(id: string, updateServiceDto: UpdateServiceSwaggerDto) {
+  async updateService(id: string, updateServiceDto: UpdateServiceDto) {
     const [updatedService] = await this.dbService.db
       .update(service)
       .set(updateServiceDto)

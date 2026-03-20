@@ -1,14 +1,11 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UsePipes } from '@nestjs/common';
-import { omit } from 'valibot';
-import { parseSearchQuery } from 'src/valibot/schemas';
-import { ServiceInsertSchema, ServiceUpdateSchema } from '@repo/database';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { parseSearchQuery } from 'src/utils/parse';
 import { Session, UserSession } from '@thallesp/nestjs-better-auth';
-import { ValibotPipe } from 'src/valibot/valibot.pipe';
 
 import { ServicesService } from './services.service';
 
-import { CreateServiceSwaggerDto } from './dto/create-service.dto';
-import { UpdateServiceSwaggerDto } from './dto/update-service.dto';
+import { CreateProviderServiceDto } from './dto/create-provider-service.dto';
+import { UpdateServiceDto } from './dto/update-service.dto';
 
 @Controller('services')
 export class ServicesController {
@@ -41,8 +38,7 @@ export class ServicesController {
   }
 
   @Post()
-  @UsePipes(new ValibotPipe(omit(ServiceInsertSchema, ['providerUserId'])))
-  async createService(@Session() { user }: UserSession, @Body() createServiceDto: CreateServiceSwaggerDto) {
+  async createService(@Session() { user }: UserSession, @Body() createServiceDto: CreateProviderServiceDto) {
     return await this.servicesService.createService({
       ...createServiceDto,
       providerUserId: user.id,
@@ -50,8 +46,7 @@ export class ServicesController {
   }
 
   @Patch(':id')
-  @UsePipes(new ValibotPipe(ServiceUpdateSchema))
-  async updateService(@Param('id') id: string, @Body() updateServiceDto: UpdateServiceSwaggerDto) {
+  async updateService(@Param('id') id: string, @Body() updateServiceDto: UpdateServiceDto) {
     return await this.servicesService.updateService(id, updateServiceDto);
   }
 

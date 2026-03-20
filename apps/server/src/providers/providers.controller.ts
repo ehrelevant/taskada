@@ -1,12 +1,9 @@
-import { Body, Controller, Get, Post, Put, UsePipes } from '@nestjs/common';
-import { omit } from 'valibot';
-import { ProviderInsertSchema } from '@repo/database';
+import { Body, Controller, Get, Post, Put } from '@nestjs/common';
 import { Session, UserSession } from '@thallesp/nestjs-better-auth';
-import { ValibotPipe } from 'src/valibot/valibot.pipe';
 
 import { ProvidersService } from './providers.service';
 
-import { CreateProviderSwaggerDto } from './dto/create-provider.dto';
+import { CreateProviderDto } from './dto/create-provider.dto';
 
 @Controller('providers')
 export class ProvidersController {
@@ -18,10 +15,9 @@ export class ProvidersController {
   }
 
   @Post()
-  @UsePipes(new ValibotPipe(omit(ProviderInsertSchema, ['userId'])))
   async createProviderForUser(
     @Session() { user: { id: userId } }: UserSession,
-    @Body() createProviderDto: CreateProviderSwaggerDto,
+    @Body() createProviderDto: CreateProviderDto,
   ) {
     return await this.providersService.createProvider(userId, createProviderDto);
   }

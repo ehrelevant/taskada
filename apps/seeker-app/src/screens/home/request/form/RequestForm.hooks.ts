@@ -8,7 +8,7 @@ import { seekerClient } from '@lib/seekerClient';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { valibotResolver } from '@hookform/resolvers/valibot';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 export function useRequestForm() {
   const route = useRoute<RouteProp<HomeStackParamList, 'RequestForm'>>();
@@ -26,7 +26,7 @@ export function useRequestForm() {
   const initialLoadAttempted = useRef(false);
 
   const methods = useForm<RequestFormData>({
-    resolver: valibotResolver(requestFormSchema),
+    resolver: zodResolver(requestFormSchema),
     defaultValues: {
       serviceTypeId: initialServiceTypeId || '',
       serviceId: initialServiceId || undefined,

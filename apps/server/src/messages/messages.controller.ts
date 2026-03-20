@@ -1,15 +1,13 @@
-import { Body, Controller, Get, Param, Post, Query, Session, UploadedFiles, UseInterceptors, UsePipes } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, Session, UploadedFiles, UseInterceptors } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
 import { UserSession } from '@thallesp/nestjs-better-auth';
-import { ValibotPipe } from 'src/valibot/valibot.pipe';
 
 import { S3Service } from '../s3/s3.service';
 
 import { MessagesService } from './messages.service';
 
-import { CreateMessageSchema } from './dto/create-message.dto';
-import { CreateMessageSwaggerDto } from './dto/create-message-swagger.dto';
+import { CreateMessageDto } from './dto/create-message.dto';
 
 @Controller('bookings/:bookingId/messages')
 export class MessagesController {
@@ -32,10 +30,9 @@ export class MessagesController {
   }
 
   @Post()
-  @UsePipes(new ValibotPipe(CreateMessageSchema))
   async createMessage(
     @Param('bookingId') bookingId: string,
-    @Body() createMessageDto: CreateMessageSwaggerDto,
+    @Body() createMessageDto: CreateMessageDto,
     @Session() { user }: UserSession,
   ) {
     return await this.messagesService.createMessage({

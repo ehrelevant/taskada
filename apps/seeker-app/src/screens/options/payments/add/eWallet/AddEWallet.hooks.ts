@@ -1,16 +1,16 @@
-import * as v from 'valibot';
 import { Alert } from 'react-native';
 import { useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigation } from '@react-navigation/native';
-import { valibotResolver } from '@hookform/resolvers/valibot';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-const eWalletSchema = v.object({
-  channelCode: v.string('Please select a wallet'),
-  phoneNumber: v.pipe(v.string(), v.regex(/^(09|\+639)\d{9}$/, 'Invalid PH phone number (e.g., 0917...)')),
+const eWalletSchema = z.object({
+  channelCode: z.string({ required_error: 'Please select a wallet' }),
+  phoneNumber: z.string().regex(/^(09|\+639)\d{9}$/, 'Invalid PH phone number (e.g., 0917...)'),
 });
 
-export type EWalletFormData = v.InferOutput<typeof eWalletSchema>;
+export type EWalletFormData = z.infer<typeof eWalletSchema>;
 
 export function useAddEWallet() {
   const navigation = useNavigation();
@@ -23,7 +23,7 @@ export function useAddEWallet() {
     watch,
     formState: { errors },
   } = useForm<EWalletFormData>({
-    resolver: valibotResolver(eWalletSchema),
+    resolver: zodResolver(eWalletSchema),
     defaultValues: {
       channelCode: 'GCASH',
       phoneNumber: '',

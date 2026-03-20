@@ -1,15 +1,9 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { createZodDto } from 'nestjs-zod';
+import { z } from 'zod';
 
-export class CreateBookingSwaggerDto {
-  @ApiProperty({
-    description: 'The ID of the request this booking is for',
-    example: '550e8400-e29b-41d4-a716-446655440000',
-  })
-  requestId: string;
+export const CreateBookingSchema = z.object({
+  requestId: z.string().uuid(),
+  serviceId: z.string().uuid(),
+});
 
-  @ApiProperty({
-    description: 'The ID of the service being booked',
-    example: '550e8400-e29b-41d4-a716-446655440001',
-  })
-  serviceId: string;
-}
+export class CreateBookingDto extends createZodDto(CreateBookingSchema) {}

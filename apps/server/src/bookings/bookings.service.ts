@@ -7,7 +7,7 @@ import { ChatGateway } from '../chat/chat.gateway';
 import { DatabaseService } from '../database/database.service';
 import { MatchingGateway } from '../matching/matching.gateway';
 
-import { UpdateBookingSwaggerDto } from './dto/update-booking.dto';
+import { UpdateBookingDto } from './dto/update-booking.dto';
 
 const providerUser = alias(user, 'provider_user');
 const seekerUser = alias(user, 'seeker_user');
@@ -81,7 +81,7 @@ export class BookingsService {
     return newBooking;
   }
 
-  async updateBooking(bookingId: string, updateBookingDto: UpdateBookingSwaggerDto) {
+  async updateBooking(bookingId: string, updateBookingDto: UpdateBookingDto) {
     const [updated] = await this.dbService.db
       .update(booking)
       .set(updateBookingDto)

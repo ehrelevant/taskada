@@ -1,4 +1,3 @@
-import * as v from 'valibot';
 import {
   boolean,
   check,
@@ -12,7 +11,7 @@ import {
   timestamp,
   uuid,
 } from 'drizzle-orm/pg-core';
-import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-valibot';
+import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-zod';
 import { sql } from 'drizzle-orm';
 
 import { geographyPointColumnType } from './custom/geography';
@@ -45,18 +44,12 @@ export const user = app.table(
 export type User = typeof user.$inferSelect;
 export type NewUser = typeof user.$inferInsert;
 export const UserSelectSchema = createSelectSchema(user);
-export const UserInsertSchema = v.omit(
-  createInsertSchema(user, {
-    email: v.pipe(v.string(), v.email()),
-  }),
-  ['id', 'createdAt', 'updatedAt'],
-);
-export const UserUpdateSchema = v.omit(
-  createUpdateSchema(user, {
-    email: v.optional(v.pipe(v.string(), v.email())),
-  }),
-  ['id', 'createdAt', 'updatedAt'],
-);
+export const UserInsertSchema = createInsertSchema(user, {
+  email: schema => schema.email(),
+}).omit({ id: true, createdAt: true, updatedAt: true });
+export const UserUpdateSchema = createUpdateSchema(user, {
+  email: schema => schema.email(),
+}).omit({ id: true, createdAt: true, updatedAt: true });
 
 export const roleEnum = pgEnum('role', ['provider', 'seeker', 'admin']);
 export type Role = (typeof roleEnum.enumValues)[number];
@@ -75,8 +68,8 @@ export const userRole = app.table(
 export type UserRole = typeof userRole.$inferSelect;
 export type NewUserRole = typeof userRole.$inferInsert;
 export const UserRoleSelectSchema = createSelectSchema(userRole);
-export const UserRoleInsertSchema = v.omit(createInsertSchema(userRole), ['assigned_at']);
-export const UserRoleUpdateSchema = v.omit(createUpdateSchema(userRole), ['assigned_at']);
+export const UserRoleInsertSchema = createInsertSchema(userRole).omit({ assigned_at: true });
+export const UserRoleUpdateSchema = createUpdateSchema(userRole).omit({ assigned_at: true });
 
 export const agency = app.table('agency', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
@@ -87,8 +80,8 @@ export const agency = app.table('agency', {
 export type Agency = typeof agency.$inferSelect;
 export type NewAgency = typeof agency.$inferInsert;
 export const AgencySelectSchema = createSelectSchema(agency);
-export const AgencyInsertSchema = v.omit(createInsertSchema(agency), ['id']);
-export const AgencyUpdateSchema = v.omit(createUpdateSchema(agency), ['id']);
+export const AgencyInsertSchema = createInsertSchema(agency).omit({ id: true });
+export const AgencyUpdateSchema = createUpdateSchema(agency).omit({ id: true });
 
 export const provider = app.table('provider', {
   userId: uuid('user_id')
@@ -125,8 +118,8 @@ export const serviceType = app.table('service_type', {
 export type ServiceType = typeof serviceType.$inferSelect;
 export type NewServiceType = typeof serviceType.$inferInsert;
 export const ServiceTypeSelectSchema = createSelectSchema(serviceType);
-export const ServiceTypeInsertSchema = v.omit(createInsertSchema(serviceType), ['id']);
-export const ServiceTypeUpdateSchema = v.omit(createUpdateSchema(serviceType), ['id']);
+export const ServiceTypeInsertSchema = createInsertSchema(serviceType).omit({ id: true });
+export const ServiceTypeUpdateSchema = createUpdateSchema(serviceType).omit({ id: true });
 
 export const service = app.table('service', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
@@ -142,8 +135,8 @@ export const service = app.table('service', {
 export type Service = typeof service.$inferSelect;
 export type NewService = typeof service.$inferInsert;
 export const ServiceSelectSchema = createSelectSchema(service);
-export const ServiceInsertSchema = v.omit(createInsertSchema(service), ['id']);
-export const ServiceUpdateSchema = v.omit(createUpdateSchema(service), ['id']);
+export const ServiceInsertSchema = createInsertSchema(service).omit({ id: true });
+export const ServiceUpdateSchema = createUpdateSchema(service).omit({ id: true });
 
 export const portfolio = app.table('portfolio', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
@@ -155,8 +148,8 @@ export const portfolio = app.table('portfolio', {
 export type Portfolio = typeof portfolio.$inferSelect;
 export type NewPortfolio = typeof portfolio.$inferInsert;
 export const PortfolioSelectSchema = createSelectSchema(portfolio);
-export const PortfolioInsertSchema = v.omit(createInsertSchema(portfolio), ['id']);
-export const PortfolioUpdateSchema = v.omit(createUpdateSchema(portfolio), ['id']);
+export const PortfolioInsertSchema = createInsertSchema(portfolio).omit({ id: true });
+export const PortfolioUpdateSchema = createUpdateSchema(portfolio).omit({ id: true });
 
 export const portfolioImage = app.table('portfolio_image', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
@@ -168,8 +161,8 @@ export const portfolioImage = app.table('portfolio_image', {
 export type PortfolioImage = typeof portfolioImage.$inferSelect;
 export type NewPortfolioImage = typeof portfolioImage.$inferInsert;
 export const PortfolioImageSelectSchema = createSelectSchema(portfolioImage);
-export const PortfolioImageInsertSchema = v.omit(createInsertSchema(portfolioImage), ['id']);
-export const PortfolioImageUpdateSchema = v.omit(createUpdateSchema(portfolioImage), ['id']);
+export const PortfolioImageInsertSchema = createInsertSchema(portfolioImage).omit({ id: true });
+export const PortfolioImageUpdateSchema = createUpdateSchema(portfolioImage).omit({ id: true });
 
 export const review = app.table(
   'review',
@@ -194,8 +187,8 @@ export const review = app.table(
 export type Review = typeof review.$inferSelect;
 export type NewReview = typeof review.$inferInsert;
 export const ReviewSelectSchema = createSelectSchema(review);
-export const ReviewInsertSchema = v.omit(createInsertSchema(review), ['id', 'createdAt', 'updatedAt']);
-export const ReviewUpdateSchema = v.omit(createUpdateSchema(review), ['id', 'createdAt', 'updatedAt']);
+export const ReviewInsertSchema = createInsertSchema(review).omit({ id: true, createdAt: true, updatedAt: true });
+export const ReviewUpdateSchema = createUpdateSchema(review).omit({ id: true, createdAt: true, updatedAt: true });
 
 export const reviewImage = app.table('review_image', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
@@ -207,8 +200,8 @@ export const reviewImage = app.table('review_image', {
 export type ReviewImage = typeof reviewImage.$inferSelect;
 export type NewReviewImage = typeof reviewImage.$inferInsert;
 export const ReviewImageSelectSchema = createSelectSchema(reviewImage);
-export const ReviewImageInsertSchema = v.omit(createInsertSchema(reviewImage), ['id']);
-export const ReviewImageUpdateSchema = v.omit(createUpdateSchema(reviewImage), ['id']);
+export const ReviewImageInsertSchema = createInsertSchema(reviewImage).omit({ id: true });
+export const ReviewImageUpdateSchema = createUpdateSchema(reviewImage).omit({ id: true });
 
 export const requestStatusEnum = pgEnum('request_status', ['pending', 'settling']);
 export type RequestStatus = (typeof requestStatusEnum.enumValues)[number];
@@ -236,8 +229,8 @@ export const request = app.table('request', {
 export type Request = typeof request.$inferSelect;
 export type NewRequest = typeof request.$inferInsert;
 export const RequestSelectSchema = createSelectSchema(request);
-export const RequestInsertSchema = v.omit(createInsertSchema(request), ['id', 'createdAt', 'updatedAt']);
-export const RequestUpdateSchema = v.omit(createUpdateSchema(request), ['id', 'createdAt', 'updatedAt']);
+export const RequestInsertSchema = createInsertSchema(request).omit({ id: true, createdAt: true, updatedAt: true });
+export const RequestUpdateSchema = createUpdateSchema(request).omit({ id: true, createdAt: true, updatedAt: true });
 
 export const requestImage = app.table('request_image', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
@@ -249,8 +242,8 @@ export const requestImage = app.table('request_image', {
 export type RequestImage = typeof requestImage.$inferSelect;
 export type NewRequestImage = typeof requestImage.$inferInsert;
 export const RequestImageSelectSchema = createSelectSchema(requestImage);
-export const RequestImageInsertSchema = v.omit(createInsertSchema(requestImage), ['id']);
-export const RequestImageUpdateSchema = v.omit(createUpdateSchema(requestImage), ['id']);
+export const RequestImageInsertSchema = createInsertSchema(requestImage).omit({ id: true });
+export const RequestImageUpdateSchema = createUpdateSchema(requestImage).omit({ id: true });
 
 export const bookingStatusEnum = pgEnum('booking_status', ['in_transit', 'serving', 'completed', 'cancelled']);
 export type BookingStatus = (typeof bookingStatusEnum.enumValues)[number];
@@ -278,8 +271,8 @@ export const booking = app.table('booking', {
 export type Booking = typeof booking.$inferSelect;
 export type NewBooking = typeof booking.$inferInsert;
 export const BookingSelectSchema = createSelectSchema(booking);
-export const BookingInsertSchema = v.omit(createInsertSchema(booking), ['id', 'createdAt', 'updatedAt']);
-export const BookingUpdateSchema = v.omit(createUpdateSchema(booking), ['id', 'createdAt', 'updatedAt']);
+export const BookingInsertSchema = createInsertSchema(booking).omit({ id: true, createdAt: true, updatedAt: true });
+export const BookingUpdateSchema = createUpdateSchema(booking).omit({ id: true, createdAt: true, updatedAt: true });
 
 export const interestStatusEnum = pgEnum('interest_status', ['pending', 'accepted', 'rejected']);
 export type InterestStatus = (typeof interestStatusEnum.enumValues)[number];
@@ -305,16 +298,16 @@ export const providerInterest = app.table('provider_interest', {
 export type ProviderInterest = typeof providerInterest.$inferSelect;
 export type NewProviderInterest = typeof providerInterest.$inferInsert;
 export const ProviderInterestSelectSchema = createSelectSchema(providerInterest);
-export const ProviderInterestInsertSchema = v.omit(createInsertSchema(providerInterest), [
-  'id',
-  'createdAt',
-  'updatedAt',
-]);
-export const ProviderInterestUpdateSchema = v.omit(createUpdateSchema(providerInterest), [
-  'id',
-  'createdAt',
-  'updatedAt',
-]);
+export const ProviderInterestInsertSchema = createInsertSchema(providerInterest).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+export const ProviderInterestUpdateSchema = createUpdateSchema(providerInterest).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
 
 export const address = app.table('address', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
@@ -324,8 +317,8 @@ export const address = app.table('address', {
 export type Address = typeof address.$inferSelect;
 export type NewAddress = typeof address.$inferInsert;
 export const AddressSelectSchema = createSelectSchema(address);
-export const AddressInsertSchema = v.omit(createInsertSchema(address), ['id']);
-export const AddressUpdateSchema = v.omit(createUpdateSchema(address), ['id']);
+export const AddressInsertSchema = createInsertSchema(address).omit({ id: true });
+export const AddressUpdateSchema = createUpdateSchema(address).omit({ id: true });
 
 export const message = app.table('message', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
@@ -345,8 +338,8 @@ export const message = app.table('message', {
 export type Message = typeof message.$inferSelect;
 export type NewMessage = typeof message.$inferInsert;
 export const MessageSelectSchema = createSelectSchema(message);
-export const MessageInsertSchema = v.omit(createInsertSchema(message), ['id', 'createdAt', 'updatedAt']);
-export const MessageUpdateSchema = v.omit(createUpdateSchema(message), ['id', 'createdAt', 'updatedAt']);
+export const MessageInsertSchema = createInsertSchema(message).omit({ id: true, createdAt: true, updatedAt: true });
+export const MessageUpdateSchema = createUpdateSchema(message).omit({ id: true, createdAt: true, updatedAt: true });
 
 export const messageImage = app.table('message_image', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
@@ -358,8 +351,8 @@ export const messageImage = app.table('message_image', {
 export type MessageImage = typeof messageImage.$inferSelect;
 export type NewMessageImage = typeof messageImage.$inferInsert;
 export const MessageImageSelectSchema = createSelectSchema(messageImage);
-export const MessageImageInsertSchema = v.omit(createInsertSchema(messageImage), ['id']);
-export const MessageImageUpdateSchema = v.omit(createUpdateSchema(messageImage), ['id']);
+export const MessageImageInsertSchema = createInsertSchema(messageImage).omit({ id: true });
+export const MessageImageUpdateSchema = createUpdateSchema(messageImage).omit({ id: true });
 
 export const paymentMethod = app.table('payment_method', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
@@ -377,8 +370,8 @@ export const paymentMethod = app.table('payment_method', {
 export type PaymentMethod = typeof paymentMethod.$inferSelect;
 export type NewPaymentMethod = typeof paymentMethod.$inferInsert;
 export const PaymentMethodSelectSchema = createSelectSchema(paymentMethod);
-export const PaymentMethodInsertSchema = v.omit(createInsertSchema(paymentMethod), ['id']);
-export const PaymentMethodUpdateSchema = v.omit(createUpdateSchema(paymentMethod), ['id']);
+export const PaymentMethodInsertSchema = createInsertSchema(paymentMethod).omit({ id: true });
+export const PaymentMethodUpdateSchema = createUpdateSchema(paymentMethod).omit({ id: true });
 
 export const pushToken = app.table('push_token', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
@@ -396,5 +389,5 @@ export const pushToken = app.table('push_token', {
 export type PushToken = typeof pushToken.$inferSelect;
 export type NewPushToken = typeof pushToken.$inferInsert;
 export const PushTokenSelectSchema = createSelectSchema(pushToken);
-export const PushTokenInsertSchema = v.omit(createInsertSchema(pushToken), ['id', 'createdAt', 'updatedAt']);
-export const PushTokenUpdateSchema = v.omit(createUpdateSchema(pushToken), ['id', 'createdAt', 'updatedAt']);
+export const PushTokenInsertSchema = createInsertSchema(pushToken).omit({ id: true, createdAt: true, updatedAt: true });
+export const PushTokenUpdateSchema = createUpdateSchema(pushToken).omit({ id: true, createdAt: true, updatedAt: true });

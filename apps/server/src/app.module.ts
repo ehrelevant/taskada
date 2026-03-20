@@ -1,5 +1,7 @@
+import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { AuthModule } from '@thallesp/nestjs-better-auth';
 import { Module } from '@nestjs/common';
+import { ZodSerializerInterceptor, ZodValidationPipe } from 'nestjs-zod';
 
 import { auth } from './auth';
 
@@ -35,6 +37,16 @@ import { UsersModule } from './users/users.module';
     ChatModule,
     PushNotificationsModule,
     ReviewsModule,
+  ],
+  providers: [
+    {
+      provide: APP_PIPE,
+      useClass: ZodValidationPipe,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ZodSerializerInterceptor,
+    },
   ],
 })
 export class AppModule {}

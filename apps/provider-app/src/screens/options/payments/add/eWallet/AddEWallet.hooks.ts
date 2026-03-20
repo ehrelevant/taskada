@@ -1,10 +1,10 @@
-import * as v from 'valibot';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { OptionsStackParamList } from '@navigation/OptionsStack';
 import { useForm } from 'react-hook-form';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
-import { valibotResolver } from '@hookform/resolvers/valibot';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 type NavProp = NativeStackNavigationProp<OptionsStackParamList, 'AddEWallet'>;
 
@@ -13,12 +13,12 @@ const WALLETS = [
   { id: 'MAYA', name: 'Maya', color: '#232526' },
 ];
 
-const eWalletSchema = v.object({
-  channelCode: v.string('Please select a wallet'),
-  phoneNumber: v.pipe(v.string(), v.regex(/^(09|\+639)\d{9}$/, 'Invalid PH phone number (e.g., 0917...)')),
+const eWalletSchema = z.object({
+  channelCode: z.string({ required_error: 'Please select a wallet' }),
+  phoneNumber: z.string().regex(/^(09|\+639)\d{9}$/, 'Invalid PH phone number (e.g., 0917...)'),
 });
 
-type EWalletFormData = v.InferOutput<typeof eWalletSchema>;
+type EWalletFormData = z.infer<typeof eWalletSchema>;
 
 export function useAddEWalletScreen() {
   const navigation = useNavigation<NavProp>();
@@ -31,7 +31,7 @@ export function useAddEWalletScreen() {
     watch,
     formState: { errors },
   } = useForm<EWalletFormData>({
-    resolver: valibotResolver(eWalletSchema),
+    resolver: zodResolver(eWalletSchema),
     defaultValues: {
       channelCode: 'GCASH',
       phoneNumber: '',

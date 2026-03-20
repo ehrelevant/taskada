@@ -1,3 +1,4 @@
+import { cleanupOpenApiDoc } from 'nestjs-zod';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { NestFactory } from '@nestjs/core';
@@ -18,8 +19,8 @@ async function bootstrap() {
   app.enableCors();
 
   const config = new DocumentBuilder().build();
-  const documentFactory = () => SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, documentFactory);
+  const openApiDocument = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, cleanupOpenApiDoc(openApiDocument));
 
   await app.listen(process.env.PORT ?? 3000, '0.0.0.0');
 }

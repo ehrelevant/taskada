@@ -1,23 +1,14 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { createZodDto } from 'nestjs-zod';
+import { z } from 'zod';
 
-export class CreateProviderSwaggerDto {
-  @ApiProperty({
-    description: 'The user ID of the provider',
-    example: '550e8400-e29b-41d4-a716-446655440000',
-  })
-  userId: string;
+export const CreateProviderSchema = z.object({
+  userId: z.string().uuid(),
+  agencyId: z.string().uuid().nullable().optional(),
+  isAccepting: z.boolean().optional(),
+});
 
-  @ApiProperty({
-    description: 'Optional agency ID if the provider belongs to an agency',
-    example: '550e8400-e29b-41d4-a716-446655440001',
-    required: false,
-  })
-  agencyId?: string;
+export class CreateProviderDto extends createZodDto(CreateProviderSchema) {}
 
-  @ApiProperty({
-    description: 'Whether the provider is currently accepting new requests',
-    example: true,
-    required: false,
-  })
-  isAccepting?: boolean;
-}
+export const UpdateProviderSchema = CreateProviderSchema.partial();
+
+export class UpdateProviderDto extends createZodDto(UpdateProviderSchema) {}

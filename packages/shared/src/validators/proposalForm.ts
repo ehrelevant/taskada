@@ -1,14 +1,13 @@
-import { type InferOutput, maxLength, minLength, minValue, number, object, pipe, string } from 'valibot';
+import { z } from 'zod';
 
-export const proposalFormSchema = object({
-  requestId: string('Request ID is required'),
-  serviceId: string('Service is required'),
-  cost: pipe(number('Cost must be a number'), minValue(1, 'Cost must be at least 1')),
-  specifications: pipe(
-    string('Specifications are required'),
-    minLength(10, 'Please provide at least 10 characters of specifications'),
-    maxLength(1000, 'Specifications are too long'),
-  ),
+export const proposalFormSchema = z.object({
+  requestId: z.string({ required_error: 'Request ID is required' }),
+  serviceId: z.string({ required_error: 'Service is required' }),
+  cost: z.number({ invalid_type_error: 'Cost must be a number' }).min(1, 'Cost must be at least 1'),
+  specifications: z
+    .string({ required_error: 'Specifications are required' })
+    .min(10, 'Please provide at least 10 characters of specifications')
+    .max(1000, 'Specifications are too long'),
 });
 
-export type ProposalFormData = InferOutput<typeof proposalFormSchema>;
+export type ProposalFormData = z.infer<typeof proposalFormSchema>;

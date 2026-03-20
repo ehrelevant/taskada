@@ -1,20 +1,8 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { array, InferOutput, minLength, object, pipe, string } from 'valibot';
+import { createZodDto } from 'nestjs-zod';
+import { z } from 'zod';
 
-export const UploadRequestImagesSchema = object({
-  imageUrls: pipe(
-    array(pipe(string(), minLength(1, 'Image URL cannot be empty'))),
-    minLength(1, 'At least one image URL is required'),
-  ),
+export const UploadRequestImagesSchema = z.object({
+  imageUrls: z.array(z.string().min(1, 'Image URL cannot be empty')).min(1, 'At least one image URL is required'),
 });
 
-export type UploadRequestImagesDto = InferOutput<typeof UploadRequestImagesSchema>;
-
-export class UploadRequestImagesSwaggerDto {
-  @ApiProperty({
-    description: 'Array of image URLs to upload',
-    example: ['https://example.com/image1.jpg', 'https://example.com/image2.jpg'],
-    type: [String],
-  })
-  imageUrls: string[];
-}
+export class UploadRequestImagesDto extends createZodDto(UploadRequestImagesSchema) {}

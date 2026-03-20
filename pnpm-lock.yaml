@@ -146,9 +146,9 @@ importers:
       socket.io-client:
         specifier: ^4.8.0
         version: 4.8.3
-      valibot:
-        specifier: ^1.1.0
-        version: 1.1.0(typescript@5.9.3)
+      zod:
+        specifier: ^3.25.0
+        version: 3.25.76
     devDependencies:
       '@repo/database':
         specifier: workspace:*
@@ -255,12 +255,12 @@ importers:
       socket.io-client:
         specifier: ^4.8.0
         version: 4.8.3
-      valibot:
-        specifier: ^1.1.0
-        version: 1.2.0(typescript@5.9.3)
       xendit-node:
         specifier: ^7.0.0
         version: 7.0.0
+      zod:
+        specifier: ^3.25.0
+        version: 3.25.76
     devDependencies:
       '@repo/database':
         specifier: workspace:*
@@ -328,6 +328,9 @@ importers:
       multer:
         specifier: ^2.0.2
         version: 2.0.2
+      nestjs-zod:
+        specifier: ^5.1.1
+        version: 5.1.1(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/swagger@11.2.0(@fastify/static@8.2.0)(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.6)(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2))(rxjs@7.8.2)(zod@3.25.76)
       pg:
         specifier: ^8.16.3
         version: 8.16.3
@@ -340,9 +343,9 @@ importers:
       socket.io:
         specifier: ^4.8.0
         version: 4.8.3
-      valibot:
-        specifier: ^1.1.0
-        version: 1.1.0(typescript@5.9.3)
+      zod:
+        specifier: ^3.25.0
+        version: 3.25.76
     devDependencies:
       '@nestjs/cli':
         specifier: ^11.0.0
@@ -429,15 +432,15 @@ importers:
       drizzle-orm:
         specifier: ^0.44.5
         version: 0.44.5(@types/pg@8.15.5)(kysely@0.28.7)(mysql2@2.3.3)(pg@8.16.3)
-      drizzle-valibot:
-        specifier: ^0.4.2
-        version: 0.4.2(drizzle-orm@0.44.5(@types/pg@8.15.5)(kysely@0.28.7)(mysql2@2.3.3)(pg@8.16.3))(valibot@1.2.0(typescript@5.9.3))
+      drizzle-zod:
+        specifier: ^0.8.2
+        version: 0.8.3(drizzle-orm@0.44.5(@types/pg@8.15.5)(kysely@0.28.7)(mysql2@2.3.3)(pg@8.16.3))(zod@3.25.76)
       pg:
         specifier: ^8.16.3
         version: 8.16.3
-      valibot:
-        specifier: ^1.2.0
-        version: 1.2.0(typescript@5.9.3)
+      zod:
+        specifier: ^3.25.0
+        version: 3.25.76
     devDependencies:
       '@types/pg':
         specifier: ^8.15.5
@@ -475,9 +478,9 @@ importers:
       socket.io-client:
         specifier: ^4.8.0
         version: 4.8.3
-      valibot:
-        specifier: ^1.1.0
-        version: 1.2.0(typescript@5.9.3)
+      zod:
+        specifier: ^3.25.0
+        version: 3.25.76
     devDependencies:
       '@types/react':
         specifier: ~19.1.0
@@ -4289,11 +4292,11 @@ packages:
       sqlite3:
         optional: true
 
-  drizzle-valibot@0.4.2:
-    resolution: {integrity: sha512-tzjT7g0Di/HX7426marIy8IDtWODjPgrwvgscdevLQRUe5rzYzRhx6bDsYLdDFF9VI/eaYgnjNeF/fznWJoUjg==}
+  drizzle-zod@0.8.3:
+    resolution: {integrity: sha512-66yVOuvGhKJnTdiqj1/Xaaz9/qzOdRJADpDa68enqS6g3t0kpNkwNYjUuaeXgZfO/UWuIM9HIhSlJ6C5ZraMww==}
     peerDependencies:
       drizzle-orm: '>=0.36.0'
-      valibot: '>=1.0.0-beta.7'
+      zod: ^3.25.0 || ^4.0.0
 
   dset@3.1.4:
     resolution: {integrity: sha512-2QF/g9/zTaPDc3BjNcVTGoBbXBgYfMTTceLaYcFJ/W9kggFUkhxD/hMEeuLKbugyef9SqAx8cpgwlIP/jinUTA==}
@@ -6126,6 +6129,17 @@ packages:
   nested-error-stacks@2.0.1:
     resolution: {integrity: sha512-SrQrok4CATudVzBS7coSz26QRSmlK9TzzoFbeKfcPBUFPjcQM9Rqvr/DlJkOrwI/0KcgvMub1n1g5Jt9EgRn4A==}
 
+  nestjs-zod@5.1.1:
+    resolution: {integrity: sha512-pXa9Jrdip7iedKvGxJTvvCFVRCoIcNENPCsHjpCefPH3PcFejRgkZkUcr3TYITRyxnUk7Zy5OsLpirZGLYBfBQ==}
+    peerDependencies:
+      '@nestjs/common': ^10.0.0 || ^11.0.0
+      '@nestjs/swagger': ^7.4.2 || ^8.0.0 || ^11.0.0
+      rxjs: ^7.0.0
+      zod: ^3.25.0 || ^4.0.0
+    peerDependenciesMeta:
+      '@nestjs/swagger':
+        optional: true
+
   node-abort-controller@3.1.1:
     resolution: {integrity: sha512-AGK2yQKIjRuqnc6VkX2Xj5d+QW8xZ87pa1UK6yA6ouUyuxfHuMP6umE5QK7UmTeOAymo+Zx1Fxiuw9rVx8taHQ==}
 
@@ -7694,22 +7708,6 @@ packages:
   v8-to-istanbul@9.3.0:
     resolution: {integrity: sha512-kiGUalWN+rgBJ/1OHZsBtU4rXZOfj/7rKQxULKlIzwzQSvMJUUNgPwJEEh7gU6xEVxC0ahoOBvN2YI8GH6FNgA==}
     engines: {node: '>=10.12.0'}
-
-  valibot@1.1.0:
-    resolution: {integrity: sha512-Nk8lX30Qhu+9txPYTwM0cFlWLdPFsFr6LblzqIySfbZph9+BFsAHsNvHOymEviUepeIW6KFHzpX8TKhbptBXXw==}
-    peerDependencies:
-      typescript: '>=5'
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-
-  valibot@1.2.0:
-    resolution: {integrity: sha512-mm1rxUsmOxzrwnX5arGS+U4T25RdvpPjPN4yR0u9pUBov9+zGVtO84tif1eY4r6zWxVxu3KzIyknJy3rxfRZZg==}
-    peerDependencies:
-      typescript: '>=5'
-    peerDependenciesMeta:
-      typescript:
-        optional: true
 
   validate-npm-package-name@5.0.1:
     resolution: {integrity: sha512-OljLrQ9SQdOUqTaQxqL5dEfZWrXExyyWsozYlAWFawPVNuD83igl7uJD2RTkNMbniIYgt8l81eCJGIdQF7avLQ==}
@@ -12733,10 +12731,10 @@ snapshots:
       mysql2: 2.3.3
       pg: 8.16.3
 
-  drizzle-valibot@0.4.2(drizzle-orm@0.44.5(@types/pg@8.15.5)(kysely@0.28.7)(mysql2@2.3.3)(pg@8.16.3))(valibot@1.2.0(typescript@5.9.3)):
+  drizzle-zod@0.8.3(drizzle-orm@0.44.5(@types/pg@8.15.5)(kysely@0.28.7)(mysql2@2.3.3)(pg@8.16.3))(zod@3.25.76):
     dependencies:
       drizzle-orm: 0.44.5(@types/pg@8.15.5)(kysely@0.28.7)(mysql2@2.3.3)(pg@8.16.3)
-      valibot: 1.2.0(typescript@5.9.3)
+      zod: 3.25.76
 
   dset@3.1.4: {}
 
@@ -15170,6 +15168,15 @@ snapshots:
 
   nested-error-stacks@2.0.1: {}
 
+  nestjs-zod@5.1.1(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/swagger@11.2.0(@fastify/static@8.2.0)(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.6)(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2))(rxjs@7.8.2)(zod@3.25.76):
+    dependencies:
+      '@nestjs/common': 11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      deepmerge: 4.3.1
+      rxjs: 7.8.2
+      zod: 3.25.76
+    optionalDependencies:
+      '@nestjs/swagger': 11.2.0(@fastify/static@8.2.0)(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.6)(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)
+
   node-abort-controller@3.1.1: {}
 
   node-emoji@1.11.0:
@@ -16858,14 +16865,6 @@ snapshots:
       '@jridgewell/trace-mapping': 0.3.31
       '@types/istanbul-lib-coverage': 2.0.6
       convert-source-map: 2.0.0
-
-  valibot@1.1.0(typescript@5.9.3):
-    optionalDependencies:
-      typescript: 5.9.3
-
-  valibot@1.2.0(typescript@5.9.3):
-    optionalDependencies:
-      typescript: 5.9.3
 
   validate-npm-package-name@5.0.1: {}
 
