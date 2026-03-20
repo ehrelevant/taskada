@@ -1,9 +1,9 @@
-import { AddCardScreen } from '@screens/options/paymentMethods/AddCardScreen';
-import { AddEWalletScreen } from '@screens/options/paymentMethods/AddEWalletScreen';
+import { AddCardScreen } from '@screens/options/payments/add/card/AddCard';
+import { AddEWalletScreen } from '@screens/options/payments/add/eWallet/AddEWallet';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { OptionsScreen } from '@screens/options/OptionsScreen';
-import { PaymentMethodsScreen } from '@screens/options/paymentMethods/PaymentMethodsScreen';
-import { ProfileScreen } from '@screens/options/profile/ProfileScreen';
+import { OptionsScreen } from '@screens/options/Options';
+import { PaymentMethodsScreen } from '@screens/options/payments/Payments';
+import { ProfileScreen } from '@screens/options/profile/Profile';
 
 export type OptionsStackParamList = {
   Options: undefined;

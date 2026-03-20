@@ -1,14 +1,14 @@
-import { BookingCompleteScreen } from '@screens/home/booking/BookingCompleteScreen';
-import { BookingDetailsScreen } from '@screens/home/booking/BookingDetailsScreen';
-import { BookingTransitScreen } from '@screens/home/booking/BookingTransitScreen';
-import { ChatScreen } from '@screens/home/chat/ChatScreen';
+import { BookingCompleteScreen } from '@screens/home/booking/done/BookingDone';
+import { BookingDetailsScreen } from '@screens/home/booking/details/BookingDetails';
+import { BookingTransitScreen } from '@screens/home/booking/transit/BookingTransit';
+import { ChatScreen } from '@screens/home/booking/chat/BookingChat';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { HomeScreen } from '@screens/home/HomeScreen';
-import { RequestFormScreen } from '@screens/request-form/RequestFormScreen';
-import { ServiceDetailsScreen } from '@screens/service-details/ServiceDetailsScreen';
-import { ServiceTypesListScreen } from '@screens/service-types/ServiceTypesListScreen';
-import { StandbyScreen } from '@screens/standby/StandbyScreen';
-import { ViewProposalScreen } from '@screens/home/proposal/ViewProposalScreen';
+import { HomeScreen } from '@screens/home/Home';
+import { RequestFormScreen } from '@screens/home/request/form/RequestForm';
+import { ServiceDetailsScreen } from '@screens/home/service/details/ServiceDetails';
+import { ServiceTypesListScreen } from '@screens/home/service/types/ServiceTypes';
+import { StandbyScreen } from '@screens/home/request/standby/Standby';
+import { ViewProposalScreen } from '@screens/home/booking/proposal/BookingProposal';
 
 export type HomeStackParamList = {
   Home: undefined;

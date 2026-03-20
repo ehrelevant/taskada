@@ -1,8 +1,8 @@
-import { ChatLogsScreen } from '@screens/history/ChatLogsScreen';
+import { ChatLogsScreen } from '@screens/history/chatLogs/ChatLogs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { RequestDetailsSummaryScreen } from '@screens/history/RequestDetailsSummaryScreen';
-import { TransactionDetailsScreen } from '@screens/history/TransactionDetailsScreen';
-import { TransactionHistoryListScreen } from '@screens/history/TransactionHistoryListScreen';
+import { RequestDetailsSummaryScreen } from '@screens/history/requestLogs/RequestLogs';
+import { TransactionDetailsScreen } from '@screens/history/bookingLogs/BookingLogs';
+import { TransactionHistoryListScreen } from '@screens/history/History';
 
 export type TransactionHistoryStackParamList = {
   TransactionHistoryList: undefined;
