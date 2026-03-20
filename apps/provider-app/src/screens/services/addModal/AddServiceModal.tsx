@@ -1,41 +1,12 @@
-import * as v from 'valibot';
 import { ActivityIndicator, Modal, TouchableOpacity, View } from 'react-native';
 import { Button, Input, Typography } from '@repo/components';
 import { colors } from '@repo/theme';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
-import { providerClient } from '@lib/providerClient';
-import { useEffect, useState } from 'react';
-import { valibotResolver } from '@hookform/resolvers/valibot';
+import type { ProviderService } from '@repo/types';
 
 import { styles } from './AddServiceModal.styles';
-
-export type ProviderService = {
-  id: string;
-  initialCost: string;
-  isEnabled: boolean;
-  serviceType: {
-    id: string;
-    name: string;
-    iconUrl?: string;
-  };
-};
-
-const serviceSchema = v.object({
-  serviceTypeId: v.pipe(v.string(), v.minLength(1, 'Please select a service type')),
-  initialCost: v.pipe(
-    v.string(),
-    v.minLength(1, 'Price is required'),
-    v.regex(/^\d+(\.\d{1,2})?$/, 'Invalid price format (e.g. 100.00)'),
-  ),
-});
-
-type ServiceFormData = v.InferOutput<typeof serviceSchema>;
-
-type ServiceType = {
-  id: string;
-  name: string;
-};
+import { useAddServiceModal } from './AddServiceModal.hooks';
 
 type Props = {
   visible: boolean;
@@ -45,80 +16,17 @@ type Props = {
 };
 
 export function AddServiceModal({ visible, serviceToEdit, onClose, onSuccess }: Props) {
-  const [serviceTypes, setServiceTypes] = useState<ServiceType[]>([]);
-  const [isLoadingTypes, setIsLoadingTypes] = useState(false);
-  const isEditing = !!serviceToEdit;
-
   const {
+    serviceTypes,
+    isLoadingTypes,
+    isEditing,
     control,
     handleSubmit,
-    reset,
-    setValue,
-    formState: { errors, isSubmitting },
-  } = useForm<ServiceFormData>({
-    resolver: valibotResolver(serviceSchema),
-    defaultValues: {
-      serviceTypeId: '',
-      initialCost: '',
-    },
-  });
-
-  // Reset or Populate form when visibility or editing state changes
-  useEffect(() => {
-    if (visible) {
-      if (serviceToEdit) {
-        setValue('serviceTypeId', serviceToEdit.serviceType.id);
-        setValue('initialCost', String(serviceToEdit.initialCost));
-      } else {
-        reset({
-          serviceTypeId: '',
-          initialCost: '',
-        });
-      }
-
-      // Load types if not loaded
-      if (serviceTypes.length === 0) {
-        setIsLoadingTypes(true);
-        providerClient
-          .apiFetch('/service-types', 'GET')
-          .then((res: Response) => res.json())
-          .then((data: ServiceType[]) => setServiceTypes(data))
-          .catch((err: unknown) => console.error('Failed to load types:', err))
-          .finally(() => setIsLoadingTypes(false));
-      }
-    }
-  }, [visible, serviceToEdit, setValue, reset, serviceTypes.length]);
-
-  const onSubmit = async (data: ServiceFormData) => {
-    try {
-      let res;
-      const payload = {
-        serviceTypeId: data.serviceTypeId,
-        initialCost: parseFloat(data.initialCost),
-        ...(isEditing ? {} : { isEnabled: true }),
-      };
-
-      if (isEditing && serviceToEdit) {
-        res = await providerClient.apiFetch(`/services/${serviceToEdit.id}`, 'PATCH', {
-          body: JSON.stringify(payload),
-        });
-      } else {
-        res = await providerClient.apiFetch('/services', 'POST', {
-          body: JSON.stringify(payload),
-        });
-      }
-
-      if (res.ok) {
-        reset();
-        onSuccess();
-        onClose();
-      } else {
-        console.error('Failed to save service');
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+    errors,
+    isSubmitting,
+    onSubmit,
+    handleCancel,
+  } = useAddServiceModal({ visible, serviceToEdit, onClose, onSuccess });
 
   return (
     <Modal visible={visible} animationType="slide" transparent onRequestClose={onClose}>
@@ -129,7 +37,6 @@ export function AddServiceModal({ visible, serviceToEdit, onClose, onSuccess }: 
           </Typography>
 
           <KeyboardAwareScrollView contentContainerStyle={styles.scrollContent}>
-            {/* Service Type Selector */}
             <View style={styles.fieldContainer}>
               <Typography variant="subtitle2" style={styles.label}>
                 Select Service Type
@@ -174,7 +81,6 @@ export function AddServiceModal({ visible, serviceToEdit, onClose, onSuccess }: 
               )}
             </View>
 
-            {/* Price Input */}
             <View style={styles.fieldContainer}>
               <Controller
                 control={control}
@@ -195,15 +101,7 @@ export function AddServiceModal({ visible, serviceToEdit, onClose, onSuccess }: 
           </KeyboardAwareScrollView>
 
           <View style={styles.actions}>
-            <Button
-              title="Cancel"
-              variant="text"
-              onPress={() => {
-                reset();
-                onClose();
-              }}
-              style={styles.button}
-            />
+            <Button title="Cancel" variant="text" onPress={handleCancel} style={styles.button} />
             <Button
               title={isEditing ? 'Save Changes' : 'Add Service'}
               onPress={handleSubmit(onSubmit)}

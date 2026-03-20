@@ -1,60 +1,14 @@
-import * as v from 'valibot';
-import { Alert, View } from 'react-native';
 import { Button, Input, Typography } from '@repo/components';
 import { colors } from '@repo/theme';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
-import { useNavigation } from '@react-navigation/native';
-import { useState } from 'react';
-import { valibotResolver } from '@hookform/resolvers/valibot';
+import { View } from 'react-native';
 
 import { styles } from './AddCard.styles';
-
-// Validation Schema
-const cardSchema = v.object({
-  cardHolderName: v.pipe(v.string(), v.minLength(1, 'Cardholder name is required')),
-  cardNumber: v.pipe(v.string(), v.regex(/^\d{16}$/, 'Card number must be 16 digits')),
-  expiryDate: v.pipe(v.string(), v.regex(/^(0[1-9]|1[0-2])\/\d{2}$/, 'Format must be MM/YY')),
-  cvv: v.pipe(v.string(), v.regex(/^\d{3,4}$/, 'CVV must be 3 or 4 digits')),
-});
-
-type CardFormData = v.InferOutput<typeof cardSchema>;
+import { useAddCardScreen } from './AddCard.hooks';
 
 export function AddCardScreen() {
-  const navigation = useNavigation();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<CardFormData>({
-    resolver: valibotResolver(cardSchema),
-    defaultValues: {
-      cardHolderName: '',
-      cardNumber: '',
-      expiryDate: '',
-      cvv: '',
-    },
-  });
-
-  const onSubmit = async (data: CardFormData) => {
-    setIsSubmitting(true);
-    try {
-      console.log('Tokenizing Card:', data);
-      // TODO: Call Xendit SDK here to tokenize, then send token to backend
-
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-
-      Alert.alert('Success', 'Card added successfully');
-      navigation.goBack();
-    } catch {
-      Alert.alert('Error', 'Failed to add card');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  const { control, handleSubmit, errors, isSubmitting, onSubmit } = useAddCardScreen();
 
   return (
     <View style={styles.container}>
@@ -95,7 +49,6 @@ export function AddCardScreen() {
                     maxLength={5}
                     onBlur={onBlur}
                     onChangeText={text => {
-                      // Auto-formatting for MM/YY
                       if (text.length === 2 && value.length === 1) {
                         onChange(text + '/');
                       } else {

@@ -1,48 +1,13 @@
-import { authClient } from '@lib/authClient';
 import { Avatar, Button, MenuButton, ScreenContainer, Typography } from '@repo/components';
 import { colors } from '@repo/theme';
 import { CreditCard, LogOut, MessageSquareWarning, UserPen } from 'lucide-react-native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { OptionsStackParamList } from '@navigation/OptionsStack';
-import { providerClient } from '@lib/providerClient';
-import { useEffect, useState } from 'react';
-import { useLoading } from '@repo/shared';
-import { useNavigation } from '@react-navigation/native';
 import { View } from 'react-native';
 
 import { styles } from './Options.styles';
-
-type OptionsNavProp = NativeStackNavigationProp<OptionsStackParamList, 'Options'>;
-
-interface UserProfile {
-  firstName: string;
-  lastName: string;
-  email: string;
-  avatarUrl: string | null;
-}
+import { useOptionsScreen } from './Options.hooks';
 
 export function OptionsScreen() {
-  const { setLoading } = useLoading();
-  const navigation = useNavigation<OptionsNavProp>();
-  const [profile, setProfile] = useState<UserProfile | null>(null);
-
-  const signOut = async () => {
-    setLoading(true);
-    await authClient.signOut();
-    setLoading(false);
-  };
-
-  const { data: userSession } = authClient.useSession();
-
-  useEffect(() => {
-    if (userSession) {
-      providerClient
-        .apiFetch('/users/profile', 'GET')
-        .then(res => res.json())
-        .then(data => setProfile(data))
-        .catch(console.error);
-    }
-  }, [userSession]);
+  const { userSession, profile, signOut, navigation } = useOptionsScreen();
 
   if (userSession === null) {
     return <View style={styles.emptyContainer} />;

@@ -1,36 +1,24 @@
 import { Card, Typography } from '@repo/components';
 import { colors } from '@repo/theme';
 import { CreditCard, Plus, Trash2, Wallet } from 'lucide-react-native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { OptionsStackParamList } from '@navigation/OptionsStack';
 import { ScrollView, TouchableOpacity, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 
 import { styles } from './Payments.styles';
-
-type NavProp = NativeStackNavigationProp<OptionsStackParamList, 'PaymentMethods'>;
-
-// Mock Data
-// TODO: Replace with real data fetching with onEffect
-const SAVED_METHODS = [
-  { id: '1', type: 'CARD', label: 'Visa ending in 4242', icon: 'visa' },
-  { id: '2', type: 'EWALLET', label: 'GCash (0917 *** 8888)', icon: 'gcash' },
-];
+import { usePaymentsScreen } from './Payments.hooks';
 
 export function PaymentMethodsScreen() {
-  const navigation = useNavigation<NavProp>();
+  const { savedMethods, navigation } = usePaymentsScreen();
 
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        {/* Saved Payment Methods List */}
         <Typography variant="h5" style={styles.sectionTitle}>
           Saved Methods
         </Typography>
 
         <View style={styles.savedMethodsContainer}>
-          {SAVED_METHODS.length > 0 ? (
-            SAVED_METHODS.map(method => (
+          {savedMethods.length > 0 ? (
+            savedMethods.map(method => (
               <Card key={method.id} style={styles.methodCard} padding="m">
                 <View style={styles.methodInfo}>
                   <View style={styles.iconContainer}>
@@ -56,7 +44,6 @@ export function PaymentMethodsScreen() {
           )}
         </View>
 
-        {/* Add New Payment Method */}
         <Typography variant="h5" style={styles.sectionTitle}>
           Add Payment Method
         </Typography>

@@ -1,74 +1,13 @@
 import { ActivityIndicator, ScrollView, TouchableOpacity, View } from 'react-native';
 import { colors } from '@repo/theme';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { providerClient } from '@lib/providerClient';
-import { RequestsStackParamList } from '@navigation/RequestsStack';
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Typography } from '@repo/components';
-import { useEffect, useState } from 'react';
 
 import { styles } from './BookingDone.styles';
-
-type BookingDoneRouteProp = RouteProp<RequestsStackParamList, 'BookingDone'>;
-type BookingDoneNavigationProp = NativeStackNavigationProp<RequestsStackParamList, 'BookingDone'>;
-
-interface BookingDetails {
-  id: string;
-  status: string;
-  cost: number;
-  serviceId: string;
-  provider: {
-    id: string;
-    firstName: string;
-    lastName: string;
-    avatarUrl: string | null;
-  } | null;
-  service: {
-    id: string;
-    serviceType: {
-      name: string;
-    } | null;
-  } | null;
-}
+import { useBookingDone } from './BookingDone.hooks';
 
 export function BookingDoneScreen() {
-  const route = useRoute<BookingDoneRouteProp>();
-  const navigation = useNavigation<BookingDoneNavigationProp>();
-  const { bookingId } = route.params;
-
-  const [bookingDetails, setBookingDetails] = useState<BookingDetails | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchBookingDetails = async () => {
-      try {
-        const response = await providerClient.apiFetch(`/bookings/${bookingId}`, 'GET');
-        if (response.ok) {
-          const data = await response.json();
-          setBookingDetails(data);
-        } else {
-          throw new Error('Failed to fetch booking details');
-        }
-      } catch (error) {
-        console.error('Error fetching booking details:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchBookingDetails();
-  }, [bookingId]);
-
-  const handleReturn = () => {
-    navigation.navigate('RequestList');
-  };
-
-  const handleViewDetails = () => {
-    navigation.navigate('BookingDetails', {
-      bookingId,
-    });
-  };
+  const { bookingDetails, isLoading, handleReturn, handleViewDetails } = useBookingDone();
 
   if (isLoading) {
     return (

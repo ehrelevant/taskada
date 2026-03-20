@@ -1,53 +1,12 @@
-import { authClient } from '@lib/authClient';
-import { AuthStackParamList } from '@navigation/AuthStack';
 import { Button, Input, ScreenContainer, Typography } from '@repo/components';
 import { colors } from '@repo/theme';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Pressable, Text } from 'react-native';
-import { providerClient } from '@lib/providerClient';
-import { useLoading } from '@repo/shared';
-import { useNavigation } from '@react-navigation/native';
-import { useState } from 'react';
 
 import { styles } from './SignIn.styles';
-
-type SignInNavProp = NativeStackNavigationProp<AuthStackParamList, 'SignIn'>;
+import { useSignInScreen } from './SignIn.hooks';
 
 export function SignInScreen() {
-  const navigation = useNavigation<SignInNavProp>();
-
-  const { withLoading } = useLoading();
-
-  const [errorMessage, setErrorMessage] = useState('');
-
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-  const handleSignIn = withLoading(async () => {
-    setErrorMessage('');
-
-    const { data: userData, error } = await authClient.signIn.email({
-      email,
-      password,
-    });
-
-    console.log(userData);
-
-    if (error !== null || userData === null) {
-      console.log(error);
-      setErrorMessage(error.message ?? '');
-      return;
-    }
-
-    const providerResponse = await providerClient.apiFetch(`/providers`);
-
-    if (providerResponse.status === 404) {
-      // Means provider does not exist, create one
-      const createProviderResponse = await providerClient.apiFetch('/providers', 'POST');
-      const newProviderData = await createProviderResponse.json();
-      console.log(newProviderData);
-    }
-  });
+  const { email, setEmail, password, setPassword, errorMessage, handleSignIn, navigation } = useSignInScreen();
 
   return (
     <ScreenContainer scrollable padding="l" style={styles.container}>

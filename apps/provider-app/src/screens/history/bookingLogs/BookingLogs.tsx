@@ -1,115 +1,24 @@
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import { ActivityIndicator, Alert, ScrollView, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, ScrollView, TouchableOpacity, View } from 'react-native';
 import { Button, Typography } from '@repo/components';
 import { ChevronLeft } from 'lucide-react-native';
 import { colors } from '@repo/theme';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { providerClient } from '@lib/providerClient';
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { TransactionHistoryStackParamList } from '@navigation/TransactionHistoryStack';
-import { useEffect, useState } from 'react';
 
 import { styles } from './BookingLogs.styles';
-
-type BookingDetailsRouteProp = RouteProp<TransactionHistoryStackParamList, 'BookingDetails'>;
-type BookingDetailsNavigationProp = NativeStackNavigationProp<TransactionHistoryStackParamList, 'BookingDetails'>;
-
-interface BookingData {
-  id: string;
-  status: string;
-  cost: number;
-  specifications: string | null;
-  createdAt: string;
-  serviceId: string;
-  seekerUserId: string;
-  provider: {
-    id: string;
-    firstName: string;
-    lastName: string;
-    avatarUrl: string | null;
-  } | null;
-  address: {
-    label: string | null;
-    coordinates: [number, number];
-  } | null;
-  serviceRating: {
-    avgRating: number;
-    reviewCount: number;
-  };
-  serviceType: {
-    id: string;
-    name: string;
-    iconUrl: string | null;
-  };
-}
+import { useBookingLogs } from './BookingLogs.hooks';
 
 export function BookingDetailsScreen() {
-  const route = useRoute<BookingDetailsRouteProp>();
-  const navigation = useNavigation<BookingDetailsNavigationProp>();
-  const { bookingId } = route.params;
-
-  const [booking, setBooking] = useState<BookingData | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchBooking = async () => {
-      try {
-        const response = await providerClient.apiFetch(`/bookings/${bookingId}`, 'GET');
-        if (response.ok) {
-          const data = await response.json();
-          setBooking(data);
-        } else {
-          throw new Error('Failed to fetch booking');
-        }
-      } catch (error) {
-        console.error('Error fetching booking:', error);
-        Alert.alert('Error', 'Failed to load booking details');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchBooking();
-  }, [bookingId]);
-
-  const handleGoBack = () => {
-    navigation.goBack();
-  };
-
-  const handleViewRequestDetails = () => {
-    navigation.navigate('RequestDetailsSummary', { bookingId });
-  };
-
-  const handleViewChatLogs = () => {
-    if (booking?.provider) {
-      navigation.navigate('ChatLogs', {
-        bookingId,
-        otherUser: {
-          id: booking.provider.id,
-          firstName: booking.provider.firstName,
-          lastName: booking.provider.lastName,
-          avatarUrl: booking.provider.avatarUrl,
-        },
-      });
-    }
-  };
-
-  // Parse coordinates (stored as [lng, lat] in database, MapView expects {latitude, longitude})
-  const coordinates = booking?.address?.coordinates;
-  const [longitude, latitude] = coordinates || [0, 0];
-
-  // Format date and time
-  const formatDateTime = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-  };
+  const {
+    booking,
+    isLoading,
+    latitude,
+    longitude,
+    formatDateTime,
+    handleGoBack,
+    handleViewRequestDetails,
+    handleViewChatLogs,
+  } = useBookingLogs();
 
   if (isLoading) {
     return (
@@ -126,7 +35,6 @@ export function BookingDetailsScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
           <ChevronLeft size={24} color={colors.textPrimary} />
@@ -136,7 +44,6 @@ export function BookingDetailsScreen() {
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        {/* Map Section */}
         {booking?.address && (
           <View style={styles.mapSection}>
             <Typography variant="subtitle2" style={styles.sectionLabel}>
@@ -168,7 +75,6 @@ export function BookingDetailsScreen() {
           </View>
         )}
 
-        {/* Service Cost */}
         <View style={styles.section}>
           <Typography variant="subtitle2" style={styles.sectionLabel}>
             Service Cost
@@ -178,7 +84,6 @@ export function BookingDetailsScreen() {
           </Typography>
         </View>
 
-        {/* Specifications */}
         {booking?.specifications && (
           <View style={styles.section}>
             <Typography variant="subtitle2" style={styles.sectionLabel}>
@@ -192,7 +97,6 @@ export function BookingDetailsScreen() {
           </View>
         )}
 
-        {/* Booking Date and Time */}
         <View style={styles.section}>
           <Typography variant="subtitle2" style={styles.sectionLabel}>
             Booking Date and Time
@@ -200,7 +104,6 @@ export function BookingDetailsScreen() {
           <Typography variant="body1">{booking?.createdAt ? formatDateTime(booking.createdAt) : 'N/A'}</Typography>
         </View>
 
-        {/* Status */}
         <View style={styles.section}>
           <Typography variant="subtitle2" style={styles.sectionLabel}>
             Status
@@ -213,7 +116,6 @@ export function BookingDetailsScreen() {
         </View>
       </ScrollView>
 
-      {/* Action Buttons */}
       <View style={styles.buttonContainer}>
         <Button title="View Request Details" onPress={handleViewRequestDetails} />
         <Button title="View Chat Logs" variant="outline" onPress={handleViewChatLogs} style={styles.secondaryButton} />

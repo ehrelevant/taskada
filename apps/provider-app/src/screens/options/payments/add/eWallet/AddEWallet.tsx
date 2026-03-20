@@ -1,67 +1,16 @@
-import * as v from 'valibot';
-import { Alert, TouchableOpacity, View } from 'react-native';
 import { Button, Card, Input, Typography } from '@repo/components';
 import { Check } from 'lucide-react-native';
 import { colors } from '@repo/theme';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { OptionsStackParamList } from '@navigation/OptionsStack';
-import { useNavigation } from '@react-navigation/native';
-import { useState } from 'react';
-import { valibotResolver } from '@hookform/resolvers/valibot';
+import { TouchableOpacity, View } from 'react-native';
 
 import { styles } from './AddEWallet.styles';
-
-type NavProp = NativeStackNavigationProp<OptionsStackParamList, 'AddEWallet'>;
-
-const WALLETS = [
-  { id: 'GCASH', name: 'GCash', color: '#007DFE' },
-  { id: 'MAYA', name: 'Maya', color: '#232526' },
-];
-
-const eWalletSchema = v.object({
-  channelCode: v.string('Please select a wallet'),
-  phoneNumber: v.pipe(v.string(), v.regex(/^(09|\+639)\d{9}$/, 'Invalid PH phone number (e.g., 0917...)')),
-});
-
-type EWalletFormData = v.InferOutput<typeof eWalletSchema>;
+import { useAddEWalletScreen } from './AddEWallet.hooks';
 
 export function AddEWalletScreen() {
-  const navigation = useNavigation<NavProp>();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const {
-    control,
-    handleSubmit,
-    setValue,
-    watch,
-    formState: { errors },
-  } = useForm<EWalletFormData>({
-    resolver: valibotResolver(eWalletSchema),
-    defaultValues: {
-      channelCode: 'GCASH',
-      phoneNumber: '',
-    },
-  });
-
-  const selectedChannel = watch('channelCode');
-
-  const onSubmit = async (data: EWalletFormData) => {
-    setIsSubmitting(true);
-    try {
-      console.log('Linking Wallet:', data);
-      // TODO: Backend call to initiate Account Linking
-
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      Alert.alert('Redirecting', 'You would now be redirected to the e-wallet app to authorize.');
-      navigation.goBack();
-    } catch {
-      Alert.alert('Error', 'Failed to link account');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  const { wallets, selectedChannel, setValue, control, handleSubmit, errors, isSubmitting, onSubmit } =
+    useAddEWalletScreen();
 
   return (
     <View style={styles.container}>
@@ -71,7 +20,7 @@ export function AddEWalletScreen() {
         </Typography>
 
         <View style={styles.walletGrid}>
-          {WALLETS.map(wallet => {
+          {wallets.map(wallet => {
             const isSelected = selectedChannel === wallet.id;
             return (
               <TouchableOpacity

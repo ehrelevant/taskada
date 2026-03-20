@@ -1,61 +1,29 @@
-import { authClient } from '@lib/authClient';
-import { AuthStackParamList } from '@navigation/AuthStack';
 import { Button, Input, Typography } from '@repo/components';
 import { colors } from '@repo/theme';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Pressable, Text } from 'react-native';
-import { type Provider } from '@repo/database';
-import { providerClient } from '@lib/providerClient';
-import { useLoading } from '@repo/shared';
-import { useNavigation } from '@react-navigation/native';
-import { useState } from 'react';
 
 import { styles } from './SignUp.styles';
-
-type SignUpNavProp = NativeStackNavigationProp<AuthStackParamList, 'SignUp'>;
+import { useSignUpScreen } from './SignUp.hooks';
 
 export function SignUpScreen() {
-  const navigation = useNavigation<SignUpNavProp>();
-
-  const { setLoading } = useLoading();
-
-  const [errorMessage, setErrorMessage] = useState('');
-
-  const [firstName, setFirstName] = useState('');
-  const [middleName, setMiddleName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-
-  const handleSignUp = async () => {
-    setLoading(true);
-    setErrorMessage('');
-
-    console.log('Requesting...');
-    const { data: newUserData, error } = await authClient.signUp.email({
-      name: firstName,
-      middleName,
-      lastName,
-      email,
-      password,
-      phoneNumber,
-    });
-
-    if (newUserData !== null) {
-      console.log(newUserData);
-    } else if (error !== null) {
-      console.log(error);
-      setErrorMessage(error.message ?? '');
-    }
-
-    const createProviderResponse = await providerClient.apiFetch('/providers', 'POST');
-    const newProviderData: Provider | null = await createProviderResponse.json();
-    console.log(newProviderData);
-
-    setLoading(false);
-  };
+  const {
+    firstName,
+    setFirstName,
+    middleName,
+    setMiddleName,
+    lastName,
+    setLastName,
+    email,
+    setEmail,
+    password,
+    setPassword,
+    phoneNumber,
+    setPhoneNumber,
+    errorMessage,
+    handleSignUp,
+    navigation,
+  } = useSignUpScreen();
 
   return (
     <KeyboardAwareScrollView contentContainerStyle={styles.scrollContainer} bottomOffset={50}>

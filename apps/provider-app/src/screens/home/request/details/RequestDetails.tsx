@@ -2,166 +2,21 @@ import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { ActivityIndicator, Image, ScrollView, TouchableOpacity, View } from 'react-native';
 import { Avatar, Button, ImageViewer, Typography } from '@repo/components';
 import { colors } from '@repo/theme';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { providerClient } from '@lib/providerClient';
-import { RequestsStackParamList } from '@navigation/RequestsStack';
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useEffect, useState } from 'react';
 
 import { styles } from './RequestDetails.styles';
-
-type RequestDetailsRouteProp = RouteProp<RequestsStackParamList, 'RequestDetails'>;
-type RequestDetailsNavigationProp = NativeStackNavigationProp<RequestsStackParamList, 'RequestDetails'>;
-
-interface RequestDetails {
-  id: string;
-  serviceId: string | null;
-  serviceTypeId: string;
-  serviceType: {
-    id: string;
-    name: string;
-    iconUrl: string | null;
-  };
-  seeker: {
-    id: string;
-    firstName: string;
-    lastName: string;
-    avatarUrl: string | null;
-    phoneNumber: string;
-  };
-  address: {
-    label: string | null;
-    coordinates: [number, number];
-  };
-  description: string | null;
-  images: string[];
-}
+import { useRequestDetails } from './RequestDetails.hooks';
 
 export function RequestDetailsScreen() {
-  const route = useRoute<RequestDetailsRouteProp>();
-  const navigation = useNavigation<RequestDetailsNavigationProp>();
-  const { requestId } = route.params;
-
-  const [request, setRequest] = useState<RequestDetails | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [isCreatingBooking, setIsCreatingBooking] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
-
-  useEffect(() => {
-    loadRequestDetails();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [requestId]);
-
-  const loadRequestDetails = async () => {
-    try {
-      setIsLoading(true);
-      const response = await providerClient.apiFetch(`/requests/${requestId}`, 'GET');
-
-      if (!response.ok) {
-        if (response.status === 404) {
-          setError('This request no longer exists. It may have been cancelled by the seeker.');
-        } else {
-          throw new Error('Failed to load request details');
-        }
-        return;
-      }
-
-      const data = await response.json();
-      console.log(data);
-      setRequest(data);
-    } catch (err) {
-      console.error('Failed to load request details:', err);
-      setError('Failed to load request details. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleGoBack = () => {
-    navigation.goBack();
-  };
-
-  const handleSettleRequest = async () => {
-    if (!request) {
-      return;
-    }
-
-    // Determine which service to use
-    let serviceId: string;
-
-    if (request.serviceId) {
-      // Request is for a specific service
-      serviceId = request.serviceId;
-    } else {
-      // Request is for a service type - need to find provider's matching service
-      // Since providers only have one service per type, fetch it
-      try {
-        const servicesResponse = await providerClient.apiFetch(
-          `/services/my-services?serviceTypeId=${request.serviceTypeId}`,
-          'GET',
-        );
-        if (!servicesResponse.ok) {
-          throw new Error('Failed to load your services');
-        }
-        const services = await servicesResponse.json();
-        if (services.length === 0) {
-          setError('You do not have a service matching this request type');
-          return;
-        }
-        serviceId = services[0].id;
-      } catch (err) {
-        console.error('Failed to get matching service:', err);
-        setError('Failed to find matching service. Please try again.');
-        return;
-      }
-    }
-
-    setIsCreatingBooking(true);
-
-    try {
-      // 1. Create booking
-      const bookingResponse = await providerClient.apiFetch('/bookings', 'POST', {
-        body: JSON.stringify({
-          requestId: request.id,
-          serviceId: serviceId,
-        }),
-      });
-
-      if (!bookingResponse.ok) {
-        throw new Error('Failed to create booking');
-      }
-
-      const booking = await bookingResponse.json();
-
-      // 2. Update request status to 'settling'
-      const statusResponse = await providerClient.apiFetch(`/requests/${request.id}/status`, 'PATCH', {
-        body: JSON.stringify({ status: 'settling' }),
-      });
-
-      if (!statusResponse.ok) {
-        console.warn('Failed to update request status, but booking was created');
-      }
-
-      // 3. Navigate to chat screen
-      navigation.replace('Chat', {
-        bookingId: booking.id,
-        otherUser: {
-          id: request.seeker.id,
-          firstName: request.seeker.firstName,
-          lastName: request.seeker.lastName,
-          avatarUrl: request.seeker.avatarUrl,
-        },
-        requestId: request.id,
-        address: request.address,
-      });
-    } catch (err) {
-      console.error('Failed to settle request:', err);
-      setError('Failed to start chat. Please try again.');
-    } finally {
-      setIsCreatingBooking(false);
-    }
-  };
+  const {
+    request,
+    isLoading,
+    error,
+    isCreatingBooking,
+    selectedImage,
+    setSelectedImage,
+    handleGoBack,
+    handleSettleRequest,
+  } = useRequestDetails();
 
   if (isLoading) {
     return (
@@ -201,14 +56,12 @@ export function RequestDetailsScreen() {
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-      {/* Service Type Header */}
       <View style={styles.headerContainer}>
         <Typography variant="h1" style={styles.serviceTypeName}>
           {request.serviceType.name}
         </Typography>
       </View>
 
-      {/* Seeker Information */}
       <View style={styles.sectionCard}>
         <Typography variant="subtitle2" style={styles.sectionLabel}>
           Seeker Information
@@ -230,7 +83,6 @@ export function RequestDetailsScreen() {
         </View>
       </View>
 
-      {/* Location */}
       <View style={styles.sectionCard}>
         <Typography variant="subtitle2" style={styles.sectionLabel}>
           Location
@@ -264,7 +116,6 @@ export function RequestDetailsScreen() {
         </View>
       </View>
 
-      {/* Description */}
       {request.description && (
         <View style={styles.sectionCard}>
           <Typography variant="subtitle2" style={styles.sectionLabel}>
@@ -278,7 +129,6 @@ export function RequestDetailsScreen() {
         </View>
       )}
 
-      {/* Images */}
       {request.images && request.images.length > 0 && (
         <View style={styles.sectionCard}>
           <Typography variant="subtitle2" style={styles.sectionLabel}>
@@ -294,7 +144,6 @@ export function RequestDetailsScreen() {
         </View>
       )}
 
-      {/* Action Buttons */}
       <View style={styles.buttonContainer}>
         <Button
           title="Settle Request Via Chat"

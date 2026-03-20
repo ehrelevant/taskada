@@ -44,3 +44,14 @@ export interface CreateServicePayload {
   initialCost: number;
   isEnabled: boolean;
 }
+
+export interface ProviderService {
+  id: string;
+  initialCost: string;
+  isEnabled: boolean;
+  serviceType: {
+    id: string;
+    name: string;
+    iconUrl?: string;
+  };
+}

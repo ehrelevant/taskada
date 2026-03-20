@@ -1,163 +1,32 @@
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import {
-  ActivityIndicator,
-  Alert,
-  KeyboardAvoidingView,
-  Modal,
-  Platform,
-  ScrollView,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { ActivityIndicator, KeyboardAvoidingView, Modal, Platform, ScrollView, TextInput, TouchableOpacity, View } from 'react-native';
 import { ArrowLeft } from 'lucide-react-native';
-import { authClient } from '@lib/authClient';
 import { Button, Typography } from '@repo/components';
 import { colors } from '@repo/theme';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { providerClient } from '@lib/providerClient';
-import { RequestsStackParamList } from '@navigation/RequestsStack';
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useEffect, useState } from 'react';
 
 import { styles } from './BookingFinalize.styles';
-
-type FinalizeDetailsRouteProp = RouteProp<RequestsStackParamList, 'FinalizeDetails'>;
-type FinalizeDetailsNavigationProp = NativeStackNavigationProp<RequestsStackParamList, 'FinalizeDetails'>;
+import { useBookingFinalize } from './BookingFinalize.hooks';
 
 export function FinalizeDetailsScreen() {
-  const route = useRoute<FinalizeDetailsRouteProp>();
-  const navigation = useNavigation<FinalizeDetailsNavigationProp>();
-  const { bookingId, seekerLocation, otherUser, requestId } = route.params;
-
-  const [serviceCost, setServiceCost] = useState('');
-  const [serviceSpecifications, setServiceSpecifications] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showWaitingModal, setShowWaitingModal] = useState(false);
-
-  // Parse coordinates (stored as [lng, lat] in database, MapView expects {latitude, longitude})
-  const [longitude, latitude] = seekerLocation.coordinates;
-
-  // WebSocket setup for waiting modal
-  useEffect(() => {
-    if (!showWaitingModal) return;
-
-    const setupSocket = async () => {
-      const session = await authClient.getSession();
-      const userId = session.data?.user?.id;
-      if (!userId) return;
-
-      await providerClient.connectChat(authClient.getCookie(), userId, 'provider');
-      providerClient.joinBooking(bookingId);
-
-      providerClient.onProposalDeclined(data => {
-        if (data.bookingId === bookingId) {
-          setShowWaitingModal(false);
-          Alert.alert(
-            'Proposal Declined',
-            'The seeker has declined your service proposal. You can discuss further in chat.',
-            [
-              {
-                text: 'OK',
-                onPress: () => {
-                  navigation.replace('Chat', {
-                    bookingId,
-                    otherUser,
-                    requestId,
-                    address: seekerLocation,
-                  });
-                },
-              },
-            ],
-          );
-        }
-      });
-
-      providerClient.onProposalAccepted(data => {
-        if (data.bookingId === bookingId) {
-          setShowWaitingModal(false);
-          navigation.replace('BookingTransit', {
-            bookingId,
-            seekerLocation: data.seekerLocation,
-            address: seekerLocation,
-          });
-        }
-      });
-    };
-
-    setupSocket();
-
-    return () => {
-      providerClient.leaveBooking(bookingId);
-      providerClient.removeAllListeners();
-      providerClient.disconnectChat();
-    };
-  }, [showWaitingModal, bookingId, otherUser, requestId, seekerLocation, navigation]);
-
-  const handleSubmit = async () => {
-    if (!serviceCost.trim() || !serviceSpecifications.trim()) {
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    try {
-      const response = await providerClient.apiFetch(`/bookings/${bookingId}/proposal`, 'PATCH', {
-        body: JSON.stringify({
-          cost: parseFloat(serviceCost),
-          specifications: serviceSpecifications,
-        }),
-      });
-
-      if (response.ok) {
-        // Show waiting modal instead of navigating
-        setShowWaitingModal(true);
-      } else {
-        const errorData = await response.json().catch(() => null);
-        console.error('Failed to submit proposal:', {
-          status: response.status,
-          statusText: response.statusText,
-          error: errorData,
-          bookingId,
-          cost: parseFloat(serviceCost),
-        });
-      }
-    } catch (error) {
-      console.error('Error submitting proposal:', {
-        error,
-        bookingId,
-        cost: parseFloat(serviceCost),
-        specifications: serviceSpecifications,
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const formatCurrency = (value: string) => {
-    // Remove non-numeric characters except decimal point
-    const numericValue = value.replace(/[^0-9.]/g, '');
-
-    // Ensure only one decimal point
-    const parts = numericValue.split('.');
-    if (parts.length > 2) {
-      return parts[0] + '.' + parts.slice(1).join('');
-    }
-
-    return numericValue;
-  };
-
-  const handleCostChange = (text: string) => {
-    const formatted = formatCurrency(text);
-    setServiceCost(formatted);
-  };
+  const {
+    serviceCost,
+    serviceSpecifications,
+    setServiceSpecifications,
+    isSubmitting,
+    showWaitingModal,
+    latitude,
+    longitude,
+    seekerLocation,
+    handleSubmit,
+    handleCostChange,
+    handleGoBack,
+  } = useBookingFinalize();
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+        <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
           <ArrowLeft size={24} color={colors.textPrimary} />
         </TouchableOpacity>
         <Typography variant="h6">Finalize Service Details</Typography>
@@ -165,7 +34,6 @@ export function FinalizeDetailsScreen() {
 
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.keyboardView}>
         <ScrollView contentContainerStyle={styles.scrollContent}>
-          {/* Map Section */}
           <View style={styles.mapSection}>
             <Typography variant="subtitle1" style={styles.sectionTitle}>
               Service Location
@@ -195,7 +63,6 @@ export function FinalizeDetailsScreen() {
             </View>
           </View>
 
-          {/* Form Section */}
           <View style={styles.formSection}>
             <View style={styles.inputContainer}>
               <Typography variant="subtitle2" style={styles.inputLabel}>
@@ -234,7 +101,6 @@ export function FinalizeDetailsScreen() {
           </View>
         </ScrollView>
 
-        {/* Submit Button */}
         <View style={styles.submitContainer}>
           <Button
             title="Submit Service Cost and Specs"
@@ -245,13 +111,11 @@ export function FinalizeDetailsScreen() {
         </View>
       </KeyboardAvoidingView>
 
-      {/* Waiting Modal */}
       <Modal
         animationType="fade"
         transparent={true}
         visible={showWaitingModal}
         onRequestClose={() => {
-          // Modal cannot be closed by user - must wait for seeker response
           return;
         }}
       >
