@@ -14,7 +14,7 @@ const WALLETS = [
 ];
 
 const eWalletSchema = z.object({
-  channelCode: z.string({ required_error: 'Please select a wallet' }),
+  channelCode: z.string({ error: issue => (issue.input === undefined ? 'Please select a wallet' : 'Invalid wallet') }),
   phoneNumber: z.string().regex(/^(09|\+639)\d{9}$/, 'Invalid PH phone number (e.g., 0917...)'),
 });
 

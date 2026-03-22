@@ -48,7 +48,7 @@ const reportSchema = z
         'poor_service',
         'other',
       ],
-      { required_error: 'Please select a reason for reporting' },
+      { error: () => 'Please select a reason for reporting' },
     ),
     description: z.string().optional(),
   })
