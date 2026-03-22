@@ -10,6 +10,13 @@ import { useCallback, useEffect, useState } from 'react';
 type BookingTransitRouteProp = RouteProp<RequestsStackParamList, 'BookingTransit'>;
 type BookingTransitNavigationProp = NativeStackNavigationProp<RequestsStackParamList, 'BookingTransit'>;
 
+interface SeekerUser {
+  id: string;
+  firstName: string;
+  lastName: string;
+  avatarUrl: string | null;
+}
+
 interface UseBookingTransitReturn {
   providerLocation: Location.LocationObjectCoords | null;
   locationError: string | null;
@@ -17,6 +24,7 @@ interface UseBookingTransitReturn {
   seekerLatitude: number;
   seekerLongitude: number;
   address: { label: string | null; coordinates: [number, number] } | undefined;
+  seekerUser: SeekerUser | null;
   getInitialRegion: () => {
     latitude: number;
     longitude: number;
@@ -24,6 +32,7 @@ interface UseBookingTransitReturn {
     longitudeDelta: number;
   };
   handleArrived: () => Promise<void>;
+  handleReport: () => void;
 }
 
 export function useBookingTransit(): UseBookingTransitReturn {
@@ -34,8 +43,26 @@ export function useBookingTransit(): UseBookingTransitReturn {
   const [providerLocation, setProviderLocation] = useState<Location.LocationObjectCoords | null>(null);
   const [locationError, setLocationError] = useState<string | null>(null);
   const [isArriving, setIsArriving] = useState(false);
+  const [seekerUser, setSeekerUser] = useState<SeekerUser | null>(null);
 
   const [seekerLongitude, seekerLatitude] = seekerLocation.coordinates;
+
+  useEffect(() => {
+    const fetchSeekerInfo = async () => {
+      try {
+        const response = await providerClient.apiFetch(`/bookings/${bookingId}`, 'GET');
+        if (response.ok) {
+          const data = await response.json();
+          if (data.seeker) {
+            setSeekerUser(data.seeker);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch seeker info:', error);
+      }
+    };
+    fetchSeekerInfo();
+  }, [bookingId]);
 
   const getCurrentLocation = useCallback(async () => {
     try {
@@ -130,6 +157,15 @@ export function useBookingTransit(): UseBookingTransitReturn {
     };
   }, [providerLocation, seekerLatitude, seekerLongitude]);
 
+  const handleReport = useCallback(() => {
+    if (seekerUser) {
+      navigation.navigate('Report', {
+        bookingId,
+        reportedUser: seekerUser,
+      });
+    }
+  }, [bookingId, navigation, seekerUser]);
+
   return {
     providerLocation,
     locationError,
@@ -137,7 +173,9 @@ export function useBookingTransit(): UseBookingTransitReturn {
     seekerLatitude,
     seekerLongitude,
     address,
+    seekerUser,
     getInitialRegion,
     handleArrived,
+    handleReport,
   };
 }

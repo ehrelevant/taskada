@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { ArrowLeft } from 'lucide-react-native';
+import { ArrowLeft, Flag } from 'lucide-react-native';
 import { Button, Typography } from '@repo/components';
 import { colors } from '@repo/theme';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -30,6 +30,7 @@ export function BookingFinalizeScreen() {
     handleSubmit,
     handleCostChange,
     handleGoBack,
+    handleReport,
   } = useBookingFinalize();
 
   return (
@@ -39,6 +40,9 @@ export function BookingFinalizeScreen() {
           <ArrowLeft size={24} color={colors.textPrimary} />
         </TouchableOpacity>
         <Typography variant="h6">Finalize Service Details</Typography>
+        <TouchableOpacity onPress={handleReport} style={{ padding: 8 }}>
+          <Flag size={20} color={colors.textSecondary} />
+        </TouchableOpacity>
       </View>
 
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.keyboardView}>

@@ -18,6 +18,12 @@ interface BookingDetails {
     lastName: string;
     avatarUrl: string | null;
   } | null;
+  seeker: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    avatarUrl: string | null;
+  } | null;
   service: {
     id: string;
     serviceType: {
@@ -31,6 +37,7 @@ interface UseBookingDoneReturn {
   isLoading: boolean;
   handleReturn: () => void;
   handleViewDetails: () => void;
+  handleReport: () => void;
 }
 
 export function useBookingDone(): UseBookingDoneReturn {
@@ -71,10 +78,20 @@ export function useBookingDone(): UseBookingDoneReturn {
     });
   }, [bookingId, navigation]);
 
+  const handleReport = useCallback(() => {
+    if (bookingDetails?.seeker) {
+      navigation.navigate('Report', {
+        bookingId,
+        reportedUser: bookingDetails.seeker,
+      });
+    }
+  }, [bookingId, navigation, bookingDetails?.seeker]);
+
   return {
     bookingDetails,
     isLoading,
     handleReturn,
     handleViewDetails,
+    handleReport,
   };
 }

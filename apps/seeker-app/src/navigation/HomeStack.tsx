@@ -5,6 +5,7 @@ import { BookingTransitScreen } from '@screens/home/booking/transit/BookingTrans
 import { ChatScreen } from '@screens/home/booking/chat/BookingChat';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { HomeScreen } from '@screens/home/Home';
+import { ReportScreen } from '@screens/report/Report';
 import { RequestFormScreen } from '@screens/home/request/form/RequestForm';
 import { ServiceDetailsScreen } from '@screens/home/service/details/ServiceDetails';
 import { ServiceTypesListScreen } from '@screens/home/service/types/ServiceTypes';
@@ -85,6 +86,15 @@ export type HomeStackParamList = {
   };
   BookingDetails: {
     bookingId: string;
+  };
+  Report: {
+    bookingId: string;
+    reportedUser: {
+      id: string;
+      firstName: string;
+      lastName: string;
+      avatarUrl: string | null;
+    };
   };
 };
 
@@ -172,6 +182,14 @@ export function HomeStack() {
         component={BookingDetailsScreen}
         options={{
           title: 'Booking Details',
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="Report"
+        component={ReportScreen}
+        options={{
+          title: 'Report User',
           headerShown: false,
         }}
       />

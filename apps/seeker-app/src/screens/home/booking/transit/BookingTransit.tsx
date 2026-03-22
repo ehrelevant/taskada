@@ -1,18 +1,23 @@
 import { Avatar, Rating, Typography } from '@repo/components';
+import { colors } from '@repo/theme';
+import { Flag } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ScrollView, View } from 'react-native';
+import { ScrollView, TouchableOpacity, View } from 'react-native';
 
 import { styles } from './BookingTransit.styles';
 import { useBookingTransit } from './BookingTransit.hooks';
 
 export function BookingTransitScreen() {
-  const { providerName, providerInfo, serviceTypeName, cost, specifications, hasProviderArrived } =
+  const { providerName, providerInfo, serviceTypeName, cost, specifications, hasProviderArrived, handleReport } =
     useBookingTransit();
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Typography variant="h6">{hasProviderArrived ? 'Provider Arrived' : 'Provider En Route'}</Typography>
+        <TouchableOpacity onPress={handleReport} style={{ padding: 8 }}>
+          <Flag size={20} color={colors.textSecondary} />
+        </TouchableOpacity>
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollContent}>

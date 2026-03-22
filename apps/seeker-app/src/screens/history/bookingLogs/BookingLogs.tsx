@@ -1,6 +1,6 @@
 import { ActivityIndicator, ScrollView, TextInput, TouchableOpacity, View } from 'react-native';
 import { Avatar, Button, Card, Rating, ReviewCard, StarRatingInput, Typography } from '@repo/components';
-import { ChevronLeft } from 'lucide-react-native';
+import { ChevronLeft, Flag } from 'lucide-react-native';
 import { colors, spacing } from '@repo/theme';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -23,6 +23,7 @@ export function BookingLogsScreen() {
     handleViewRequestDetails,
     handleViewChatLogs,
     handleSubmitReview,
+    handleReport,
     formatDateTime,
   } = useBookingLogs();
 
@@ -54,7 +55,9 @@ export function BookingLogsScreen() {
           <ChevronLeft size={24} color={colors.textPrimary} />
         </TouchableOpacity>
         <Typography variant="h6">Transaction Details</Typography>
-        <View style={styles.headerSpacer} />
+        <TouchableOpacity onPress={handleReport} style={{ padding: 8 }}>
+          <Flag size={20} color={colors.textSecondary} />
+        </TouchableOpacity>
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollContent}>

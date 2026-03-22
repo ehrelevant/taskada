@@ -9,8 +9,8 @@ import {
 } from 'react-native';
 import { Avatar, Button, Rating, StarRatingInput, Typography } from '@repo/components';
 import { colors } from '@repo/theme';
+import { Flag, X } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { X } from 'lucide-react-native';
 
 import { styles } from './BookingDone.styles';
 import { useBookingDone } from './BookingDone.hooks';
@@ -29,6 +29,7 @@ export function BookingDoneScreen() {
     handleGoHome,
     handleViewDetails,
     handleSubmitReview,
+    handleReport,
   } = useBookingDone();
 
   const providerName = `${providerInfo.firstName} ${providerInfo.lastName}`;
@@ -38,6 +39,9 @@ export function BookingDoneScreen() {
       <View style={styles.header}>
         <TouchableOpacity onPress={handleGoHome} style={styles.exitButton}>
           <X size={24} color={colors.textPrimary} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handleReport} style={{ padding: 8 }}>
+          <Flag size={20} color={colors.textSecondary} />
         </TouchableOpacity>
       </View>
 

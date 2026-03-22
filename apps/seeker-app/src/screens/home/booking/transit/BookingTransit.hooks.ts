@@ -3,7 +3,7 @@ import { HomeStackParamList } from '@navigation/HomeStack';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RouteProp } from '@react-navigation/native';
 import { seekerClient } from '@lib/seekerClient';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 type BookingTransitRouteProp = RouteProp<HomeStackParamList, 'BookingTransit'>;
@@ -57,6 +57,13 @@ export function useBookingTransit() {
     };
   }, [bookingId, cost, navigation, providerInfo, serviceTypeName]);
 
+  const handleReport = useCallback(() => {
+    navigation.navigate('Report', {
+      bookingId,
+      reportedUser: providerInfo,
+    });
+  }, [bookingId, navigation, providerInfo]);
+
   return {
     providerName,
     providerInfo,
@@ -64,5 +71,6 @@ export function useBookingTransit() {
     cost,
     specifications,
     hasProviderArrived,
+    handleReport,
   };
 }

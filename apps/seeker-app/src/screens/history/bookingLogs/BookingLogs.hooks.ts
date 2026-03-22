@@ -8,10 +8,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 type TransactionDetailsRouteProp = RouteProp<HistoryStackParamList, 'TransactionDetails'>;
-type TransactionDetailsNavigationProp = NativeStackNavigationProp<
-  HistoryStackParamList,
-  'TransactionDetails'
->;
+type TransactionDetailsNavigationProp = NativeStackNavigationProp<HistoryStackParamList, 'TransactionDetails'>;
 
 interface TransactionData {
   id: string;
@@ -169,6 +166,20 @@ export function useBookingLogs() {
     }
   }, [transaction?.serviceId, bookingId, rating, comment, navigation]);
 
+  const handleReport = useCallback(() => {
+    if (transaction?.provider) {
+      navigation.navigate('Report', {
+        bookingId,
+        reportedUser: {
+          id: transaction.provider.id,
+          firstName: transaction.provider.firstName,
+          lastName: transaction.provider.lastName,
+          avatarUrl: transaction.provider.avatarUrl,
+        },
+      });
+    }
+  }, [bookingId, navigation, transaction?.provider]);
+
   const formatDateTime = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleString('en-US', {
@@ -196,6 +207,7 @@ export function useBookingLogs() {
     handleViewRequestDetails,
     handleViewChatLogs,
     handleSubmitReview,
+    handleReport,
     formatDateTime,
   };
 }

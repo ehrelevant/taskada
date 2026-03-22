@@ -1,5 +1,6 @@
 import { ActivityIndicator, ScrollView, TouchableOpacity, View } from 'react-native';
 import { colors } from '@repo/theme';
+import { Flag } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Typography } from '@repo/components';
 
@@ -7,7 +8,7 @@ import { styles } from './BookingDone.styles';
 import { useBookingDone } from './BookingDone.hooks';
 
 export function BookingDoneScreen() {
-  const { bookingDetails, isLoading, handleReturn, handleViewDetails } = useBookingDone();
+  const { bookingDetails, isLoading, handleReturn, handleViewDetails, handleReport } = useBookingDone();
 
   if (isLoading) {
     return (
@@ -24,6 +25,12 @@ export function BookingDoneScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
+      <View style={{ flexDirection: 'row', justifyContent: 'flex-end', paddingHorizontal: 16, paddingTop: 8 }}>
+        <TouchableOpacity onPress={handleReport} style={{ padding: 8 }}>
+          <Flag size={20} color={colors.textSecondary} />
+        </TouchableOpacity>
+      </View>
+
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.centeredContent}>
           <View style={styles.header}>

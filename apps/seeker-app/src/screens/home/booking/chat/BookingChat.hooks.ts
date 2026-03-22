@@ -176,6 +176,13 @@ export function useBookingChat() {
     setSelectedImages(prev => prev.filter((_, i) => i !== index));
   }, []);
 
+  const handleReport = useCallback(() => {
+    navigation.navigate('Report', {
+      bookingId,
+      reportedUser: providerInfo,
+    });
+  }, [bookingId, navigation, providerInfo]);
+
   return {
     messages,
     inputText,
@@ -193,5 +200,6 @@ export function useBookingChat() {
     handleLoadMore,
     handlePickImage,
     handleRemoveImage,
+    handleReport,
   };
 }

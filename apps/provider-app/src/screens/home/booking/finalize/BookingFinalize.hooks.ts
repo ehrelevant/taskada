@@ -22,6 +22,7 @@ interface UseBookingFinalizeReturn {
   handleSubmit: () => Promise<void>;
   handleCostChange: (text: string) => void;
   handleGoBack: () => void;
+  handleReport: () => void;
 }
 
 export function useBookingFinalize(): UseBookingFinalizeReturn {
@@ -153,6 +154,13 @@ export function useBookingFinalize(): UseBookingFinalizeReturn {
     navigation.goBack();
   }, [navigation]);
 
+  const handleReport = useCallback(() => {
+    navigation.navigate('Report', {
+      bookingId,
+      reportedUser: otherUser,
+    });
+  }, [bookingId, navigation, otherUser]);
+
   return {
     serviceCost,
     setServiceCost,
@@ -166,5 +174,6 @@ export function useBookingFinalize(): UseBookingFinalizeReturn {
     handleSubmit,
     handleCostChange,
     handleGoBack,
+    handleReport,
   };
 }

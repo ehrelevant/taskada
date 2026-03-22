@@ -33,6 +33,13 @@ export function useBookingProposal() {
     });
   }, [bookingId, navigation, providerInfo, requestId]);
 
+  const handleReport = useCallback(() => {
+    navigation.navigate('Report', {
+      bookingId,
+      reportedUser: providerInfo,
+    });
+  }, [bookingId, navigation, providerInfo]);
+
   const coordinates = address?.coordinates;
   const [longitude, latitude] = coordinates || [0, 0];
 
@@ -45,5 +52,6 @@ export function useBookingProposal() {
     latitude,
     handleAccept,
     handleDecline,
+    handleReport,
   };
 }

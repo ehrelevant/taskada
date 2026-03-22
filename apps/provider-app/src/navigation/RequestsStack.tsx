@@ -5,6 +5,7 @@ import { BookingFinalizeScreen } from '@screens/home/booking/finalize/BookingFin
 import { BookingServingScreen } from '@screens/home/booking/serving/BookingServing';
 import { BookingTransitScreen } from '@screens/home/booking/transit/BookingTransit';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { ReportScreen } from '@screens/report/Report';
 import { RequestDetailsScreen } from '@screens/home/request/details/RequestDetails';
 import { RequestListScreen } from '@screens/home/request/list/RequestList';
 
@@ -57,6 +58,15 @@ export type RequestsStackParamList = {
   };
   BookingDetails: {
     bookingId: string;
+  };
+  Report: {
+    bookingId: string;
+    reportedUser: {
+      id: string;
+      firstName: string;
+      lastName: string;
+      avatarUrl: string | null;
+    };
   };
 };
 
@@ -129,6 +139,14 @@ export function RequestsStack() {
         component={BookingDetailsScreen}
         options={{
           title: 'Booking Details',
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="Report"
+        component={ReportScreen}
+        options={{
+          title: 'Report User',
           headerShown: false,
         }}
       />

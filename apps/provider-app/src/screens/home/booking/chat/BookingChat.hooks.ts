@@ -51,6 +51,7 @@ interface UseBookingChatReturn {
   handleLoadMore: () => void;
   handlePickImage: () => Promise<void>;
   handleRemoveImage: (index: number) => void;
+  handleReport: () => void;
 }
 
 export function useBookingChat(): UseBookingChatReturn {
@@ -218,6 +219,13 @@ export function useBookingChat(): UseBookingChatReturn {
     setSelectedImages(prev => prev.filter((_, i) => i !== index));
   }, []);
 
+  const handleReport = useCallback(() => {
+    navigation.navigate('Report', {
+      bookingId,
+      reportedUser: otherUser,
+    });
+  }, [bookingId, navigation, otherUser]);
+
   return {
     otherUser,
     messages,
@@ -237,5 +245,6 @@ export function useBookingChat(): UseBookingChatReturn {
     handleLoadMore,
     handlePickImage,
     handleRemoveImage,
+    handleReport,
   };
 }

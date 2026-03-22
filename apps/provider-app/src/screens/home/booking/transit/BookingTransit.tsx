@@ -1,7 +1,9 @@
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { Button, Typography } from '@repo/components';
+import { colors } from '@repo/theme';
+import { Flag } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ScrollView, View } from 'react-native';
+import { ScrollView, TouchableOpacity, View } from 'react-native';
 
 import { styles } from './BookingTransit.styles';
 import { useBookingTransit } from './BookingTransit.hooks';
@@ -14,14 +16,21 @@ export function BookingTransitScreen() {
     seekerLatitude,
     seekerLongitude,
     address,
+    seekerUser,
     getInitialRegion,
     handleArrived,
+    handleReport,
   } = useBookingTransit();
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Typography variant="h6">Navigate to Seeker</Typography>
+        {seekerUser && (
+          <TouchableOpacity onPress={handleReport} style={{ padding: 8 }}>
+            <Flag size={20} color={colors.textSecondary} />
+          </TouchableOpacity>
+        )}
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollContent}>

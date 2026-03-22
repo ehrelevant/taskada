@@ -1,5 +1,6 @@
 import { ActivityIndicator, ScrollView, TouchableOpacity, View } from 'react-native';
 import { colors } from '@repo/theme';
+import { Flag } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Typography } from '@repo/components';
 
@@ -7,7 +8,7 @@ import { styles } from './BookingServing.styles';
 import { useBookingServing } from './BookingServing.hooks';
 
 export function BookingServingScreen() {
-  const { bookingDetails, isLoading, isPaid, isUpdatingStatus, handlePaidPress, handleViewDetails } =
+  const { bookingDetails, isLoading, isPaid, isUpdatingStatus, handlePaidPress, handleViewDetails, handleReport } =
     useBookingServing();
 
   if (isLoading) {
@@ -25,6 +26,12 @@ export function BookingServingScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
+      <View style={{ flexDirection: 'row', justifyContent: 'flex-end', paddingHorizontal: 16, paddingTop: 8 }}>
+        <TouchableOpacity onPress={handleReport} style={{ padding: 8 }}>
+          <Flag size={20} color={colors.textSecondary} />
+        </TouchableOpacity>
+      </View>
+
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.centeredContent}>
           <View style={styles.header}>

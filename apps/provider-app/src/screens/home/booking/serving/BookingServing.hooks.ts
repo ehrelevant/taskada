@@ -19,6 +19,12 @@ interface BookingDetails {
     lastName: string;
     avatarUrl: string | null;
   } | null;
+  seeker: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    avatarUrl: string | null;
+  } | null;
 }
 
 interface UseBookingServingReturn {
@@ -28,6 +34,7 @@ interface UseBookingServingReturn {
   isUpdatingStatus: boolean;
   handlePaidPress: () => Promise<void>;
   handleViewDetails: () => void;
+  handleReport: () => void;
 }
 
 export function useBookingServing(): UseBookingServingReturn {
@@ -94,6 +101,15 @@ export function useBookingServing(): UseBookingServingReturn {
     });
   }, [bookingId, navigation]);
 
+  const handleReport = useCallback(() => {
+    if (bookingDetails?.seeker) {
+      navigation.navigate('Report', {
+        bookingId,
+        reportedUser: bookingDetails.seeker,
+      });
+    }
+  }, [bookingId, navigation, bookingDetails?.seeker]);
+
   return {
     bookingDetails,
     isLoading,
@@ -101,5 +117,6 @@ export function useBookingServing(): UseBookingServingReturn {
     isUpdatingStatus,
     handlePaidPress,
     handleViewDetails,
+    handleReport,
   };
 }

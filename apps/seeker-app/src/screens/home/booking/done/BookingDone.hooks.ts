@@ -96,6 +96,13 @@ export function useBookingDone() {
     }
   }, [bookingData, bookingId, navigation, rating, reviewText]);
 
+  const handleReport = useCallback(() => {
+    navigation.navigate('Report', {
+      bookingId,
+      reportedUser: providerInfo,
+    });
+  }, [bookingId, navigation, providerInfo]);
+
   return {
     providerInfo,
     serviceTypeName,
@@ -110,5 +117,6 @@ export function useBookingDone() {
     handleGoHome,
     handleViewDetails,
     handleSubmitReview,
+    handleReport,
   };
 }

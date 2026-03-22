@@ -22,6 +22,12 @@ export interface BookingData {
     lastName: string;
     avatarUrl: string | null;
   } | null;
+  seeker: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    avatarUrl: string | null;
+  } | null;
   address: {
     label: string | null;
     coordinates: [number, number];
@@ -46,6 +52,7 @@ interface UseBookingLogsReturn {
   handleGoBack: () => void;
   handleViewRequestDetails: () => void;
   handleViewChatLogs: () => void;
+  handleReport: () => void;
 }
 
 export function useBookingLogs(): UseBookingLogsReturn {
@@ -99,6 +106,15 @@ export function useBookingLogs(): UseBookingLogsReturn {
     }
   }, [booking, bookingId, navigation]);
 
+  const handleReport = useCallback(() => {
+    if (booking?.seeker) {
+      navigation.navigate('Report', {
+        bookingId,
+        reportedUser: booking.seeker,
+      });
+    }
+  }, [booking, bookingId, navigation]);
+
   const coordinates = booking?.address?.coordinates;
   const [longitude, latitude] = coordinates || [0, 0];
 
@@ -122,5 +138,6 @@ export function useBookingLogs(): UseBookingLogsReturn {
     handleGoBack,
     handleViewRequestDetails,
     handleViewChatLogs,
+    handleReport,
   };
 }

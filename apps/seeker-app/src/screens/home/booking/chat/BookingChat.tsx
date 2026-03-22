@@ -1,7 +1,7 @@
 import { ActivityIndicator, FlatList, Image, ScrollView, TextInput, TouchableOpacity, View } from 'react-native';
 import { Avatar, ImageViewer, Typography } from '@repo/components';
 import { colors } from '@repo/theme';
-import { Image as ImageIcon, Send, X } from 'lucide-react-native';
+import { Flag, Image as ImageIcon, Send, X } from 'lucide-react-native';
 import { KeyboardStickyView } from 'react-native-keyboard-controller';
 import type { Message } from '@repo/shared';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -27,6 +27,7 @@ export function ChatScreen() {
     handleLoadMore,
     handlePickImage,
     handleRemoveImage,
+    handleReport,
   } = useBookingChat();
 
   const renderMessage = ({ item }: { item: Message }) => {
@@ -82,6 +83,9 @@ export function ChatScreen() {
             </Typography>
           )}
         </View>
+        <TouchableOpacity onPress={handleReport} style={{ padding: 8 }}>
+          <Flag size={20} color={colors.textSecondary} />
+        </TouchableOpacity>
       </View>
 
       <FlatList
