@@ -16,7 +16,16 @@ async function bootstrap() {
   app.useGlobalFilters(new GlobalExceptionFilter());
 
   // TODO: Add CORS policy for production mode
-  app.enableCors();
+  app.enableCors({
+    origin: [
+      'http://localhost:3300',
+      'http://localhost:3200',
+      'http://localhost:3100',
+      'provider-app://',
+      'seeker-app://',
+    ],
+    credentials: true,
+  });
 
   const config = new DocumentBuilder().build();
   const openApiDocument = SwaggerModule.createDocument(app, config);

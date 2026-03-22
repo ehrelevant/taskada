@@ -16,7 +16,7 @@ export const auth = betterAuth({
     debugLogs: false,
   }),
   plugins: [expo()],
-  trustedOrigins: ['provider-app://'],
+  trustedOrigins: ['provider-app://', 'seeker-app://', 'http://localhost:3300'],
   emailAndPassword: {
     enabled: true,
   },
