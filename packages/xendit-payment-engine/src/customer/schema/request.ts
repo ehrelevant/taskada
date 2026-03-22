@@ -13,10 +13,11 @@ export const GetCustomerRequestSchema = z.object({
 });
 
 export const GetCustomerListRequestSchema = z.object({
-  reference_id: z.string().regex(/^[a-zA-Z0-9]{1,255}$/),
+  reference_id: z.string().regex(/^[a-zA-Z0-9-]{1,255}$/),
 });
 
 export const CreateCustomerRequestSchema = z.object({
+  reference_id: z.string().regex(/^[a-zA-Z0-9-]{1,255}$/),
   individual_detail: IndividualDetailSchema.optional(),
   business_detail: BusinessDetailSchema.optional(),
   mobile_number: PhoneNumberSchema.optional(),
@@ -29,11 +30,14 @@ export const CreateCustomerRequestSchema = z.object({
   domicile_of_registration: z
     .string()
     .regex(/^[A-Z]{2}$/)
+    .default('PH')
     .meta({ description: 'Country within which the account resides (ISO 3166-1 alpha-2)' }),
   metadata: MetadataSchema.optional(),
+  type: z.enum(['INDIVIDUAL', 'BUSINESS']).default('INDIVIDUAL'),
 });
 
 export const UpdateCustomerRequestSchema = z.object({
+  customer_id: z.string().max(41),
   individual_detail: IndividualDetailSchema.optional(),
   business_detail: BusinessDetailSchema.optional(),
   mobile_number: PhoneNumberSchema.optional(),

@@ -34,7 +34,7 @@ export const CustomerIdFieldSchema = z
 export const CustomerSchema = z
   .object({
     id: CustomerIdFieldSchema,
-    reference_id: z.string().min(1).max(255),
+    reference_id: z.string().min(1).max(255).optional(),
     type: z.enum(['INDIVIDUAL', 'BUSINESS']),
     mobile_number: PhoneNumberSchema.optional(),
     phone_number: PhoneNumberSchema.optional(),

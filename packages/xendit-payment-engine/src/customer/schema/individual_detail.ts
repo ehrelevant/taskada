@@ -6,11 +6,11 @@ export const IndividualDetailSchema = z
   .object({
     given_names: z
       .string()
-      .regex(/^[a-zA-Z0-9]{1,50}$/)
+      .regex(/^[a-zA-Z0-9 ]{1,50}$/)
       .meta({ description: 'Primary or first name/s of customer. Alphanumeric. No special characters is allowed.' }),
     surname: z
       .string()
-      .regex(/^[a-zA-Z0-9]{1,50}$/)
+      .regex(/^[a-zA-Z0-9 ]{1,50}$/)
       .nullable()
       .optional()
       .meta({ description: 'Last or family name of customer. Alphanumeric. No special characters is allowed.' }),
