@@ -1,12 +1,11 @@
-import * as v from 'valibot';
+import * as z from 'zod';
 import ky from 'ky';
 import { Buffer } from 'buffer';
 
-const API_URL = v.parse(v.string('Environment variable `XENDIT_API_URL` is missing.'), process.env.XENDIT_API_URL);
-const secret_key = v.parse(
-  v.string('Environment variable `XENDIT_CLIENT_SECRET` is missing.'),
-  process.env.XENDIT_CLIENT_SECRET,
-);
+const API_URL = z.string('Environment variable `XENDIT_API_URL` is missing.').parse(process.env.XENDIT_API_URL);
+const secret_key = z
+  .string('Environment variable `XENDIT_CLIENT_SECRET` is missing.')
+  .parse(process.env.XENDIT_CLIENT_SECRET);
 const encoded: string = Buffer.from(`${secret_key}:`).toString('base64');
 
 const client = ky.create({
