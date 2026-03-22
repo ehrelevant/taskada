@@ -1,5 +1,5 @@
 import * as Notifications from 'expo-notifications';
-import type { CreateRequestPayload } from '@repo/types';
+import type { CreateReportPayload, CreateRequestPayload } from '@repo/types';
 
 import { apiFetch } from '../api/apiFetch';
 import {
@@ -10,6 +10,11 @@ import {
   type ProposalSubmittedData,
   type TypingData,
 } from '../socket/ChatSocketClient';
+import {
+  checkReportExists as checkReportExistsApi,
+  createReport as createReportApi,
+  uploadReportImages as uploadReportImagesApi,
+} from '../api/report';
 import { createRequest as createRequestApi } from '../api/request';
 import { deleteAvatar, uploadAvatar, uploadMessageImages, uploadRequestImages } from '../api/upload';
 import { forwardGeocode, reverseGeocode } from '../api/geolocation';
@@ -97,6 +102,18 @@ export abstract class BaseClient {
 
   async deleteAvatar(): Promise<void> {
     return deleteAvatar(this.authClient, this.baseUrl);
+  }
+
+  async createReport(payload: CreateReportPayload) {
+    return createReportApi(this.authClient, this.baseUrl, payload);
+  }
+
+  async uploadReportImages(reportId: string, imageUris: string[]): Promise<string[]> {
+    return uploadReportImagesApi(this.authClient, this.baseUrl, reportId, imageUris);
+  }
+
+  async checkReportExists(bookingId: string): Promise<boolean> {
+    return checkReportExistsApi(this.authClient, this.baseUrl, bookingId);
   }
 
   async reverseGeocode(lat: number, lng: number): Promise<string> {
