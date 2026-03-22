@@ -2,6 +2,63 @@
 
 This repository contains the main project files used for the implementation of a digital platform for connecting service seekers with local service providers.
 
+## Environment Variables
+
+Each app/package requires its own `.env` file. Copy the corresponding `.env.example` and fill in the values.
+
+### Root (`.env`)
+
+| Variable                  | Description                                            | Example          |
+| ------------------------- | ------------------------------------------------------ | ---------------- |
+| `POSTGRES_DB`             | PostgreSQL database name                               | `postgres`       |
+| `POSTGRES_USER`           | PostgreSQL username                                    | `postgres`       |
+| `POSTGRES_PASSWORD`       | PostgreSQL password                                    | `password`       |
+| `ANDROID_DEVICE_SEEKER`   | Android device ID for seeker app (run `adb devices`)   | `Medium_Phone`   |
+| `ANDROID_DEVICE_PROVIDER` | Android device ID for provider app (run `adb devices`) | `Medium_Phone_2` |
+
+### Server (`apps/server/.env`)
+
+| Variable                | Description                       | Example                                                |
+| ----------------------- | --------------------------------- | ------------------------------------------------------ |
+| `DATABASE_URL`          | PostgreSQL connection string      | `postgres://postgres:password@localhost:5432/postgres` |
+| `BETTER_AUTH_URL`       | Base URL for the auth service     | `http://localhost:3000`                                |
+| `BETTER_AUTH_SECRET`    | Secret key for auth token signing |                                                        |
+| `XENDIT_SECRET_KEY`     | Xendit payment gateway secret key | `xnd_development_...`                                  |
+| `GOOGLE_MAPS_API_KEY`   | Server-side Google Maps API key   | `AIzaSy...`                                            |
+| `AWS_REGION`            | AWS S3 region                     | `ap-southeast-1`                                       |
+| `AWS_ACCESS_KEY_ID`     | AWS access key ID                 |                                                        |
+| `AWS_SECRET_ACCESS_KEY` | AWS secret access key             |                                                        |
+| `S3_BUCKET_NAME`        | S3 bucket name for file uploads   | `taskada-bucket`                                       |
+| `S3_PUBLIC_URL`         | Public URL for S3 assets          | `https://taskada-bucket.s3.amazonaws.com`              |
+
+### Seeker App (`apps/seeker-app/.env`)
+
+| Variable                          | Description                     | Example                 |
+| --------------------------------- | ------------------------------- | ----------------------- |
+| `EXPO_PUBLIC_API_URL`             | Base URL for the API server     | `http://localhost:3000` |
+| `EXPO_PUBLIC_GOOGLE_MAPS_API_KEY` | Client-side Google Maps API key | `AIzaSy...`             |
+
+### Provider App (`apps/provider-app/.env`)
+
+| Variable                          | Description                     | Example                 |
+| --------------------------------- | ------------------------------- | ----------------------- |
+| `EXPO_PUBLIC_API_URL`             | Base URL for the API server     | `http://localhost:3000` |
+| `EXPO_PUBLIC_GOOGLE_MAPS_API_KEY` | Client-side Google Maps API key | `AIzaSy...`             |
+
+### Database Package (`packages/database/.env`)
+
+| Variable       | Description                  | Example                                                |
+| -------------- | ---------------------------- | ------------------------------------------------------ |
+| `DATABASE_URL` | PostgreSQL connection string | `postgres://postgres:password@localhost:5432/postgres` |
+
+### Build Scripts (`scripts/.env.build`)
+
+| Variable                    | Description                               | Example           |
+| --------------------------- | ----------------------------------------- | ----------------- |
+| `TASKADA_KEYSTORE_PASSWORD` | Password for the Android signing keystore | `your-password`   |
+| `TASKADA_KEY_ALIAS`         | Alias for the signing key                 | `taskada-release` |
+| `TASKADA_VALIDITY_DAYS`     | Keystore validity in days                 | `10000`           |
+
 ## Development
 
 This project's dependencies are managed by [`pnpm`](https://pnpm.io/), a package manager for [Node.js](https://nodejs.org/).
@@ -49,11 +106,7 @@ pnpm lint:fix
 
 ### Database Management
 
-This project uses [Drizzle ORM](https://orm.drizzle.team/) for managing its database. The files pertaining to managing the project's database are stored in the `database` package. Note that using this package requires the following environment variables (stored in a `.env` file at the package root).
-
-| **Variable**   | **Description**                                                                                                 |
-| -------------- | --------------------------------------------------------------------------------------------------------------- |
-| `DATABASE_URL` | The connection string to the PostgreSQL instance (`postgres://<user>:<password>@<hostname>:<port>/<database>`). |
+This project uses [Drizzle ORM](https://orm.drizzle.team/) for managing its database. The files pertaining to managing the project's database are stored in the `database` package (see [Database Package](#database-package-packagesdatabaseenv) for required environment variables).
 
 ```bash
 # Generate SQL migration files from schema
