@@ -10,6 +10,7 @@ import { ChatModule } from './chat/chat.module';
 import { DatabaseModule } from './database/database.module';
 import { MatchingModule } from './matching/matching.module';
 import { MessagesModule } from './messages/messages.module';
+import { ModerationModule } from './moderation/moderation.module';
 import { ProvidersModule } from './providers/providers.module';
 import { PushNotificationsModule } from './push-notifications/push-notifications.module';
 import { ReportsModule } from './reports/reports.module';
@@ -39,6 +40,7 @@ import { UsersModule } from './users/users.module';
     PushNotificationsModule,
     ReportsModule,
     ReviewsModule,
+    ModerationModule,
   ],
   providers: [
     {
