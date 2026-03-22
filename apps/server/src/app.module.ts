@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 
 import { auth } from './auth';
 
+import { AuthEndpointModule } from './auth_endpoint/auth-endpoint.module';
 import { BookingsModule } from './bookings/bookings.module';
 import { ChatModule } from './chat/chat.module';
 import { DatabaseModule } from './database/database.module';
@@ -23,6 +24,7 @@ import { UsersModule } from './users/users.module';
   imports: [
     DatabaseModule,
     AuthModule.forRoot({ auth }),
+    AuthEndpointModule,
     S3Module,
     UsersModule,
     ProvidersModule,

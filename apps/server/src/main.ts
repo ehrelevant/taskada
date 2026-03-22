@@ -17,7 +17,7 @@ async function bootstrap() {
   // TODO: Add CORS policy for production mode
   app.enableCors();
 
-  const config = new DocumentBuilder().build();
+  const config = new DocumentBuilder().setTitle('Taskada API Backend').setVersion('0.0.1').addBearerAuth().build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);
 
