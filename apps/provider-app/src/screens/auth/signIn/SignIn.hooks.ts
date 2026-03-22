@@ -23,10 +23,7 @@ export function useSignInScreen() {
       password,
     });
 
-    console.log(userData);
-
     if (error !== null || userData === null) {
-      console.log(error);
       setErrorMessage(error.message ?? '');
       return;
     }
@@ -34,9 +31,7 @@ export function useSignInScreen() {
     const providerResponse = await providerClient.apiFetch(`/providers`);
 
     if (providerResponse.status === 404) {
-      const createProviderResponse = await providerClient.apiFetch('/providers', 'POST');
-      const newProviderData = await createProviderResponse.json();
-      console.log(newProviderData);
+      await providerClient.apiFetch('/providers', 'POST');
     }
   });
 

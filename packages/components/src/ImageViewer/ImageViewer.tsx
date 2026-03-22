@@ -1,5 +1,5 @@
-import { colors } from '@repo/theme';
 import { Image, Modal, TouchableOpacity, View } from 'react-native';
+import { useTheme } from '@repo/theme';
 import { X } from 'lucide-react-native';
 
 import { styles } from './ImageViewer.styles';
@@ -11,6 +11,7 @@ type Props = {
 };
 
 export function ImageViewer({ visible, imageUri, onClose }: Props) {
+  const { colors } = useTheme();
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
       <View style={styles.overlay}>

@@ -57,7 +57,6 @@ export function useRequestDetails() {
       }
 
       const data = await response.json();
-      console.log(data);
       setRequest(data);
     } catch (err) {
       console.error('Failed to load request details:', err);

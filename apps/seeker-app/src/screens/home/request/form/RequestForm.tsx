@@ -1,17 +1,19 @@
 import { ActivityIndicator, FlatList, Image, Modal, TouchableOpacity, View } from 'react-native';
 import { Button, ImageViewer, Input, Typography } from '@repo/components';
 import { Camera, X } from 'lucide-react-native';
-import { colors } from '@repo/theme';
 import { Controller, FormProvider } from 'react-hook-form';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
+import { useTheme } from '@repo/theme';
 
-import { styles } from './RequestForm.styles';
+import { createStyles } from './RequestForm.styles';
 import { useRequestForm } from './RequestForm.hooks';
 
 import { MapSection } from './mapSection/MapSection';
 import { ServiceSelection } from './serviceSelection/ServiceSelection';
 
 export function RequestFormScreen() {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const {
     methods,
     errors,

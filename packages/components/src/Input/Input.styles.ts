@@ -1,7 +1,7 @@
-import { colors, fontFamily, fontSize, fontWeight, radius, spacing } from '@repo/theme';
+import { fontFamily, fontSize, fontWeight, radius, spacing, ThemeColors } from '@repo/theme';
 import { StyleSheet } from 'react-native';
 
-export function createStyles(error?: string, isFocused?: boolean) {
+export function createStyles(colors: ThemeColors, error?: string, isFocused?: boolean) {
   return StyleSheet.create({
     container: {
       width: '100%',

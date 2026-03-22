@@ -1,11 +1,11 @@
 import { Avatar, Typography } from '@repo/components';
-import { colors } from '@repo/theme';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Image, TouchableOpacity, View } from 'react-native';
 import { Search, X } from 'lucide-react-native';
 import type { SearchResult } from '@repo/types';
+import { useTheme } from '@repo/theme';
 
-import { styles } from './ServiceSelection.styles';
+import { createStyles } from './ServiceSelection.styles';
 
 interface ServiceSelectionProps {
   onOpenSearch: () => void;
@@ -14,6 +14,8 @@ interface ServiceSelectionProps {
 }
 
 export function ServiceSelection({ onOpenSearch, selectedService, onClearSelection }: ServiceSelectionProps) {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const { control } = useFormContext();
 
   return (

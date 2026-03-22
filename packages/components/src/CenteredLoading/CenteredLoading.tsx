@@ -1,5 +1,5 @@
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
-import { colors, spacing } from '@repo/theme';
+import { spacing, useTheme } from '@repo/theme';
 
 import { Typography } from '../Typography';
 
@@ -9,6 +9,7 @@ type Props = {
 };
 
 export function CenteredLoading({ message = 'Loading...', size = 'large' }: Props) {
+  const { colors } = useTheme();
   return (
     <View style={styles.container}>
       <ActivityIndicator size={size} color={colors.actionPrimary} />

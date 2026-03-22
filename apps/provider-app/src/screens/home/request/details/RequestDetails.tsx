@@ -1,12 +1,15 @@
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { ActivityIndicator, Image, ScrollView, TouchableOpacity, View } from 'react-native';
 import { Avatar, Button, ImageViewer, Typography } from '@repo/components';
-import { colors } from '@repo/theme';
+import { useTheme } from '@repo/theme';
 
-import { styles } from './RequestDetails.styles';
+import { createStyles } from './RequestDetails.styles';
 import { useRequestDetails } from './RequestDetails.hooks';
 
 export function RequestDetailsScreen() {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
+
   const {
     request,
     isLoading,

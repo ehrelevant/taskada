@@ -1,6 +1,6 @@
-import { colors } from '@repo/theme';
 import { Star } from 'lucide-react-native';
 import { StyleProp, View, ViewStyle } from 'react-native';
+import { useTheme } from '@repo/theme';
 
 import { Typography } from '../Typography';
 
@@ -13,6 +13,7 @@ export interface RatingProps {
 }
 
 export function Rating({ value, size = 14, showValue = true, reviewCount, style }: RatingProps) {
+  const { colors } = useTheme();
   const formattedValue = typeof value === 'number' ? value.toFixed(1) : value;
 
   return (

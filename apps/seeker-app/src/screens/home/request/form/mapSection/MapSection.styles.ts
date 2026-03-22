@@ -1,24 +1,25 @@
-import { palette } from '@repo/theme';
 import { StyleSheet } from 'react-native';
+import { ThemeColors } from '@repo/theme';
 
-export const styles = StyleSheet.create({
-  container: {
-    height: 300,
-    backgroundColor: palette.gray200,
-  },
-  loadingContainer: {
-    height: 300,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: palette.gray200,
-  },
-  errorContainer: {
-    height: 300,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: palette.gray200,
-  },
-  map: {
-    flex: 1,
-  },
-});
+export const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    container: {
+      height: 300,
+      backgroundColor: colors.backgroundSecondary,
+    },
+    loadingContainer: {
+      height: 300,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: colors.backgroundSecondary,
+    },
+    errorContainer: {
+      height: 300,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: colors.backgroundSecondary,
+    },
+    map: {
+      flex: 1,
+    },
+  });

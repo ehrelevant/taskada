@@ -81,14 +81,14 @@ export function useBookingLogs() {
   }, [bookingId, navigation]);
 
   const handleViewChatLogs = useCallback(() => {
-    if (booking?.provider) {
+    if (booking?.seeker) {
       navigation.navigate('ChatLogs', {
         bookingId,
         otherUser: {
-          id: booking.provider.id,
-          firstName: booking.provider.firstName,
-          lastName: booking.provider.lastName,
-          avatarUrl: booking.provider.avatarUrl,
+          id: booking.seeker.id,
+          firstName: booking.seeker.firstName,
+          lastName: booking.seeker.lastName,
+          avatarUrl: booking.seeker.avatarUrl,
         },
       });
     }

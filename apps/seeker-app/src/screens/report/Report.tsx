@@ -9,15 +9,17 @@ import {
 } from 'react-native';
 import { Avatar, Button, Header, Typography } from '@repo/components';
 import { CheckCircle2, ChevronLeft, ImagePlus, X } from 'lucide-react-native';
-import { colors, spacing } from '@repo/theme';
 import { Controller } from 'react-hook-form';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { spacing, useTheme } from '@repo/theme';
 import { useEffect } from 'react';
 
+import { createStyles } from './Report.styles';
 import { REPORT_REASONS, useReport } from './Report.hooks';
-import { styles } from './Report.styles';
 
 export function ReportScreen() {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const {
     reportedUser,
     selectedReason,

@@ -1,11 +1,15 @@
 import { BottomActionBar, Button, EmptyState, Header, ScreenContainer } from '@repo/components';
 import { FlatList, View } from 'react-native';
 import { RequestListing } from '@repo/components';
+import { useTheme } from '@repo/theme';
 
-import { styles } from './RequestList.styles';
+import { createStyles } from './RequestList.styles';
 import { useRequestList } from './RequestList.hooks';
 
 export function RequestListScreen() {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
+
   const { isAccepting, requests, isConnecting, enableRequests, disableRequests, handleViewDetails } = useRequestList();
 
   if (isAccepting) {

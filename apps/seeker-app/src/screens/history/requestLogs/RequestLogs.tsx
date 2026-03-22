@@ -1,12 +1,14 @@
 import { ActivityIndicator, Image, ScrollView, View } from 'react-native';
 import { Button, Card, Header, Typography } from '@repo/components';
-import { colors } from '@repo/theme';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTheme } from '@repo/theme';
 
-import { styles } from './RequestLogs.styles';
+import { createStyles } from './RequestLogs.styles';
 import { useRequestLogs } from './RequestLogs.hooks';
 
 export function RequestLogsScreen() {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const { request, isLoading, error, handleGoBack } = useRequestLogs();
 
   if (isLoading) {

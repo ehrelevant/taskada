@@ -8,14 +8,16 @@ import {
   View,
 } from 'react-native';
 import { Avatar, Button, Header, Rating, StarRatingInput, Typography } from '@repo/components';
-import { colors } from '@repo/theme';
 import { Flag, X } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTheme } from '@repo/theme';
 
-import { styles } from './BookingDone.styles';
+import { createStyles } from './BookingDone.styles';
 import { useBookingDone } from './BookingDone.hooks';
 
 export function BookingDoneScreen() {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const {
     providerInfo,
     serviceTypeName,

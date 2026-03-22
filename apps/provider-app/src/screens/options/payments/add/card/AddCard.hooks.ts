@@ -31,10 +31,9 @@ export function useAddCardScreen() {
     },
   });
 
-  const onSubmit = async (data: CardFormData) => {
+  const onSubmit = async (_data: CardFormData) => {
     setIsSubmitting(true);
     try {
-      console.log('Tokenizing Card:', data);
       await new Promise(resolve => setTimeout(resolve, 1500));
       navigation.goBack();
     } catch {

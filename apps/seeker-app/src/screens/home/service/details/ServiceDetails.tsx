@@ -1,11 +1,13 @@
 import { ActivityIndicator, ScrollView, View } from 'react-native';
 import { Avatar, Button, Rating, ReviewCard, Typography } from '@repo/components';
-import { colors, spacing } from '@repo/theme';
+import { spacing, useTheme } from '@repo/theme';
 
-import { styles } from './ServiceDetails.styles';
+import { createStyles } from './ServiceDetails.styles';
 import { useServiceDetails } from './ServiceDetails.hooks';
 
 export function ServiceDetailsScreen() {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const { details, reviews, loading, error, returnTo, handleRequestService } = useServiceDetails();
 
   if (loading) {

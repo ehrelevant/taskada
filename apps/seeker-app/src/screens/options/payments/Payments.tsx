@@ -1,12 +1,12 @@
 import { Card, Typography } from '@repo/components';
-import { colors } from '@repo/theme';
 import { CreditCard, Plus, Trash2, Wallet } from 'lucide-react-native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { OptionsStackParamList } from '@navigation/OptionsStack';
 import { ScrollView, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useTheme } from '@repo/theme';
 
-import { styles } from './Payments.styles';
+import { createStyles } from './Payments.styles';
 
 const SAVED_METHODS = [
   { id: '1', type: 'CARD', label: 'Visa ending in 4242', icon: 'visa' },
@@ -14,6 +14,8 @@ const SAVED_METHODS = [
 ];
 
 export function PaymentMethodsScreen() {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const navigation = useNavigation<NativeStackNavigationProp<OptionsStackParamList>>();
 
   return (

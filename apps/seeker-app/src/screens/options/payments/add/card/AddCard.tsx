@@ -1,15 +1,15 @@
 import { Alert, View } from 'react-native';
 import { Button, Input, Typography } from '@repo/components';
-import { colors } from '@repo/theme';
 import { Controller } from 'react-hook-form';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigation } from '@react-navigation/native';
+import { useTheme } from '@repo/theme';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { styles } from './AddCard.styles';
+import { createStyles } from './AddCard.styles';
 
 const cardSchema = z.object({
   cardHolderName: z.string().min(1, 'Cardholder name is required'),
@@ -21,6 +21,8 @@ const cardSchema = z.object({
 type CardFormData = z.infer<typeof cardSchema>;
 
 export function AddCardScreen() {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const navigation = useNavigation();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -39,10 +41,9 @@ export function AddCardScreen() {
   });
 
   const onSubmit = useCallback(
-    async (data: CardFormData) => {
+    async (_data: CardFormData) => {
       setIsSubmitting(true);
       try {
-        console.log('Tokenizing Card:', data);
         await new Promise(resolve => setTimeout(resolve, 1500));
         Alert.alert('Success', 'Card added successfully');
         navigation.goBack();

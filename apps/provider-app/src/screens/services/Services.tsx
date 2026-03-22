@@ -1,15 +1,18 @@
 import { Card, Typography } from '@repo/components';
-import { colors, palette } from '@repo/theme';
 import { FlatList, Switch, TouchableOpacity, View } from 'react-native';
 import { Pencil, Plus, Trash2, Wrench } from 'lucide-react-native';
 import type { ProviderService } from '@repo/types';
+import { useTheme } from '@repo/theme';
 
-import { styles } from './Services.styles';
+import { createStyles } from './Services.styles';
 import { useServices } from './Services.hooks';
 
 import { AddServiceModal } from './addModal/AddServiceModal';
 
 export function ServicesScreen() {
+  const { colors, shadows } = useTheme();
+  const styles = createStyles(colors, shadows);
+
   const {
     services,
     isRefreshing,
@@ -51,7 +54,7 @@ export function ServicesScreen() {
           {item.isEnabled ? 'Active' : 'Disabled'}
         </Typography>
         <Switch
-          trackColor={{ false: palette.gray300, true: colors.actionPrimary }}
+          trackColor={{ false: colors.border, true: colors.actionPrimary }}
           thumbColor={colors.white}
           value={item.isEnabled}
           onValueChange={() => toggleService(item.id, item.isEnabled)}

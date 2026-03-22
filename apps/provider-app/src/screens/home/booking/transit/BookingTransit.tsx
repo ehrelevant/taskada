@@ -1,14 +1,17 @@
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { Button, Header, Typography } from '@repo/components';
-import { colors } from '@repo/theme';
 import { Flag } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView, TouchableOpacity, View } from 'react-native';
+import { useTheme } from '@repo/theme';
 
-import { styles } from './BookingTransit.styles';
+import { createStyles } from './BookingTransit.styles';
 import { useBookingTransit } from './BookingTransit.hooks';
 
 export function BookingTransitScreen() {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
+
   const {
     providerLocation,
     locationError,

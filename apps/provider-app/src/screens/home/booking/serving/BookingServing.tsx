@@ -1,13 +1,16 @@
 import { ActivityIndicator, ScrollView, TouchableOpacity, View } from 'react-native';
-import { colors } from '@repo/theme';
 import { Flag } from 'lucide-react-native';
 import { Header, Typography } from '@repo/components';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTheme } from '@repo/theme';
 
-import { styles } from './BookingServing.styles';
+import { createStyles } from './BookingServing.styles';
 import { useBookingServing } from './BookingServing.hooks';
 
 export function BookingServingScreen() {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
+
   const { bookingDetails, isLoading, isPaid, isUpdatingStatus, handlePaidPress, handleViewDetails, handleReport } =
     useBookingServing();
 
@@ -76,7 +79,7 @@ export function BookingServingScreen() {
                 Service Type
               </Typography>
               <Typography variant="body1" weight="medium">
-                {bookingDetails?.provider?.firstName || 'Service'}
+                {bookingDetails?.serviceType?.name || 'Service'}
               </Typography>
             </View>
             <View style={styles.infoItem}>

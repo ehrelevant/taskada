@@ -1,6 +1,5 @@
 import { HistoryStackParamList } from '@navigation/HistoryStack';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { palette } from '@repo/theme';
 import { providerClient } from '@lib/providerClient';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
@@ -72,7 +71,7 @@ export function useHistory() {
   }, []);
 
   const getStatusColor = useCallback((status: string) => {
-    return status === 'completed' ? palette.success : palette.error;
+    return status === 'completed' ? '#4CAF50' : '#F44336';
   }, []);
 
   const handleViewDetails = useCallback(

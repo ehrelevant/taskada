@@ -23,10 +23,7 @@ export function useSignIn() {
       password,
     });
 
-    console.log(userData);
-
     if (error !== null || userData === null) {
-      console.log(error);
       setErrorMessage(error.message ?? '');
       return;
     }
@@ -34,9 +31,7 @@ export function useSignIn() {
     const seekerResponse = await seekerClient.apiFetch(`/seekers`);
 
     if (seekerResponse.status === 404) {
-      const createSeekerResponse = await seekerClient.apiFetch('/seekers', 'POST');
-      const newSeekerData = await createSeekerResponse.json();
-      console.log(newSeekerData);
+      await seekerClient.apiFetch('/seekers', 'POST');
     }
   });
 

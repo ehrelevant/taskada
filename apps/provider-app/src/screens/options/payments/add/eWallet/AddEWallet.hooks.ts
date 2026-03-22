@@ -40,10 +40,9 @@ export function useAddEWalletScreen() {
 
   const selectedChannel = watch('channelCode');
 
-  const onSubmit = async (data: EWalletFormData) => {
+  const onSubmit = async (_data: EWalletFormData) => {
     setIsSubmitting(true);
     try {
-      console.log('Linking Wallet:', data);
       await new Promise(resolve => setTimeout(resolve, 1500));
       navigation.goBack();
     } catch {

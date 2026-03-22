@@ -1,13 +1,16 @@
 import { ActivityIndicator, ScrollView, TouchableOpacity, View } from 'react-native';
-import { colors } from '@repo/theme';
 import { Flag } from 'lucide-react-native';
 import { Header, Typography } from '@repo/components';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTheme } from '@repo/theme';
 
-import { styles } from './BookingDone.styles';
+import { createStyles } from './BookingDone.styles';
 import { useBookingDone } from './BookingDone.hooks';
 
 export function BookingDoneScreen() {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
+
   const { bookingDetails, isLoading, handleReturn, handleViewDetails, handleReport } = useBookingDone();
 
   if (isLoading) {

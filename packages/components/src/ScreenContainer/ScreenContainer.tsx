@@ -1,7 +1,7 @@
-import { colors, spacing } from '@repo/theme';
 import { ReactNode } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView, StyleSheet, View, ViewProps } from 'react-native';
+import { spacing, useTheme } from '@repo/theme';
 
 interface ScreenContainerProps extends ViewProps {
   children: ReactNode;
@@ -16,12 +16,14 @@ export function ScreenContainer({
   children,
   scrollable = false,
   useSafeArea = true,
-  backgroundColor = colors.background,
+  backgroundColor,
   padding = 'm',
   verticalPadding,
   style,
   ...rest
 }: ScreenContainerProps) {
+  const { colors } = useTheme();
+  const resolvedBackgroundColor = backgroundColor ?? colors.background;
   const paddingValues = {
     none: 0,
     s: spacing.s,
@@ -34,7 +36,7 @@ export function ScreenContainer({
 
   const containerStyles = [
     styles.container,
-    { backgroundColor, paddingHorizontal: horizontalPadding, paddingVertical: vertical },
+    { backgroundColor: resolvedBackgroundColor, paddingHorizontal: horizontalPadding, paddingVertical: vertical },
     style,
   ];
 

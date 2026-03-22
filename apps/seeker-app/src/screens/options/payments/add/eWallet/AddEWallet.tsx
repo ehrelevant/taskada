@@ -1,11 +1,11 @@
 import { Button, Card, Input, Typography } from '@repo/components';
 import { Check } from 'lucide-react-native';
-import { colors } from '@repo/theme';
 import { Controller } from 'react-hook-form';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { TouchableOpacity, View } from 'react-native';
+import { useTheme } from '@repo/theme';
 
-import { styles } from './AddEWallet.styles';
+import { createStyles } from './AddEWallet.styles';
 import { useAddEWallet } from './AddEWallet.hooks';
 
 const WALLETS = [
@@ -14,6 +14,8 @@ const WALLETS = [
 ];
 
 export function AddEWalletScreen() {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const { control, handleSubmit, setValue, errors, isSubmitting, selectedChannel, onSubmit } = useAddEWallet();
 
   return (

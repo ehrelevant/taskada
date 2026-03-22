@@ -1,17 +1,20 @@
 import { Avatar, Button, Input, Typography } from '@repo/components';
 import { Camera, Eye, EyeOff, X } from 'lucide-react-native';
-import { colors } from '@repo/theme';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { OptionsStackParamList } from '@navigation/OptionsStack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView, TouchableOpacity, View } from 'react-native';
+import { useTheme } from '@repo/theme';
 
-import { styles } from './Profile.styles';
+import { createStyles } from './Profile.styles';
 import { useProfileScreen } from './Profile.hooks';
 
 type ProfileScreenProps = NativeStackScreenProps<OptionsStackParamList, 'Profile'>;
 
 export function ProfileScreen(props: ProfileScreenProps) {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
+
   const {
     userSession,
     profileData,

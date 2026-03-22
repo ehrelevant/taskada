@@ -1,11 +1,11 @@
 import { ActivityIndicator, Modal, TouchableOpacity, View } from 'react-native';
 import { Button, Input, Typography } from '@repo/components';
-import { colors } from '@repo/theme';
 import { Controller } from 'react-hook-form';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import type { ProviderService } from '@repo/types';
+import { useTheme } from '@repo/theme';
 
-import { styles } from './AddServiceModal.styles';
+import { createStyles } from './AddServiceModal.styles';
 import { useAddServiceModal } from './AddServiceModal.hooks';
 
 type Props = {
@@ -16,6 +16,9 @@ type Props = {
 };
 
 export function AddServiceModal({ visible, serviceToEdit, onClose, onSuccess }: Props) {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
+
   const {
     serviceTypes,
     isLoadingTypes,

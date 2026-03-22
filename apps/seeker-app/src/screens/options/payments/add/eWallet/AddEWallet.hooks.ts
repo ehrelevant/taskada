@@ -33,10 +33,9 @@ export function useAddEWallet() {
   const selectedChannel = watch('channelCode');
 
   const onSubmit = useCallback(
-    async (data: EWalletFormData) => {
+    async (_data: EWalletFormData) => {
       setIsSubmitting(true);
       try {
-        console.log('Linking Wallet:', data);
         await new Promise(resolve => setTimeout(resolve, 1500));
         Alert.alert('Redirecting', 'You would now be redirected to the e-wallet app to authorize.');
         navigation.goBack();

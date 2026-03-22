@@ -23,7 +23,6 @@ export function useSignUp() {
     setLoading(true);
     setErrorMessage('');
 
-    console.log('Requesting...');
     const { data: newUserData, error } = await authClient.signUp.email({
       name: firstName,
       middleName,
@@ -34,15 +33,12 @@ export function useSignUp() {
     });
 
     if (newUserData !== null) {
-      console.log(newUserData);
+      // sign up succeeded
     } else if (error !== null) {
-      console.log(error);
       setErrorMessage(error.message ?? '');
     }
 
-    const createSeekerResponse = await seekerClient.apiFetch('/seekers', 'POST');
-    const newSeekerData = await createSeekerResponse.json();
-    console.log(newSeekerData);
+    await seekerClient.apiFetch('/seekers', 'POST');
 
     setLoading(false);
   };

@@ -1,15 +1,17 @@
 import { Avatar, Button, MenuButton, ScreenContainer, Typography } from '@repo/components';
-import { colors } from '@repo/theme';
-import { CreditCard, LogOut, MessageSquareWarning, UserPen } from 'lucide-react-native';
+import { ColorScheme, useTheme } from '@repo/theme';
+import { CreditCard, LogOut, MessageSquareWarning, Moon, Sun, UserPen } from 'lucide-react-native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { OptionsStackParamList } from '@navigation/OptionsStack';
 import { useNavigation } from '@react-navigation/native';
 import { View } from 'react-native';
 
-import { styles } from './Options.styles';
+import { createStyles } from './Options.styles';
 import { useOptions } from './Options.hooks';
 
 export function OptionsScreen() {
+  const { colors, colorScheme, setColorScheme } = useTheme();
+  const styles = createStyles(colors);
   const { userSession, profile, signOut } = useOptions();
   const navigation = useNavigation<NativeStackNavigationProp<OptionsStackParamList>>();
 
@@ -18,6 +20,24 @@ export function OptionsScreen() {
   }
 
   const { user } = userSession;
+
+  const cycleTheme = () => {
+    const order: ColorScheme[] = ['system', 'light', 'dark'];
+    const nextIndex = (order.indexOf(colorScheme) + 1) % order.length;
+    setColorScheme(order[nextIndex]);
+  };
+
+  const getThemeIcon = () => {
+    if (colorScheme === 'dark') return <Moon size={24} color={colors.actionPrimary} />;
+    if (colorScheme === 'light') return <Sun size={24} color={colors.actionPrimary} />;
+    return <Sun size={24} color={colors.textDisabled} />;
+  };
+
+  const getThemeLabel = () => {
+    if (colorScheme === 'dark') return 'Dark Mode';
+    if (colorScheme === 'light') return 'Light Mode';
+    return 'System Theme';
+  };
 
   return (
     <ScreenContainer scrollable padding="m" verticalPadding="none">
@@ -52,6 +72,12 @@ export function OptionsScreen() {
           onPress={() => navigation.navigate('PaymentMethods')}
           style={styles.menuButton}
         />
+
+        <Typography variant="h6" style={styles.sectionTitle}>
+          Preferences
+        </Typography>
+
+        <MenuButton title={getThemeLabel()} icon={getThemeIcon()} onPress={cycleTheme} style={styles.menuButton} />
 
         <Typography variant="h6" style={styles.sectionTitle}>
           Support

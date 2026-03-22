@@ -1,5 +1,5 @@
-import { colors } from '@repo/theme';
 import { Image, ImageStyle, StyleProp, View } from 'react-native';
+import { useTheme } from '@repo/theme';
 
 import { Typography } from '../Typography';
 
@@ -11,6 +11,7 @@ export interface AvatarProps {
 }
 
 export function Avatar({ source, size = 40, name, style }: AvatarProps) {
+  const { colors } = useTheme();
   const initials = name
     ? name
         .split(' ')

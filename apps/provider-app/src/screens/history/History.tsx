@@ -1,12 +1,15 @@
 import { ActivityIndicator, FlatList, View } from 'react-native';
 import { Avatar, Button, Card, Typography } from '@repo/components';
-import { colors } from '@repo/theme';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTheme } from '@repo/theme';
 
 import { BookingHistoryItem, useHistory } from './History.hooks';
-import { styles } from './History.styles';
+import { createStyles } from './History.styles';
 
 export function HistoryScreen() {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
+
   const { bookings, isLoading, error, formatDateTime, getStatusColor, handleViewDetails } = useHistory();
 
   const renderBookingCard = ({ item }: { item: BookingHistoryItem }) => {

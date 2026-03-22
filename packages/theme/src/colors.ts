@@ -31,80 +31,120 @@ export const palette = {
   transparent: 'transparent',
 };
 
-export const colors = {
-  // Primary
-  primary: {
-    base: palette.primary,
-    light: palette.primaryLight,
-    dark: palette.primaryDark,
-    text: palette.white,
-  },
+export const paletteDark = {
+  // Core colors (slightly brighter for dark backgrounds)
+  primary: '#4A7BA7',
+  primaryDark: '#2A4A6F',
+  primaryLight: '#6B9FCC',
+  secondary: '#F0B09A',
+  secondaryDark: '#E29578',
+  secondaryLight: '#F5C8B4',
 
-  // Secondary
-  secondary: {
-    base: palette.secondary,
-    light: palette.secondaryLight,
-    dark: palette.secondaryDark,
-    text: palette.gray900,
-  },
+  // Neutrals (inverted)
+  black: '#FFFFFF',
+  gray900: '#E0E0E0',
+  gray800: '#C0C0C0',
+  gray700: '#A0A0A0',
+  gray600: '#888888',
+  gray500: '#707070',
+  gray400: '#555555',
+  gray300: '#3A3A3A',
+  gray200: '#2A2A2A',
+  gray100: '#1E1E1E',
+  white: '#121212',
 
-  // UI elements
-  background: palette.white,
-  backgroundSecondary: palette.gray100,
-  surface: palette.white,
-  surfaceSecondary: palette.gray100,
-
-  // Text
-  textPrimary: palette.gray900,
-  textSecondary: palette.gray700,
-  textDisabled: palette.gray500,
-  textInverse: palette.white,
-
-  // Actions
-  actionPrimary: palette.primary,
-  actionSecondary: palette.secondary,
-  actionDisabled: palette.gray400,
-
-  // Feedback - Enhanced with state variations
-  success: {
-    base: palette.success,
-    light: '#E8F5E9',
-    dark: '#388E3C',
-    text: palette.white,
-  },
-  warning: {
-    base: palette.warning,
-    light: '#FFF8E1',
-    dark: '#FFA000',
-    text: palette.gray900,
-  },
-  error: {
-    base: palette.error,
-    light: '#FFEBEE',
-    dark: '#D32F2F',
-    text: palette.white,
-  },
-  info: {
-    base: palette.info,
-    light: '#E3F2FD',
-    dark: '#1976D2',
-    text: palette.white,
-  },
-  pending: {
-    base: palette.pending,
-    light: '#FFF3E0',
-    dark: '#F57C00',
-    text: palette.gray900,
-  },
-
-  // Borders
-  border: palette.gray300,
-  borderFocus: palette.primary,
+  // Feedback colors (lighter variants for dark mode)
+  success: '#66BB6A',
+  warning: '#FFD54F',
+  error: '#EF5350',
+  info: '#42A5F5',
+  pending: '#FFA726',
 
   // Transparent
-  transparent: palette.transparent,
-
-  // Others
-  black: palette.black,
-  white: palette.white,
+  transparent: 'transparent',
 };
+
+function buildColors(p: typeof palette) {
+  return {
+    // Primary
+    primary: {
+      base: p.primary,
+      light: p.primaryLight,
+      dark: p.primaryDark,
+      text: p.white,
+    },
+
+    // Secondary
+    secondary: {
+      base: p.secondary,
+      light: p.secondaryLight,
+      dark: p.secondaryDark,
+      text: p.gray900,
+    },
+
+    // UI elements
+    background: p.white,
+    backgroundSecondary: p.gray100,
+    surface: p.white,
+    surfaceSecondary: p.gray100,
+
+    // Text
+    textPrimary: p.gray900,
+    textSecondary: p.gray700,
+    textDisabled: p.gray500,
+    textInverse: p.white,
+
+    // Actions
+    actionPrimary: p.primary,
+    actionSecondary: p.secondary,
+    actionDisabled: p.gray400,
+
+    // Feedback
+    success: {
+      base: p.success,
+      light: p === palette ? '#E8F5E9' : '#1B3A1B',
+      dark: p === palette ? '#388E3C' : '#81C784',
+      text: p.white,
+    },
+    warning: {
+      base: p.warning,
+      light: p === palette ? '#FFF8E1' : '#3A3520',
+      dark: p === palette ? '#FFA000' : '#FFD54F',
+      text: p.gray900,
+    },
+    error: {
+      base: p.error,
+      light: p === palette ? '#FFEBEE' : '#3A1B1B',
+      dark: p === palette ? '#D32F2F' : '#EF9A9A',
+      text: p.white,
+    },
+    info: {
+      base: p.info,
+      light: p === palette ? '#E3F2FD' : '#1B2A3A',
+      dark: p === palette ? '#1976D2' : '#90CAF9',
+      text: p.white,
+    },
+    pending: {
+      base: p.pending,
+      light: p === palette ? '#FFF3E0' : '#3A2A1B',
+      dark: p === palette ? '#F57C00' : '#FFB74D',
+      text: p.gray900,
+    },
+
+    // Borders
+    border: p.gray300,
+    borderFocus: p.primary,
+
+    // Transparent
+    transparent: p.transparent,
+
+    // Others
+    black: p.black,
+    white: p.white,
+  };
+}
+
+export const colors = buildColors(palette);
+export const colorsDark = buildColors(paletteDark);
+
+export type ThemeColors = typeof colors;

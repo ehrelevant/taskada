@@ -1,4 +1,4 @@
-import { colors, fontFamily, fontSize, fontWeight, lineHeight } from '@repo/theme';
+import { fontFamily, fontSize, fontWeight, lineHeight, useTheme } from '@repo/theme';
 import { StyleSheet, Text, TextProps, TextStyle } from 'react-native';
 
 type VariantType =
@@ -16,9 +16,23 @@ type VariantType =
   | 'caption'
   | 'overline';
 
+type SemanticColor =
+  | 'textPrimary'
+  | 'textSecondary'
+  | 'textDisabled'
+  | 'textInverse'
+  | 'actionPrimary'
+  | 'actionSecondary'
+  | 'actionDisabled'
+  | 'error'
+  | 'success'
+  | 'warning'
+  | 'info'
+  | 'pending';
+
 export interface TypographyProps extends TextProps {
   variant?: VariantType;
-  color?: string;
+  color?: SemanticColor | (string & {});
   align?: 'left' | 'center' | 'right';
   weight?: 'regular' | 'medium' | 'semiBold' | 'bold';
 }
@@ -120,10 +134,31 @@ export function Typography({
   children,
   ...rest
 }: TypographyProps) {
+  const { colors } = useTheme();
+
+  const colorMap: Record<SemanticColor, string> = {
+    textPrimary: colors.textPrimary,
+    textSecondary: colors.textSecondary,
+    textDisabled: colors.textDisabled,
+    textInverse: colors.textInverse,
+    actionPrimary: colors.actionPrimary,
+    actionSecondary: colors.actionSecondary,
+    actionDisabled: colors.actionDisabled,
+    error: colors.error.base,
+    success: colors.success.base,
+    warning: colors.warning.base,
+    info: colors.info.base,
+    pending: colors.pending.base,
+  };
+
+  const resolveColor = (c: SemanticColor | (string & {})): string => {
+    return colorMap[c as SemanticColor] || c;
+  };
+
   const styles = StyleSheet.create({
     text: {
       ...getVariantStyles(variant),
-      color: color || colors.textPrimary,
+      color: color ? resolveColor(color) : colors.textPrimary,
       textAlign: align,
       ...(weight && { fontWeight: fontWeight[weight] }),
     },

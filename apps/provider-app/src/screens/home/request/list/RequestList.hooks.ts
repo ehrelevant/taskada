@@ -64,9 +64,6 @@ export function useRequestList() {
       const serviceTypeIds: string[] = [...new Set(enabledServices.map(s => s.serviceType.id))];
       const serviceIds: string[] = enabledServices.map(s => s.id);
 
-      console.log('Service Type IDs:', serviceTypeIds);
-      console.log('Service IDs:', serviceIds);
-
       if (serviceTypeIds.length > 0) {
         await providerClient.joinProviderRooms(serviceTypeIds);
       }
@@ -79,7 +76,6 @@ export function useRequestList() {
 
         if (pendingResponse.ok) {
           const pendingRequests = (await pendingResponse.json()) as IncomingRequest[];
-          console.log('Fetched pending requests:', pendingRequests.length);
           setRequests(pendingRequests);
         }
       }

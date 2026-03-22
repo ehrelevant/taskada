@@ -1,4 +1,4 @@
-import { colors, spacing } from '@repo/theme';
+import { spacing, useTheme } from '@repo/theme';
 import { StyleProp, View, ViewStyle } from 'react-native';
 
 import { Avatar } from '../Avatar';
@@ -15,6 +15,7 @@ export interface ReviewCardProps {
 }
 
 export function ReviewCard({ reviewerName, reviewerAvatar, rating, comment, date, style }: ReviewCardProps) {
+  const { colors } = useTheme();
   const formattedDate = typeof date === 'string' ? date : date.toLocaleDateString();
 
   return (

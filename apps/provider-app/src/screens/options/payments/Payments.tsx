@@ -1,12 +1,15 @@
 import { Card, Typography } from '@repo/components';
-import { colors } from '@repo/theme';
 import { CreditCard, Plus, Trash2, Wallet } from 'lucide-react-native';
 import { ScrollView, TouchableOpacity, View } from 'react-native';
+import { useTheme } from '@repo/theme';
 
-import { styles } from './Payments.styles';
+import { createStyles } from './Payments.styles';
 import { usePayments } from './Payments.hooks';
 
 export function PaymentsScreen() {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
+
   const { savedMethods, navigation } = usePayments();
 
   return (

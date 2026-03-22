@@ -1,13 +1,16 @@
 import { Button, Input, Typography } from '@repo/components';
-import { colors } from '@repo/theme';
 import { Controller } from 'react-hook-form';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
+import { useTheme } from '@repo/theme';
 import { View } from 'react-native';
 
-import { styles } from './AddCard.styles';
+import { createStyles } from './AddCard.styles';
 import { useAddCardScreen } from './AddCard.hooks';
 
 export function AddCardScreen() {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
+
   const { control, handleSubmit, errors, isSubmitting, onSubmit } = useAddCardScreen();
 
   return (

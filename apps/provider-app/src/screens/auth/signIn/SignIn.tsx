@@ -1,11 +1,14 @@
 import { Button, Input, ScreenContainer, Typography } from '@repo/components';
-import { colors } from '@repo/theme';
 import { Pressable, Text } from 'react-native';
+import { useTheme } from '@repo/theme';
 
-import { styles } from './SignIn.styles';
+import { createStyles } from './SignIn.styles';
 import { useSignInScreen } from './SignIn.hooks';
 
 export function SignInScreen() {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
+
   const { email, setEmail, password, setPassword, errorMessage, handleSignIn, navigation } = useSignInScreen();
 
   return (

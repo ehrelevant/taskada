@@ -7,8 +7,7 @@
       "@screens/*": ["src/screens/*"],
       "@navigation/*": ["src/navigation/*"],
       "@lib/*": ["lib/*"],
-      "@assets/*": ["lib/assets/*"],
-      "@components/*": ["lib/components/*"]
+      "@assets/*": ["lib/assets/*"]
     }
   }
 }

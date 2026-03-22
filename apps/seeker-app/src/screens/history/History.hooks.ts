@@ -65,7 +65,7 @@ export function useHistory() {
   };
 
   const getStatusColor = (status: string) => {
-    return status === 'completed' ? 'palette.success' : 'palette.error';
+    return status === 'completed' ? '#4CAF50' : '#F44336';
   };
 
   const handleViewDetails = useCallback(

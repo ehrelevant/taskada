@@ -1,13 +1,15 @@
 import { ActivityIndicator, FlatList, TouchableOpacity, View } from 'react-native';
 import { Avatar, FeaturedServiceCard, Rating, SearchBar, ServiceTypeCard, Typography } from '@repo/components';
-import { colors, spacing } from '@repo/theme';
 import type { FeaturedService, SearchResult, ServiceType } from '@repo/types';
+import { spacing, useTheme } from '@repo/theme';
 import { useCallback, useMemo } from 'react';
 
-import { styles } from './Home.styles';
+import { createStyles } from './Home.styles';
 import { useHome } from './Home.hooks';
 
 export function HomeScreen() {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const {
     session,
     profile,
@@ -46,7 +48,7 @@ export function HomeScreen() {
         <Rating value={item.avgRating} size={12} />
       </TouchableOpacity>
     ),
-    [navigateToService],
+    [navigateToService, styles.searchResultItem],
   );
 
   const renderServiceTypeItem = useCallback(
@@ -82,7 +84,7 @@ export function HomeScreen() {
         </TouchableOpacity>
       </View>
     ),
-    [navigateToServiceTypesList],
+    [navigateToServiceTypesList, styles.sectionHeader],
   );
 
   if (loading) {
@@ -99,7 +101,7 @@ export function HomeScreen() {
         <View style={styles.greetingRow}>
           <Avatar
             source={profile?.avatarUrl ? { uri: profile.avatarUrl } : null}
-            name={session?.user?.name + ' ' + session?.user?.lastName || 'User'}
+            name={`${session?.user?.name ?? ''} ${session?.user?.lastName ?? ''}`.trim() || 'User'}
             size={48}
           />
           <View style={{ marginLeft: spacing.s }}>
@@ -107,7 +109,7 @@ export function HomeScreen() {
               Hello,
             </Typography>
             <Typography variant="h4">
-              {session?.user?.name?.split(' ') + ' ' + session?.user?.lastName || 'User'}
+              {`${session?.user?.name ?? ''} ${session?.user?.lastName ?? ''}`.trim() || 'User'}
             </Typography>
           </View>
         </View>

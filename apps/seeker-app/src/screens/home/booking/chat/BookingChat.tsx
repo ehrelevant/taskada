@@ -1,14 +1,16 @@
 import { ActivityIndicator, FlatList, Image, ScrollView, TextInput, TouchableOpacity, View } from 'react-native';
 import { Avatar, Header, ImageViewer, Typography } from '@repo/components';
-import { colors } from '@repo/theme';
 import { Flag, Image as ImageIcon, Send, X } from 'lucide-react-native';
 import { KeyboardStickyView } from 'react-native-keyboard-controller';
 import type { Message } from '@repo/shared';
+import { useTheme } from '@repo/theme';
 
-import { styles } from './BookingChat.styles';
+import { createStyles } from './BookingChat.styles';
 import { useBookingChat } from './BookingChat.hooks';
 
 export function ChatScreen() {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const {
     messages,
     inputText,

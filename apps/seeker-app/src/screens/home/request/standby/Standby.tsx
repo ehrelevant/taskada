@@ -1,12 +1,14 @@
 import { ActivityIndicator, View } from 'react-native';
 import { Button, Typography } from '@repo/components';
-import { colors } from '@repo/theme';
 import { useNavigation } from '@react-navigation/native';
+import { useTheme } from '@repo/theme';
 
-import { styles } from './Standby.styles';
+import { createStyles } from './Standby.styles';
 import { useStandby } from './Standby.hooks';
 
 export function StandbyScreen() {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const { isConnecting, isCancelling, error, handleCancelRequest } = useStandby();
   const navigation = useNavigation();
 

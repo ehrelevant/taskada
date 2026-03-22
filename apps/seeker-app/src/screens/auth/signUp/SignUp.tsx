@@ -1,12 +1,14 @@
 import { Button, Input, Typography } from '@repo/components';
-import { colors } from '@repo/theme';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { Pressable, Text } from 'react-native';
+import { useTheme } from '@repo/theme';
 
-import { styles } from './SignUp.styles';
+import { createStyles } from './SignUp.styles';
 import { useSignUp } from './SignUp.hooks';
 
 export function SignUpScreen() {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const {
     firstName,
     setFirstName,

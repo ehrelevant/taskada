@@ -1,7 +1,7 @@
-import { colors } from '@repo/theme';
 import { Star } from 'lucide-react-native';
 import { StyleProp, TouchableOpacity, View, ViewStyle } from 'react-native';
 import { useState } from 'react';
+import { useTheme } from '@repo/theme';
 
 export interface StarRatingInputProps {
   value: number;
@@ -20,6 +20,7 @@ export function StarRatingInput({
   disabled = false,
   style,
 }: StarRatingInputProps) {
+  const { colors } = useTheme();
   const [hoveredValue, setHoveredValue] = useState(0);
 
   const handlePress = (starValue: number) => {

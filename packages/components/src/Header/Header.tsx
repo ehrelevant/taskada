@@ -1,5 +1,5 @@
-import { colors, spacing } from '@repo/theme';
 import { ReactNode } from 'react';
+import { spacing, useTheme } from '@repo/theme';
 import { StyleSheet, View, ViewProps } from 'react-native';
 
 import { Typography } from '../Typography';
@@ -24,6 +24,7 @@ export function Header({
   style,
   ...rest
 }: HeaderProps) {
+  const { colors } = useTheme();
   const titleVariant = size === 'large' ? 'h3' : size === 'small' ? 'h5' : 'h4';
   const subtitleVariant = size === 'large' ? 'body1' : 'body2';
 
@@ -35,7 +36,7 @@ export function Header({
     if (title) {
       return (
         <View style={styles.textContainer}>
-          <Typography variant={titleVariant} weight="bold" style={styles.title}>
+          <Typography variant={titleVariant} weight="bold" style={[styles.title, { color: colors.textPrimary }]}>
             {title}
           </Typography>
           {subtitle && (
@@ -74,9 +75,7 @@ const styles = StyleSheet.create({
   centerContent: {
     flex: 1,
   },
-  title: {
-    color: colors.textPrimary,
-  },
+  title: {},
   subtitle: {
     marginTop: spacing.xs,
   },

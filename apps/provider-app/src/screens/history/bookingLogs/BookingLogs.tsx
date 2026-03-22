@@ -2,13 +2,16 @@ import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { ActivityIndicator, ScrollView, TouchableOpacity, View } from 'react-native';
 import { Button, Header, Typography } from '@repo/components';
 import { ChevronLeft, Flag } from 'lucide-react-native';
-import { colors } from '@repo/theme';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTheme } from '@repo/theme';
 
-import { styles } from './BookingLogs.styles';
+import { createStyles } from './BookingLogs.styles';
 import { useBookingLogs } from './BookingLogs.hooks';
 
 export function BookingLogsScreen() {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
+
   const {
     booking,
     isLoading,

@@ -1,13 +1,15 @@
-import { Avatar, Header, Rating, Typography } from '@repo/components';
-import { colors } from '@repo/theme';
+import { Avatar, Header, Typography } from '@repo/components';
 import { Flag } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView, TouchableOpacity, View } from 'react-native';
+import { useTheme } from '@repo/theme';
 
-import { styles } from './BookingTransit.styles';
+import { createStyles } from './BookingTransit.styles';
 import { useBookingTransit } from './BookingTransit.hooks';
 
 export function BookingTransitScreen() {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const { providerName, providerInfo, serviceTypeName, cost, specifications, hasProviderArrived, handleReport } =
     useBookingTransit();
 
@@ -63,9 +65,6 @@ export function BookingTransitScreen() {
               <Typography variant="overline" color="textSecondary" style={styles.serviceType}>
                 {serviceTypeName}
               </Typography>
-              <View style={styles.ratingContainer}>
-                <Rating value={4.5} reviewCount={24} size={16} />
-              </View>
             </View>
           </View>
         </View>

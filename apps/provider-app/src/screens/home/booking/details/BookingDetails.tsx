@@ -1,13 +1,16 @@
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { ActivityIndicator, ScrollView, View } from 'react-native';
 import { Button, Header, Typography } from '@repo/components';
-import { colors } from '@repo/theme';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTheme } from '@repo/theme';
 
-import { styles } from './BookingDetails.styles';
+import { createStyles } from './BookingDetails.styles';
 import { useBookingDetails } from './BookingDetails.hooks';
 
 export function BookingDetailsScreen() {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
+
   const { booking, isLoading, latitude, longitude, formatDateTime, handleGoBack } = useBookingDetails();
 
   if (isLoading) {

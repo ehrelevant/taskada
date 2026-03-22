@@ -1,10 +1,11 @@
-import { colors, fontFamily, fontSize, fontWeight, radius, spacing, touchTarget } from '@repo/theme';
 import { FlexStyle, StyleSheet } from 'react-native';
+import { fontFamily, fontSize, fontWeight, radius, spacing, ThemeColors, touchTarget } from '@repo/theme';
 
 export function createStyles(
   variant: 'primary' | 'secondary' | 'outline' | 'text' | 'danger',
   size: 'small' | 'medium' | 'large',
   isDisabled: boolean,
+  colors: ThemeColors,
 ) {
   // Base styles
   const baseButtonStyles = {

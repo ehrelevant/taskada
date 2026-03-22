@@ -1,6 +1,6 @@
-import { colors, palette, radius, spacing } from '@repo/theme';
 import { Image, TouchableOpacity, TouchableOpacityProps, View } from 'react-native';
 import { memo } from 'react';
+import { palette, radius, spacing, useTheme } from '@repo/theme';
 
 import { Avatar } from '../Avatar';
 import { Rating } from '../Rating';
@@ -25,6 +25,7 @@ export const FeaturedServiceCard = memo(function FeaturedServiceCard({
   style,
   ...rest
 }: FeaturedServiceCardProps) {
+  const { colors } = useTheme();
   return (
     <TouchableOpacity
       style={[

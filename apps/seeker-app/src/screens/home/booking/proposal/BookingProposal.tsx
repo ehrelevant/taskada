@@ -1,14 +1,16 @@
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { Button, Header, Typography } from '@repo/components';
-import { colors } from '@repo/theme';
 import { Flag } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView, TouchableOpacity, View } from 'react-native';
+import { useTheme } from '@repo/theme';
 
-import { styles } from './BookingProposal.styles';
+import { createStyles } from './BookingProposal.styles';
 import { useBookingProposal } from './BookingProposal.hooks';
 
 export function BookingProposalScreen() {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const {
     cost,
     specifications,

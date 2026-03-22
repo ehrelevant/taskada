@@ -1,5 +1,5 @@
-import { colors, palette, radius, SERVICE_TYPE_ICONS, spacing } from '@repo/theme';
 import { memo } from 'react';
+import { palette, radius, SERVICE_TYPE_ICONS, spacing, useTheme } from '@repo/theme';
 import { TouchableOpacity, TouchableOpacityProps, View } from 'react-native';
 
 import { Typography } from '../Typography';
@@ -15,6 +15,7 @@ export const ServiceTypeCard = memo(function ServiceTypeCard({
   style,
   ...rest
 }: ServiceTypeCardProps) {
+  const { colors } = useTheme();
   return (
     <TouchableOpacity
       style={[

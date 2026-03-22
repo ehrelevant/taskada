@@ -25,6 +25,11 @@ interface BookingDetails {
     lastName: string;
     avatarUrl: string | null;
   } | null;
+  serviceType: {
+    id: string;
+    name: string;
+    iconUrl: string | null;
+  } | null;
 }
 
 export function useBookingServing() {

@@ -1,4 +1,4 @@
-import { colors, radius, shadows, spacing } from '@repo/theme';
+import { radius, spacing, useTheme } from '@repo/theme';
 import { StyleSheet, View, ViewProps } from 'react-native';
 
 export interface CardProps extends ViewProps {
@@ -7,6 +7,7 @@ export interface CardProps extends ViewProps {
 }
 
 export function Card({ children, elevation = 's', padding = 'm', style, ...rest }: CardProps) {
+  const { colors, shadows } = useTheme();
   const paddingValues = {
     none: 0,
     xs: spacing.xs,
@@ -17,7 +18,16 @@ export function Card({ children, elevation = 's', padding = 'm', style, ...rest 
   };
 
   return (
-    <View style={[styles.container, shadows[elevation], { padding: paddingValues[padding] }, style]} {...rest}>
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: colors.surface },
+        shadows[elevation],
+        { padding: paddingValues[padding] },
+        style,
+      ]}
+      {...rest}
+    >
       {children}
     </View>
   );
@@ -25,7 +35,6 @@ export function Card({ children, elevation = 's', padding = 'm', style, ...rest 
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.surface,
     borderRadius: radius.m,
     overflow: 'hidden',
   },

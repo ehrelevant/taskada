@@ -2,14 +2,18 @@ import { ActivityIndicator, FlatList, View } from 'react-native';
 import type { ServiceType } from '@repo/types';
 import { ServiceTypeCard, Typography } from '@repo/components';
 
-import { styles } from './ServiceTypes.styles';
+import { useTheme } from '@repo/theme';
+
+import { createStyles } from './ServiceTypes.styles';
 import { useServiceTypes } from './ServiceTypes.hooks';
 
 export function ServiceTypesListScreen() {
-  const { serviceTypes, loading, error } = useServiceTypes();
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
+  const { serviceTypes, loading, error, handleServiceTypePress } = useServiceTypes();
 
   const renderItem = ({ item }: { item: ServiceType }) => (
-    <ServiceTypeCard name={item.name} iconUrl={item.iconUrl} onPress={() => undefined} />
+    <ServiceTypeCard name={item.name} iconUrl={item.iconUrl} onPress={() => handleServiceTypePress(item.id)} />
   );
 
   if (loading) {

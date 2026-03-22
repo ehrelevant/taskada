@@ -1,8 +1,8 @@
 import { BottomTabBarProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { colors, palette } from '@repo/theme';
 import { History, Home, Menu } from 'lucide-react-native';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Typography } from '@repo/components';
+import { useTheme } from '@repo/theme';
 
 import { BookingStack } from './BookingStack';
 import { HistoryStack } from './HistoryStack';
@@ -19,10 +19,18 @@ export type DashboardTabsParamList = {
 const Tab = createBottomTabNavigator<DashboardTabsParamList>();
 
 function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
+  const { colors } = useTheme();
+
   return (
-    <View style={styles.tabsContainer}>
+    <View
+      style={[styles.tabsContainer, { backgroundColor: colors.backgroundSecondary, borderTopColor: colors.border }]}
+    >
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
+
+        // Do not render if tabBarButton is disabled
+        if (options.tabBarButton) return null;
+
         const label =
           options.tabBarLabel !== undefined
             ? options.tabBarLabel
@@ -47,7 +55,7 @@ function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
         const renderIcon = () => {
           const iconProps = {
             size: 24,
-            color: isFocused ? colors.actionPrimary : palette.gray500,
+            color: isFocused ? colors.actionPrimary : colors.textDisabled,
             strokeWidth: 2,
           };
 
@@ -72,11 +80,7 @@ function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
           >
             <View style={styles.tabContent}>
               {renderIcon()}
-              <Typography
-                variant="caption"
-                color={isFocused ? colors.actionPrimary : palette.gray500}
-                style={styles.label}
-              >
+              <Typography variant="caption" color={isFocused ? 'actionPrimary' : 'textDisabled'} style={styles.label}>
                 {label.toString()}
               </Typography>
             </View>
@@ -113,8 +117,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: 64,
     paddingTop: 8,
-    backgroundColor: colors.backgroundSecondary,
-    borderTopColor: colors.border,
     borderTopWidth: 2,
   },
   tabButton: {

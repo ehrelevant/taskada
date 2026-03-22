@@ -1,8 +1,9 @@
 import { ActivityIndicator, StyleSheet } from 'react-native';
-import { colors } from '@repo/theme';
+import { useTheme } from '@repo/theme';
 import { View } from 'react-native';
 
 export function LoadingView() {
+  const { colors } = useTheme();
   return (
     <View style={styles.loadingContainer}>
       <ActivityIndicator size="large" color={colors.actionPrimary} />

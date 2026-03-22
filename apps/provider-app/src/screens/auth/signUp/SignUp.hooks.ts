@@ -1,7 +1,6 @@
 import { authClient } from '@lib/authClient';
 import { AuthStackParamList } from '@navigation/AuthStack';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import type { Provider } from '@repo/database';
 import { providerClient } from '@lib/providerClient';
 import { useLoading } from '@repo/shared';
 import { useNavigation } from '@react-navigation/native';
@@ -24,7 +23,6 @@ export function useSignUpScreen() {
     setLoading(true);
     setErrorMessage('');
 
-    console.log('Requesting...');
     const { data: newUserData, error } = await authClient.signUp.email({
       name: firstName,
       middleName,
@@ -35,15 +33,12 @@ export function useSignUpScreen() {
     });
 
     if (newUserData !== null) {
-      console.log(newUserData);
+      // success
     } else if (error !== null) {
-      console.log(error);
       setErrorMessage(error.message ?? '');
     }
 
-    const createProviderResponse = await providerClient.apiFetch('/providers', 'POST');
-    const newProviderData: Provider | null = await createProviderResponse.json();
-    console.log(newProviderData);
+    await providerClient.apiFetch('/providers', 'POST');
 
     setLoading(false);
   };

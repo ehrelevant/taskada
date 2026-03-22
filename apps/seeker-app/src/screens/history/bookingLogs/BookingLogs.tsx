@@ -1,13 +1,15 @@
 import { ActivityIndicator, ScrollView, TextInput, TouchableOpacity, View } from 'react-native';
 import { Avatar, Button, Card, Header, Rating, ReviewCard, StarRatingInput, Typography } from '@repo/components';
 import { ChevronLeft, Flag } from 'lucide-react-native';
-import { colors, spacing } from '@repo/theme';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { spacing, useTheme } from '@repo/theme';
 
-import { styles } from './BookingLogs.styles';
+import { createStyles } from './BookingLogs.styles';
 import { useBookingLogs } from './BookingLogs.hooks';
 
 export function BookingLogsScreen() {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const {
     transaction,
     isLoading,

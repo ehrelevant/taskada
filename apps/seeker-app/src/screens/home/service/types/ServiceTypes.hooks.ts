@@ -1,8 +1,12 @@
+import { HomeStackParamList } from '@navigation/HomeStack';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { seekerClient } from '@lib/seekerClient';
 import type { ServiceType } from '@repo/types';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 
 export function useServiceTypes() {
+  const navigation = useNavigation<NativeStackNavigationProp<HomeStackParamList>>();
   const [serviceTypes, setServiceTypes] = useState<ServiceType[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -22,9 +26,17 @@ export function useServiceTypes() {
     loadServiceTypes();
   }, []);
 
+  const handleServiceTypePress = useCallback(
+    (serviceTypeId: string) => {
+      navigation.navigate('RequestForm', { serviceTypeId });
+    },
+    [navigation],
+  );
+
   return {
     serviceTypes,
     loading,
     error,
+    handleServiceTypePress,
   };
 }

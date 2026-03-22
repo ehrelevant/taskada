@@ -11,13 +11,16 @@ import {
 } from 'react-native';
 import { ArrowLeft, Flag } from 'lucide-react-native';
 import { Button, Header, Typography } from '@repo/components';
-import { colors } from '@repo/theme';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTheme } from '@repo/theme';
 
-import { styles } from './BookingFinalize.styles';
+import { createStyles } from './BookingFinalize.styles';
 import { useBookingFinalize } from './BookingFinalize.hooks';
 
 export function BookingFinalizeScreen() {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
+
   const {
     serviceCost,
     serviceSpecifications,

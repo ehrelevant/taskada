@@ -1,13 +1,15 @@
 import { ActivityIndicator, FlatList, Image, ScrollView, TouchableOpacity, View } from 'react-native';
 import { ChevronLeft, Flag } from 'lucide-react-native';
-import { colors } from '@repo/theme';
 import { Header, ImageViewer, Typography } from '@repo/components';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTheme } from '@repo/theme';
 
-import { styles } from './ChatLogs.styles';
+import { createStyles } from './ChatLogs.styles';
 import { useChatLogs } from './ChatLogs.hooks';
 
 export function ChatLogsScreen() {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const { messages, isLoading, error, otherUser, selectedImage, setSelectedImage, handleGoBack, handleReport } =
     useChatLogs();
 

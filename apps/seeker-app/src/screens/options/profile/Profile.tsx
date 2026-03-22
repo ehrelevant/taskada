@@ -1,13 +1,15 @@
 import { Avatar, Button, Input, Typography } from '@repo/components';
 import { Camera, Eye, EyeOff, X } from 'lucide-react-native';
-import { colors } from '@repo/theme';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView, TouchableOpacity, View } from 'react-native';
+import { useTheme } from '@repo/theme';
 
-import { styles } from './Profile.styles';
+import { createStyles } from './Profile.styles';
 import { useProfile } from './Profile.hooks';
 
 export function ProfileScreen() {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const {
     userSession,
     profileData,

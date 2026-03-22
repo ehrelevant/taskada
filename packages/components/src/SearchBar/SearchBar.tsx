@@ -1,4 +1,4 @@
-import { colors, radius, spacing } from '@repo/theme';
+import { radius, spacing, useTheme } from '@repo/theme';
 import { Search } from 'lucide-react-native';
 import { StyleProp, TextInput, TextInputProps, TouchableOpacity, View, ViewStyle } from 'react-native';
 import { useState } from 'react';
@@ -21,6 +21,7 @@ export function SearchBar({
   placeholder = 'Search services or providers...',
   ...rest
 }: SearchBarProps) {
+  const { colors } = useTheme();
   const [isFocused, setIsFocused] = useState(false);
 
   return (

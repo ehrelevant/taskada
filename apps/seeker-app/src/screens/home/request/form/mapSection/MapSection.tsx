@@ -1,12 +1,15 @@
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { ActivityIndicator, View } from 'react-native';
-import { colors } from '@repo/theme';
+import { Typography } from '@repo/components';
+import { useTheme } from '@repo/theme';
 
+import { createStyles } from './MapSection.styles';
 import { MapSectionProps } from './MapSection.hooks';
-import { styles } from './MapSection.styles';
 import { useMapSection } from './MapSection.hooks';
 
 export function MapSection({ onLocationUpdate, initialLat, initialLng }: MapSectionProps) {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const { location, loading, handleMarkerDragEnd } = useMapSection({
     onLocationUpdate,
     initialLat,
@@ -24,7 +27,9 @@ export function MapSection({ onLocationUpdate, initialLat, initialLng }: MapSect
   if (!location) {
     return (
       <View style={styles.errorContainer}>
-        <ActivityIndicator size="large" color={colors.actionPrimary} />
+        <Typography variant="body2" color="error">
+          Unable to get your location. Please enable location permissions and try again.
+        </Typography>
       </View>
     );
   }
