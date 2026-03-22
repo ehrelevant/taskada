@@ -31,18 +31,7 @@ export interface RequestDetails {
 type RequestDetailsRouteProp = RouteProp<RequestsStackParamList, 'RequestDetails'>;
 type RequestDetailsNavigationProp = NativeStackNavigationProp<RequestsStackParamList, 'RequestDetails'>;
 
-interface UseRequestDetailsReturn {
-  request: RequestDetails | null;
-  isLoading: boolean;
-  error: string | null;
-  isCreatingBooking: boolean;
-  selectedImage: string | null;
-  setSelectedImage: (image: string | null) => void;
-  handleGoBack: () => void;
-  handleSettleRequest: () => Promise<void>;
-}
-
-export function useRequestDetails(): UseRequestDetailsReturn {
+export function useRequestDetails() {
   const route = useRoute<RequestDetailsRouteProp>();
   const navigation = useNavigation<RequestDetailsNavigationProp>();
   const { requestId } = route.params;

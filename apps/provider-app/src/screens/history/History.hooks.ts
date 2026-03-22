@@ -31,17 +31,7 @@ export interface BookingHistoryItem {
   };
 }
 
-interface UseHistoryReturn {
-  bookings: BookingHistoryItem[];
-  isLoading: boolean;
-  error: string | null;
-  formatDateTime: (dateString: string) => string;
-  getStatusColor: (status: string) => string;
-  handleViewDetails: (bookingId: string) => void;
-  loadBookingHistory: () => Promise<void>;
-}
-
-export function useHistory(): UseHistoryReturn {
+export function useHistory() {
   const navigation = useNavigation<HistoryNavigationProp>();
   const [bookings, setBookings] = useState<BookingHistoryItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);

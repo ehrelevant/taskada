@@ -17,25 +17,7 @@ interface SeekerUser {
   avatarUrl: string | null;
 }
 
-interface UseBookingTransitReturn {
-  providerLocation: Location.LocationObjectCoords | null;
-  locationError: string | null;
-  isArriving: boolean;
-  seekerLatitude: number;
-  seekerLongitude: number;
-  address: { label: string | null; coordinates: [number, number] } | undefined;
-  seekerUser: SeekerUser | null;
-  getInitialRegion: () => {
-    latitude: number;
-    longitude: number;
-    latitudeDelta: number;
-    longitudeDelta: number;
-  };
-  handleArrived: () => Promise<void>;
-  handleReport: () => void;
-}
-
-export function useBookingTransit(): UseBookingTransitReturn {
+export function useBookingTransit() {
   const route = useRoute<BookingTransitRouteProp>();
   const navigation = useNavigation<BookingTransitNavigationProp>();
   const { bookingId, seekerLocation, address } = route.params;

@@ -32,15 +32,7 @@ interface BookingDetails {
   } | null;
 }
 
-interface UseBookingDoneReturn {
-  bookingDetails: BookingDetails | null;
-  isLoading: boolean;
-  handleReturn: () => void;
-  handleViewDetails: () => void;
-  handleReport: () => void;
-}
-
-export function useBookingDone(): UseBookingDoneReturn {
+export function useBookingDone() {
   const route = useRoute<BookingDoneRouteProp>();
   const navigation = useNavigation<BookingDoneNavigationProp>();
   const { bookingId } = route.params;

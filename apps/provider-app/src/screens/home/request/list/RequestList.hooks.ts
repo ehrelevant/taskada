@@ -30,16 +30,7 @@ export interface IncomingRequest {
 
 type RequestsNavigationProp = NativeStackNavigationProp<RequestsStackParamList, 'RequestList'>;
 
-interface UseRequestListReturn {
-  isAccepting: boolean;
-  requests: IncomingRequest[];
-  isConnecting: boolean;
-  enableRequests: () => Promise<void>;
-  disableRequests: () => Promise<void>;
-  handleViewDetails: (request: IncomingRequest) => void;
-}
-
-export function useRequestList(): UseRequestListReturn {
+export function useRequestList() {
   const navigation = useNavigation<RequestsNavigationProp>();
   const [isAccepting, setIsAccepting] = useState(false);
   const [requests, setRequests] = useState<IncomingRequest[]>([]);

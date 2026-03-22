@@ -21,24 +21,7 @@ export interface Message {
   imageUrls: string[];
 }
 
-interface UseChatLogsReturn {
-  messages: Message[];
-  isLoading: boolean;
-  error: string | null;
-  selectedImage: string | null;
-  setSelectedImage: (image: string | null) => void;
-  otherUser: {
-    id: string;
-    firstName: string;
-    lastName: string;
-    avatarUrl: string | null;
-  };
-  handleGoBack: () => void;
-  handleReport: () => void;
-  loadChatLogs: () => Promise<void>;
-}
-
-export function useChatLogs(): UseChatLogsReturn {
+export function useChatLogs() {
   const route = useRoute<ChatLogsRouteProp>();
   const navigation = useNavigation<ChatLogsNavigationProp>();
   const { bookingId, otherUser } = route.params;

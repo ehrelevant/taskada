@@ -28,15 +28,7 @@ export interface RequestDetailsData {
   } | null;
 }
 
-interface UseRequestLogsReturn {
-  request: RequestDetailsData | null;
-  isLoading: boolean;
-  error: string | null;
-  handleGoBack: () => void;
-  loadRequestDetails: () => Promise<void>;
-}
-
-export function useRequestLogs(): UseRequestLogsReturn {
+export function useRequestLogs() {
   const route = useRoute<RequestDetailsRouteProp>();
   const navigation = useNavigation<RequestDetailsNavigationProp>();
   const { bookingId } = route.params;

@@ -9,23 +9,7 @@ import { useCallback, useEffect, useState } from 'react';
 type FinalizeDetailsRouteProp = RouteProp<RequestsStackParamList, 'FinalizeDetails'>;
 type FinalizeDetailsNavigationProp = NativeStackNavigationProp<RequestsStackParamList, 'FinalizeDetails'>;
 
-interface UseBookingFinalizeReturn {
-  serviceCost: string;
-  setServiceCost: (cost: string) => void;
-  serviceSpecifications: string;
-  setServiceSpecifications: (specs: string) => void;
-  isSubmitting: boolean;
-  showWaitingModal: boolean;
-  latitude: number;
-  longitude: number;
-  seekerLocation: { label: string | null; coordinates: [number, number] };
-  handleSubmit: () => Promise<void>;
-  handleCostChange: (text: string) => void;
-  handleGoBack: () => void;
-  handleReport: () => void;
-}
-
-export function useBookingFinalize(): UseBookingFinalizeReturn {
+export function useBookingFinalize() {
   const route = useRoute<FinalizeDetailsRouteProp>();
   const navigation = useNavigation<FinalizeDetailsNavigationProp>();
   const { bookingId, seekerLocation, otherUser, requestId } = route.params;

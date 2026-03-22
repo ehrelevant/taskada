@@ -26,16 +26,7 @@ interface BookingData {
   } | null;
 }
 
-interface UseBookingDetailsReturn {
-  booking: BookingData | null;
-  isLoading: boolean;
-  latitude: number;
-  longitude: number;
-  formatDateTime: (dateString: string) => string;
-  handleGoBack: () => void;
-}
-
-export function useBookingDetails(): UseBookingDetailsReturn {
+export function useBookingDetails() {
   const route = useRoute<BookingDetailsRouteProp>();
   const navigation = useNavigation<BookingDetailsNavigationProp>();
   const { bookingId } = route.params;

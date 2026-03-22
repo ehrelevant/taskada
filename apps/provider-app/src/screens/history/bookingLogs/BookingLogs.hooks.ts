@@ -43,19 +43,7 @@ export interface BookingData {
   };
 }
 
-interface UseBookingLogsReturn {
-  booking: BookingData | null;
-  isLoading: boolean;
-  latitude: number;
-  longitude: number;
-  formatDateTime: (dateString: string) => string;
-  handleGoBack: () => void;
-  handleViewRequestDetails: () => void;
-  handleViewChatLogs: () => void;
-  handleReport: () => void;
-}
-
-export function useBookingLogs(): UseBookingLogsReturn {
+export function useBookingLogs() {
   const route = useRoute<BookingDetailsRouteProp>();
   const navigation = useNavigation<BookingDetailsNavigationProp>();
   const { bookingId } = route.params;

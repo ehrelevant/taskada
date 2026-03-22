@@ -27,17 +27,7 @@ interface BookingDetails {
   } | null;
 }
 
-interface UseBookingServingReturn {
-  bookingDetails: BookingDetails | null;
-  isLoading: boolean;
-  isPaid: boolean;
-  isUpdatingStatus: boolean;
-  handlePaidPress: () => Promise<void>;
-  handleViewDetails: () => void;
-  handleReport: () => void;
-}
-
-export function useBookingServing(): UseBookingServingReturn {
+export function useBookingServing() {
   const route = useRoute<BookingServingRouteProp>();
   const navigation = useNavigation<BookingServingNavigationProp>();
   const { bookingId } = route.params;

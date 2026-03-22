@@ -27,34 +27,7 @@ interface ChatScreenParams {
   };
 }
 
-interface UseBookingChatReturn {
-  otherUser: {
-    id: string;
-    firstName: string;
-    lastName: string;
-    avatarUrl: string | null;
-  };
-  messages: Message[];
-  inputText: string;
-  setInputText: (text: string) => void;
-  isLoading: boolean;
-  isSending: boolean;
-  isTyping: boolean;
-  hasMoreMessages: boolean;
-  selectedImages: string[];
-  selectedImage: string | null;
-  setSelectedImage: (image: string | null) => void;
-  currentUserId: string | undefined;
-  handleSendMessage: () => Promise<void>;
-  handleDecline: () => Promise<void>;
-  handleFinalize: () => void;
-  handleLoadMore: () => void;
-  handlePickImage: () => Promise<void>;
-  handleRemoveImage: (index: number) => void;
-  handleReport: () => void;
-}
-
-export function useBookingChat(): UseBookingChatReturn {
+export function useBookingChat() {
   const route = useRoute<ChatRouteProp>();
   const navigation = useNavigation<ChatNavigationProp>();
   const { bookingId, otherUser, requestId, address } = route.params as ChatScreenParams;
