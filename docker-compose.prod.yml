@@ -1,0 +1,56 @@
+services:
+  db:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.db
+    restart: always
+    env_file:
+      - ./.env.production
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+      POSTGRES_DB: ${POSTGRES_DB:-postgres}
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD', 'pg_isready']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  migrate:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.server
+    command: pnpm --filter @repo/database migrate
+    env_file:
+      - apps/server/.env.production
+    depends_on:
+      db:
+        condition: service_healthy
+
+  server:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.server
+    ports:
+      - '3000:3000'
+    env_file:
+      - apps/server/.env.production
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+
+  moderation:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.moderation
+    ports:
+      - '3300:3300'
+    env_file:
+      - apps/moderation/.env.production
+    depends_on:
+      - server
+
+volumes:
+  postgres:
