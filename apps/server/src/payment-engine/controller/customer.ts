@@ -1,16 +1,10 @@
-import { ApiBody, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Body, Controller, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { Session } from '@thallesp/nestjs-better-auth';
 
-import {
-  CreateCustomerRequestDto,
-  CreateCustomerResponseDto,
-  GetCustomerListResponseDto,
-  GetCustomerResponseDto,
-  GetPaymentChannelsRequestDto,
-  GetPaymentChannelsResponseDto,
-  UpdateCustomerRequestDto,
-  UpdateCustomerResponseDto,
-} from '../dto';
+import { Session as UserSession } from '../../auth';
+
+import { CreateCustomerResponseDto, GetCustomerListResponseDto, GetPaymentChannelsRequestDto, GetPaymentChannelsResponseDto, UpdateCustomerRequestDto, UpdateCustomerResponseDto } from '../dto';
 import { path_case } from '../utils';
 import { PaymentEngineService } from '../payment-engine.service';
 
@@ -22,40 +16,34 @@ export class CustomerController {
   constructor(private readonly paymentEngineService: PaymentEngineService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Create customer', description: 'Create a customer record in the payment engine.' })
-  @ApiResponse({ status: 201, description: 'Customer created', type: CreateCustomerResponseDto })
-  @ApiBody({ type: CreateCustomerRequestDto })
-  createCustomer(@Body() body: CreateCustomerRequestDto): Promise<CreateCustomerResponseDto> {
-    return this.paymentEngineService.createCustomer(body);
-  }
-
-  @Get(':customer_id')
-  @ApiOperation({ summary: 'Get customer', description: 'Retrieve a customer by Xendit customer id.' })
-  @ApiParam({
-    name: 'customer_id',
-    description: 'Xendit customer id',
-    required: true,
-    example: 'cust-abcdef0123456789',
-  })
-  @ApiResponse({ status: 200, description: 'Customer retrieved', type: GetCustomerResponseDto })
-  getCustomer(@Param('customer_id') customer_id: string): Promise<GetCustomerResponseDto> {
-    return this.paymentEngineService.getCustomer({ customer_id });
-  }
-
-  @Get(':reference_id')
   @ApiOperation({
-    summary: 'Get customer list by reference id',
-    description: 'Retrieve customers matching the provided merchant reference id.',
+    summary: 'Create customer',
+    description: 'Create a customer record in the payment engine using session data.',
   })
-  @ApiParam({
-    name: 'reference_id',
-    description: 'Merchant reference id associated with customers',
-    required: true,
-    example: 'ref-123',
+  @ApiResponse({ status: 201, description: 'Customer created', type: CreateCustomerResponseDto })
+  // @ApiBody({ type: CreateCustomerRequestDto })
+  createCustomer(@Session() session: UserSession): Promise<CreateCustomerResponseDto> {
+    return this.paymentEngineService.createCustomer({
+      reference_id: session.user.id,
+      type: 'INDIVIDUAL',
+      individual_detail: {
+        given_names: session.user.name,
+        surname: session.user.lastName,
+      },
+      email: session.user.email,
+      mobile_number: session.user.phoneNumber,
+      date_of_registration: session.user.createdAt.toISOString(),
+    });
+  }
+
+  @Get('')
+  @ApiOperation({
+    summary: 'Get customer through authenticated user',
+    description: "Retrieve customers matching the authenticated user's id.",
   })
   @ApiResponse({ status: 200, description: 'List of customers', type: GetCustomerListResponseDto })
-  getCustomerList(@Param('reference_id') reference_id: string): Promise<GetCustomerListResponseDto> {
-    return this.paymentEngineService.getCustomerList({ reference_id });
+  getCustomerList(@Session() session: UserSession): Promise<GetCustomerListResponseDto> {
+    return this.paymentEngineService.getCustomerList({ reference_id: session.user.id });
   }
 
   @Get('channels')
@@ -86,11 +74,14 @@ export class CustomerController {
     return this.paymentEngineService.getPaymentChannels(query);
   }
 
-  @Patch('update')
+  @Patch(':customer_id')
   @ApiOperation({ summary: 'Update customer', description: 'Update an existing customer.' })
   @ApiBody({ type: UpdateCustomerRequestDto })
   @ApiResponse({ status: 200, description: 'Customer updated', type: UpdateCustomerResponseDto })
-  updateCustomer(@Body() body: UpdateCustomerRequestDto): Promise<UpdateCustomerResponseDto> {
+  updateCustomer(
+    @Param('customer_id') customer_id: string,
+    @Body() body: UpdateCustomerRequestDto,
+  ): Promise<UpdateCustomerResponseDto> {
     return this.paymentEngineService.updateCustomer(body);
   }
 }

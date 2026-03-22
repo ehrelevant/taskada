@@ -2,8 +2,8 @@ import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/s
 import { Body, ClassSerializerInterceptor, Controller, Get, Param, Post, UseInterceptors } from '@nestjs/common';
 
 import {
-  GetPaymentRequestStatusResponseDto,
   CancelPaymentRequestResponseDto,
+  GetPaymentRequestStatusResponseDto,
   SimulatePaymentRequestDto,
   SimulatePaymentResponseDto,
 } from '../dto';
@@ -22,7 +22,9 @@ export class PaymentRequestController {
   @ApiOperation({ summary: 'Get payment request status', description: 'Retrieve a payment request by id.' })
   @ApiParam({ name: 'payment_request_id', description: 'Payment Request id', required: true, example: 'pr-...' })
   @ApiResponse({ status: 200, description: 'Payment request retrieved', type: GetPaymentRequestStatusResponseDto })
-  getPaymentRequestStatus(@Param('payment_request_id') payment_request_id: string): Promise<GetPaymentRequestStatusResponseDto> {
+  getPaymentRequestStatus(
+    @Param('payment_request_id') payment_request_id: string,
+  ): Promise<GetPaymentRequestStatusResponseDto> {
     return this.paymentEngineService.getPaymentRequestStatus({ payment_request_id });
   }
 
@@ -30,7 +32,9 @@ export class PaymentRequestController {
   @ApiOperation({ summary: 'Cancel payment request', description: 'Cancel an existing payment request.' })
   @ApiParam({ name: 'payment_request_id', description: 'Payment Request id', required: true, example: 'pr-...' })
   @ApiResponse({ status: 200, description: 'Payment request cancelled', type: CancelPaymentRequestResponseDto })
-  cancelPaymentRequest(@Param('payment_request_id') payment_request_id: string): Promise<CancelPaymentRequestResponseDto> {
+  cancelPaymentRequest(
+    @Param('payment_request_id') payment_request_id: string,
+  ): Promise<CancelPaymentRequestResponseDto> {
     return this.paymentEngineService.cancelPaymentRequest({ payment_request_id });
   }
 
