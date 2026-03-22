@@ -1,5 +1,5 @@
 import { ActivityIndicator, FlatList, Image, ScrollView, TouchableOpacity, View } from 'react-native';
-import { ChevronLeft } from 'lucide-react-native';
+import { ChevronLeft, Flag } from 'lucide-react-native';
 import { colors } from '@repo/theme';
 import { ImageViewer, Typography } from '@repo/components';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -8,7 +8,8 @@ import { styles } from './ChatLogs.styles';
 import { useChatLogs } from './ChatLogs.hooks';
 
 export function ChatLogsScreen() {
-  const { messages, isLoading, error, otherUser, selectedImage, setSelectedImage, handleGoBack } = useChatLogs();
+  const { messages, isLoading, error, otherUser, selectedImage, setSelectedImage, handleGoBack, handleReport } =
+    useChatLogs();
 
   const renderMessage = ({
     item,
@@ -95,7 +96,9 @@ export function ChatLogsScreen() {
             Chat History
           </Typography>
         </View>
-        <View style={styles.headerSpacer} />
+        <TouchableOpacity onPress={handleReport} style={{ padding: 8 }}>
+          <Flag size={20} color={colors.textSecondary} />
+        </TouchableOpacity>
       </View>
 
       <FlatList

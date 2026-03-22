@@ -34,6 +34,7 @@ interface UseChatLogsReturn {
     avatarUrl: string | null;
   };
   handleGoBack: () => void;
+  handleReport: () => void;
   loadChatLogs: () => Promise<void>;
 }
 
@@ -74,6 +75,13 @@ export function useChatLogs(): UseChatLogsReturn {
     navigation.goBack();
   }, [navigation]);
 
+  const handleReport = useCallback(() => {
+    navigation.navigate('Report', {
+      bookingId,
+      reportedUser: otherUser,
+    });
+  }, [bookingId, navigation, otherUser]);
+
   return {
     messages,
     isLoading,
@@ -82,6 +90,7 @@ export function useChatLogs(): UseChatLogsReturn {
     setSelectedImage,
     otherUser,
     handleGoBack,
+    handleReport,
     loadChatLogs,
   };
 }

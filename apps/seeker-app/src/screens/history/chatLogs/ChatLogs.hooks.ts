@@ -59,6 +59,13 @@ export function useChatLogs() {
     navigation.goBack();
   }, [navigation]);
 
+  const handleReport = useCallback(() => {
+    navigation.navigate('Report', {
+      bookingId,
+      reportedUser: otherUser,
+    });
+  }, [bookingId, navigation, otherUser]);
+
   return {
     messages,
     isLoading,
@@ -67,5 +74,6 @@ export function useChatLogs() {
     selectedImage,
     setSelectedImage,
     handleGoBack,
+    handleReport,
   };
 }
