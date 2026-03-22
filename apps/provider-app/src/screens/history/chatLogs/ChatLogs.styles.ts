@@ -6,25 +6,6 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background,
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: spacing.m,
-    paddingVertical: spacing.s,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-    backgroundColor: colors.background,
-  },
-  headerInfo: {
-    flex: 1,
-    marginLeft: spacing.m,
-  },
-  backButton: {
-    padding: spacing.xs,
-  },
-  headerSpacer: {
-    width: 40,
-  },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',

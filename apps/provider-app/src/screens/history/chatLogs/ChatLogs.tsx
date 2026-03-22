@@ -1,7 +1,7 @@
 import { ActivityIndicator, FlatList, Image, ScrollView, TouchableOpacity, View } from 'react-native';
 import { ChevronLeft, Flag } from 'lucide-react-native';
 import { colors } from '@repo/theme';
-import { ImageViewer, Typography } from '@repo/components';
+import { Header, ImageViewer, Typography } from '@repo/components';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Message, useChatLogs } from './ChatLogs.hooks';
@@ -73,22 +73,21 @@ export function ChatLogsScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
-          <ChevronLeft size={24} color={colors.textPrimary} />
-        </TouchableOpacity>
-        <View style={styles.headerInfo}>
-          <Typography variant="h6" numberOfLines={1}>
-            {otherUser.firstName} {otherUser.lastName}
-          </Typography>
-          <Typography variant="caption" color="textSecondary">
-            Chat History
-          </Typography>
-        </View>
-        <TouchableOpacity onPress={handleReport} style={{ padding: 8 }}>
-          <Flag size={20} color={colors.textSecondary} />
-        </TouchableOpacity>
-      </View>
+      <Header
+        title={`${otherUser.firstName} ${otherUser.lastName}`}
+        subtitle="Chat History"
+        size="small"
+        leftContent={
+          <TouchableOpacity onPress={handleGoBack}>
+            <ChevronLeft size={24} color={colors.textPrimary} />
+          </TouchableOpacity>
+        }
+        rightContent={
+          <TouchableOpacity onPress={handleReport}>
+            <Flag size={20} color={colors.textSecondary} />
+          </TouchableOpacity>
+        }
+      />
 
       <FlatList
         data={messages}

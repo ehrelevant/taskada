@@ -9,15 +9,6 @@ export const styles = StyleSheet.create({
   keyboardView: {
     flex: 1,
   },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    paddingHorizontal: spacing.m,
-    paddingVertical: spacing.s,
-  },
-  exitButton: {
-    padding: spacing.s,
-  },
   scrollContent: {
     flexGrow: 1,
     padding: spacing.m,

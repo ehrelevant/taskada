@@ -1,6 +1,6 @@
 import { ActivityIndicator, FlatList, Image, ScrollView, TextInput, TouchableOpacity, View } from 'react-native';
-import { Avatar, Button, ImageViewer, Typography } from '@repo/components';
-import { colors } from '@repo/theme';
+import { Avatar, Button, Header, ImageViewer, Typography } from '@repo/components';
+import { colors, spacing } from '@repo/theme';
 import { Flag, Image as ImageIcon, Send, X } from 'lucide-react-native';
 import { KeyboardStickyView } from 'react-native-keyboard-controller';
 import type { Message } from '@repo/shared';
@@ -68,26 +68,32 @@ export function BookingChatScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Avatar
-          source={otherUser.avatarUrl ? { uri: otherUser.avatarUrl } : null}
-          name={`${otherUser.firstName} ${otherUser.lastName}`}
-          size={56}
-        />
-        <View style={styles.headerInfo}>
-          <Typography variant="h5" weight="bold" numberOfLines={1}>
-            {otherUser.firstName} {otherUser.lastName}
-          </Typography>
-          {isTyping && (
-            <Typography variant="caption" color={colors.textSecondary}>
-              Typing...
-            </Typography>
-          )}
-        </View>
-        <TouchableOpacity onPress={handleReport} style={{ padding: 8 }}>
-          <Flag size={20} color={colors.textSecondary} />
-        </TouchableOpacity>
-      </View>
+      <Header
+        centerContent={
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Avatar
+              source={otherUser.avatarUrl ? { uri: otherUser.avatarUrl } : null}
+              name={`${otherUser.firstName} ${otherUser.lastName}`}
+              size={36}
+            />
+            <View style={{ marginLeft: spacing.s }}>
+              <Typography variant="h5" weight="bold">
+                {otherUser.firstName} {otherUser.lastName}
+              </Typography>
+              {isTyping && (
+                <Typography variant="caption" color="textSecondary">
+                  Typing...
+                </Typography>
+              )}
+            </View>
+          </View>
+        }
+        rightContent={
+          <TouchableOpacity onPress={handleReport}>
+            <Flag size={20} color={colors.textSecondary} />
+          </TouchableOpacity>
+        }
+      />
 
       <FlatList
         data={messages}

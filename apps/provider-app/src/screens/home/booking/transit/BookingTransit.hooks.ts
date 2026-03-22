@@ -1,14 +1,14 @@
 import * as Location from 'expo-location';
 import { Alert } from 'react-native';
 import { authClient } from '@lib/authClient';
+import { BookingStackParamList } from '@navigation/BookingStack';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { providerClient } from '@lib/providerClient';
-import { RequestsStackParamList } from '@navigation/RequestsStack';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useCallback, useEffect, useState } from 'react';
 
-type BookingTransitRouteProp = RouteProp<RequestsStackParamList, 'BookingTransit'>;
-type BookingTransitNavigationProp = NativeStackNavigationProp<RequestsStackParamList, 'BookingTransit'>;
+type BookingTransitRouteProp = RouteProp<BookingStackParamList, 'BookingTransit'>;
+type BookingTransitNavigationProp = NativeStackNavigationProp<BookingStackParamList, 'BookingTransit'>;
 
 interface SeekerUser {
   id: string;

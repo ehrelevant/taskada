@@ -1,18 +1,18 @@
 import * as ImagePicker from 'expo-image-picker';
 import { Alert } from 'react-native';
+import type { BookingStackParamList } from '@navigation/BookingStack';
 import type { HistoryStackParamList } from '@navigation/HistoryStack';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { providerClient } from '@lib/providerClient';
 import type { ReportReason } from '@repo/types';
-import type { RequestsStackParamList } from '@navigation/RequestsStack';
 import { type RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-type ReportRouteProp = RouteProp<RequestsStackParamList & HistoryStackParamList, 'Report'>;
-type ReportNavigationProp = NativeStackNavigationProp<RequestsStackParamList & HistoryStackParamList, 'Report'>;
+type ReportRouteProp = RouteProp<BookingStackParamList & HistoryStackParamList, 'Report'>;
+type ReportNavigationProp = NativeStackNavigationProp<BookingStackParamList & HistoryStackParamList, 'Report'>;
 
 interface ReportedUser {
   id: string;

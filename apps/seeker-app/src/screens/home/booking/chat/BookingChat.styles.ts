@@ -6,18 +6,6 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background,
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: spacing.m,
-    paddingVertical: spacing.m,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-  },
-  headerInfo: {
-    marginLeft: spacing.m,
-    flex: 1,
-  },
   messagesList: {
     padding: spacing.m,
   },

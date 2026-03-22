@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { Avatar, Button, Typography } from '@repo/components';
+import { Avatar, Button, Header, Typography } from '@repo/components';
 import { CheckCircle2, ChevronLeft, ImagePlus, X } from 'lucide-react-native';
 import { colors, spacing } from '@repo/theme';
 import { Controller } from 'react-hook-form';
@@ -41,15 +41,15 @@ export function ReportScreen() {
   if (isChecking) {
     return (
       <SafeAreaView style={styles.container}>
-        <View style={styles.header}>
-          <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
-            <ChevronLeft size={24} color={colors.textPrimary} />
-          </TouchableOpacity>
-          <Typography variant="h6" style={styles.headerTitle}>
-            Report User
-          </Typography>
-          <View style={styles.headerSpacer} />
-        </View>
+        <Header
+          title="Report User"
+          size="small"
+          leftContent={
+            <TouchableOpacity onPress={handleGoBack}>
+              <ChevronLeft size={24} color={colors.textPrimary} />
+            </TouchableOpacity>
+          }
+        />
         <View style={styles.alreadyReportedContainer}>
           <ActivityIndicator size="large" color={colors.actionPrimary} />
         </View>
@@ -60,15 +60,15 @@ export function ReportScreen() {
   if (hasAlreadyReported) {
     return (
       <SafeAreaView style={styles.container}>
-        <View style={styles.header}>
-          <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
-            <ChevronLeft size={24} color={colors.textPrimary} />
-          </TouchableOpacity>
-          <Typography variant="h6" style={styles.headerTitle}>
-            Report User
-          </Typography>
-          <View style={styles.headerSpacer} />
-        </View>
+        <Header
+          title="Report User"
+          size="small"
+          leftContent={
+            <TouchableOpacity onPress={handleGoBack}>
+              <ChevronLeft size={24} color={colors.textPrimary} />
+            </TouchableOpacity>
+          }
+        />
         <View style={styles.alreadyReportedContainer}>
           <CheckCircle2 size={48} color={colors.success.base} />
           <Typography variant="h6" style={{ marginTop: spacing.m }}>
@@ -86,15 +86,15 @@ export function ReportScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
-          <ChevronLeft size={24} color={colors.textPrimary} />
-        </TouchableOpacity>
-        <Typography variant="h6" style={styles.headerTitle}>
-          Report User
-        </Typography>
-        <View style={styles.headerSpacer} />
-      </View>
+      <Header
+        title="Report User"
+        size="small"
+        leftContent={
+          <TouchableOpacity onPress={handleGoBack}>
+            <ChevronLeft size={24} color={colors.textPrimary} />
+          </TouchableOpacity>
+        }
+      />
 
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.keyboardView}>
         <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">

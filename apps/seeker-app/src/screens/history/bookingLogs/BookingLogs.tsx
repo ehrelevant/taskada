@@ -1,5 +1,5 @@
 import { ActivityIndicator, ScrollView, TextInput, TouchableOpacity, View } from 'react-native';
-import { Avatar, Button, Card, Rating, ReviewCard, StarRatingInput, Typography } from '@repo/components';
+import { Avatar, Button, Card, Header, Rating, ReviewCard, StarRatingInput, Typography } from '@repo/components';
 import { ChevronLeft, Flag } from 'lucide-react-native';
 import { colors, spacing } from '@repo/theme';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -50,15 +50,20 @@ export function BookingLogsScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
-          <ChevronLeft size={24} color={colors.textPrimary} />
-        </TouchableOpacity>
-        <Typography variant="h6">Transaction Details</Typography>
-        <TouchableOpacity onPress={handleReport} style={{ padding: 8 }}>
-          <Flag size={20} color={colors.textSecondary} />
-        </TouchableOpacity>
-      </View>
+      <Header
+        title="Transaction Details"
+        size="small"
+        leftContent={
+          <TouchableOpacity onPress={handleGoBack}>
+            <ChevronLeft size={24} color={colors.textPrimary} />
+          </TouchableOpacity>
+        }
+        rightContent={
+          <TouchableOpacity onPress={handleReport}>
+            <Flag size={20} color={colors.textSecondary} />
+          </TouchableOpacity>
+        }
+      />
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <TouchableOpacity onPress={handleViewServiceDetails} activeOpacity={0.8}>

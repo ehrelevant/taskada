@@ -1,13 +1,13 @@
 import { Alert } from 'react-native';
-import { HomeStackParamList } from '@navigation/HomeStack';
+import { BookingStackParamList } from '@navigation/BookingStack';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RouteProp } from '@react-navigation/native';
 import { seekerClient } from '@lib/seekerClient';
 import { useEffect, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-type BookingDetailsRouteProp = RouteProp<HomeStackParamList, 'BookingDetails'>;
-type BookingDetailsNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'BookingDetails'>;
+type BookingDetailsRouteProp = RouteProp<BookingStackParamList, 'BookingDetails'>;
+type BookingDetailsNavigationProp = NativeStackNavigationProp<BookingStackParamList, 'BookingDetails'>;
 
 interface BookingData {
   id: string;

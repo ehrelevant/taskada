@@ -1,10 +1,9 @@
 import { ActivityIndicator, FlatList, Image, ScrollView, TextInput, TouchableOpacity, View } from 'react-native';
-import { Avatar, ImageViewer, Typography } from '@repo/components';
+import { Avatar, Header, ImageViewer, Typography } from '@repo/components';
 import { colors } from '@repo/theme';
 import { Flag, Image as ImageIcon, Send, X } from 'lucide-react-native';
 import { KeyboardStickyView } from 'react-native-keyboard-controller';
 import type { Message } from '@repo/shared';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { styles } from './BookingChat.styles';
 import { useBookingChat } from './BookingChat.hooks';
@@ -66,27 +65,33 @@ export function ChatScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Avatar
-          source={providerInfo.avatarUrl ? { uri: providerInfo.avatarUrl } : null}
-          name={`${providerInfo.firstName} ${providerInfo.lastName}`}
-          size={56}
-        />
-        <View style={styles.headerInfo}>
-          <Typography variant="h5" weight="bold" numberOfLines={1}>
-            {providerInfo.firstName} {providerInfo.lastName}
-          </Typography>
-          {isTyping && (
-            <Typography variant="caption" color={colors.textPrimary}>
-              Typing...
-            </Typography>
-          )}
-        </View>
-        <TouchableOpacity onPress={handleReport} style={{ padding: 8 }}>
-          <Flag size={20} color={colors.textSecondary} />
-        </TouchableOpacity>
-      </View>
+    <View style={styles.container}>
+      <Header
+        centerContent={
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Avatar
+              source={providerInfo.avatarUrl ? { uri: providerInfo.avatarUrl } : null}
+              name={`${providerInfo.firstName} ${providerInfo.lastName}`}
+              size={36}
+            />
+            <View style={{ marginLeft: 8 }}>
+              <Typography variant="h5" weight="bold">
+                {providerInfo.firstName} {providerInfo.lastName}
+              </Typography>
+              {isTyping && (
+                <Typography variant="caption" color="textSecondary">
+                  Typing...
+                </Typography>
+              )}
+            </View>
+          </View>
+        }
+        rightContent={
+          <TouchableOpacity onPress={handleReport}>
+            <Flag size={20} color={colors.textSecondary} />
+          </TouchableOpacity>
+        }
+      />
 
       <FlatList
         ref={flatListRef}
@@ -147,6 +152,6 @@ export function ChatScreen() {
         imageUri={selectedImage || ''}
         onClose={() => setSelectedImage(null)}
       />
-    </SafeAreaView>
+    </View>
   );
 }

@@ -14,15 +14,6 @@ export const styles = StyleSheet.create({
   loadingText: {
     marginTop: spacing.m,
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: spacing.m,
-    paddingVertical: spacing.s,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-  },
   scrollContent: {
     padding: spacing.m,
   },

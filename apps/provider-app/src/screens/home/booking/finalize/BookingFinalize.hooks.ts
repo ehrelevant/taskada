@@ -1,13 +1,13 @@
 import { Alert } from 'react-native';
 import { authClient } from '@lib/authClient';
+import { BookingStackParamList } from '@navigation/BookingStack';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { providerClient } from '@lib/providerClient';
-import { RequestsStackParamList } from '@navigation/RequestsStack';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useCallback, useEffect, useState } from 'react';
 
-type FinalizeDetailsRouteProp = RouteProp<RequestsStackParamList, 'FinalizeDetails'>;
-type FinalizeDetailsNavigationProp = NativeStackNavigationProp<RequestsStackParamList, 'FinalizeDetails'>;
+type FinalizeDetailsRouteProp = RouteProp<BookingStackParamList, 'FinalizeDetails'>;
+type FinalizeDetailsNavigationProp = NativeStackNavigationProp<BookingStackParamList, 'FinalizeDetails'>;
 
 export function useBookingFinalize() {
   const route = useRoute<FinalizeDetailsRouteProp>();

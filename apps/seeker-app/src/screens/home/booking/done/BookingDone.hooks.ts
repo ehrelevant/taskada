@@ -1,13 +1,13 @@
 import { Alert } from 'react-native';
-import { HomeStackParamList } from '@navigation/HomeStack';
+import { BookingStackParamList } from '@navigation/BookingStack';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RouteProp } from '@react-navigation/native';
 import { seekerClient } from '@lib/seekerClient';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-type BookingCompleteRouteProp = RouteProp<HomeStackParamList, 'BookingComplete'>;
-type BookingCompleteNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'BookingComplete'>;
+type BookingCompleteRouteProp = RouteProp<BookingStackParamList, 'BookingComplete'>;
+type BookingCompleteNavigationProp = NativeStackNavigationProp<BookingStackParamList, 'BookingComplete'>;
 
 interface BookingData {
   id: string;
@@ -48,7 +48,7 @@ export function useBookingDone() {
   }, [bookingId]);
 
   const handleGoHome = useCallback(() => {
-    navigation.navigate('Home');
+    navigation.getParent()?.goBack();
   }, [navigation]);
 
   const handleViewDetails = useCallback(() => {
@@ -86,7 +86,7 @@ export function useBookingDone() {
       }
 
       Alert.alert('Success', 'Thank you for your review!', [
-        { text: 'OK', onPress: () => navigation.navigate('Home') },
+        { text: 'OK', onPress: () => navigation.getParent()?.goBack() },
       ]);
     } catch (error) {
       console.error('Error submitting review:', error);

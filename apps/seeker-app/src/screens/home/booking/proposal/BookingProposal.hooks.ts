@@ -1,12 +1,12 @@
-import { HomeStackParamList } from '@navigation/HomeStack';
+import { BookingStackParamList } from '@navigation/BookingStack';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RouteProp } from '@react-navigation/native';
 import { seekerClient } from '@lib/seekerClient';
 import { useCallback } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-type ViewProposalRouteProp = RouteProp<HomeStackParamList, 'ViewProposal'>;
-type ViewProposalNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'ViewProposal'>;
+type ViewProposalRouteProp = RouteProp<BookingStackParamList, 'ViewProposal'>;
+type ViewProposalNavigationProp = NativeStackNavigationProp<BookingStackParamList, 'ViewProposal'>;
 
 export function useBookingProposal() {
   const route = useRoute<ViewProposalRouteProp>();

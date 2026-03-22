@@ -4,6 +4,7 @@ import { History, Home, Menu } from 'lucide-react-native';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Typography } from '@repo/components';
 
+import { BookingStack } from './BookingStack';
 import { HistoryStack } from './HistoryStack';
 import { HomeStack } from './HomeStack';
 import { OptionsStack } from './OptionsStack';
@@ -12,6 +13,7 @@ export type DashboardTabsParamList = {
   HomeStack: undefined;
   HistoryStack: undefined;
   OptionsStack: undefined;
+  BookingFlow: undefined;
 };
 
 const Tab = createBottomTabNavigator<DashboardTabsParamList>();
@@ -95,6 +97,13 @@ export function DashboardTabs() {
       <Tab.Screen name="HomeStack" component={HomeStack} options={{ title: 'Home' }} />
       <Tab.Screen name="HistoryStack" component={HistoryStack} options={{ title: 'History' }} />
       <Tab.Screen name="OptionsStack" component={OptionsStack} options={{ title: 'Options' }} />
+      <Tab.Screen
+        name="BookingFlow"
+        component={BookingStack}
+        options={{
+          tabBarButton: () => null,
+        }}
+      />
     </Tab.Navigator>
   );
 }

@@ -1,7 +1,7 @@
 import * as ImagePicker from 'expo-image-picker';
 import { Alert, FlatList } from 'react-native';
 import { authClient } from '@lib/authClient';
-import { HomeStackParamList } from '@navigation/HomeStack';
+import { BookingStackParamList } from '@navigation/BookingStack';
 import type { Message } from '@repo/shared';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RouteProp } from '@react-navigation/native';
@@ -9,8 +9,8 @@ import { seekerClient } from '@lib/seekerClient';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-type ChatRouteProp = RouteProp<HomeStackParamList, 'Chat'>;
-type ChatNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'Chat'>;
+type ChatRouteProp = RouteProp<BookingStackParamList, 'Chat'>;
+type ChatNavigationProp = NativeStackNavigationProp<BookingStackParamList, 'Chat'>;
 
 interface ChatScreenParams {
   bookingId: string;
@@ -97,8 +97,10 @@ export function useBookingChat() {
 
       seekerClient.onBookingDeclined(data => {
         if (data.bookingId === bookingId) {
-          Alert.alert('Booking Declined', 'The provider has declined the booking.');
-          navigation.goBack();
+          seekerClient.unwatchRequest(requestId);
+          Alert.alert('Booking Declined', 'The provider has declined the booking.', [
+            { text: 'OK', onPress: () => navigation.getParent()?.goBack() },
+          ]);
         }
       });
 

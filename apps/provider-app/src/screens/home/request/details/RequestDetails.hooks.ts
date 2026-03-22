@@ -126,16 +126,19 @@ export function useRequestDetails() {
         console.warn('Failed to update request status, but booking was created');
       }
 
-      navigation.replace('Chat', {
-        bookingId: booking.id,
-        otherUser: {
-          id: request.seeker.id,
-          firstName: request.seeker.firstName,
-          lastName: request.seeker.lastName,
-          avatarUrl: request.seeker.avatarUrl,
+      navigation.getParent()?.navigate('BookingFlow', {
+        screen: 'Chat',
+        params: {
+          bookingId: booking.id,
+          otherUser: {
+            id: request.seeker.id,
+            firstName: request.seeker.firstName,
+            lastName: request.seeker.lastName,
+            avatarUrl: request.seeker.avatarUrl,
+          },
+          requestId: request.id,
+          address: request.address,
         },
-        requestId: request.id,
-        address: request.address,
       });
     } catch (err) {
       console.error('Failed to settle request:', err);

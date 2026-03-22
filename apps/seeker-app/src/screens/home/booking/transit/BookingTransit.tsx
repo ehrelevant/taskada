@@ -1,4 +1,4 @@
-import { Avatar, Rating, Typography } from '@repo/components';
+import { Avatar, Header, Rating, Typography } from '@repo/components';
 import { colors } from '@repo/theme';
 import { Flag } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -13,12 +13,15 @@ export function BookingTransitScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Typography variant="h6">{hasProviderArrived ? 'Provider Arrived' : 'Provider En Route'}</Typography>
-        <TouchableOpacity onPress={handleReport} style={{ padding: 8 }}>
-          <Flag size={20} color={colors.textSecondary} />
-        </TouchableOpacity>
-      </View>
+      <Header
+        title={hasProviderArrived ? 'Provider Arrived' : 'Provider En Route'}
+        size="small"
+        rightContent={
+          <TouchableOpacity onPress={handleReport}>
+            <Flag size={20} color={colors.textSecondary} />
+          </TouchableOpacity>
+        }
+      />
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.statusSection}>

@@ -1,5 +1,5 @@
 import { ActivityIndicator, Image, ScrollView, View } from 'react-native';
-import { Button, Card, Typography } from '@repo/components';
+import { Button, Card, Header, Typography } from '@repo/components';
 import { colors } from '@repo/theme';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -37,9 +37,7 @@ export function RequestLogsScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Typography variant="h5">Request Details</Typography>
-      </View>
+      <Header title="Request Details" size="small" />
 
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <Card elevation="s" padding="m" style={styles.section}>

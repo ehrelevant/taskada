@@ -1,6 +1,6 @@
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { ActivityIndicator, ScrollView, View } from 'react-native';
-import { Button, Typography } from '@repo/components';
+import { Button, Header, Typography } from '@repo/components';
 import { colors } from '@repo/theme';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -25,9 +25,7 @@ export function BookingDetailsScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Typography variant="h6">Booking Details</Typography>
-      </View>
+      <Header title="Booking Details" size="small" />
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {booking?.address && (

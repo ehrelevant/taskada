@@ -14,21 +14,6 @@ export const styles = StyleSheet.create({
   loadingText: {
     marginTop: spacing.m,
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: spacing.m,
-    paddingVertical: spacing.s,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-  },
-  backButton: {
-    padding: spacing.xs,
-  },
-  headerSpacer: {
-    width: 40,
-  },
   scrollContent: {
     padding: spacing.m,
   },

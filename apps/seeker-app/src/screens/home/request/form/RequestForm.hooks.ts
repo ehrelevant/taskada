@@ -155,8 +155,9 @@ export function useRequestForm() {
           await seekerClient.uploadRequestImages(newRequest.id, images);
         }
 
-        navigation.replace('Standby', {
-          requestId: newRequest.id,
+        navigation.getParent()?.navigate('BookingFlow', {
+          screen: 'Standby',
+          params: { requestId: newRequest.id },
         });
       } catch (error) {
         console.error('Failed to create request:', error);

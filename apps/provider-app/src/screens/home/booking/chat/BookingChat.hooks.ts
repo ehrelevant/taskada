@@ -1,16 +1,16 @@
 import * as ImagePicker from 'expo-image-picker';
 import { Alert } from 'react-native';
 import { authClient } from '@lib/authClient';
+import { BookingStackParamList } from '@navigation/BookingStack';
 import { FlatList } from 'react-native';
 import type { Message } from '@repo/shared';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { providerClient } from '@lib/providerClient';
-import { RequestsStackParamList } from '@navigation/RequestsStack';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-type ChatRouteProp = RouteProp<RequestsStackParamList, 'Chat'>;
-type ChatNavigationProp = NativeStackNavigationProp<RequestsStackParamList, 'Chat'>;
+type ChatRouteProp = RouteProp<BookingStackParamList, 'Chat'>;
+type ChatNavigationProp = NativeStackNavigationProp<BookingStackParamList, 'Chat'>;
 
 interface ChatScreenParams {
   bookingId: string;
@@ -101,7 +101,9 @@ export function useBookingChat() {
 
       providerClient.onBookingDeclined(data => {
         if (data.bookingId === bookingId) {
-          navigation.replace('RequestList');
+          Alert.alert('Booking Declined', 'The seeker has declined the booking.', [
+            { text: 'OK', onPress: () => navigation.getParent()?.goBack() },
+          ]);
         }
       });
     };
@@ -139,18 +141,30 @@ export function useBookingChat() {
   }, [bookingId, inputText, isSending, selectedImages]);
 
   const handleDecline = useCallback(async () => {
-    try {
-      const response = await providerClient.apiFetch(`/requests/${requestId}/status`, 'PATCH', {
-        body: JSON.stringify({ status: 'pending' }),
-      });
+    Alert.alert('Decline Booking', 'Are you sure you want to decline this booking?', [
+      { text: 'No', style: 'cancel' },
+      {
+        text: 'Yes, Decline',
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            const response = await providerClient.apiFetch(`/requests/${requestId}/status`, 'PATCH', {
+              body: JSON.stringify({ status: 'pending' }),
+            });
 
-      if (response.ok) {
-        providerClient.declineBooking(bookingId, requestId);
-        navigation.replace('RequestList');
-      }
-    } catch (error) {
-      console.error('Failed to decline request:', error);
-    }
+            if (response.ok) {
+              providerClient.declineBooking(bookingId, requestId);
+              Alert.alert('Declined', 'The booking has been declined.', [
+                { text: 'OK', onPress: () => navigation.getParent()?.goBack() },
+              ]);
+            }
+          } catch (error) {
+            console.error('Failed to decline request:', error);
+            Alert.alert('Error', 'Failed to decline booking. Please try again.');
+          }
+        },
+      },
+    ]);
   }, [bookingId, navigation, requestId]);
 
   const handleFinalize = useCallback(() => {

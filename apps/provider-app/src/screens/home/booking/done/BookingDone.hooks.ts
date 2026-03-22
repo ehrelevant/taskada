@@ -1,11 +1,11 @@
+import { BookingStackParamList } from '@navigation/BookingStack';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { providerClient } from '@lib/providerClient';
-import { RequestsStackParamList } from '@navigation/RequestsStack';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useCallback, useEffect, useState } from 'react';
 
-type BookingDoneRouteProp = RouteProp<RequestsStackParamList, 'BookingDone'>;
-type BookingDoneNavigationProp = NativeStackNavigationProp<RequestsStackParamList, 'BookingDone'>;
+type BookingDoneRouteProp = RouteProp<BookingStackParamList, 'BookingDone'>;
+type BookingDoneNavigationProp = NativeStackNavigationProp<BookingStackParamList, 'BookingDone'>;
 
 interface BookingDetails {
   id: string;
@@ -61,7 +61,7 @@ export function useBookingDone() {
   }, [fetchBookingDetails]);
 
   const handleReturn = useCallback(() => {
-    navigation.navigate('RequestList');
+    navigation.getParent()?.goBack();
   }, [navigation]);
 
   const handleViewDetails = useCallback(() => {

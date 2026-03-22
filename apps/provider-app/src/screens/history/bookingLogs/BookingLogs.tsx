@@ -1,6 +1,6 @@
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { ActivityIndicator, ScrollView, TouchableOpacity, View } from 'react-native';
-import { Button, Typography } from '@repo/components';
+import { Button, Header, Typography } from '@repo/components';
 import { ChevronLeft, Flag } from 'lucide-react-native';
 import { colors } from '@repo/theme';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -36,15 +36,20 @@ export function BookingLogsScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
-          <ChevronLeft size={24} color={colors.textPrimary} />
-        </TouchableOpacity>
-        <Typography variant="h6">Booking Details</Typography>
-        <TouchableOpacity onPress={handleReport} style={{ padding: 8 }}>
-          <Flag size={20} color={colors.textSecondary} />
-        </TouchableOpacity>
-      </View>
+      <Header
+        title="Booking Details"
+        size="small"
+        leftContent={
+          <TouchableOpacity onPress={handleGoBack}>
+            <ChevronLeft size={24} color={colors.textPrimary} />
+          </TouchableOpacity>
+        }
+        rightContent={
+          <TouchableOpacity onPress={handleReport}>
+            <Flag size={20} color={colors.textSecondary} />
+          </TouchableOpacity>
+        }
+      />
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {booking?.address && (

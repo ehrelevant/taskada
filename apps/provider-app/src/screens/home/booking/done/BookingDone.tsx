@@ -1,8 +1,8 @@
 import { ActivityIndicator, ScrollView, TouchableOpacity, View } from 'react-native';
 import { colors } from '@repo/theme';
 import { Flag } from 'lucide-react-native';
+import { Header, Typography } from '@repo/components';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Typography } from '@repo/components';
 
 import { styles } from './BookingDone.styles';
 import { useBookingDone } from './BookingDone.hooks';
@@ -25,11 +25,13 @@ export function BookingDoneScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{ flexDirection: 'row', justifyContent: 'flex-end', paddingHorizontal: 16, paddingTop: 8 }}>
-        <TouchableOpacity onPress={handleReport} style={{ padding: 8 }}>
-          <Flag size={20} color={colors.textSecondary} />
-        </TouchableOpacity>
-      </View>
+      <Header
+        rightContent={
+          <TouchableOpacity onPress={handleReport}>
+            <Flag size={20} color={colors.textSecondary} />
+          </TouchableOpacity>
+        }
+      />
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.centeredContent}>

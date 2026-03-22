@@ -1,13 +1,13 @@
 import { authClient } from '@lib/authClient';
-import { HomeStackParamList } from '@navigation/HomeStack';
+import { BookingStackParamList } from '@navigation/BookingStack';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RouteProp } from '@react-navigation/native';
 import { seekerClient } from '@lib/seekerClient';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-type BookingTransitRouteProp = RouteProp<HomeStackParamList, 'BookingTransit'>;
-type BookingTransitNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'BookingTransit'>;
+type BookingTransitRouteProp = RouteProp<BookingStackParamList, 'BookingTransit'>;
+type BookingTransitNavigationProp = NativeStackNavigationProp<BookingStackParamList, 'BookingTransit'>;
 
 export function useBookingTransit() {
   const route = useRoute<BookingTransitRouteProp>();

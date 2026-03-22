@@ -1,12 +1,12 @@
 import { Alert } from 'react-native';
+import { BookingStackParamList } from '@navigation/BookingStack';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { providerClient } from '@lib/providerClient';
-import { RequestsStackParamList } from '@navigation/RequestsStack';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useCallback, useEffect, useState } from 'react';
 
-type BookingServingRouteProp = RouteProp<RequestsStackParamList, 'BookingServing'>;
-type BookingServingNavigationProp = NativeStackNavigationProp<RequestsStackParamList, 'BookingServing'>;
+type BookingServingRouteProp = RouteProp<BookingStackParamList, 'BookingServing'>;
+type BookingServingNavigationProp = NativeStackNavigationProp<BookingStackParamList, 'BookingServing'>;
 
 interface BookingDetails {
   id: string;

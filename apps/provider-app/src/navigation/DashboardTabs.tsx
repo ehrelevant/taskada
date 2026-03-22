@@ -4,6 +4,7 @@ import { colors, palette } from '@repo/theme';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Typography } from '@repo/components';
 
+import { BookingStack } from './BookingStack';
 import { HistoryStack } from './HistoryStack';
 import { OptionsStack } from './OptionsStack';
 import { RequestsStack } from './RequestsStack';
@@ -14,6 +15,7 @@ export type DashboardTabsParamList = {
   ServicesStack: undefined;
   HistoryStack: undefined;
   OptionsStack: undefined;
+  BookingFlow: undefined;
 };
 
 const Tab = createBottomTabNavigator<DashboardTabsParamList>();
@@ -100,6 +102,13 @@ export function DashboardTabs() {
       <Tab.Screen name="ServicesStack" component={ServicesStack} options={{ title: 'Services' }} />
       <Tab.Screen name="HistoryStack" component={HistoryStack} options={{ title: 'History' }} />
       <Tab.Screen name="OptionsStack" component={OptionsStack} options={{ title: 'Options' }} />
+      <Tab.Screen
+        name="BookingFlow"
+        component={BookingStack}
+        options={{
+          tabBarButton: () => null,
+        }}
+      />
     </Tab.Navigator>
   );
 }

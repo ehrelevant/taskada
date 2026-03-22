@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { Avatar, Button, Rating, StarRatingInput, Typography } from '@repo/components';
+import { Avatar, Button, Header, Rating, StarRatingInput, Typography } from '@repo/components';
 import { colors } from '@repo/theme';
 import { Flag, X } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -36,14 +36,18 @@ export function BookingDoneScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={handleGoHome} style={styles.exitButton}>
-          <X size={24} color={colors.textPrimary} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleReport} style={{ padding: 8 }}>
-          <Flag size={20} color={colors.textSecondary} />
-        </TouchableOpacity>
-      </View>
+      <Header
+        leftContent={
+          <TouchableOpacity onPress={handleGoHome}>
+            <X size={24} color={colors.textPrimary} />
+          </TouchableOpacity>
+        }
+        rightContent={
+          <TouchableOpacity onPress={handleReport}>
+            <Flag size={20} color={colors.textSecondary} />
+          </TouchableOpacity>
+        }
+      />
 
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.keyboardView}>
         <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">

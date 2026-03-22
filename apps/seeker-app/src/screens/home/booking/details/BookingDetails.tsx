@@ -1,8 +1,9 @@
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { ActivityIndicator, ScrollView, TouchableOpacity, View } from 'react-native';
 import { ChevronLeft } from 'lucide-react-native';
+import { colors } from '@repo/theme';
+import { Header, Typography } from '@repo/components';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Typography } from '@repo/components';
 
 import { styles } from './BookingDetails.styles';
 import { useBookingDetails } from './BookingDetails.hooks';
@@ -28,13 +29,15 @@ export function BookingDetailsScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
-          <ChevronLeft size={24} color="$textPrimary" />
-        </TouchableOpacity>
-        <Typography variant="h6">Booking Details</Typography>
-        <View style={styles.headerSpacer} />
-      </View>
+      <Header
+        title="Booking Details"
+        size="small"
+        leftContent={
+          <TouchableOpacity onPress={handleGoBack}>
+            <ChevronLeft size={24} color={colors.textPrimary} />
+          </TouchableOpacity>
+        }
+      />
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {booking?.address && (

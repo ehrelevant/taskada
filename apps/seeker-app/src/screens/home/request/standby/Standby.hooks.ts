@@ -1,14 +1,14 @@
 import { Alert } from 'react-native';
 import { authClient } from '@lib/authClient';
-import { HomeStackParamList } from '@navigation/HomeStack';
+import { BookingStackParamList } from '@navigation/BookingStack';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RouteProp } from '@react-navigation/native';
 import { seekerClient } from '@lib/seekerClient';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-type StandbyRouteProp = RouteProp<HomeStackParamList, 'Standby'>;
-type StandbyNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'Standby'>;
+type StandbyRouteProp = RouteProp<BookingStackParamList, 'Standby'>;
+type StandbyNavigationProp = NativeStackNavigationProp<BookingStackParamList, 'Standby'>;
 
 export function useStandby() {
   const route = useRoute<StandbyRouteProp>();
@@ -42,8 +42,9 @@ export function useStandby() {
 
         seekerClient.onRequestCancelled(data => {
           if (data.requestId === requestId) {
-            Alert.alert('Request Cancelled', 'Your request has been cancelled.');
-            navigation.navigate('Home');
+            Alert.alert('Request Cancelled', 'Your request has been cancelled.', [
+              { text: 'OK', onPress: () => navigation.getParent()?.goBack() },
+            ]);
           }
         });
 
@@ -101,8 +102,9 @@ export function useStandby() {
               await seekerClient.apiFetch(`/requests/${requestId}`, 'DELETE');
             }
 
-            Alert.alert('Cancelled', 'Your request has been cancelled.');
-            navigation.navigate('Home');
+            Alert.alert('Cancelled', 'Your request has been cancelled.', [
+              { text: 'OK', onPress: () => navigation.getParent()?.goBack() },
+            ]);
           } catch (err) {
             console.error('Failed to cancel request:', err);
             Alert.alert('Error', 'Failed to cancel request. Please try again.');
