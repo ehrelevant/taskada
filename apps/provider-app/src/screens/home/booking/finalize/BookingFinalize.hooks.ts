@@ -6,8 +6,8 @@ import { providerClient } from '@lib/providerClient';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useCallback, useEffect, useState } from 'react';
 
-type FinalizeDetailsRouteProp = RouteProp<BookingStackParamList, 'FinalizeDetails'>;
-type FinalizeDetailsNavigationProp = NativeStackNavigationProp<BookingStackParamList, 'FinalizeDetails'>;
+type FinalizeDetailsRouteProp = RouteProp<BookingStackParamList, 'BookingFinalize'>;
+type FinalizeDetailsNavigationProp = NativeStackNavigationProp<BookingStackParamList, 'BookingFinalize'>;
 
 export function useBookingFinalize() {
   const route = useRoute<FinalizeDetailsRouteProp>();
@@ -42,7 +42,7 @@ export function useBookingFinalize() {
               {
                 text: 'OK',
                 onPress: () => {
-                  navigation.replace('Chat', {
+                  navigation.replace('BookingChat', {
                     bookingId,
                     otherUser,
                     requestId,

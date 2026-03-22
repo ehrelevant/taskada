@@ -8,7 +8,7 @@ import { ProfileScreen } from '@screens/options/profile/Profile';
 export type OptionsStackParamList = {
   Options: undefined;
   Profile: undefined;
-  PaymentMethods: undefined;
+  Payments: undefined;
   AddCard: undefined;
   AddEWallet: undefined;
 };
@@ -38,7 +38,7 @@ export function OptionsStack() {
         }}
       />
       <Stack.Screen
-        name="PaymentMethods"
+        name="Payments"
         component={PaymentsScreen}
         options={{
           title: 'Payment Methods',

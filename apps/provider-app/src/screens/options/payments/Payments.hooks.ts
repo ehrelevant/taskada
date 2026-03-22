@@ -2,7 +2,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { OptionsStackParamList } from '@navigation/OptionsStack';
 import { useNavigation } from '@react-navigation/native';
 
-type NavProp = NativeStackNavigationProp<OptionsStackParamList, 'PaymentMethods'>;
+type NavProp = NativeStackNavigationProp<OptionsStackParamList, 'Payments'>;
 
 const SAVED_METHODS = [
   { id: '1', type: 'CARD', label: 'Visa ending in 4242', icon: 'visa' },

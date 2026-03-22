@@ -5,8 +5,8 @@ import { providerClient } from '@lib/providerClient';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useCallback, useEffect, useState } from 'react';
 
-type BookingDetailsRouteProp = RouteProp<HistoryStackParamList, 'BookingDetails'>;
-type BookingDetailsNavigationProp = NativeStackNavigationProp<HistoryStackParamList, 'BookingDetails'>;
+type BookingDetailsRouteProp = RouteProp<HistoryStackParamList, 'BookingLogs'>;
+type BookingDetailsNavigationProp = NativeStackNavigationProp<HistoryStackParamList, 'BookingLogs'>;
 
 export interface BookingData {
   id: string;
@@ -77,7 +77,7 @@ export function useBookingLogs() {
   }, [navigation]);
 
   const handleViewRequestDetails = useCallback(() => {
-    navigation.navigate('RequestDetailsSummary', { bookingId });
+    navigation.navigate('RequestLogs', { bookingId });
   }, [bookingId, navigation]);
 
   const handleViewChatLogs = useCallback(() => {

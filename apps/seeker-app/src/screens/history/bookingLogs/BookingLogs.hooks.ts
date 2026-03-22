@@ -7,8 +7,8 @@ import { seekerClient } from '@lib/seekerClient';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-type TransactionDetailsRouteProp = RouteProp<HistoryStackParamList, 'TransactionDetails'>;
-type TransactionDetailsNavigationProp = NativeStackNavigationProp<HistoryStackParamList, 'TransactionDetails'>;
+type TransactionDetailsRouteProp = RouteProp<HistoryStackParamList, 'BookingLogs'>;
+type TransactionDetailsNavigationProp = NativeStackNavigationProp<HistoryStackParamList, 'BookingLogs'>;
 
 interface TransactionData {
   id: string;
@@ -118,7 +118,7 @@ export function useBookingLogs() {
   }, [navigation, transaction?.serviceId]);
 
   const handleViewRequestDetails = useCallback(() => {
-    navigation.navigate('RequestDetailsSummary', { bookingId });
+    navigation.navigate('RequestLogs', { bookingId });
   }, [navigation, bookingId]);
 
   const handleViewChatLogs = useCallback(() => {

@@ -9,8 +9,8 @@ import { providerClient } from '@lib/providerClient';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-type ChatRouteProp = RouteProp<BookingStackParamList, 'Chat'>;
-type ChatNavigationProp = NativeStackNavigationProp<BookingStackParamList, 'Chat'>;
+type ChatRouteProp = RouteProp<BookingStackParamList, 'BookingChat'>;
+type ChatNavigationProp = NativeStackNavigationProp<BookingStackParamList, 'BookingChat'>;
 
 interface ChatScreenParams {
   bookingId: string;
@@ -168,7 +168,7 @@ export function useBookingChat() {
   }, [bookingId, navigation, requestId]);
 
   const handleFinalize = useCallback(() => {
-    navigation.navigate('FinalizeDetails', {
+    navigation.navigate('BookingFinalize', {
       bookingId,
       seekerLocation: address,
       otherUser,

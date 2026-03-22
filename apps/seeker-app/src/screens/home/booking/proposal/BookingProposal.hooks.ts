@@ -5,8 +5,8 @@ import { seekerClient } from '@lib/seekerClient';
 import { useCallback } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-type ViewProposalRouteProp = RouteProp<BookingStackParamList, 'ViewProposal'>;
-type ViewProposalNavigationProp = NativeStackNavigationProp<BookingStackParamList, 'ViewProposal'>;
+type ViewProposalRouteProp = RouteProp<BookingStackParamList, 'BookingProposal'>;
+type ViewProposalNavigationProp = NativeStackNavigationProp<BookingStackParamList, 'BookingProposal'>;
 
 export function useBookingProposal() {
   const route = useRoute<ViewProposalRouteProp>();

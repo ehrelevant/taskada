@@ -6,9 +6,9 @@ import { ReportScreen } from '@screens/report/Report';
 import { RequestLogsScreen } from '@screens/history/requestLogs/RequestLogs';
 
 export type HistoryStackParamList = {
-  TransactionHistoryList: undefined;
-  BookingDetails: { bookingId: string };
-  RequestDetailsSummary: { bookingId: string };
+  History: undefined;
+  BookingLogs: { bookingId: string };
+  RequestLogs: { bookingId: string };
   ChatLogs: {
     bookingId: string;
     otherUser: {
@@ -34,20 +34,20 @@ const Stack = createNativeStackNavigator<HistoryStackParamList>();
 export function HistoryStack() {
   return (
     <Stack.Navigator
-      initialRouteName="TransactionHistoryList"
+      initialRouteName="History"
       screenOptions={{
         animationDuration: 400,
       }}
     >
       <Stack.Screen
-        name="TransactionHistoryList"
+        name="History"
         component={HistoryScreen}
         options={{
           title: 'Transaction History',
         }}
       />
       <Stack.Screen
-        name="BookingDetails"
+        name="BookingLogs"
         component={BookingLogsScreen}
         options={{
           title: 'Booking Details',
@@ -55,7 +55,7 @@ export function HistoryStack() {
         }}
       />
       <Stack.Screen
-        name="RequestDetailsSummary"
+        name="RequestLogs"
         component={RequestLogsScreen}
         options={{
           title: 'Request Details',

@@ -126,8 +126,8 @@ export function useRequestDetails() {
         console.warn('Failed to update request status, but booking was created');
       }
 
-      navigation.getParent()?.navigate('BookingFlow', {
-        screen: 'Chat',
+      navigation.getParent()?.navigate('BookingStack', {
+        screen: 'BookingChat',
         params: {
           bookingId: booking.id,
           otherUser: {

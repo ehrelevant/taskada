@@ -8,7 +8,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ReportScreen } from '@screens/report/Report';
 
 export type BookingStackParamList = {
-  Chat: {
+  BookingChat: {
     bookingId: string;
     otherUser: {
       id: string;
@@ -22,7 +22,7 @@ export type BookingStackParamList = {
       coordinates: [number, number];
     };
   };
-  FinalizeDetails: {
+  BookingFinalize: {
     bookingId: string;
     seekerLocation: {
       label: string | null;
@@ -74,13 +74,13 @@ const Stack = createNativeStackNavigator<BookingStackParamList>();
 export function BookingStack() {
   return (
     <Stack.Navigator
-      initialRouteName="Chat"
+      initialRouteName="BookingChat"
       screenOptions={{
         animationDuration: 400,
       }}
     >
       <Stack.Screen
-        name="Chat"
+        name="BookingChat"
         component={BookingChatScreen}
         options={{
           headerShown: false,
@@ -88,7 +88,7 @@ export function BookingStack() {
         }}
       />
       <Stack.Screen
-        name="FinalizeDetails"
+        name="BookingFinalize"
         component={BookingFinalizeScreen}
         options={{
           headerShown: false,

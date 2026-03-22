@@ -106,7 +106,7 @@ export function useBookingChat() {
 
       seekerClient.onProposalSubmitted(data => {
         if (data.bookingId === bookingId) {
-          navigation.navigate('ViewProposal', {
+          navigation.navigate('BookingProposal', {
             bookingId,
             providerInfo,
             proposal: data.proposal,

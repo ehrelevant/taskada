@@ -5,8 +5,8 @@ import { seekerClient } from '@lib/seekerClient';
 import { useEffect, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-type RequestDetailsRouteProp = RouteProp<HistoryStackParamList, 'RequestDetailsSummary'>;
-type RequestDetailsNavigationProp = NativeStackNavigationProp<HistoryStackParamList, 'RequestDetailsSummary'>;
+type RequestDetailsRouteProp = RouteProp<HistoryStackParamList, 'RequestLogs'>;
+type RequestDetailsNavigationProp = NativeStackNavigationProp<HistoryStackParamList, 'RequestLogs'>;
 
 interface RequestDetailsData {
   id: string;

@@ -6,8 +6,8 @@ import { seekerClient } from '@lib/seekerClient';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-type BookingCompleteRouteProp = RouteProp<BookingStackParamList, 'BookingComplete'>;
-type BookingCompleteNavigationProp = NativeStackNavigationProp<BookingStackParamList, 'BookingComplete'>;
+type BookingCompleteRouteProp = RouteProp<BookingStackParamList, 'BookingDone'>;
+type BookingCompleteNavigationProp = NativeStackNavigationProp<BookingStackParamList, 'BookingDone'>;
 
 interface BookingData {
   id: string;

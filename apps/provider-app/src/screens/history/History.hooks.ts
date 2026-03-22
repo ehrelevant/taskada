@@ -77,7 +77,7 @@ export function useHistory() {
 
   const handleViewDetails = useCallback(
     (bookingId: string) => {
-      navigation.navigate('BookingDetails', { bookingId });
+      navigation.navigate('BookingLogs', { bookingId });
     },
     [navigation],
   );

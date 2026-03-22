@@ -2,7 +2,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ServicesScreen } from '@screens/services/Services';
 
 export type ServicesStackParamList = {
-  ServiceList: undefined;
+  Services: undefined;
 };
 
 const Stack = createNativeStackNavigator<ServicesStackParamList>();
@@ -10,13 +10,13 @@ const Stack = createNativeStackNavigator<ServicesStackParamList>();
 export function ServicesStack() {
   return (
     <Stack.Navigator
-      initialRouteName="ServiceList"
+      initialRouteName="Services"
       screenOptions={{
         animationDuration: 400,
       }}
     >
       <Stack.Screen
-        name="ServiceList"
+        name="Services"
         component={ServicesScreen}
         options={{
           title: 'Services',

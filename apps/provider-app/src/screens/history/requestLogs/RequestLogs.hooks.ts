@@ -4,8 +4,8 @@ import { providerClient } from '@lib/providerClient';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useCallback, useEffect, useState } from 'react';
 
-type RequestDetailsRouteProp = RouteProp<HistoryStackParamList, 'RequestDetailsSummary'>;
-type RequestDetailsNavigationProp = NativeStackNavigationProp<HistoryStackParamList, 'RequestDetailsSummary'>;
+type RequestDetailsRouteProp = RouteProp<HistoryStackParamList, 'RequestLogs'>;
+type RequestDetailsNavigationProp = NativeStackNavigationProp<HistoryStackParamList, 'RequestLogs'>;
 
 export interface RequestDetailsData {
   id: string;

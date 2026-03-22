@@ -15,7 +15,7 @@ export type DashboardTabsParamList = {
   ServicesStack: undefined;
   HistoryStack: undefined;
   OptionsStack: undefined;
-  BookingFlow: undefined;
+  BookingStack: undefined;
 };
 
 const Tab = createBottomTabNavigator<DashboardTabsParamList>();
@@ -103,7 +103,7 @@ export function DashboardTabs() {
       <Tab.Screen name="HistoryStack" component={HistoryStack} options={{ title: 'History' }} />
       <Tab.Screen name="OptionsStack" component={OptionsStack} options={{ title: 'Options' }} />
       <Tab.Screen
-        name="BookingFlow"
+        name="BookingStack"
         component={BookingStack}
         options={{
           tabBarButton: () => null,

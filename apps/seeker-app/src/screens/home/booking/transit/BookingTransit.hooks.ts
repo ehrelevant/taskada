@@ -36,7 +36,7 @@ export function useBookingTransit() {
 
       seekerClient.onBookingCompleted(data => {
         if (data.bookingId === bookingId) {
-          navigation.replace('BookingComplete', {
+          navigation.replace('BookingDone', {
             bookingId,
             providerInfo,
             serviceTypeName,

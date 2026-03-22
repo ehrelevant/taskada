@@ -21,7 +21,7 @@ export type BookingStackParamList = {
     };
     requestId: string;
   };
-  ViewProposal: {
+  BookingProposal: {
     bookingId: string;
     providerInfo: {
       id: string;
@@ -62,7 +62,7 @@ export type BookingStackParamList = {
         | undefined;
     };
   };
-  BookingComplete: {
+  BookingDone: {
     bookingId: string;
     providerInfo: {
       id: string;
@@ -114,7 +114,7 @@ export function BookingStack() {
         }}
       />
       <Stack.Screen
-        name="ViewProposal"
+        name="BookingProposal"
         component={BookingProposalScreen}
         options={{
           headerShown: false,
@@ -130,7 +130,7 @@ export function BookingStack() {
         }}
       />
       <Stack.Screen
-        name="BookingComplete"
+        name="BookingDone"
         component={BookingDoneScreen}
         options={{
           headerShown: false,

@@ -155,7 +155,7 @@ export function useRequestForm() {
           await seekerClient.uploadRequestImages(newRequest.id, images);
         }
 
-        navigation.getParent()?.navigate('BookingFlow', {
+        navigation.getParent()?.navigate('BookingStack', {
           screen: 'Standby',
           params: { requestId: newRequest.id },
         });
