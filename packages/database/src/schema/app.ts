@@ -9,6 +9,7 @@ import {
   primaryKey,
   text,
   timestamp,
+  unique,
   uuid,
 } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-zod';
@@ -391,3 +392,56 @@ export type NewPushToken = typeof pushToken.$inferInsert;
 export const PushTokenSelectSchema = createSelectSchema(pushToken);
 export const PushTokenInsertSchema = createInsertSchema(pushToken).omit({ id: true, createdAt: true, updatedAt: true });
 export const PushTokenUpdateSchema = createUpdateSchema(pushToken).omit({ id: true, createdAt: true, updatedAt: true });
+
+export const reportReasonEnum = pgEnum('report_reason', [
+  'harassment',
+  'fraudulent_payment',
+  'unfair_cancellation',
+  'no_show',
+  'inappropriate_behavior',
+  'poor_service',
+  'other',
+]);
+export type ReportReason = (typeof reportReasonEnum.enumValues)[number];
+
+export const report = app.table(
+  'report',
+  {
+    id: uuid('id').primaryKey().notNull().defaultRandom(),
+    reporterUserId: uuid('reporter_user_id')
+      .notNull()
+      .references(() => user.id, { onUpdate: 'cascade', onDelete: 'cascade' }),
+    reportedUserId: uuid('reported_user_id')
+      .notNull()
+      .references(() => user.id, { onUpdate: 'cascade', onDelete: 'cascade' }),
+    bookingId: uuid('booking_id')
+      .notNull()
+      .references(() => booking.id, { onUpdate: 'cascade', onDelete: 'cascade' }),
+    reason: reportReasonEnum('reason').notNull(),
+    description: text('description'),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .defaultNow()
+      .$onUpdate(() => new Date()),
+  },
+  ({ reporterUserId, bookingId }) => [unique('report_unique_reporter_booking').on(reporterUserId, bookingId)],
+);
+export type Report = typeof report.$inferSelect;
+export type NewReport = typeof report.$inferInsert;
+export const ReportSelectSchema = createSelectSchema(report);
+export const ReportInsertSchema = createInsertSchema(report).omit({ id: true, createdAt: true, updatedAt: true });
+export const ReportUpdateSchema = createUpdateSchema(report).omit({ id: true, createdAt: true, updatedAt: true });
+
+export const reportImage = app.table('report_image', {
+  id: uuid('id').primaryKey().notNull().defaultRandom(),
+  reportId: uuid('report_id')
+    .notNull()
+    .references(() => report.id, { onUpdate: 'cascade', onDelete: 'cascade' }),
+  image: text('image').notNull(),
+});
+export type ReportImage = typeof reportImage.$inferSelect;
+export type NewReportImage = typeof reportImage.$inferInsert;
+export const ReportImageSelectSchema = createSelectSchema(reportImage);
+export const ReportImageInsertSchema = createInsertSchema(reportImage).omit({ id: true });
+export const ReportImageUpdateSchema = createUpdateSchema(reportImage).omit({ id: true });
