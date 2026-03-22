@@ -21,11 +21,12 @@ import {
   UpdateCustomerRequestSchema,
 } from './schema';
 
-const client = defaultClient.create({
+const client = defaultClient.extend({
   headers: {
     'api-version': '2020-10-31',
   },
 });
+
 
 async function get_customer(request: GetCustomerRequest): Promise<GetCustomerResponse> {
   const validated_request = GetCustomerRequestSchema.parse(request);
@@ -56,15 +57,19 @@ async function create_customer(request: CreateCustomerRequest): Promise<CreateCu
   });
   if (!response.ok) {
     const error_message = ErrorResponseSchema.parse(await response.json());
-    throw new Error(`Failed to create customer due to ${error_message.error_code}`);
+    console.log(response);
+    throw new Error(
+      `Failed to create customer due to ${error_message.error_code}. ${JSON.stringify(ErrorResponseSchema)}`,
+    );
   }
   return CustomerSchema.parse(await response.json());
 }
 
 async function update_customer(request: UpdateCustomerRequest): Promise<UpdateCustomerResponse> {
   const validated_request = UpdateCustomerRequestSchema.parse(request);
-  const response = await client.post('customers', {
-    body: JSON.stringify(validated_request),
+  const { customer_id, ...body } = validated_request as unknown as { customer_id: string } & Record<string, unknown>;
+  const response = await client.patch(`customers/${customer_id}`, {
+    body: JSON.stringify(body),
   });
   if (!response.ok) {
     const error_message = ErrorResponseSchema.parse(await response.json());

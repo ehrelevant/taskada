@@ -18,7 +18,7 @@ import {
   GetPaymentStatusResponseSchema,
 } from './schema';
 
-const client = defaultClient.create({
+const client = defaultClient.extend({
   headers: {
     'api-version': '2024-11-11',
   },
