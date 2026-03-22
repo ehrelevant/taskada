@@ -12,6 +12,7 @@ import { MatchingModule } from './matching/matching.module';
 import { MessagesModule } from './messages/messages.module';
 import { ProvidersModule } from './providers/providers.module';
 import { PushNotificationsModule } from './push-notifications/push-notifications.module';
+import { ReportsModule } from './reports/reports.module';
 import { RequestsModule } from './requests/requests.module';
 import { ReviewsModule } from './reviews/reviews.module';
 import { S3Module } from './s3/s3.module';
@@ -36,6 +37,7 @@ import { UsersModule } from './users/users.module';
     MessagesModule,
     ChatModule,
     PushNotificationsModule,
+    ReportsModule,
     ReviewsModule,
   ],
   providers: [
