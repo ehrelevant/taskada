@@ -21,6 +21,7 @@ export interface Report {
   bookingId: string;
   reason: ReportReason;
   description: string | null;
+  status: 'open' | 'under_review' | 'resolved' | 'dismissed';
   createdAt: string;
   updatedAt: string;
 }
