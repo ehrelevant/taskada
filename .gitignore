@@ -4,6 +4,7 @@ node_modules/
 # Build folders
 build/
 dist/
+releases/
 
 # Dotfiles
 .*
