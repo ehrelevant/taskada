@@ -22,6 +22,7 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile.server
+      target: build
     command: pnpm --filter @repo/database migrate
     env_file:
       - apps/server/.env.production
