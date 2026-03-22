@@ -1,0 +1,1 @@
+ALTER TABLE "app"."service_type" ADD CONSTRAINT "service_type_name_unique" UNIQUE("name");

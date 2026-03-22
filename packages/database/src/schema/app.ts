@@ -118,7 +118,7 @@ export const SeekerUpdateSchema = createUpdateSchema(seeker);
 
 export const serviceType = app.table('service_type', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
-  name: text('name').notNull(),
+  name: text('name').notNull().unique(),
   description: text('description'),
   iconUrl: text('icon_url'),
 });
