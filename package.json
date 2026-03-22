@@ -5,6 +5,7 @@
   "scripts": {
     "dev:db": "pnpm --filter @repo/database dev",
     "dev:server": "pnpm --filter server dev",
+    "dev:moderation": "pnpm --filter moderation dev",
     "dev:android:seeker": "pnpm --filter seeker-app dev:android --device ${ANDROID_DEVICE_SEEKER:-}",
     "dev:android:provider": "pnpm --filter provider-app dev:android --device ${ANDROID_DEVICE_PROVIDER:-}",
     "dev:android": "concurrently -k -n db,server,seeker,provider -c magenta,blue,green,yellow \"pnpm dev:db\" \"pnpm dev:server --preserveWatchOutput\" \"pnpm dev:android:seeker\" \"pnpm dev:android:provider\"",
