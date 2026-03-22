@@ -1,6 +1,6 @@
 import { createZodDto } from 'nestjs-zod';
 
-import { CreateServiceSchema } from "./create-service.dto";
+import { CreateServiceSchema } from './create-service.dto';
 
 export const UpdateServiceSchema = CreateServiceSchema.partial();
 

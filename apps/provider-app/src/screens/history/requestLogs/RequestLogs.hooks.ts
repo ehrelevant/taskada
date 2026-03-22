@@ -5,10 +5,7 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useCallback, useEffect, useState } from 'react';
 
 type RequestDetailsRouteProp = RouteProp<HistoryStackParamList, 'RequestDetailsSummary'>;
-type RequestDetailsNavigationProp = NativeStackNavigationProp<
-  HistoryStackParamList,
-  'RequestDetailsSummary'
->;
+type RequestDetailsNavigationProp = NativeStackNavigationProp<HistoryStackParamList, 'RequestDetailsSummary'>;
 
 export interface RequestDetailsData {
   id: string;

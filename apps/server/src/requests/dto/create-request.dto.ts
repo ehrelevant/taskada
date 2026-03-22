@@ -12,4 +12,3 @@ export const CreateRequestSchema = z.object({
 });
 
 export class CreateRequestDto extends createZodDto(CreateRequestSchema) {}
-
