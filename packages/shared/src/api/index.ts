@@ -5,3 +5,4 @@ export * from './request';
 export * from './geolocation';
 export * from './upload';
 export * from './user';
+export * from './moderation';
