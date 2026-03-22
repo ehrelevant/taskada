@@ -1,6 +1,8 @@
 import { Card, Typography } from '@repo/components';
 import { colors } from '@repo/theme';
 import { CreditCard, Plus, Trash2, Wallet } from 'lucide-react-native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { OptionsStackParamList } from '@navigation/OptionsStack';
 import { ScrollView, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
@@ -12,7 +14,7 @@ const SAVED_METHODS = [
 ];
 
 export function PaymentMethodsScreen() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<OptionsStackParamList>>();
 
   return (
     <View style={styles.container}>
@@ -54,7 +56,7 @@ export function PaymentMethodsScreen() {
         </Typography>
 
         <View style={styles.actionsContainer}>
-          <TouchableOpacity onPress={() => navigation.navigate('AddCard' as never)}>
+          <TouchableOpacity onPress={() => navigation.navigate('AddCard')}>
             <Card style={styles.actionCard} padding="m">
               <View style={[styles.actionIcon, { backgroundColor: '#E3F2FD' }]}>
                 <CreditCard color={colors.actionPrimary} size={24} />
@@ -69,7 +71,7 @@ export function PaymentMethodsScreen() {
             </Card>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => navigation.navigate('AddEWallet' as never)}>
+          <TouchableOpacity onPress={() => navigation.navigate('AddEWallet')}>
             <Card style={styles.actionCard} padding="m">
               <View style={[styles.actionIcon, { backgroundColor: '#E8F5E9' }]}>
                 <Wallet color={colors.success.base} size={24} />

@@ -1,6 +1,8 @@
 import { Avatar, Button, MenuButton, ScreenContainer, Typography } from '@repo/components';
 import { colors } from '@repo/theme';
 import { CreditCard, LogOut, MessageSquareWarning, UserPen } from 'lucide-react-native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { OptionsStackParamList } from '@navigation/OptionsStack';
 import { useNavigation } from '@react-navigation/native';
 import { View } from 'react-native';
 
@@ -9,7 +11,7 @@ import { useOptions } from './Options.hooks';
 
 export function OptionsScreen() {
   const { userSession, profile, signOut } = useOptions();
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<OptionsStackParamList>>();
 
   if (userSession === null) {
     return <View style={styles.emptyContainer} />;
@@ -41,13 +43,13 @@ export function OptionsScreen() {
         <MenuButton
           title="Manage Profile"
           icon={<UserPen size={24} color={colors.actionPrimary} />}
-          onPress={() => navigation.navigate('Profile' as never)}
+          onPress={() => navigation.navigate('Profile')}
           style={styles.menuButton}
         />
         <MenuButton
           title="Manage Payment Methods"
           icon={<CreditCard size={24} color={colors.actionPrimary} />}
-          onPress={() => navigation.navigate('Payments' as never)}
+          onPress={() => navigation.navigate('PaymentMethods')}
           style={styles.menuButton}
         />
 
