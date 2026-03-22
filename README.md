@@ -118,3 +118,18 @@ pnpm db:migrate
 # Connect to the database with a GUI
 pnpm db:studio
 ```
+
+### Building Release APKs
+
+Build signed release APKs for both mobile apps:
+
+```bash
+pnpm build:apps
+```
+
+This requires:
+
+- `apps/seeker-app/.env.production` and `apps/provider-app/.env.production` with production values (see [Environment Variables](#environment-variables))
+- `scripts/.env.build` with signing credentials (see [Build Scripts](#build-scripts-scriptsenvbuild))
+
+The APKs are output to the `releases/` directory as `taskada-seeker.apk` and `taskada-provider.apk`.
