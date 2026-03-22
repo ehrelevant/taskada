@@ -19,6 +19,9 @@ import { geographyPointColumnType } from './custom/geography';
 
 export const app = pgSchema('app');
 
+export const banStatusEnum = pgEnum('ban_status', ['active', 'suspended', 'banned']);
+export type BanStatus = (typeof banStatusEnum.enumValues)[number];
+
 export const user = app.table(
   'user',
   {
@@ -31,6 +34,9 @@ export const user = app.table(
     avatarUrl: text('avatar_url'),
     emailVerified: boolean('email_verified').notNull().default(false),
     xenditCustomerId: text('xendit_customer_id').unique(),
+    banStatus: banStatusEnum('ban_status').notNull().default('active'),
+    warningsCount: integer('warnings_count').notNull().default(0),
+    suspendedUntil: timestamp('suspended_until', { withTimezone: true }),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true })
       .notNull()
@@ -393,6 +399,9 @@ export const PushTokenSelectSchema = createSelectSchema(pushToken);
 export const PushTokenInsertSchema = createInsertSchema(pushToken).omit({ id: true, createdAt: true, updatedAt: true });
 export const PushTokenUpdateSchema = createUpdateSchema(pushToken).omit({ id: true, createdAt: true, updatedAt: true });
 
+export const reportStatusEnum = pgEnum('report_status', ['open', 'under_review', 'resolved', 'dismissed']);
+export type ReportStatus = (typeof reportStatusEnum.enumValues)[number];
+
 export const reportReasonEnum = pgEnum('report_reason', [
   'harassment',
   'fraudulent_payment',
@@ -419,6 +428,9 @@ export const report = app.table(
       .references(() => booking.id, { onUpdate: 'cascade', onDelete: 'cascade' }),
     reason: reportReasonEnum('reason').notNull(),
     description: text('description'),
+    status: reportStatusEnum('status').notNull().default('open'),
+    resolvedAt: timestamp('resolved_at', { withTimezone: true }),
+    resolvedBy: uuid('resolved_by').references(() => user.id, { onUpdate: 'cascade', onDelete: 'set null' }),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true })
       .notNull()
@@ -445,3 +457,50 @@ export type NewReportImage = typeof reportImage.$inferInsert;
 export const ReportImageSelectSchema = createSelectSchema(reportImage);
 export const ReportImageInsertSchema = createInsertSchema(reportImage).omit({ id: true });
 export const ReportImageUpdateSchema = createUpdateSchema(reportImage).omit({ id: true });
+
+export const moderationNote = app.table('moderation_note', {
+  id: uuid('id').primaryKey().notNull().defaultRandom(),
+  reportId: uuid('report_id')
+    .notNull()
+    .references(() => report.id, { onUpdate: 'cascade', onDelete: 'cascade' }),
+  authorId: uuid('author_id')
+    .notNull()
+    .references(() => user.id, { onUpdate: 'cascade', onDelete: 'cascade' }),
+  content: text('content').notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+});
+export type ModerationNote = typeof moderationNote.$inferSelect;
+export type NewModerationNote = typeof moderationNote.$inferInsert;
+export const ModerationNoteSelectSchema = createSelectSchema(moderationNote);
+export const ModerationNoteInsertSchema = createInsertSchema(moderationNote).omit({ id: true, createdAt: true });
+export const ModerationNoteUpdateSchema = createUpdateSchema(moderationNote).omit({ id: true, createdAt: true });
+
+export const auditActionEnum = pgEnum('audit_action', [
+  'created',
+  'status_changed',
+  'assigned',
+  'note_added',
+  'resolved',
+  'dismissed',
+  'evidence_reviewed',
+]);
+export type AuditAction = (typeof auditActionEnum.enumValues)[number];
+
+
+export const auditLog = app.table('audit_log', {
+  id: uuid('id').primaryKey().notNull().defaultRandom(),
+  reportId: uuid('report_id')
+    .notNull()
+    .references(() => report.id, { onUpdate: 'cascade', onDelete: 'cascade' }),
+  moderatorId: uuid('moderator_id')
+    .notNull()
+    .references(() => user.id, { onUpdate: 'cascade', onDelete: 'cascade' }),
+  action: auditActionEnum('action').notNull(),
+  details: text('details'),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+});
+export type AuditLog = typeof auditLog.$inferSelect;
+export type NewAuditLog = typeof auditLog.$inferInsert;
+export const AuditLogSelectSchema = createSelectSchema(auditLog);
+export const AuditLogInsertSchema = createInsertSchema(auditLog).omit({ id: true, createdAt: true });
+export const AuditLogUpdateSchema = createUpdateSchema(auditLog).omit({ id: true, createdAt: true });

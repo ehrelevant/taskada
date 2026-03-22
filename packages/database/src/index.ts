@@ -44,4 +44,11 @@ export type {
   NewPaymentMethod,
   PushToken,
   NewPushToken,
+  ReportStatus,
+  BanStatus,
+  AuditAction,
+  ModerationNote,
+  NewModerationNote,
+  AuditLog,
+  NewAuditLog,
 } from './schema';
