@@ -4,6 +4,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app.module';
+import { CORS_ORIGINS } from './env';
 
 import { GlobalExceptionFilter } from './common/filters/global-exception.filter';
 
@@ -15,15 +16,8 @@ async function bootstrap() {
   // Global exception filter for consistent error responses
   app.useGlobalFilters(new GlobalExceptionFilter());
 
-  // TODO: Add CORS policy for production mode
   app.enableCors({
-    origin: [
-      'http://localhost:3300',
-      'http://localhost:3200',
-      'http://localhost:3100',
-      'provider-app://',
-      'seeker-app://',
-    ],
+    origin: CORS_ORIGINS,
     credentials: true,
   });
 

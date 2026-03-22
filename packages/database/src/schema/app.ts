@@ -486,7 +486,6 @@ export const auditActionEnum = pgEnum('audit_action', [
 ]);
 export type AuditAction = (typeof auditActionEnum.enumValues)[number];
 
-
 export const auditLog = app.table('audit_log', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
   reportId: uuid('report_id')

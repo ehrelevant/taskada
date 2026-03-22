@@ -38,7 +38,7 @@ export function AuditTimeline({ entries }: AuditTimelineProps) {
         const Icon = ACTION_ICONS[entry.action]
         return (
           <div key={entry.id} className="relative mb-4 last:mb-0">
-            <div className="bg-surface-raised ring-border absolute -left-5.25 flex h-4 w-4 items-center justify-center rounded-full ring-2">
+            <div className="bg-surface-raised ring-border -left-5.25 absolute flex h-4 w-4 items-center justify-center rounded-full ring-2">
               <Icon size={10} className="text-muted" />
             </div>
             <p className="text-primary text-xs font-semibold">{ACTION_LABELS[entry.action]}</p>

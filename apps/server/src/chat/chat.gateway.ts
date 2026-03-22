@@ -10,6 +10,7 @@ import {
 import { Logger, UseGuards } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
 
+import { CORS_ORIGINS } from '../env';
 import { MessagesService } from '../messages/messages.service';
 import { PushNotificationsService } from '../push-notifications/push-notifications.service';
 import { WsAuthGuard } from '../matching/ws-auth.guard';
@@ -36,7 +37,7 @@ interface JoinBookingData {
 
 @WebSocketGateway({
   cors: {
-    origin: '*',
+    origin: CORS_ORIGINS,
     credentials: true,
   },
   namespace: '/chat',

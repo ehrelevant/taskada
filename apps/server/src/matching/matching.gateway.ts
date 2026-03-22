@@ -10,6 +10,8 @@ import {
 import { Logger, UseGuards } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
 
+import { CORS_ORIGINS } from '../env';
+
 import { MatchingService } from './matching.service';
 import { WsAuthGuard } from './ws-auth.guard';
 
@@ -20,7 +22,7 @@ interface AuthenticatedSocket extends Socket {
 
 @WebSocketGateway({
   cors: {
-    origin: '*',
+    origin: CORS_ORIGINS,
     credentials: true,
   },
   namespace: '/matching',
