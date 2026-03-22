@@ -13,3 +13,4 @@ releases/
 !.prettierignore
 !.env.example
 !.github
+!.env.*.example
