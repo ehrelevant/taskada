@@ -26,7 +26,7 @@ export async function apiFetch(
         ...headers,
         Cookie: cookies,
       },
-      credentials: 'omit',
+      credentials: 'include',
     });
   }
 
