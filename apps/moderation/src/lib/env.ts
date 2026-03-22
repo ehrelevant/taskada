@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
 export const API_URL = z
-  .url()
+  .string()
   .default('http://localhost:3000')
-  .parse(process.env.API_URL)
+  .parse(import.meta.env.VITE_API_URL)

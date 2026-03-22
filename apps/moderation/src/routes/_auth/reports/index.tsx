@@ -1,28 +1,29 @@
+import { API_URL } from '#/lib/env'
+import { authClient } from '#/lib/auth-client'
 import { createFileRoute } from '@tanstack/react-router'
-
-import { ReportsTable } from '#/components/ReportsTable'
-import { MOCK_REPORTS } from '#/lib/mock-data'
+import { getReports } from '@repo/shared/api/moderation'
 import { reportColumns } from '#/lib/table-columns'
+import { ReportsTable } from '#/components/ReportsTable'
+import { useQuery } from '@tanstack/react-query'
 
 export const Route = createFileRoute('/_auth/reports/')({
   component: ReportsList,
 })
 
 function ReportsList() {
-  const sortedReports = [...MOCK_REPORTS].sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-  )
+  const { data } = useQuery({
+    queryKey: ['reports', { limit: 100 }],
+    queryFn: () => getReports(authClient as never, API_URL, { limit: 100 }),
+  })
 
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-primary">Reports</h1>
-        <p className="mt-1 text-sm text-muted">
-          Manage and review user-submitted reports
-        </p>
+        <h1 className="text-primary text-2xl font-bold">Reports</h1>
+        <p className="text-muted mt-1 text-sm">Manage and review user-submitted reports</p>
       </div>
 
-      <ReportsTable data={sortedReports} columns={reportColumns} />
+      <ReportsTable data={data?.data ?? []} columns={reportColumns} />
     </div>
   )
 }

@@ -1,32 +1,23 @@
-import { useState } from 'react'
-import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
-import {
-  ArrowLeft,
-  Clock,
-  ExternalLink,
-  FileText,
-  Image,
-  ScrollText,
-  User,
-} from 'lucide-react'
-import { useForm } from 'react-hook-form'
-
+import { API_URL } from '#/lib/env'
+import { ArrowLeft, Clock, ExternalLink, FileText, Image, ScrollText, User } from 'lucide-react'
 import { AuditTimeline } from '#/components/AuditTimeline'
-import { ImageLightbox } from '#/components/ImageLightbox'
-import { NotesThread } from '#/components/NotesThread'
-import { ModerationStatusBadge, StatusBadge } from '#/components/StatusBadge'
-import { UserHistory } from '#/components/UserHistory'
+import { authClient } from '#/lib/auth-client'
+import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
+import { formatDateTime } from '#/lib/format'
 import {
-  formatDateTime,
-  getAuditEntriesForReport,
-  getBookingForReport,
-  getNotesForReport,
+  getAuditLog as getReportAudit,
   getReportById,
-  getReportedUserForReport,
-  getReporterForReport,
-  getUserFullName,
-} from '#/lib/mock-data'
-import type { ReportStatus } from '#/lib/types'
+  getReportNotes,
+  updateReportStatus,
+} from '@repo/shared/api/moderation'
+import { ImageLightbox } from '#/components/ImageLightbox'
+import { ModerationStatusBadge, StatusBadge } from '#/components/StatusBadge'
+import { NotesThread } from '#/components/NotesThread'
+import type { ReportStatus } from '@repo/types'
+import { useForm } from 'react-hook-form'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { UserHistory } from '#/components/UserHistory'
+import { useState } from 'react'
 
 interface ResolutionFormValues {
   action: ReportStatus
@@ -40,11 +31,33 @@ export const Route = createFileRoute('/_auth/reports/$reportId')({
 function ReportDetail() {
   const { reportId } = Route.useParams()
   const router = useRouter()
-  const report = getReportById(reportId)
-  const [currentStatus, setCurrentStatus] = useState<ReportStatus | null>(
-    report?.status ?? null,
-  )
+  const queryClient = useQueryClient()
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
+
+  const { data: report, isLoading } = useQuery({
+    queryKey: ['report', reportId],
+    queryFn: () => getReportById(authClient as never, API_URL, reportId),
+  })
+
+  const { data: notes = [] } = useQuery({
+    queryKey: ['report-notes', reportId],
+    queryFn: () => getReportNotes(authClient as never, API_URL, reportId),
+  })
+
+  const { data: auditData } = useQuery({
+    queryKey: ['report-audit', reportId],
+    queryFn: () => getReportAudit(authClient as never, API_URL, { reportId }),
+  })
+
+  const resolveMutation = useMutation({
+    mutationFn: (values: { status: string; notes?: string }) =>
+      updateReportStatus(authClient as never, API_URL, reportId, values.status, values.notes),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['report', reportId] })
+      queryClient.invalidateQueries({ queryKey: ['report-audit', reportId] })
+      queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] })
+    },
+  })
 
   const {
     register,
@@ -57,33 +70,26 @@ function ReportDetail() {
     },
   })
 
+  if (isLoading) {
+    return <div className="text-muted py-16 text-center text-sm">Loading...</div>
+  }
+
   if (!report) {
     return (
       <div className="py-16 text-center">
-        <p className="mb-4 text-lg font-medium text-primary">
-          Report not found
-        </p>
-        <Link
-          to="/reports"
-          className="text-sm font-medium text-accent no-underline"
-        >
+        <p className="text-primary mb-4 text-lg font-medium">Report not found</p>
+        <Link to="/reports" className="text-accent text-sm font-medium no-underline">
           Back to Reports
         </Link>
       </div>
     )
   }
 
-  const reporter = getReporterForReport(report)
-  const reported = getReportedUserForReport(report)
-  const booking = getBookingForReport(report)
-  const auditEntries = getAuditEntriesForReport(report.id)
-  const notes = getNotesForReport(report.id)
+  const auditEntries = auditData?.data ?? []
+  const images = report.images ?? []
 
   const onSubmit = (values: ResolutionFormValues) => {
-    setCurrentStatus(values.action)
-    alert(
-      `Mock: Report ${report.id} ${values.action}. Notes: ${values.notes || '(none)'}`,
-    )
+    resolveMutation.mutate({ status: values.action, notes: values.notes })
   }
 
   return (
@@ -91,54 +97,48 @@ function ReportDetail() {
       <div className="mb-6 flex items-center gap-3">
         <button
           onClick={() => router.history.back()}
-          className="cursor-pointer rounded-lg border border-border p-2 text-secondary transition-colors"
+          className="border-border text-secondary cursor-pointer rounded-lg border p-2 transition-colors"
         >
           <ArrowLeft size={18} />
         </button>
         <div>
-          <h1 className="text-xl font-bold text-primary">Report {report.id}</h1>
-          <p className="text-xs text-muted">
-            Submitted {formatDateTime(report.createdAt)}
-          </p>
+          <h1 className="text-primary text-xl font-bold">Report {report.id.slice(0, 8)}</h1>
+          <p className="text-muted text-xs">Submitted {formatDateTime(report.createdAt)}</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="flex flex-col gap-6 lg:col-span-2">
-          <div className="rounded-xl border border-border bg-surface">
-            <div className="flex items-center justify-between border-b border-border px-5 py-4">
-              <h2 className="flex items-center gap-2 text-sm font-semibold text-primary">
+          <div className="border-border bg-surface rounded-xl border">
+            <div className="border-border flex items-center justify-between border-b px-5 py-4">
+              <h2 className="text-primary flex items-center gap-2 text-sm font-semibold">
                 <FileText size={16} />
                 Report Details
               </h2>
               <div className="flex items-center gap-2">
                 <StatusBadge reason={report.reason} />
-                <ModerationStatusBadge
-                  status={currentStatus ?? report.status}
-                />
+                <ModerationStatusBadge status={report.status} />
               </div>
             </div>
             <div className="p-5">
-              <p className="mb-4 text-sm leading-relaxed text-secondary">
+              <p className="text-secondary mb-4 text-sm leading-relaxed">
                 {report.description ?? 'No description provided.'}
               </p>
-              {report.reportImages.length > 0 && (
+              {images.length > 0 && (
                 <div>
-                  <h3 className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted">
+                  <h3 className="text-muted mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider">
                     <Image size={14} />
-                    Evidence ({report.reportImages.length})
+                    Evidence ({images.length})
                   </h3>
                   <div className="flex flex-wrap gap-3">
-                    {report.reportImages.map((img, idx) => (
+                    {images.map((img, idx) => (
                       <button
                         key={img.id}
                         onClick={() => setLightboxIndex(idx)}
-                        className="flex h-24 w-32 cursor-pointer flex-col items-center justify-center rounded-lg border border-border bg-surface-raised text-center transition-colors hover:bg-surface-hover"
+                        className="border-border bg-surface-raised hover:bg-surface-hover flex h-24 w-32 cursor-pointer flex-col items-center justify-center rounded-lg border text-center transition-colors"
                       >
                         <Image size={20} className="text-muted" />
-                        <span className="mt-1 px-1 text-[10px] text-muted">
-                          {img.caption ?? 'Image'}
-                        </span>
+                        <span className="text-muted mt-1 px-1 text-[10px]">{img.image ?? 'Image'}</span>
                       </button>
                     ))}
                   </div>
@@ -147,18 +147,16 @@ function ReportDetail() {
             </div>
           </div>
 
-          <div className="rounded-xl border border-border bg-surface">
-            <div className="border-b border-border px-5 py-4">
-              <h2 className="text-sm font-semibold text-primary">Resolution</h2>
+          <div className="border-border bg-surface rounded-xl border">
+            <div className="border-border border-b px-5 py-4">
+              <h2 className="text-primary text-sm font-semibold">Resolution</h2>
             </div>
             <form onSubmit={handleSubmit(onSubmit)} className="p-5">
               <div className="mb-4">
-                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-muted">
-                  Action
-                </label>
+                <label className="text-muted mb-1.5 block text-xs font-semibold uppercase tracking-wider">Action</label>
                 <select
                   {...register('action', { required: true })}
-                  className="w-full rounded-lg border border-border bg-surface-raised px-3 py-2 text-sm text-primary outline-none"
+                  className="border-border bg-surface-raised text-primary w-full rounded-lg border px-3 py-2 text-sm outline-none"
                 >
                   <option value="resolved">Resolve</option>
                   <option value="dismissed">Dismiss</option>
@@ -166,9 +164,7 @@ function ReportDetail() {
                 </select>
               </div>
               <div className="mb-4">
-                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-muted">
-                  Notes
-                </label>
+                <label className="text-muted mb-1.5 block text-xs font-semibold uppercase tracking-wider">Notes</label>
                 <textarea
                   {...register('notes', {
                     validate: (v, formValues) => {
@@ -180,19 +176,16 @@ function ReportDetail() {
                   })}
                   rows={4}
                   placeholder="Add resolution notes..."
-                  className="w-full resize-none rounded-lg border border-border bg-surface-raised px-3 py-2 text-sm text-primary outline-none"
+                  className="border-border bg-surface-raised text-primary w-full resize-none rounded-lg border px-3 py-2 text-sm outline-none"
                 />
-                {errors.notes && (
-                  <p className="mt-1 text-xs text-danger">
-                    {errors.notes.message}
-                  </p>
-                )}
+                {errors.notes && <p className="text-danger mt-1 text-xs">{errors.notes.message}</p>}
               </div>
               <button
                 type="submit"
-                className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-accent-hover"
+                disabled={resolveMutation.isPending}
+                className="bg-accent hover:bg-accent-hover rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors disabled:opacity-50"
               >
-                Submit Resolution
+                {resolveMutation.isPending ? 'Submitting...' : 'Submit Resolution'}
               </button>
             </form>
           </div>
@@ -203,77 +196,51 @@ function ReportDetail() {
         <div className="flex flex-col gap-6">
           <InfoCard
             title="Reporter"
-            user={reporter ? getUserFullName(reporter) : 'Unknown'}
-            subtitle={reporter?.email ?? ''}
+            user={report.reporterName || 'Unknown'}
+            subtitle={report.reporterEmail ?? ''}
             icon={User}
           />
-          <UserHistory
-            userId={report.reporterUserId}
-            excludeReportId={report.id}
-          />
+          <UserHistory userId={report.reporterUserId} excludeReportId={report.id} />
           <InfoCard
             title="Reported User"
-            user={reported ? getUserFullName(reported) : 'Unknown'}
-            subtitle={reported?.email ?? ''}
+            user={report.reportedName || 'Unknown'}
+            subtitle={report.reportedEmail ?? ''}
             icon={User}
           />
-          <UserHistory
-            userId={report.reportedUserId}
-            excludeReportId={report.id}
-          />
-          {booking && (
-            <div className="rounded-xl border border-border bg-surface">
-              <div className="border-b border-border px-5 py-4">
-                <h3 className="flex items-center gap-2 text-sm font-semibold text-primary">
+          <UserHistory userId={report.reportedUserId} excludeReportId={report.id} />
+          {report.booking && (
+            <div className="border-border bg-surface rounded-xl border">
+              <div className="border-border border-b px-5 py-4">
+                <h3 className="text-primary flex items-center gap-2 text-sm font-semibold">
                   <ExternalLink size={16} />
                   Booking
                 </h3>
               </div>
               <div className="flex flex-col gap-2 p-5">
-                <DetailRow label="ID" value={booking.id} />
-                <DetailRow
-                  label="Status"
-                  value={booking.status.replace('_', ' ')}
-                />
-                <DetailRow
-                  label="Cost"
-                  value={`₱${booking.cost.toLocaleString()}`}
-                />
-                <DetailRow
-                  label="Date"
-                  value={formatDateTime(booking.createdAt)}
-                />
-                {booking.specifications && (
-                  <DetailRow label="Notes" value={booking.specifications} />
-                )}
+                <DetailRow label="ID" value={report.booking.id} />
+                <DetailRow label="Status" value={report.booking.status.replace('_', ' ')} />
+                <DetailRow label="Cost" value={`₱${report.booking.cost.toLocaleString()}`} />
+                <DetailRow label="Date" value={formatDateTime(report.booking.createdAt)} />
+                {report.booking.specifications && <DetailRow label="Notes" value={report.booking.specifications} />}
               </div>
             </div>
           )}
-          <div className="rounded-xl border border-border bg-surface">
-            <div className="border-b border-border px-5 py-4">
-              <h3 className="flex items-center gap-2 text-sm font-semibold text-primary">
+          <div className="border-border bg-surface rounded-xl border">
+            <div className="border-border border-b px-5 py-4">
+              <h3 className="text-primary flex items-center gap-2 text-sm font-semibold">
                 <Clock size={16} />
                 Timeline
               </h3>
             </div>
             <div className="flex flex-col gap-2 p-5">
-              <DetailRow
-                label="Created"
-                value={formatDateTime(report.createdAt)}
-              />
-              <DetailRow
-                label="Updated"
-                value={formatDateTime(report.updatedAt)}
-              />
-              <DetailRow
-                label="Status"
-                value={currentStatus ?? report.status}
-              />
+              <DetailRow label="Created" value={formatDateTime(report.createdAt)} />
+              <DetailRow label="Updated" value={formatDateTime(report.updatedAt)} />
+              <DetailRow label="Status" value={report.status} />
             </div>
           </div>
-          <div className="rounded-xl border border-border bg-surface">
-            <div className="border-b border-border px-5 py-4">
-              <h3 className="flex items-center gap-2 text-sm font-semibold text-primary">
+          <div className="border-border bg-surface rounded-xl border">
+            <div className="border-border border-b px-5 py-4">
+              <h3 className="text-primary flex items-center gap-2 text-sm font-semibold">
                 <ScrollText size={16} />
                 Audit Trail
               </h3>
@@ -287,7 +254,7 @@ function ReportDetail() {
 
       {lightboxIndex !== null && (
         <ImageLightbox
-          images={report.reportImages}
+          images={images}
           currentIndex={lightboxIndex}
           onClose={() => setLightboxIndex(null)}
           onNavigate={setLightboxIndex}
@@ -309,16 +276,16 @@ function InfoCard({
   icon: typeof User
 }) {
   return (
-    <div className="rounded-xl border border-border bg-surface">
-      <div className="border-b border-border px-5 py-4">
-        <h3 className="flex items-center gap-2 text-sm font-semibold text-primary">
+    <div className="border-border bg-surface rounded-xl border">
+      <div className="border-border border-b px-5 py-4">
+        <h3 className="text-primary flex items-center gap-2 text-sm font-semibold">
           <Icon size={16} />
           {title}
         </h3>
       </div>
       <div className="p-5">
-        <p className="text-sm font-medium text-primary">{user}</p>
-        {subtitle && <p className="mt-0.5 text-xs text-muted">{subtitle}</p>}
+        <p className="text-primary text-sm font-medium">{user}</p>
+        {subtitle && <p className="text-muted mt-0.5 text-xs">{subtitle}</p>}
       </div>
     </div>
   )
@@ -328,7 +295,7 @@ function DetailRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex justify-between text-sm">
       <span className="text-muted">{label}</span>
-      <span className="font-medium capitalize text-secondary">{value}</span>
+      <span className="text-secondary font-medium capitalize">{value}</span>
     </div>
   )
 }

@@ -1,15 +1,18 @@
 import { ShieldAlert } from 'lucide-react'
 
+import { useSession } from '#/lib/auth-client'
+
 export default function Header() {
+  const { data: session } = useSession()
+  const userName = session?.user?.name ?? 'Admin'
+
   return (
-    <header className="z-50 flex shrink-0 h-14 items-center justify-between border-b border-border bg-surface px-6">
+    <header className="border-border bg-surface z-50 flex h-14 shrink-0 items-center justify-between border-b px-6">
       <div className="flex items-center gap-3">
         <ShieldAlert size={22} className="text-accent" />
-        <span className="text-sm font-semibold tracking-wide text-primary">
-          Moderation Panel
-        </span>
+        <span className="text-primary text-sm font-semibold tracking-wide">Moderation Panel</span>
       </div>
-      <div className="text-xs text-muted">Admin</div>
+      <div className="text-muted text-xs">{userName}</div>
     </header>
   )
 }

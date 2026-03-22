@@ -1,8 +1,10 @@
-import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-import { TanStackDevtools } from '@tanstack/react-devtools'
 import Header from '#/components/Header'
 import Sidebar from '#/components/Sidebar'
+import { createRootRoute, HeadContent, Scripts } from '@tanstack/react-router'
+import { queryClient } from '@repo/shared/queryClient'
+import { QueryClientProvider } from '@tanstack/react-query'
+import { TanStackDevtools } from '@tanstack/react-devtools'
+import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { useSession } from '#/lib/auth-client'
 
 import appCss from '../styles.css?url'
@@ -35,37 +37,37 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   const { data: session } = useSession()
 
   return (
-    <html lang="en">
-      <head>
-        <HeadContent />
-      </head>
-      <body className="flex flex-col h-screen overflow-hidden bg-base font-sans text-primary antialiased wrap-anywhere selection:bg-[rgba(108,140,255,0.24)]">
-        {session ? (
-          <>
-            <Header />
-            <div className="flex min-h-0 flex-1">
-              <Sidebar />
-              <main className="flex-1 overflow-y-auto p-8">
-                {children}
-              </main>
-            </div>
-          </>
-        ) : (
-          children
-        )}
-        <TanStackDevtools
-          config={{
-            position: 'bottom-right',
-          }}
-          plugins={[
-            {
-              name: 'Tanstack Router',
-              render: <TanStackRouterDevtoolsPanel />,
-            },
-          ]}
-        />
-        <Scripts />
-      </body>
-    </html>
+    <QueryClientProvider client={queryClient}>
+      <html lang="en">
+        <head>
+          <HeadContent />
+        </head>
+        <body className="bg-base text-primary wrap-anywhere flex h-screen flex-col overflow-hidden font-sans antialiased selection:bg-[rgba(108,140,255,0.24)]">
+          {session ? (
+            <>
+              <Header />
+              <div className="flex min-h-0 flex-1">
+                <Sidebar />
+                <main className="flex-1 overflow-y-auto p-8">{children}</main>
+              </div>
+            </>
+          ) : (
+            children
+          )}
+          <TanStackDevtools
+            config={{
+              position: 'bottom-right',
+            }}
+            plugins={[
+              {
+                name: 'Tanstack Router',
+                render: <TanStackRouterDevtoolsPanel />,
+              },
+            ]}
+          />
+          <Scripts />
+        </body>
+      </html>
+    </QueryClientProvider>
   )
 }

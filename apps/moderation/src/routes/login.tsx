@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { API_URL } from '#/lib/env'
+import { authClient, signIn, signOut, useSession } from '#/lib/auth-client'
+import { checkAdminRole } from '@repo/shared/api/moderation'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { ShieldAlert } from 'lucide-react'
 import { useForm } from 'react-hook-form'
-
-import { signIn, signOut, useSession } from '#/lib/auth-client'
+import { useState } from 'react'
 
 interface LoginFormValues {
   email: string
@@ -53,8 +54,7 @@ function LoginPage() {
         return
       }
 
-      // Mock admin role check — replace with real endpoint when merging with monorepo
-      const isAdmin = await mockCheckAdminRole(values.email)
+      const isAdmin = await checkAdminRole(authClient as never, API_URL)
 
       if (!isAdmin) {
         await signOut()
@@ -73,33 +73,24 @@ function LoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center">
       <div className="w-full max-w-sm">
-        <div className="rounded-xl border border-border bg-surface p-8">
+        <div className="border-border bg-surface rounded-xl border p-8">
           <div className="mb-8 flex flex-col items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent-subtle">
+            <div className="bg-accent-subtle flex h-12 w-12 items-center justify-center rounded-xl">
               <ShieldAlert size={24} className="text-accent" />
             </div>
-            <h1 className="text-lg font-bold text-primary">
-              Taskada Moderation Panel
-            </h1>
-            <p className="text-sm text-muted">
-              Sign in with your admin account
-            </p>
+            <h1 className="text-primary text-lg font-bold">Taskada Moderation Panel</h1>
+            <p className="text-muted text-sm">Sign in with your admin account</p>
           </div>
 
           {error && (
-            <div className="mb-4 rounded-lg border border-danger/20 bg-danger-subtle px-4 py-3 text-sm text-danger">
+            <div className="border-danger/20 bg-danger-subtle text-danger mb-4 rounded-lg border px-4 py-3 text-sm">
               {error}
             </div>
           )}
 
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="flex flex-col gap-4"
-          >
+          <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
             <div>
-              <label className="mb-1.5 block text-xs font-medium text-secondary">
-                Email
-              </label>
+              <label className="text-secondary mb-1.5 block text-xs font-medium">Email</label>
               <input
                 type="email"
                 {...register('email', {
@@ -110,19 +101,13 @@ function LoginPage() {
                   },
                 })}
                 placeholder="admin@example.com"
-                className="w-full rounded-lg border border-border bg-surface-raised px-3 py-2 text-sm text-primary outline-none transition-colors placeholder:text-muted focus:border-accent"
+                className="border-border bg-surface-raised text-primary placeholder:text-muted focus:border-accent w-full rounded-lg border px-3 py-2 text-sm outline-none transition-colors"
               />
-              {errors.email && (
-                <p className="mt-1 text-xs text-danger">
-                  {errors.email.message}
-                </p>
-              )}
+              {errors.email && <p className="text-danger mt-1 text-xs">{errors.email.message}</p>}
             </div>
 
             <div>
-              <label className="mb-1.5 block text-xs font-medium text-secondary">
-                Password
-              </label>
+              <label className="text-secondary mb-1.5 block text-xs font-medium">Password</label>
               <input
                 type="password"
                 {...register('password', {
@@ -133,19 +118,15 @@ function LoginPage() {
                   },
                 })}
                 placeholder="••••••••"
-                className="w-full rounded-lg border border-border bg-surface-raised px-3 py-2 text-sm text-primary outline-none transition-colors placeholder:text-muted focus:border-accent"
+                className="border-border bg-surface-raised text-primary placeholder:text-muted focus:border-accent w-full rounded-lg border px-3 py-2 text-sm outline-none transition-colors"
               />
-              {errors.password && (
-                <p className="mt-1 text-xs text-danger">
-                  {errors.password.message}
-                </p>
-              )}
+              {errors.password && <p className="text-danger mt-1 text-xs">{errors.password.message}</p>}
             </div>
 
             <button
               type="submit"
               disabled={isSubmitting}
-              className="mt-2 w-full rounded-lg bg-accent cursor-pointer px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-accent-hover disabled:opacity-50"
+              className="bg-accent hover:bg-accent-hover mt-2 w-full cursor-pointer rounded-lg px-4 py-2.5 text-sm font-medium text-white transition-colors disabled:opacity-50"
             >
               {isSubmitting ? 'Signing in...' : 'Sign In'}
             </button>
@@ -154,13 +135,4 @@ function LoginPage() {
       </div>
     </div>
   )
-}
-
-// Mock admin role check — replace with real API call when merging with monorepo
-async function mockCheckAdminRole(_email: string): Promise<boolean> {
-  // Simulate network delay
-  await new Promise((r) => setTimeout(r, 300))
-  // For now, allow all authenticated users as admins
-  // When merging, replace with: const res = await fetch('/users/roles'); ...
-  return true
 }

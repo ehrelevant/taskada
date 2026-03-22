@@ -1,29 +1,22 @@
-import { useCallback, useEffect } from 'react'
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
+import { useCallback, useEffect } from 'react'
 
-import type { ReportImage } from '#/lib/types'
+interface LightboxImage {
+  id: string
+  image: string
+  url: string | null
+}
 
 interface ImageLightboxProps {
-  images: ReportImage[]
+  images: LightboxImage[]
   currentIndex: number
   onClose: () => void
   onNavigate: (index: number) => void
 }
 
-const COLORS = [
-  'bg-accent-subtle',
-  'bg-danger-subtle',
-  'bg-warning-subtle',
-  'bg-success-subtle',
-  'bg-info-subtle',
-]
+const COLORS = ['bg-accent-subtle', 'bg-danger-subtle', 'bg-warning-subtle', 'bg-success-subtle', 'bg-info-subtle']
 
-export function ImageLightbox({
-  images,
-  currentIndex,
-  onClose,
-  onNavigate,
-}: ImageLightboxProps) {
+export function ImageLightbox({ images, currentIndex, onClose, onNavigate }: ImageLightboxProps) {
   const current = images[currentIndex]
   const hasPrev = currentIndex > 0
   const hasNext = currentIndex < images.length - 1
@@ -61,15 +54,21 @@ export function ImageLightbox({
             <X size={18} />
           </button>
         </div>
-        <div
-          className={`flex h-[60vh] w-[80vw] max-w-3xl flex-col items-center justify-center rounded-xl ${COLORS[currentIndex % COLORS.length]}`}
-        >
-          <span className="text-lg font-semibold text-primary">
-            {current.caption ?? 'Image'}
-          </span>
-          <span className="mt-1 text-sm text-muted">
-            No real image — placeholder
-          </span>
+        <div className="flex h-[60vh] w-[80vw] max-w-3xl items-center justify-center overflow-hidden rounded-xl bg-black/50">
+          {current.url ? (
+            <img
+              src={current.url}
+              alt={current.image ?? 'Evidence'}
+              className="max-h-full max-w-full rounded-xl object-contain"
+            />
+          ) : (
+            <div
+              className={`flex h-full w-full flex-col items-center justify-center ${COLORS[currentIndex % COLORS.length]}`}
+            >
+              <span className="text-primary text-lg font-semibold">{current.image ?? 'Image'}</span>
+              <span className="text-muted mt-1 text-sm">Image unavailable</span>
+            </div>
+          )}
         </div>
         <div className="mt-3 flex items-center gap-4">
           <button

@@ -1,9 +1,12 @@
-import { useState } from 'react'
+import { API_URL } from '#/lib/env'
+import { authClient } from '#/lib/auth-client'
+import { createReportNote } from '@repo/shared/api/moderation'
+import { formatDateTime } from '#/lib/format'
 import { MessageSquare, Plus } from 'lucide-react'
+import type { ModerationNote } from '@repo/types'
 import { useForm } from 'react-hook-form'
-
-import { formatDateTime } from '#/lib/mock-data'
-import type { Note } from '#/lib/types'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useState } from 'react'
 
 interface NoteFormValues {
   content: string
@@ -11,12 +14,12 @@ interface NoteFormValues {
 
 interface NotesThreadProps {
   reportId: string
-  initialNotes: Note[]
+  initialNotes: ModerationNote[]
 }
 
 export function NotesThread({ reportId, initialNotes }: NotesThreadProps) {
-  const [notes, setNotes] = useState<Note[]>(initialNotes)
   const [isFormOpen, setIsFormOpen] = useState(false)
+  const queryClient = useQueryClient()
 
   const {
     register,
@@ -25,30 +28,29 @@ export function NotesThread({ reportId, initialNotes }: NotesThreadProps) {
     formState: { errors },
   } = useForm<NoteFormValues>({ defaultValues: { content: '' } })
 
+  const createNoteMutation = useMutation({
+    mutationFn: (content: string) => createReportNote(authClient as never, API_URL, reportId, content),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['report-notes', reportId] })
+      reset()
+      setIsFormOpen(false)
+    },
+  })
+
   const onSubmit = (values: NoteFormValues) => {
-    const newNote: Note = {
-      id: `nt_${Date.now()}`,
-      reportId,
-      authorId: 'mod_current',
-      authorName: 'Current Moderator',
-      content: values.content,
-      createdAt: new Date().toISOString(),
-    }
-    setNotes((prev) => [...prev, newNote])
-    reset()
-    setIsFormOpen(false)
+    createNoteMutation.mutate(values.content)
   }
 
   return (
-    <div className="rounded-xl border border-border bg-surface">
-      <div className="flex items-center justify-between border-b border-border px-5 py-4">
-        <h2 className="flex items-center gap-2 text-sm font-semibold text-primary">
+    <div className="border-border bg-surface rounded-xl border">
+      <div className="border-border flex items-center justify-between border-b px-5 py-4">
+        <h2 className="text-primary flex items-center gap-2 text-sm font-semibold">
           <MessageSquare size={16} />
-          Internal Notes ({notes.length})
+          Internal Notes ({initialNotes.length})
         </h2>
         <button
           onClick={() => setIsFormOpen(!isFormOpen)}
-          className="inline-flex items-center gap-1 rounded-lg bg-accent-subtle px-3 py-1.5 text-xs font-medium text-accent transition-colors hover:bg-accent/20"
+          className="bg-accent-subtle text-accent hover:bg-accent/20 inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors"
         >
           <Plus size={14} />
           Add Note
@@ -56,25 +58,21 @@ export function NotesThread({ reportId, initialNotes }: NotesThreadProps) {
       </div>
 
       {isFormOpen && (
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="border-b border-border p-5"
-        >
+        <form onSubmit={handleSubmit(onSubmit)} className="border-border border-b p-5">
           <textarea
             {...register('content', { required: 'Note content is required.' })}
             rows={3}
             placeholder="Write an internal note..."
-            className="w-full resize-none rounded-lg border border-border bg-surface-raised px-3 py-2 text-sm text-primary outline-none"
+            className="border-border bg-surface-raised text-primary w-full resize-none rounded-lg border px-3 py-2 text-sm outline-none"
           />
-          {errors.content && (
-            <p className="mt-1 text-xs text-danger">{errors.content.message}</p>
-          )}
+          {errors.content && <p className="text-danger mt-1 text-xs">{errors.content.message}</p>}
           <div className="mt-2 flex gap-2">
             <button
               type="submit"
-              className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-accent-hover"
+              disabled={createNoteMutation.isPending}
+              className="bg-accent hover:bg-accent-hover rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors disabled:opacity-50"
             >
-              Post Note
+              {createNoteMutation.isPending ? 'Posting...' : 'Post Note'}
             </button>
             <button
               type="button"
@@ -82,7 +80,7 @@ export function NotesThread({ reportId, initialNotes }: NotesThreadProps) {
                 setIsFormOpen(false)
                 reset()
               }}
-              className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-secondary transition-colors hover:bg-surface-hover"
+              className="border-border text-secondary hover:bg-surface-hover rounded-lg border px-4 py-2 text-sm font-medium transition-colors"
             >
               Cancel
             </button>
@@ -90,23 +88,17 @@ export function NotesThread({ reportId, initialNotes }: NotesThreadProps) {
         </form>
       )}
 
-      <div className="divide-y divide-border-subtle">
-        {notes.length === 0 ? (
-          <p className="p-5 text-sm text-muted">No notes yet.</p>
+      <div className="divide-border-subtle divide-y">
+        {initialNotes.length === 0 ? (
+          <p className="text-muted p-5 text-sm">No notes yet.</p>
         ) : (
-          notes.map((note) => (
+          initialNotes.map(note => (
             <div key={note.id} className="px-5 py-3.5">
               <div className="mb-1 flex items-center justify-between">
-                <span className="text-xs font-semibold text-primary">
-                  {note.authorName}
-                </span>
-                <span className="text-[10px] text-muted">
-                  {formatDateTime(note.createdAt)}
-                </span>
+                <span className="text-primary text-xs font-semibold">{note.authorName}</span>
+                <span className="text-muted text-[10px]">{formatDateTime(note.createdAt)}</span>
               </div>
-              <p className="text-sm leading-relaxed text-secondary">
-                {note.content}
-              </p>
+              <p className="text-secondary text-sm leading-relaxed">{note.content}</p>
             </div>
           ))
         )}
