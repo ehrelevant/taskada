@@ -1,12 +1,11 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ServicesScreen } from '@screens/services/Services';
 
-export type OptionsStackParamList = {
+export type ServicesStackParamList = {
   ServiceList: undefined;
-  ServiceDetails: undefined;
 };
 
-const Stack = createNativeStackNavigator<OptionsStackParamList>();
+const Stack = createNativeStackNavigator<ServicesStackParamList>();
 
 export function ServicesStack() {
   return (

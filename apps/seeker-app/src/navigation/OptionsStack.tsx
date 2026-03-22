@@ -11,7 +11,6 @@ export type OptionsStackParamList = {
   PaymentMethods: undefined;
   AddCard: undefined;
   AddEWallet: undefined;
-  TransactionHistory: undefined;
 };
 
 const Stack = createNativeStackNavigator<OptionsStackParamList>();

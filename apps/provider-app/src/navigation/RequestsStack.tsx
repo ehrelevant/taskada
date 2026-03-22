@@ -10,7 +10,6 @@ import { RequestDetailsScreen } from '@screens/home/request/details/RequestDetai
 import { RequestListScreen } from '@screens/home/request/list/RequestList';
 
 export type RequestsStackParamList = {
-  Home: undefined;
   RequestList: undefined;
   RequestDetails: { requestId: string };
   Chat: {
