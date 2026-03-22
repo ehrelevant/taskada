@@ -13,6 +13,7 @@
     "dev:ios:provider": "pnpm --filter provider-app dev:ios",
     "dev:ios": "concurrently -k --raw -n db,server,seeker,provider -c magenta,blue,green,yellow \"pnpm dev:db\" \"pnpm dev:server --preserveWatchOutput\" \"pnpm dev:ios:seeker\" \"pnpm dev:ios:provider\"",
     "docker:dev": "docker compose up -d",
+    "docker:prod": "docker compose -f docker-compose.prod.yml up -d",
     "docker:down": "docker compose down",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
