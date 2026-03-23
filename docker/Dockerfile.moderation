@@ -52,4 +52,4 @@ COPY --from=build /app/packages/types/src/ packages/types/src/
 COPY --from=build /app/packages/shared/src/ packages/shared/src/
 COPY --from=build /app/apps/moderation/dist/ apps/moderation/dist/
 
-CMD ["node", "apps/moderation/dist/server/server.js"]
+CMD ["pnpm", "start"]

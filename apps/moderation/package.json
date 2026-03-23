@@ -9,6 +9,7 @@
     "dev": "vite dev --port 3300",
     "build": "vite build",
     "preview": "vite preview",
+    "start": "PORT=3300 node .output/server/index.mjs",
     "test": "vitest run",
     "lint": "eslint",
     "format": "prettier --check .",
