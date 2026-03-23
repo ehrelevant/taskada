@@ -25,10 +25,22 @@ services:
       target: build
     command: pnpm --filter @repo/database migrate
     env_file:
-      - apps/server/.env.production
+      - packages/database/.env.production
     depends_on:
       db:
         condition: service_healthy
+
+  seed:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.server
+      target: build
+    command: pnpm --filter @repo/database seed
+    env_file:
+      - packages/database/.env.production
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
 
   server:
     build:
@@ -39,7 +51,7 @@ services:
     env_file:
       - apps/server/.env.production
     depends_on:
-      migrate:
+      seed:
         condition: service_completed_successfully
 
   moderation:
