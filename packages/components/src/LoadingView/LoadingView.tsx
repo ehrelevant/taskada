@@ -1,21 +1,5 @@
-import { ActivityIndicator, StyleSheet } from 'react-native';
-import { useTheme } from '@repo/theme';
-import { View } from 'react-native';
+import { EmptyState } from '../EmptyState';
 
 export function LoadingView() {
-  const { colors } = useTheme();
-  return (
-    <View style={styles.loadingContainer}>
-      <ActivityIndicator size="large" color={colors.actionPrimary} />
-    </View>
-  );
+  return <EmptyState loading />;
 }
-
-const styles = StyleSheet.create({
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: 10,
-  },
-});

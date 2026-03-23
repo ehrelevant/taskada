@@ -1,4 +1,4 @@
-import { spacing, ThemeColors } from '@repo/theme';
+import { radius, spacing, ThemeColors } from '@repo/theme';
 import { StyleSheet } from 'react-native';
 
 export const createStyles = (colors: ThemeColors) =>
@@ -24,21 +24,21 @@ export const createStyles = (colors: ThemeColors) =>
     messageAvatar: {
       width: 32,
       height: 32,
-      borderRadius: 16,
+      borderRadius: radius.l,
       marginRight: spacing.s,
     },
     messageBubble: {
       maxWidth: '70%',
       padding: spacing.m,
-      borderRadius: 16,
+      borderRadius: radius.l,
     },
     ownBubble: {
       backgroundColor: colors.actionPrimary,
-      borderBottomLeftRadius: 4,
+      borderBottomLeftRadius: radius.xs,
     },
     otherBubble: {
       backgroundColor: colors.actionSecondary,
-      borderBottomRightRadius: 4,
+      borderBottomRightRadius: radius.xs,
     },
     messageTime: {
       marginTop: spacing.xs,
@@ -49,7 +49,7 @@ export const createStyles = (colors: ThemeColors) =>
     messageImage: {
       width: 100,
       height: 100,
-      borderRadius: 8,
+      borderRadius: radius.s,
       marginRight: spacing.xs,
     },
     selectedImagesContainer: {
@@ -68,14 +68,14 @@ export const createStyles = (colors: ThemeColors) =>
     selectedImage: {
       width: 80,
       height: 80,
-      borderRadius: 8,
+      borderRadius: radius.s,
     },
     removeImageButton: {
       position: 'absolute',
       top: -8,
       right: -8,
       backgroundColor: colors.error.base,
-      borderRadius: 12,
+      borderRadius: radius.m,
       width: 24,
       height: 24,
       justifyContent: 'center',

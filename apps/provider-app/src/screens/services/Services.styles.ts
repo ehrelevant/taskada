@@ -1,4 +1,4 @@
-import { spacing, ThemeColors, ThemeShadows } from '@repo/theme';
+import { radius, spacing, ThemeColors, ThemeShadows } from '@repo/theme';
 import { StyleSheet } from 'react-native';
 
 export const createStyles = (colors: ThemeColors, shadows: ThemeShadows) =>
@@ -22,7 +22,7 @@ export const createStyles = (colors: ThemeColors, shadows: ThemeShadows) =>
     iconContainer: {
       width: 48,
       height: 48,
-      borderRadius: 24,
+      borderRadius: radius.xl,
       backgroundColor: colors.surfaceSecondary,
       justifyContent: 'center',
       alignItems: 'center',

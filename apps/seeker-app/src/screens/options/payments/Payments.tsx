@@ -60,7 +60,7 @@ export function PaymentMethodsScreen() {
         <View style={styles.actionsContainer}>
           <TouchableOpacity onPress={() => navigation.navigate('AddCard')}>
             <Card style={styles.actionCard} padding="m">
-              <View style={[styles.actionIcon, { backgroundColor: '#E3F2FD' }]}>
+              <View style={[styles.actionIcon, { backgroundColor: colors.info.light }]}>
                 <CreditCard color={colors.actionPrimary} size={24} />
               </View>
               <View>
@@ -75,7 +75,7 @@ export function PaymentMethodsScreen() {
 
           <TouchableOpacity onPress={() => navigation.navigate('AddEWallet')}>
             <Card style={styles.actionCard} padding="m">
-              <View style={[styles.actionIcon, { backgroundColor: '#E8F5E9' }]}>
+              <View style={[styles.actionIcon, { backgroundColor: colors.success.light }]}>
                 <Wallet color={colors.success.base} size={24} />
               </View>
               <View>

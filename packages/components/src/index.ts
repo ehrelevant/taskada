@@ -12,6 +12,8 @@ export * from './ReviewCard';
 export * from './StarRatingInput';
 export * from './ScreenContainer';
 export * from './Header';
+export * from './BackButton';
+export * from './Section';
 export * from './EmptyState';
 export * from './BottomActionBar';
 export * from './MenuButton';

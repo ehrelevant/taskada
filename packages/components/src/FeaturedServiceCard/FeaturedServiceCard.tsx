@@ -1,18 +1,18 @@
-import { Image, TouchableOpacity, TouchableOpacityProps, View } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { memo } from 'react';
-import { palette, radius, spacing, useTheme } from '@repo/theme';
+import { radius, spacing, useTheme } from '@repo/theme';
 
 import { Avatar } from '../Avatar';
 import { Rating } from '../Rating';
 import { Typography } from '../Typography';
 
-export interface FeaturedServiceCardProps extends TouchableOpacityProps {
+export interface FeaturedServiceCardProps {
   serviceTypeName: string;
   providerName: string;
   providerAvatar?: string | null;
   rating: number;
   reviewCount: number;
-  serviceId: string;
+  onPress?: () => void;
 }
 
 export const FeaturedServiceCard = memo(function FeaturedServiceCard({
@@ -21,47 +21,61 @@ export const FeaturedServiceCard = memo(function FeaturedServiceCard({
   providerAvatar,
   rating,
   reviewCount,
-  serviceId: _serviceId,
-  style,
-  ...rest
+  onPress,
 }: FeaturedServiceCardProps) {
   const { colors } = useTheme();
+
   return (
-    <TouchableOpacity
-      style={[
-        {
-          width: '100%',
-          borderRadius: radius.m,
-          backgroundColor: colors.background,
-          borderColor: colors.border,
-          borderWidth: 1,
-          overflow: 'hidden',
-        },
-        style,
-      ]}
-      {...rest}
-    >
-      <View style={{ height: 100, backgroundColor: colors.backgroundSecondary }}>
+    <TouchableOpacity style={[styles.container, { borderColor: colors.border }]} onPress={onPress} activeOpacity={0.8}>
+      <View style={[styles.banner, { backgroundColor: colors.backgroundSecondary }]}>
         {providerAvatar ? (
-          <Image source={{ uri: providerAvatar }} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
-        ) : (
-          <View style={{ width: '100%', height: '100%', backgroundColor: palette.gray300 }} />
-        )}
+          <Image source={{ uri: providerAvatar }} style={styles.bannerImage} resizeMode="cover" />
+        ) : null}
       </View>
-      <View style={{ padding: spacing.s }}>
+      <View style={styles.content}>
         <Typography variant="overline" color="textSecondary">
           {serviceTypeName}
         </Typography>
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 2 }}>
+        <View style={styles.providerRow}>
           <Avatar source={providerAvatar ? { uri: providerAvatar } : null} size={24} name={providerName} />
-          <Typography variant="body1" color="textPrimary" weight="medium" style={{ marginLeft: spacing.xs }}>
+          <Typography variant="body1" color="textPrimary" weight="medium" style={styles.providerName}>
             {providerName}
           </Typography>
         </View>
-        <View style={{ marginTop: spacing.xs }}>
+        <View style={styles.ratingRow}>
           <Rating value={rating} reviewCount={reviewCount} size={12} />
         </View>
       </View>
     </TouchableOpacity>
   );
+});
+
+const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+    borderRadius: radius.m,
+    borderWidth: 1,
+    overflow: 'hidden',
+  },
+  banner: {
+    height: 100,
+  },
+  bannerImage: {
+    width: '100%',
+    height: '100%',
+  },
+  content: {
+    padding: spacing.s,
+  },
+  providerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: spacing.xxs,
+  },
+  providerName: {
+    marginLeft: spacing.xs,
+  },
+  ratingRow: {
+    marginTop: spacing.xs,
+  },
 });

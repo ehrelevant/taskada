@@ -48,7 +48,7 @@ export function Button({
       return (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="small" color={getLoadingColor()} />
-          {loadingText && loadingText !== 'Loading...' && <Text style={styles.loadingText}>{loadingText}</Text>}
+          {loadingText && <Text style={styles.loadingText}>{loadingText}</Text>}
         </View>
       );
     }

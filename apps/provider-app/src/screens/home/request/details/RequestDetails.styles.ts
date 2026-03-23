@@ -1,4 +1,4 @@
-import { spacing, ThemeColors } from '@repo/theme';
+import { radius, spacing, ThemeColors } from '@repo/theme';
 import { StyleSheet } from 'react-native';
 
 export const createStyles = (colors: ThemeColors) =>
@@ -27,7 +27,7 @@ export const createStyles = (colors: ThemeColors) =>
     sectionCard: {
       backgroundColor: colors.surface,
       padding: spacing.m,
-      borderRadius: 12,
+      borderRadius: radius.m,
       borderWidth: 1,
       borderColor: colors.border,
       marginBottom: spacing.m,
@@ -50,7 +50,7 @@ export const createStyles = (colors: ThemeColors) =>
     descriptionBox: {
       backgroundColor: colors.background,
       padding: spacing.m,
-      borderRadius: 8,
+      borderRadius: radius.s,
       borderWidth: 1,
       borderColor: colors.border,
     },
@@ -62,11 +62,11 @@ export const createStyles = (colors: ThemeColors) =>
     image: {
       width: 100,
       height: 100,
-      borderRadius: 8,
+      borderRadius: radius.s,
     },
     mapContainer: {
       height: 150,
-      borderRadius: 8,
+      borderRadius: radius.s,
       overflow: 'hidden',
       borderWidth: 1,
       borderColor: colors.border,

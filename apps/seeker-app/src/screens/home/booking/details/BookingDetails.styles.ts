@@ -1,4 +1,4 @@
-import { spacing, ThemeColors } from '@repo/theme';
+import { radius, spacing, ThemeColors } from '@repo/theme';
 import { StyleSheet } from 'react-native';
 
 export const createStyles = (colors: ThemeColors) =>
@@ -23,7 +23,7 @@ export const createStyles = (colors: ThemeColors) =>
     },
     mapContainer: {
       height: 200,
-      borderRadius: 12,
+      borderRadius: radius.m,
       overflow: 'hidden',
       borderWidth: 1,
       borderColor: colors.border,
@@ -35,7 +35,7 @@ export const createStyles = (colors: ThemeColors) =>
       marginTop: spacing.s,
       padding: spacing.m,
       backgroundColor: colors.surface,
-      borderRadius: 8,
+      borderRadius: radius.s,
       borderWidth: 1,
       borderColor: colors.border,
     },
@@ -52,7 +52,7 @@ export const createStyles = (colors: ThemeColors) =>
     statusBadge: {
       backgroundColor: colors.surface,
       padding: spacing.m,
-      borderRadius: 8,
+      borderRadius: radius.s,
       borderWidth: 1,
       borderColor: colors.border,
       alignSelf: 'flex-start',
@@ -68,7 +68,7 @@ export const createStyles = (colors: ThemeColors) =>
     specificationsBox: {
       backgroundColor: colors.surface,
       padding: spacing.m,
-      borderRadius: 12,
+      borderRadius: radius.m,
       borderWidth: 1,
       borderColor: colors.border,
       minHeight: 120,

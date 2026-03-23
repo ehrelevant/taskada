@@ -1,6 +1,6 @@
-import { radius, spacing, useTheme } from '@repo/theme';
+import { ActivityIndicator, StyleProp, StyleSheet, TextInput, TextInputProps, TouchableOpacity, View, ViewStyle } from 'react-native';
+import { fontFamily, fontSize, radius, spacing, useTheme } from '@repo/theme';
 import { Search } from 'lucide-react-native';
-import { StyleProp, TextInput, TextInputProps, TouchableOpacity, View, ViewStyle } from 'react-native';
 import { useState } from 'react';
 
 import { Typography } from '../Typography';
@@ -10,7 +10,7 @@ export interface SearchBarProps extends TextInputProps {
   onChangeText: (text: string) => void;
   onClear?: () => void;
   containerStyle?: StyleProp<ViewStyle>;
-  placeholder?: string;
+  loading?: boolean;
 }
 
 export function SearchBar({
@@ -18,6 +18,7 @@ export function SearchBar({
   onChangeText,
   onClear,
   containerStyle,
+  loading = false,
   placeholder = 'Search services or providers...',
   ...rest
 }: SearchBarProps) {
@@ -27,27 +28,21 @@ export function SearchBar({
   return (
     <View
       style={[
+        styles.container,
         {
-          flexDirection: 'row',
-          alignItems: 'center',
-          borderWidth: 1,
           borderColor: isFocused ? colors.borderFocus : colors.border,
-          borderRadius: radius.m,
-          paddingHorizontal: spacing.m,
           backgroundColor: colors.backgroundSecondary,
         },
         containerStyle,
       ]}
     >
-      <Search size={20} color={colors.textDisabled} />
+      {loading ? (
+        <ActivityIndicator size="small" color={colors.textDisabled} />
+      ) : (
+        <Search size={20} color={colors.textDisabled} />
+      )}
       <TextInput
-        style={{
-          flex: 1,
-          paddingVertical: spacing.s,
-          paddingHorizontal: spacing.s,
-          fontSize: 16,
-          color: colors.textPrimary,
-        }}
+        style={[styles.input, { color: colors.textPrimary }]}
         placeholder={placeholder}
         placeholderTextColor={colors.textDisabled}
         value={value}
@@ -68,7 +63,7 @@ export function SearchBar({
             onChangeText('');
             onClear?.();
           }}
-          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          hitSlop={{ top: spacing.s, bottom: spacing.s, left: spacing.s, right: spacing.s }}
         >
           <Typography variant="caption" color="textSecondary">
             Clear
@@ -78,3 +73,20 @@ export function SearchBar({
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderRadius: radius.m,
+    paddingHorizontal: spacing.m,
+  },
+  input: {
+    flex: 1,
+    fontFamily: fontFamily.regular,
+    fontSize: fontSize.m,
+    paddingVertical: spacing.s,
+    paddingHorizontal: spacing.s,
+  },
+});

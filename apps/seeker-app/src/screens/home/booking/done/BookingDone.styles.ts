@@ -1,5 +1,5 @@
 import { Platform, StyleSheet } from 'react-native';
-import { spacing, ThemeColors } from '@repo/theme';
+import { radius, spacing, ThemeColors } from '@repo/theme';
 
 export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
@@ -31,7 +31,7 @@ export const createStyles = (colors: ThemeColors) =>
     },
     providerCard: {
       backgroundColor: colors.surface,
-      borderRadius: 12,
+      borderRadius: radius.m,
       borderWidth: 1,
       borderColor: colors.border,
       padding: spacing.m,
@@ -57,7 +57,7 @@ export const createStyles = (colors: ThemeColors) =>
       alignItems: 'center',
       padding: spacing.m,
       backgroundColor: colors.surface,
-      borderRadius: 12,
+      borderRadius: radius.m,
       borderWidth: 1,
       borderColor: colors.border,
       marginBottom: spacing.m,
@@ -86,7 +86,7 @@ export const createStyles = (colors: ThemeColors) =>
     },
     reviewInput: {
       backgroundColor: colors.background,
-      borderRadius: 8,
+      borderRadius: radius.s,
       borderWidth: 1,
       borderColor: colors.border,
       padding: spacing.m,

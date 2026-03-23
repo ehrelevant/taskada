@@ -1,4 +1,4 @@
-import { spacing, ThemeColors } from '@repo/theme';
+import { radius, spacing, ThemeColors } from '@repo/theme';
 import { StyleSheet } from 'react-native';
 
 export const createStyles = (colors: ThemeColors) =>
@@ -21,7 +21,7 @@ export const createStyles = (colors: ThemeColors) =>
     },
     mapContainer: {
       height: 200,
-      borderRadius: 12,
+      borderRadius: radius.m,
       overflow: 'hidden',
       borderWidth: 1,
       borderColor: colors.border,
@@ -33,7 +33,7 @@ export const createStyles = (colors: ThemeColors) =>
       marginTop: spacing.s,
       padding: spacing.s,
       backgroundColor: colors.backgroundSecondary,
-      borderRadius: 8,
+      borderRadius: radius.s,
     },
     formSection: {
       gap: spacing.l,
@@ -48,7 +48,7 @@ export const createStyles = (colors: ThemeColors) =>
       flexDirection: 'row',
       alignItems: 'center',
       backgroundColor: colors.surface,
-      borderRadius: 8,
+      borderRadius: radius.s,
       borderWidth: 1,
       borderColor: colors.border,
       paddingHorizontal: spacing.m,
@@ -65,7 +65,7 @@ export const createStyles = (colors: ThemeColors) =>
     },
     specificationsInput: {
       backgroundColor: colors.surface,
-      borderRadius: 8,
+      borderRadius: radius.s,
       borderWidth: 1,
       borderColor: colors.border,
       padding: spacing.m,
@@ -88,7 +88,7 @@ export const createStyles = (colors: ThemeColors) =>
     },
     modalContent: {
       backgroundColor: colors.background,
-      borderRadius: 16,
+      borderRadius: radius.l,
       padding: spacing.xl,
       width: '80%',
       alignItems: 'center',

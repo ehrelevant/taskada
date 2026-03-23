@@ -1,6 +1,6 @@
 import { Platform } from 'react-native';
 
-import { colors } from './colors';
+import { colors, paletteDark } from './colors';
 
 function buildShadows(shadowColor: string) {
   return {
@@ -55,6 +55,6 @@ function buildShadows(shadowColor: string) {
 }
 
 export const shadows = buildShadows(colors.textPrimary);
-export const shadowsDark = buildShadows('rgba(0, 0, 0, 0.5)');
+export const shadowsDark = buildShadows(paletteDark.gray700);
 
 export type ThemeShadows = typeof shadows;

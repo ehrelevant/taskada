@@ -1,16 +1,16 @@
-import { spacing, useTheme } from '@repo/theme';
-import { StyleSheet, View } from 'react-native';
+import { radius, spacing, useTheme } from '@repo/theme';
+import { StyleSheet, View, ViewProps } from 'react-native';
 
 import { Typography } from '../Typography';
 
-type StatusType = 'success' | 'warning' | 'error' | 'info' | 'pending' | 'default';
+export type StatusType = 'success' | 'warning' | 'error' | 'info' | 'pending' | 'default';
 
-type Props = {
+export interface StatusBadgeProps extends ViewProps {
   status: StatusType;
   label: string;
-};
+}
 
-export function StatusBadge({ status, label }: Props) {
+export function StatusBadge({ status, label, style, ...rest }: StatusBadgeProps) {
   const { colors } = useTheme();
   const statusColors: Record<StatusType, { background: string; text: string }> = {
     success: { background: colors.success.light, text: colors.success.base },
@@ -23,7 +23,7 @@ export function StatusBadge({ status, label }: Props) {
   const colorScheme = statusColors[status] || statusColors.default;
 
   return (
-    <View style={[styles.badge, { backgroundColor: colorScheme.background }]}>
+    <View style={[styles.badge, { backgroundColor: colorScheme.background }, style]} {...rest}>
       <Typography variant="caption" color={colorScheme.text}>
         {label}
       </Typography>
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   badge: {
     paddingHorizontal: spacing.s,
     paddingVertical: spacing.xs,
-    borderRadius: 4,
+    borderRadius: radius.xs,
     alignSelf: 'flex-start',
   },
 });

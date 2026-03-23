@@ -1,4 +1,4 @@
-import { spacing, ThemeColors } from '@repo/theme';
+import { radius, spacing, ThemeColors } from '@repo/theme';
 import { StyleSheet } from 'react-native';
 
 export const createStyles = (colors: ThemeColors) =>
@@ -41,7 +41,7 @@ export const createStyles = (colors: ThemeColors) =>
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: colors.surface,
-      borderRadius: spacing.m,
+      borderRadius: radius.m,
       marginBottom: spacing.l,
     },
     actionsContainer: {
@@ -55,7 +55,7 @@ export const createStyles = (colors: ThemeColors) =>
     actionIcon: {
       width: 48,
       height: 48,
-      borderRadius: 24,
+      borderRadius: radius.xl,
       alignItems: 'center',
       justifyContent: 'center',
     },

@@ -1,4 +1,4 @@
-import { spacing, ThemeColors } from '@repo/theme';
+import { radius, spacing, ThemeColors } from '@repo/theme';
 import { StyleSheet } from 'react-native';
 
 export const createStyles = (colors: ThemeColors) =>
@@ -33,7 +33,7 @@ export const createStyles = (colors: ThemeColors) =>
     serviceIcon: {
       width: 40,
       height: 40,
-      borderRadius: 8,
+      borderRadius: radius.s,
       marginRight: spacing.m,
     },
     description: {
@@ -47,7 +47,7 @@ export const createStyles = (colors: ThemeColors) =>
     image: {
       width: 100,
       height: 100,
-      borderRadius: 8,
+      borderRadius: radius.s,
     },
     buttonContainer: {
       padding: spacing.m,

@@ -1,5 +1,5 @@
+import { spacing, ThemeColors } from '@repo/theme';
 import { StyleSheet } from 'react-native';
-import { ThemeColors } from '@repo/theme';
 
 export const createStyles = (_colors: ThemeColors) =>
   StyleSheet.create({
@@ -7,7 +7,7 @@ export const createStyles = (_colors: ThemeColors) =>
       flexGrow: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      gap: 10,
-      paddingHorizontal: 10,
+      gap: spacing.s,
+      paddingHorizontal: spacing.s,
     },
   });

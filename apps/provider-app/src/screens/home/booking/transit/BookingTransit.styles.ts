@@ -1,4 +1,4 @@
-import { spacing, ThemeColors } from '@repo/theme';
+import { radius, spacing, ThemeColors } from '@repo/theme';
 import { StyleSheet } from 'react-native';
 
 export const createStyles = (colors: ThemeColors) =>
@@ -15,7 +15,7 @@ export const createStyles = (colors: ThemeColors) =>
     },
     mapContainer: {
       height: 300,
-      borderRadius: 12,
+      borderRadius: radius.m,
       overflow: 'hidden',
       borderWidth: 1,
       borderColor: colors.border,
@@ -33,7 +33,7 @@ export const createStyles = (colors: ThemeColors) =>
     addressText: {
       backgroundColor: colors.surface,
       padding: spacing.m,
-      borderRadius: 8,
+      borderRadius: radius.s,
       borderWidth: 1,
       borderColor: colors.border,
       lineHeight: 22,
@@ -42,7 +42,7 @@ export const createStyles = (colors: ThemeColors) =>
       marginBottom: spacing.l,
       padding: spacing.m,
       backgroundColor: colors.error.light,
-      borderRadius: 8,
+      borderRadius: radius.s,
       borderWidth: 1,
       borderColor: 'rgba(244, 67, 54, 0.25)',
     },

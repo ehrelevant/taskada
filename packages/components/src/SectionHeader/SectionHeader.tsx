@@ -1,17 +1,17 @@
 import { spacing } from '@repo/theme';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View, ViewProps } from 'react-native';
 
 import { Typography } from '../Typography';
 
-type Props = {
+export interface SectionHeaderProps extends ViewProps {
   title: string;
   onViewAllPress?: () => void;
   viewAllText?: string;
-};
+}
 
-export function SectionHeader({ title, onViewAllPress, viewAllText = 'View All' }: Props) {
+export function SectionHeader({ title, onViewAllPress, viewAllText = 'View All', style, ...rest }: SectionHeaderProps) {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, style]} {...rest}>
       <Typography variant="h4">{title}</Typography>
       {onViewAllPress && (
         <TouchableOpacity onPress={onViewAllPress} style={styles.viewAllButton}>

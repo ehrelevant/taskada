@@ -53,7 +53,7 @@ export function HomeScreen() {
 
   const renderServiceTypeItem = useCallback(
     ({ item }: { item: ServiceType }) => (
-      <ServiceTypeCard name={item.name} iconUrl={item.iconUrl} onPress={() => handleServiceTypePress(item.id)} />
+      <ServiceTypeCard name={item.name} onPress={() => handleServiceTypePress(item.id)} />
     ),
     [handleServiceTypePress],
   );
@@ -66,7 +66,6 @@ export function HomeScreen() {
         providerAvatar={item.providerAvatar}
         rating={item.avgRating}
         reviewCount={item.reviewCount}
-        serviceId={item.serviceId}
         onPress={() => navigateToService(item.serviceId)}
       />
     ),

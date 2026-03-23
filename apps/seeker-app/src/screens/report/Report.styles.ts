@@ -90,7 +90,7 @@ export const createStyles = (colors: ThemeColors) =>
       top: -6,
       right: -6,
       backgroundColor: colors.error.base,
-      borderRadius: 12,
+      borderRadius: radius.m,
       width: 24,
       height: 24,
       alignItems: 'center',

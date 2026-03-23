@@ -1,32 +1,54 @@
 import { ReactNode } from 'react';
 import { spacing, useTheme } from '@repo/theme';
-import { StyleSheet, View, ViewProps } from 'react-native';
+import { StyleSheet, TouchableOpacity, View, ViewProps } from 'react-native';
+import { X } from 'lucide-react-native';
 
+import { BackButton } from '../BackButton';
 import { Typography } from '../Typography';
 
-interface HeaderProps extends ViewProps {
+export interface HeaderProps extends ViewProps {
   title?: string;
   subtitle?: string;
   align?: 'left' | 'center';
+  size?: 'large' | 'medium' | 'small';
+  onBack?: () => void;
+  onClose?: () => void;
   leftContent?: ReactNode;
   centerContent?: ReactNode;
   rightContent?: ReactNode;
-  size?: 'large' | 'medium' | 'small';
+  bottomBorder?: boolean;
 }
 
 export function Header({
   title,
   subtitle,
+  align = 'left',
+  size = 'medium',
+  onBack,
+  onClose,
   leftContent,
   centerContent,
   rightContent,
-  size = 'medium',
+  bottomBorder = false,
   style,
   ...rest
 }: HeaderProps) {
   const { colors } = useTheme();
   const titleVariant = size === 'large' ? 'h3' : size === 'small' ? 'h5' : 'h4';
   const subtitleVariant = size === 'large' ? 'body1' : 'body2';
+
+  const resolvedLeftContent = onBack ? <BackButton onPress={onBack} /> : leftContent;
+
+  const resolvedRightContent = onClose ? (
+    <TouchableOpacity
+      onPress={onClose}
+      hitSlop={{ top: spacing.s, bottom: spacing.s, left: spacing.s, right: spacing.s }}
+    >
+      <X size={24} color={colors.textSecondary} />
+    </TouchableOpacity>
+  ) : (
+    rightContent
+  );
 
   const renderCenter = () => {
     if (centerContent) {
@@ -36,11 +58,11 @@ export function Header({
     if (title) {
       return (
         <View style={styles.textContainer}>
-          <Typography variant={titleVariant} weight="bold" style={[styles.title, { color: colors.textPrimary }]}>
+          <Typography variant={titleVariant} weight="bold" align={align}>
             {title}
           </Typography>
           {subtitle && (
-            <Typography variant={subtitleVariant} color="textSecondary" style={styles.subtitle}>
+            <Typography variant={subtitleVariant} color="textSecondary" align={align} style={styles.subtitle}>
               {subtitle}
             </Typography>
           )}
@@ -51,11 +73,13 @@ export function Header({
     return null;
   };
 
+  const borderStyle = bottomBorder ? { borderBottomWidth: 1, borderBottomColor: colors.border } : undefined;
+
   return (
-    <View style={[styles.container, style]} {...rest}>
-      {leftContent && <View style={styles.leftContent}>{leftContent}</View>}
+    <View style={[styles.container, borderStyle, style]} {...rest}>
+      {resolvedLeftContent && <View style={styles.leftContent}>{resolvedLeftContent}</View>}
       {renderCenter()}
-      {rightContent && <View style={styles.rightContent}>{rightContent}</View>}
+      {resolvedRightContent && <View style={styles.rightContent}>{resolvedRightContent}</View>}
     </View>
   );
 }
@@ -75,9 +99,8 @@ const styles = StyleSheet.create({
   centerContent: {
     flex: 1,
   },
-  title: {},
   subtitle: {
-    marginTop: spacing.xs,
+    marginTop: spacing.xxs,
   },
   rightContent: {
     marginLeft: spacing.m,

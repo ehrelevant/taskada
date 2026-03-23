@@ -10,8 +10,8 @@ export const createStyles = (colors: ThemeColors) =>
     },
     container: {
       backgroundColor: colors.surface,
-      borderTopLeftRadius: 24,
-      borderTopRightRadius: 24,
+      borderTopLeftRadius: radius.xl,
+      borderTopRightRadius: radius.xl,
       padding: spacing.l,
       maxHeight: '85%',
     },

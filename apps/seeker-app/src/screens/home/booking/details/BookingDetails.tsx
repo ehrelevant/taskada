@@ -20,7 +20,7 @@ export function BookingDetailsScreen() {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="$actionPrimary" />
+          <ActivityIndicator size="large" color={colors.actionPrimary} />
           <Typography variant="body1" style={styles.loadingText}>
             Loading...
           </Typography>

@@ -1,4 +1,4 @@
-import { spacing, ThemeColors } from '@repo/theme';
+import { radius, spacing, ThemeColors } from '@repo/theme';
 import { StyleSheet } from 'react-native';
 
 export const createStyles = (colors: ThemeColors) =>
@@ -49,7 +49,7 @@ export const createStyles = (colors: ThemeColors) =>
     statusBadge: {
       paddingHorizontal: spacing.s,
       paddingVertical: spacing.xs,
-      borderRadius: 4,
+      borderRadius: radius.xs,
     },
     statusText: {
       fontWeight: '600',

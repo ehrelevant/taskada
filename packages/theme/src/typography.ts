@@ -1,9 +1,9 @@
-import { TextStyle } from 'react-native';
+import { Platform, TextStyle } from 'react-native';
 
 export const fontFamily = {
-  regular: 'System',
-  medium: 'System',
-  bold: 'System',
+  regular: Platform.select({ ios: 'System', android: 'System', default: 'System' }),
+  medium: Platform.select({ ios: 'System', android: 'System', default: 'System' }),
+  bold: Platform.select({ ios: 'System', android: 'System', default: 'System' }),
 };
 
 export const fontSize = {

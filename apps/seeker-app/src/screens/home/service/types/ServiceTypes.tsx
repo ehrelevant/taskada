@@ -13,13 +13,13 @@ export function ServiceTypesListScreen() {
   const { serviceTypes, loading, error, handleServiceTypePress } = useServiceTypes();
 
   const renderItem = ({ item }: { item: ServiceType }) => (
-    <ServiceTypeCard name={item.name} iconUrl={item.iconUrl} onPress={() => handleServiceTypePress(item.id)} />
+    <ServiceTypeCard name={item.name} onPress={() => handleServiceTypePress(item.id)} />
   );
 
   if (loading) {
     return (
       <View style={styles.centerContainer}>
-        <ActivityIndicator size="large" color="$actionPrimary" />
+        <ActivityIndicator size="large" color={colors.actionPrimary} />
       </View>
     );
   }

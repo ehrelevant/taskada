@@ -5,3 +5,4 @@ export * from './shadows';
 export * from './serviceTypeIcons';
 export { ThemeProvider, useTheme } from './ThemeContext';
 export type { ColorScheme } from './ThemeContext';
+export type { ServiceType } from './serviceTypeIcons';

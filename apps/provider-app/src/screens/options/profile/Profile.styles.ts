@@ -1,5 +1,5 @@
+import { spacing, ThemeColors } from '@repo/theme';
 import { StyleSheet } from 'react-native';
-import { ThemeColors } from '@repo/theme';
 
 export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
@@ -9,13 +9,13 @@ export const createStyles = (colors: ThemeColors) =>
     },
     scrollView: {
       flex: 1,
-      paddingHorizontal: 20,
+      paddingHorizontal: spacing.m,
     },
     section: {
-      marginVertical: 20,
+      marginVertical: spacing.m,
     },
     sectionTitle: {
-      marginBottom: 15,
+      marginBottom: spacing.m,
       color: colors.textPrimary,
     },
     avatarSection: {
@@ -25,7 +25,7 @@ export const createStyles = (colors: ThemeColors) =>
     },
     avatarContainer: {
       alignItems: 'center',
-      marginBottom: 15,
+      marginBottom: spacing.m,
     },
     cameraButton: {
       position: 'absolute',
@@ -54,14 +54,14 @@ export const createStyles = (colors: ThemeColors) =>
       color: colors.textDisabled,
     },
     buttonContainer: {
-      marginVertical: 30,
-      gap: 10,
+      marginVertical: spacing.l,
+      gap: spacing.s,
     },
     saveButton: {
-      marginBottom: 10,
+      marginBottom: spacing.s,
     },
     cancelButton: {
-      marginBottom: 20,
+      marginBottom: spacing.m,
     },
     errorText: {
       color: colors.error.base,

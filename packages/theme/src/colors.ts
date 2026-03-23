@@ -64,7 +64,7 @@ export const paletteDark = {
   transparent: 'transparent',
 };
 
-function buildColors(p: typeof palette) {
+function buildColors(p: typeof palette, mode: 'light' | 'dark') {
   return {
     // Primary
     primary: {
@@ -102,38 +102,45 @@ function buildColors(p: typeof palette) {
     // Feedback
     success: {
       base: p.success,
-      light: p === palette ? '#E8F5E9' : '#1B3A1B',
-      dark: p === palette ? '#388E3C' : '#81C784',
+      light: mode === 'light' ? '#E8F5E9' : '#1B3A1B',
+      dark: mode === 'light' ? '#388E3C' : '#81C784',
       text: p.white,
     },
     warning: {
       base: p.warning,
-      light: p === palette ? '#FFF8E1' : '#3A3520',
-      dark: p === palette ? '#FFA000' : '#FFD54F',
+      light: mode === 'light' ? '#FFF8E1' : '#3A3520',
+      dark: mode === 'light' ? '#FFA000' : '#FFD54F',
       text: p.gray900,
     },
     error: {
       base: p.error,
-      light: p === palette ? '#FFEBEE' : '#3A1B1B',
-      dark: p === palette ? '#D32F2F' : '#EF9A9A',
+      light: mode === 'light' ? '#FFEBEE' : '#3A1B1B',
+      dark: mode === 'light' ? '#D32F2F' : '#EF9A9A',
       text: p.white,
     },
     info: {
       base: p.info,
-      light: p === palette ? '#E3F2FD' : '#1B2A3A',
-      dark: p === palette ? '#1976D2' : '#90CAF9',
+      light: mode === 'light' ? '#E3F2FD' : '#1B2A3A',
+      dark: mode === 'light' ? '#1976D2' : '#90CAF9',
       text: p.white,
     },
     pending: {
       base: p.pending,
-      light: p === palette ? '#FFF3E0' : '#3A2A1B',
-      dark: p === palette ? '#F57C00' : '#FFB74D',
+      light: mode === 'light' ? '#FFF3E0' : '#3A2A1B',
+      dark: mode === 'light' ? '#F57C00' : '#FFB74D',
       text: p.gray900,
     },
 
     // Borders
     border: p.gray300,
     borderFocus: p.primary,
+
+    // Overlay
+    overlay: {
+      light: 'rgba(0, 0, 0, 0.25)',
+      medium: 'rgba(0, 0, 0, 0.5)',
+      dark: 'rgba(0, 0, 0, 0.7)',
+    },
 
     // Transparent
     transparent: p.transparent,
@@ -144,7 +151,7 @@ function buildColors(p: typeof palette) {
   };
 }
 
-export const colors = buildColors(palette);
-export const colorsDark = buildColors(paletteDark);
+export const colors = buildColors(palette, 'light');
+export const colorsDark = buildColors(paletteDark, 'dark');
 
 export type ThemeColors = typeof colors;

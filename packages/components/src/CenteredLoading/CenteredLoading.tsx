@@ -1,35 +1,10 @@
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
-import { spacing, useTheme } from '@repo/theme';
+import { EmptyState } from '../EmptyState';
 
-import { Typography } from '../Typography';
-
-type Props = {
+export interface CenteredLoadingProps {
   message?: string;
   size?: 'small' | 'large';
-};
-
-export function CenteredLoading({ message = 'Loading...', size = 'large' }: Props) {
-  const { colors } = useTheme();
-  return (
-    <View style={styles.container}>
-      <ActivityIndicator size={size} color={colors.actionPrimary} />
-      {message && (
-        <Typography variant="body1" color="textSecondary" style={styles.message}>
-          {message}
-        </Typography>
-      )}
-    </View>
-  );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: spacing.xl,
-  },
-  message: {
-    marginTop: spacing.m,
-  },
-});
+export function CenteredLoading({ message = 'Loading...', size = 'large' }: CenteredLoadingProps) {
+  return <EmptyState loading loadingSize={size} loadingMessage={message} />;
+}
