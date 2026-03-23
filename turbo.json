@@ -13,7 +13,10 @@
     "S3_BUCKET_NAME",
     "S3_PUBLIC_URL",
     "VITE_API_URL",
-    "CORS_ORIGINS"
+    "CORS_ORIGINS",
+    "SEED_ADMIN_EMAIL",
+    "SEED_ADMIN_PHONE",
+    "SEED_ADMIN_PASSWORD"
   ],
   "tasks": {
     "dev": {
