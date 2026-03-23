@@ -22,6 +22,7 @@
     "db:generate": "pnpm --filter @repo/database generate",
     "db:migrate": "pnpm --filter @repo/database migrate",
     "db:studio": "pnpm --filter @repo/database studio",
+    "db:seed": "pnpm --filter @repo/database seed",
     "build:apps": "python3 scripts/build_apk.py"
   },
   "packageManager": "pnpm@10.17.1",
