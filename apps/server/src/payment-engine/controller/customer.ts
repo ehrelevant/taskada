@@ -4,7 +4,12 @@ import { Session } from '@thallesp/nestjs-better-auth';
 
 import { Session as UserSession } from '../../auth';
 
-import { CreateCustomerResponseDto, GetCustomerResponseDto, UpdateCustomerRequestDto, UpdateCustomerResponseDto } from '../dto';
+import {
+  CreateCustomerResponseDto,
+  GetCustomerResponseDto,
+  UpdateCustomerRequestDto,
+  UpdateCustomerResponseDto,
+} from '../dto';
 import { path_case } from '../utils';
 import { PaymentEngineService } from '../payment-engine.service';
 

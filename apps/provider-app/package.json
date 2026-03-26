@@ -5,8 +5,7 @@
   "scripts": {
     "dev": "expo start --port 3100",
     "dev:android": "expo run:android --port 3100",
-    "dev:ios": "expo run:ios --port 3100",
-    "dev:web": "expo start --web --port 3100"
+    "dev:ios": "expo run:ios --port 3100"
   },
   "dependencies": {
     "@better-auth/expo": "^1.3.27",
@@ -16,6 +15,7 @@
     "@react-navigation/native-stack": "^7.3.26",
     "@repo/components": "workspace:*",
     "@repo/theme": "workspace:*",
+    "@repo/screens": "workspace:*",
     "better-auth": "^1.3.27",
     "expo": "~54.0.10",
     "expo-dev-client": "~6.0.13",
@@ -30,14 +30,18 @@
     "react-hook-form": "^7.68.0",
     "react-native": "0.81.4",
     "react-native-keyboard-controller": "1.18.5",
-    "react-native-maps": "^1.26.18",
+    "react-native-maps": "^1.20.1",
     "react-native-reanimated": "~4.1.2",
     "react-native-safe-area-context": "5.6.1",
     "react-native-screens": "~4.16.0",
+    "react-native-svg": "^15.15.4",
+    "react-native-svg-transformer": "^1.5.3",
+    "react-native-webview": "13.15.0",
     "react-native-worklets": "0.5.1",
     "react-query": "^3.39.3",
     "socket.io-client": "^4.8.0",
-    "valibot": "^1.1.0"
+    "valibot": "^1.1.0",
+    "xendit-node": "^7.0.0"
   },
   "devDependencies": {
     "@repo/database": "workspace:*",

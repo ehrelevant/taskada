@@ -45,10 +45,10 @@ export class PaymentRequestController {
   @ApiResponse({ status: 200, description: 'Simulation result', type: SimulatePaymentResponseDto })
   simulatePayment(
     @Param('payment_request_id') payment_request_id: string,
-    @Body() body: Partial<SimulatePaymentRequestDto>,
+    @Body() body: SimulatePaymentRequestDto,
   ): Promise<SimulatePaymentResponseDto> {
     // combine path param and body to form the request expected by the service
-    const request = { payment_request_id, ...(body as any) } as any;
+    const request = { payment_request_id: payment_request_id, amount: body.amount };
     return this.paymentEngineService.simulatePayment(request);
   }
 }

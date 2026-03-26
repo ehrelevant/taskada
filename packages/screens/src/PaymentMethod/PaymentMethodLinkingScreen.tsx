@@ -1,19 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
-import { apiFetch } from '@lib/helpers';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { OptionsStackParamList } from '@navigation/OptionsStack';
-import { useNavigation } from '@react-navigation/native';
 import { WebView } from 'react-native-webview';
 
-type NavProp = NativeStackNavigationProp<OptionsStackParamList, 'PaymentMethods'>;
+import { Props } from './types';
 
-export default function PaymentMethodLinkingScreen() {
+export function PaymentMethodLinkingScreen({ apiFetch, navigation }: Props) {
   const [url, setUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const paymentSessionIdRef = useRef<string | null>(null);
-  const navigation = useNavigation<NavProp>();
   const sessionStatus = useRef(false);
   const sessionHandled = useRef(false);
 
@@ -39,9 +34,9 @@ export default function PaymentMethodLinkingScreen() {
         paymentSessionIdRef.current = payment_session_id_temp;
         if (!paymentUrl) throw new Error('payment_link_url missing from session response');
         setUrl(String(paymentUrl));
-      } catch (err: any) {
+      } catch (err) {
         if (!mounted) return;
-        setError(err?.message ?? String(err));
+        setError((err as { message: string })?.message ?? String(err));
       } finally {
         if (mounted) {
           setLoading(false);

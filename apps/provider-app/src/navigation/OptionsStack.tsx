@@ -1,8 +1,7 @@
-import { AddCardScreen } from '@screens/options/paymentMethods/AddCardScreen';
-import { AddEWalletScreen } from '@screens/options/paymentMethods/AddEWalletScreen';
+import { apiFetch } from '@lib/helpers';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { OptionsScreen } from '@screens/options/OptionsScreen';
-import { PaymentMethodsScreen } from '@screens/options/paymentMethods/PaymentMethodsScreen';
+import { PaymentMethodLinkingScreen, PaymentMethodsScreen } from '@repo/screens';
 import { ProfileScreen } from '@screens/options/profile/ProfileScreen';
 
 export type OptionsStackParamList = {
@@ -11,6 +10,7 @@ export type OptionsStackParamList = {
   PaymentMethods: undefined;
   AddCard: undefined;
   AddEWallet: undefined;
+  PaymentMethodLinking: undefined;
 };
 
 const Stack = createNativeStackNavigator<OptionsStackParamList>();
@@ -37,15 +37,12 @@ export function OptionsStack() {
           title: 'Profile',
         }}
       />
-      <Stack.Screen
-        name="PaymentMethods"
-        component={PaymentMethodsScreen}
-        options={{
-          title: 'Payment Methods',
-        }}
-      />
-      <Stack.Screen name="AddCard" component={AddCardScreen} options={{ title: 'Add Card' }} />
-      <Stack.Screen name="AddEWallet" component={AddEWalletScreen} options={{ title: 'Add E-Wallet' }} />
+      <Stack.Screen name="PaymentMethods" options={{ title: 'Payment Methods' }}>
+        {({ navigation }) => <PaymentMethodsScreen apiFetch={apiFetch} navigation={navigation} />}
+      </Stack.Screen>
+      <Stack.Screen name="PaymentMethodLinking" options={{ title: 'Payment Method Linking' }}>
+        {({ navigation }) => <PaymentMethodLinkingScreen apiFetch={apiFetch} navigation={navigation} />}
+      </Stack.Screen>
     </Stack.Navigator>
   );
 }

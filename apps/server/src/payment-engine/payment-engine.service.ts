@@ -1,11 +1,76 @@
-import { cancel_payment, cancel_payment_request, cancel_payout, cancel_session, capture_payment, create_customer, create_payout, create_session, get_customer, get_customer_list, get_payment_channels, get_payment_request_status, get_payment_status, get_payment_token_status, get_payout, get_payout_by_reference_id, get_session_status, refund_payment, simulate_payment, update_customer } from '@repo/xendit-payment-engine';
-import type { CancelPaymentRequest, CancelPaymentRequestRequest, CancelPaymentRequestResponse, CancelPaymentResponse, CancelPayoutRequest, CancelPayoutResponse, CancelSessionRequest, CancelSessionResponse, CapturePaymentRequest, CapturePaymentResponse, CreateCustomerRequest, CreateCustomerResponse, CreatePayoutRequest, CreatePayoutResponse, CreateRefundRequest, CreateRefundResponse, CreateSessionResponse, GetCustomerListResponse, GetCustomerResponse, GetPaymentChannelsRequest, GetPaymentChannelsResponse, GetPaymentRequestStatusRequest, GetPaymentRequestStatusResponse, GetPaymentStatusRequest, GetPaymentStatusResponse, GetPaymentTokenStatusRequest, GetPaymentTokenStatusResponse, GetPayoutRequest, GetPayoutResponse, GetSessionStatusRequest, GetSessionStatusResponse, ListPayoutsRequest, ListPayoutsResponse, SimulatePaymentRequest, SimulatePaymentResponse, UpdateCustomerRequest, UpdateCustomerResponse } from '@repo/xendit-payment-engine';
+import {
+  cancel_payment,
+  cancel_payment_request,
+  cancel_payout,
+  cancel_session,
+  capture_payment,
+  create_customer,
+  create_payout,
+  create_session,
+  get_customer,
+  get_customer_list,
+  get_payment_channels,
+  get_payment_request_status,
+  get_payment_status,
+  get_payment_token_status,
+  get_payout,
+  get_payout_by_reference_id,
+  get_session_status,
+  refund_payment,
+  simulate_payment,
+  update_customer,
+} from '@repo/xendit-payment-engine';
+import type {
+  CancelPaymentRequest,
+  CancelPaymentRequestRequest,
+  CancelPaymentRequestResponse,
+  CancelPaymentResponse,
+  CancelPayoutRequest,
+  CancelPayoutResponse,
+  CancelSessionRequest,
+  CancelSessionResponse,
+  CapturePaymentRequest,
+  CapturePaymentResponse,
+  CreateCustomerRequest,
+  CreateCustomerResponse,
+  CreatePayoutRequest,
+  CreatePayoutResponse,
+  CreateRefundRequest,
+  CreateRefundResponse,
+  CreateSessionResponse,
+  GetCustomerListResponse,
+  GetCustomerResponse,
+  GetPaymentChannelsRequest,
+  GetPaymentChannelsResponse,
+  GetPaymentRequestStatusRequest,
+  GetPaymentRequestStatusResponse,
+  GetPaymentStatusRequest,
+  GetPaymentStatusResponse,
+  GetPaymentTokenStatusRequest,
+  GetPaymentTokenStatusResponse,
+  GetPayoutRequest,
+  GetPayoutResponse,
+  GetSessionStatusRequest,
+  GetSessionStatusResponse,
+  ListPayoutsRequest,
+  ListPayoutsResponse,
+  SimulatePaymentRequest,
+  SimulatePaymentResponse,
+  UpdateCustomerRequest,
+  UpdateCustomerResponse,
+} from '@repo/xendit-payment-engine';
 import { eq } from 'drizzle-orm';
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
-import { NewPaymentMethod, PaymentAuditLogType, paymentAuditLog, paymentMethod, UpdatePaymentAuditLog, user } from '@repo/database';
+import {
+  NewPaymentMethod,
+  PaymentAuditLogType,
+  paymentAuditLog,
+  paymentMethod,
+  UpdatePaymentAuditLog,
+  user,
+} from '@repo/database';
 
 import { DatabaseService } from '../database/database.service';
-
 
 @Injectable()
 export class PaymentEngineService {
@@ -16,7 +81,7 @@ export class PaymentEngineService {
   private async handleRequest<T>(fn: () => Promise<T>): Promise<T> {
     try {
       return await fn();
-    } catch (err: any) {
+    } catch (err) {
       let status = HttpStatus.INTERNAL_SERVER_ERROR;
       let details: unknown = undefined;
 
@@ -24,7 +89,7 @@ export class PaymentEngineService {
         try {
           status = err.response.status ?? status;
           details = await err.response.json();
-        } catch (parseErr) {
+        } catch {
           details = { message: err.message };
         }
       } else if (typeof err?.statusCode === 'number') {
@@ -43,7 +108,7 @@ export class PaymentEngineService {
   }
 
   private async getPaymentMethodRow(user_id: string) {
-    const [user_payment_method] = await this.dbService.db
+    await this.dbService.db
       .select({
         userId: paymentMethod.userId,
         externalId: paymentMethod.externalId,

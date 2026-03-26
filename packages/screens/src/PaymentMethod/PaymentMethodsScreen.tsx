@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Alert, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { apiFetch } from '@lib/helpers';
 import { Card, Typography } from '@repo/components';
 import { colors, spacing } from '@repo/theme';
 import { CreditCard, Plus, Trash2 } from 'lucide-react-native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { OptionsStackParamList } from '@navigation/OptionsStack';
 import { PaymentMethod } from '@repo/database';
-import { useNavigation } from '@react-navigation/native';
+
+import { Props, SavedMethod } from './types';
 
 import BPI from './assets/BPI/logo.svg';
 import GCASH from './assets/GCash/logo.svg';
@@ -16,14 +14,7 @@ import MAYA from './assets/Maya/logo.svg';
 import RCBC from './assets/RCBC/logo.svg';
 import UBP from './assets/UBP/logo.svg';
 
-type NavProp = NativeStackNavigationProp<OptionsStackParamList, 'PaymentMethods'>;
-
-type SavedMethod = { id: string; type: string; icon?: React.JSX.Element; label: string };
-
-// Load saved methods from API
-
-export function PaymentMethodsScreen() {
-  const navigation = useNavigation<NavProp>();
+export function PaymentMethodsScreen({ apiFetch, navigation }: Props) {
   const [methods, setMethods] = useState<SavedMethod[]>([]);
   const [loading, setLoading] = useState(true);
 
