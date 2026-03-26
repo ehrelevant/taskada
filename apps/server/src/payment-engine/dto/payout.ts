@@ -1,18 +1,5 @@
-import {
-  CancelPayoutRequestSchema,
-  CancelPayoutResponseSchema,
-  CreatePayoutRequestSchema,
-  CreatePayoutResponseSchema,
-  GetPaymentChannelsRequestSchema,
-  GetPaymentChannelsResponseSchema,
-  GetPayoutRequestSchema,
-  GetPayoutResponseSchema,
-  ListPayoutsRequestSchema,
-  ListPayoutsResponseSchema,
-} from '@repo/xendit-payment-engine';
-
+import { CancelPayoutRequestSchema, CancelPayoutResponseSchema, CreatePayoutRequestSchema, CreatePayoutResponseSchema, GetPaymentChannelsRequestSchema, GetPaymentChannelsResponseSchema, GetPayoutRequestSchema, GetPayoutResponseSchema, ListPayoutsRequestSchema, ListPayoutsResponseSchema } from '@repo/xendit-payment-engine';
 import { createStandardDto } from '@mag123c/nestjs-stdschema';
-import { ApiHideProperty } from '@nestjs/swagger';
 
 export class CancelPayoutRequestDto extends createStandardDto(CancelPayoutRequestSchema) {}
 export class CancelPayoutResponseDto extends createStandardDto(CancelPayoutResponseSchema) {}

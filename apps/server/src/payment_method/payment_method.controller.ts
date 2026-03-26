@@ -5,15 +5,15 @@ import { PaymentMethodService } from './payment_method.service';
 
 @Controller('payment-method')
 export class PaymentMethodController {
-	constructor(private readonly paymentMethodService: PaymentMethodService) {}
+  constructor(private readonly paymentMethodService: PaymentMethodService) {}
 
-	@Get()
-	async listPaymentMethods(@Session() { user: { id: userId } }: UserSession) {
-		return await this.paymentMethodService.listPaymentMethods(userId);
-	}
+  @Get()
+  async listPaymentMethods(@Session() { user: { id: userId } }: UserSession) {
+    return await this.paymentMethodService.listPaymentMethods(userId);
+  }
 
-	@Delete(':id')
-	async deletePaymentMethod(@Session() { user: { id: userId } }: UserSession, @Param('id') id: string) {
-		return await this.paymentMethodService.deletePaymentMethod(userId, id);
-	}
+  @Delete(':id')
+  async deletePaymentMethod(@Session() { user: { id: userId } }: UserSession, @Param('id') id: string) {
+    return await this.paymentMethodService.deletePaymentMethod(userId, id);
+  }
 }

@@ -73,7 +73,7 @@ export class PayoutController {
     name: 'currency',
     required: false,
     description: 'Filter by currency',
-    schema: { type: 'string', example: "PHP"},
+    schema: { type: 'string', example: 'PHP' },
   })
   @ApiQuery({
     name: 'channel_category',

@@ -1,17 +1,10 @@
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Controller, Get, Param, Post } from '@nestjs/common';
+import { Session, UserSession } from '@thallesp/nestjs-better-auth';
 
-import {
-  CancelSessionRequestDto,
-  CancelSessionResponseDto,
-  CreateSessionRequestDto,
-  CreateSessionResponseDto,
-  GetSessionStatusResponseDto,
-} from '../dto/session';
+import { CancelSessionResponseDto, CreateSessionResponseDto, GetSessionStatusResponseDto } from '../dto/session';
 import { path_case } from '../utils';
 import { PaymentEngineService } from '../payment-engine.service';
-import { Session, UserSession } from '@thallesp/nestjs-better-auth';
-import { user } from '@repo/database';
 
 const tag = 'PaymentEngine/Session';
 
@@ -38,15 +31,14 @@ export class SessionController {
   @Post(':session_id/cancel')
   @ApiOperation({ summary: 'Cancel session', description: 'Cancel an existing payment session.' })
   @ApiResponse({ status: 200, description: 'Session cancelled', type: () => CancelSessionResponseDto })
-  cancelSession(@Param("session_id") session_id: string): Promise<CancelSessionResponseDto> {
-    return this.paymentEngineService.cancelSession({session_id});
+  cancelSession(@Param('session_id') session_id: string): Promise<CancelSessionResponseDto> {
+    return this.paymentEngineService.cancelSession({ session_id });
   }
 
   @Post(':session_id/success')
-  @ApiOperation({ summary: 'Callback for Session Success', description: 'Callback for Successful session.'})
+  @ApiOperation({ summary: 'Callback for Session Success', description: 'Callback for Successful session.' })
   @ApiResponse({ status: 200, description: 'Session cancelled', type: () => CancelSessionResponseDto })
-  successSession(@Param("session_id") session_id: string) {
+  successSession(@Param('session_id') session_id: string) {
     return this.paymentEngineService.sessionSuccess(session_id);
   }
-
 }

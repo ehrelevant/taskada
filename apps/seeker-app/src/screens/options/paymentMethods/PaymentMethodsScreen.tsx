@@ -1,19 +1,20 @@
+import React, { useEffect, useState } from 'react';
+import { Alert, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { apiFetch } from '@lib/helpers';
 import { Card, Typography } from '@repo/components';
 import { colors, spacing } from '@repo/theme';
-import { CreditCard, Plus, Trash2, Wallet } from 'lucide-react-native';
+import { CreditCard, Plus, Trash2 } from 'lucide-react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { OptionsStackParamList } from '@navigation/OptionsStack';
-import { ScrollView, StyleSheet, TouchableOpacity, View, Image, Alert } from 'react-native';
+import { PaymentMethod } from '@repo/database';
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
-import { apiFetch } from '@lib/helpers';
-import BPI from "./assets/BPI/logo.svg"
-import GCASH from "./assets/GCash/logo.svg"
-import GRAB from "./assets/Grab/logo.jpeg"
-import MAYA from "./assets/Maya/logo.svg"
-import RCBC from "./assets/RCBC/logo.svg"
-import UBP from "./assets/UBP/logo.svg"
-import {PaymentMethod} from "@repo/database"
+
+import BPI from './assets/BPI/logo.svg';
+import GCASH from './assets/GCash/logo.svg';
+import GRAB from './assets/Grab/logo.jpeg';
+import MAYA from './assets/Maya/logo.svg';
+import RCBC from './assets/RCBC/logo.svg';
+import UBP from './assets/UBP/logo.svg';
 
 type NavProp = NativeStackNavigationProp<OptionsStackParamList, 'PaymentMethods'>;
 
@@ -36,27 +37,27 @@ export function PaymentMethodsScreen() {
         const data: PaymentMethod[] = await res.json();
 
         const mapped: SavedMethod[] = data.map(pm => {
-          const type = pm.type
-          const channel = pm.channelCode
+          const type = pm.type;
+          const channel = pm.channelCode;
 
           // Determine icon
           let icon = undefined;
           let label = channel;
           const ch = channel.toLowerCase();
           if (ch.includes('gcash')) {
-            icon = <GCASH width={28} height={28} />
-            label = "GCASH"
+            icon = <GCASH width={28} height={28} />;
+            label = 'GCASH';
           } else if (ch.includes('bpi')) {
-            icon = <BPI width={28} height={28} />
+            icon = <BPI width={28} height={28} />;
           } else if (ch.includes('grab')) {
-            icon = <GRAB width={28} height={28} />
+            icon = <GRAB width={28} height={28} />;
           } else if (ch.includes('maya')) {
-            icon = <MAYA width={28} height={28} />
+            icon = <MAYA width={28} height={28} />;
             label = (pm.metadata as Record<string, string>).account_number;
           } else if (ch.includes('rcbc')) {
-            icon = <RCBC width={28} height={28} />
+            icon = <RCBC width={28} height={28} />;
           } else if (ch.includes('ubp') || ch.includes('unionbank')) {
-            icon = <UBP width={28} height={28} />
+            icon = <UBP width={28} height={28} />;
           }
 
           // if (metadata?.card?.last4) label = `Card ending in ${metadata.card.last4}`;
@@ -104,38 +105,30 @@ export function PaymentMethodsScreen() {
               <Typography color={colors.textSecondary}>No payment methods added yet.</Typography>
             </View>
           ) : (
-              methods.map(method => {
-                return (
-                  <Card key={method.id} style={styles.methodCard} padding="m">
-                    <View style={styles.methodInfo}>
-                      <View style={styles.iconContainer}>
-                        {
-                          method.icon ?? (
-                            <CreditCard color={colors.textPrimary} size={24} />
-                          )
-                        }
-                      </View>
-                      <Typography variant="body1" weight="medium">
-                        {method.label}
-                      </Typography>
+            methods.map(method => {
+              return (
+                <Card key={method.id} style={styles.methodCard} padding="m">
+                  <View style={styles.methodInfo}>
+                    <View style={styles.iconContainer}>
+                      {method.icon ?? <CreditCard color={colors.textPrimary} size={24} />}
                     </View>
-                    <TouchableOpacity
-                      onPress={() =>
-                        Alert.alert(
-                          'Delete payment method',
-                          'Are you sure you want to remove this payment method?',
-                          [
-                            { text: 'Cancel', style: 'cancel' },
-                            { text: 'Delete', style: 'destructive', onPress: () => handleDelete(method.id) },
-                          ]
-                        )
-                      }
-                    >
-                      <Trash2 color={colors.error.base} size={20} />
-                    </TouchableOpacity>
-                  </Card>
-                );
-              })
+                    <Typography variant="body1" weight="medium">
+                      {method.label}
+                    </Typography>
+                  </View>
+                  <TouchableOpacity
+                    onPress={() =>
+                      Alert.alert('Delete payment method', 'Are you sure you want to remove this payment method?', [
+                        { text: 'Cancel', style: 'cancel' },
+                        { text: 'Delete', style: 'destructive', onPress: () => handleDelete(method.id) },
+                      ])
+                    }
+                  >
+                    <Trash2 color={colors.error.base} size={20} />
+                  </TouchableOpacity>
+                </Card>
+              );
+            })
           )}
         </View>
 

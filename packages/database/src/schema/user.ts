@@ -44,7 +44,6 @@ export const UserUpdateSchema = v.omit(
   ['id', 'createdAt', 'updatedAt'],
 );
 
-
 export const userRole = app.table(
   'user_role',
   {

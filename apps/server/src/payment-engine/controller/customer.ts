@@ -1,18 +1,10 @@
-import { ApiBody, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Body, Controller, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Get, Patch, Post } from '@nestjs/common';
 import { Session } from '@thallesp/nestjs-better-auth';
 
 import { Session as UserSession } from '../../auth';
 
-import {
-  CreateCustomerResponseDto,
-  GetCustomerListResponseDto,
-  GetPaymentChannelsRequestDto,
-  GetPaymentChannelsResponseDto,
-  GetCustomerResponseDto,
-  UpdateCustomerRequestDto,
-  UpdateCustomerResponseDto,
-} from '../dto';
+import { CreateCustomerResponseDto, GetCustomerResponseDto, UpdateCustomerRequestDto, UpdateCustomerResponseDto } from '../dto';
 import { path_case } from '../utils';
 import { PaymentEngineService } from '../payment-engine.service';
 
@@ -30,7 +22,7 @@ export class CustomerController {
   })
   @ApiResponse({ status: 201, description: 'Customer created', type: CreateCustomerResponseDto })
   createCustomer(@Session() session: UserSession): Promise<CreateCustomerResponseDto> {
-    return this.paymentEngineService.createCustomer(session.user.id)
+    return this.paymentEngineService.createCustomer(session.user.id);
   }
 
   @Get('')

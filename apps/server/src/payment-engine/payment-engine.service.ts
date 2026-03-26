@@ -1,11 +1,10 @@
-import { cancel_payment, cancel_payment_request, cancel_payout, cancel_session, capture_payment, create_customer, create_payout, create_session, get_customer, get_customer_list, get_payment_channels, get_payment_request_status, get_payment_status, get_payout, get_payout_by_reference_id, get_session_status, get_payment_token_status, refund_payment, simulate_payment, update_customer} from '@repo/xendit-payment-engine';
-import type { CancelPaymentRequest, CancelPaymentRequestRequest, CancelPaymentRequestResponse, CancelPaymentResponse, CancelPayoutRequest, CancelPayoutResponse, CancelSessionRequest, CancelSessionResponse, CapturePaymentRequest, CapturePaymentResponse, CreateCustomerRequest, CreateCustomerResponse, CreatePayoutRequest, CreatePayoutResponse, CreateRefundRequest, CreateRefundResponse, CreateSessionRequest, CreateSessionResponse, GetCustomerListRequest, GetCustomerListResponse, GetCustomerRequest, GetCustomerResponse, GetPaymentChannelsRequest, GetPaymentChannelsResponse, GetPaymentRequestStatusRequest, GetPaymentRequestStatusResponse, GetPaymentStatusRequest, GetPaymentStatusResponse, GetPayoutRequest, GetPayoutResponse, GetSessionStatusRequest, GetSessionStatusResponse, GetPaymentTokenStatusRequest, GetPaymentTokenStatusResponse, ListPayoutsRequest, ListPayoutsResponse, SimulatePaymentRequest, SimulatePaymentResponse, UpdateCustomerRequest, UpdateCustomerResponse } from '@repo/xendit-payment-engine';
+import { cancel_payment, cancel_payment_request, cancel_payout, cancel_session, capture_payment, create_customer, create_payout, create_session, get_customer, get_customer_list, get_payment_channels, get_payment_request_status, get_payment_status, get_payment_token_status, get_payout, get_payout_by_reference_id, get_session_status, refund_payment, simulate_payment, update_customer } from '@repo/xendit-payment-engine';
+import type { CancelPaymentRequest, CancelPaymentRequestRequest, CancelPaymentRequestResponse, CancelPaymentResponse, CancelPayoutRequest, CancelPayoutResponse, CancelSessionRequest, CancelSessionResponse, CapturePaymentRequest, CapturePaymentResponse, CreateCustomerRequest, CreateCustomerResponse, CreatePayoutRequest, CreatePayoutResponse, CreateRefundRequest, CreateRefundResponse, CreateSessionResponse, GetCustomerListResponse, GetCustomerResponse, GetPaymentChannelsRequest, GetPaymentChannelsResponse, GetPaymentRequestStatusRequest, GetPaymentRequestStatusResponse, GetPaymentStatusRequest, GetPaymentStatusResponse, GetPaymentTokenStatusRequest, GetPaymentTokenStatusResponse, GetPayoutRequest, GetPayoutResponse, GetSessionStatusRequest, GetSessionStatusResponse, ListPayoutsRequest, ListPayoutsResponse, SimulatePaymentRequest, SimulatePaymentResponse, UpdateCustomerRequest, UpdateCustomerResponse } from '@repo/xendit-payment-engine';
 import { eq } from 'drizzle-orm';
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
-import { paymentAuditLog, paymentMethod, user, PaymentAuditLogType, PaymentAuditLog, UpdatePaymentAuditLog, NewPaymentMethod } from '@repo/database';
+import { NewPaymentMethod, PaymentAuditLogType, paymentAuditLog, paymentMethod, UpdatePaymentAuditLog, user } from '@repo/database';
 
 import { DatabaseService } from '../database/database.service';
-import { CreateCustomerRequestDto } from './dto';
 
 
 @Injectable()
@@ -54,15 +53,15 @@ export class PaymentEngineService {
       .limit(1);
   }
 
-
   private async createPaymentAuditLog(user_id: string, session_type: PaymentAuditLogType) {
     const [result] = await this.dbService.db
       .insert(paymentAuditLog)
       .values({
         userId: user_id,
         type: session_type,
-      }).returning()
-    return result
+      })
+      .returning();
+    return result;
   }
 
   private async updatePaymentAuditLog(id: string, updates: UpdatePaymentAuditLog) {
@@ -70,29 +69,28 @@ export class PaymentEngineService {
       .update(paymentAuditLog)
       .set(updates)
       .where(eq(paymentAuditLog.id, id))
-      .returning()
-    return result
+      .returning();
+    return result;
   }
-
 
   async createSession(user_id: string): Promise<CreateSessionResponse> {
     this.logger.debug('createSession');
-    const user_row = await this.dbService.getUser(user_id)
-    const audit_log = await this.createPaymentAuditLog(user_id, "SESSION_SAVE")
-    const result:CreateSessionResponse = await this.handleRequest(
-      () => create_session({
+    const user_row = await this.dbService.getUser(user_id);
+    const audit_log = await this.createPaymentAuditLog(user_id, 'SESSION_SAVE');
+    const result: CreateSessionResponse = await this.handleRequest(() =>
+      create_session({
         reference_id: audit_log.id,
-        customer_id:user_row.xenditCustomerId!,
-        session_type: "SAVE",
+        customer_id: user_row.xenditCustomerId!,
+        session_type: 'SAVE',
         amount: 0,
-        currency: "PHP",
-        mode: "PAYMENT_LINK",
-        country: "PH",
-        success_return_url: "https://example.com/xendit-success"
-      })
+        currency: 'PHP',
+        mode: 'PAYMENT_LINK',
+        country: 'PH',
+        success_return_url: 'https://example.com/xendit-success',
+      }),
     );
-    await this.updatePaymentAuditLog(audit_log.id, {externalId: result.payment_session_id})
-    return result
+    await this.updatePaymentAuditLog(audit_log.id, { externalId: result.payment_session_id });
+    return result;
   }
 
   async getSessionStatus(request: GetSessionStatusRequest): Promise<GetSessionStatusResponse> {
@@ -107,24 +105,27 @@ export class PaymentEngineService {
 
   async sessionSuccess(session_id: string) {
     this.logger.debug('sessionSuccess');
-    const session_result = await this.getSessionStatus({session_id})
-    const payment_token_result = await this.getPaymentTokenStatus({payment_token_id: session_result.payment_token_id!})
+    const session_result = await this.getSessionStatus({ session_id });
+    const payment_token_result = await this.getPaymentTokenStatus({
+      payment_token_id: session_result.payment_token_id!,
+    });
     const [user_row] = await this.dbService.db
       .select()
       .from(user)
       .where(eq(user.xenditCustomerId, session_result.customer_id))
-      .limit(1)
+      .limit(1);
 
     await this.dbService.db
       .insert(paymentMethod)
       .values({
         userId: user_row.id,
-        type: "TOKEN",
-        channelCode:payment_token_result.channel_code,
+        type: 'TOKEN',
+        channelCode: payment_token_result.channel_code,
         externalId: session_result.payment_token_id,
         status: payment_token_result.status,
-        metadata: {...payment_token_result.token_details, ...payment_token_result.channel_properties}
-      } as NewPaymentMethod).returning()
+        metadata: { ...payment_token_result.token_details, ...payment_token_result.channel_properties },
+      } as NewPaymentMethod)
+      .returning();
   }
 
   async cancelSession(request: CancelSessionRequest): Promise<CancelSessionResponse> {
@@ -164,43 +165,45 @@ export class PaymentEngineService {
 
   async createCustomer(user_id: string): Promise<CreateCustomerResponse> {
     this.logger.debug('createCustomer');
-    const user_row = await this.dbService.getUser(user_id)
-    const request:CreateCustomerRequest = {
+    const user_row = await this.dbService.getUser(user_id);
+    const request: CreateCustomerRequest = {
       reference_id: user_row.id,
       date_of_registration: user_row.createdAt.toISOString(),
       email: user_row.email,
-      type: "INDIVIDUAL",
+      type: 'INDIVIDUAL',
       mobile_number: user_row.phoneNumber,
       individual_detail: {
         given_names: user_row.firstName,
         surname: user_row.lastName,
-      }
-    }
-      const result:CreateCustomerResponse = await this.handleRequest(() => create_customer(request));
-      await this.dbService.db
+      },
+    };
+    const result: CreateCustomerResponse = await this.handleRequest(() => create_customer(request));
+    await this.dbService.db
       .update(user)
       .set({
-        "xenditCustomerId": result.id
+        xenditCustomerId: result.id,
       })
       .where(eq(user.id, user_row.id))
-      .returning()
+      .returning();
 
-      return result;
+    return result;
   }
 
   async getCustomer(user_id: string): Promise<GetCustomerResponse> {
     this.logger.debug('getCustomer');
-    const user_row = await this.dbService.getUser(user_id)
+    const user_row = await this.dbService.getUser(user_id);
 
     if (!user_row.xenditCustomerId) {
-      this.logger.debug(`User ${user_row.id} has no xendit customer id. Fetching.`)
-      const result2:GetCustomerListResponse = await this.handleRequest(() => get_customer_list({reference_id: user_row.id}));
-      const xenditCustomerId = result2.data[0].id
-      user_row.xenditCustomerId = xenditCustomerId
+      this.logger.debug(`User ${user_row.id} has no xendit customer id. Fetching.`);
+      const result2: GetCustomerListResponse = await this.handleRequest(() =>
+        get_customer_list({ reference_id: user_row.id }),
+      );
+      const xenditCustomerId = result2.data[0].id;
+      user_row.xenditCustomerId = xenditCustomerId;
 
-      await this.dbService.updateUser(user_row.id, {xenditCustomerId: xenditCustomerId})
+      await this.dbService.updateUser(user_row.id, { xenditCustomerId: xenditCustomerId });
     }
-    return this.handleRequest(() => get_customer({customer_id: user_row.xenditCustomerId!}));
+    return this.handleRequest(() => get_customer({ customer_id: user_row.xenditCustomerId! }));
   }
 
   async getPaymentChannels(request: GetPaymentChannelsRequest): Promise<GetPaymentChannelsResponse> {
@@ -233,13 +236,13 @@ export class PaymentEngineService {
     return this.handleRequest(() => get_payout_by_reference_id(request));
   }
 
-  async updateCustomer(user_id:string, request: UpdateCustomerRequest): Promise<UpdateCustomerResponse> {
+  async updateCustomer(user_id: string, request: UpdateCustomerRequest): Promise<UpdateCustomerResponse> {
     this.logger.debug('updateCustomer');
-    const user_row = await this.dbService.getUser(user_id)
-    if (user_row.xenditCustomerId){
-      request.customer_id = await user_row.xenditCustomerId
+    const user_row = await this.dbService.getUser(user_id);
+    if (user_row.xenditCustomerId) {
+      request.customer_id = await user_row.xenditCustomerId;
     } else {
-      throw new Error(`User ${user_id} does not have a valid Xendit Customer Id. Please create one first.`)
+      throw new Error(`User ${user_id} does not have a valid Xendit Customer Id. Please create one first.`);
     }
 
     return this.handleRequest(() => update_customer(request));

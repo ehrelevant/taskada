@@ -1,6 +1,13 @@
 import * as z from 'zod';
 
-import { ActionSchema, GetPaymentTokenStatusRequestSchema, GetPaymentTokenStatusResponseSchema, PaymentTokenObjectSchema, TokenChannelPropertiesSchema, TokenDetailsSchema } from './schema';
+import {
+  ActionSchema,
+  GetPaymentTokenStatusRequestSchema,
+  GetPaymentTokenStatusResponseSchema,
+  PaymentTokenObjectSchema,
+  TokenChannelPropertiesSchema,
+  TokenDetailsSchema,
+} from './schema';
 
 export type Action = z.infer<typeof ActionSchema>;
 export type TokenChannelProperties = z.infer<typeof TokenChannelPropertiesSchema>;

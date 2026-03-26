@@ -1,42 +1,10 @@
-import {
-  account,
-  address,
-  agency,
-  booking,
-  bookingStatusEnum,
-  interestStatusEnum,
-  message,
-  messageImage,
-  paymentMethod,
-  portfolio,
-  portfolioImage,
-  provider,
-  providerInterest,
-  pushToken,
-  request,
-  requestImage,
-  requestStatusEnum,
-  review,
-  reviewImage,
-  roleEnum,
-  seeker,
-  service,
-  serviceType,
-  session,
-  user,
-  userRole,
-  verification,
-  UserUpdateSchema,
-  paymentAuditLog,
-  PaymentAuditLogUpdateSchema,
-  paymentAuditLogEnum,
-  PaymentMethodUpdateSchema
-} from './schema';
-import * as v from "valibot"
+import * as v from 'valibot';
+
+import { account, address, agency, booking, bookingStatusEnum, interestStatusEnum, message, messageImage, PaymentAuditLogUpdateSchema, PaymentMethodUpdateSchema, paymentAuditLog, paymentAuditLogEnum, paymentMethod, portfolio, portfolioImage, provider, providerInterest, pushToken, request, requestImage, requestStatusEnum, review, reviewImage, roleEnum, seeker, service, serviceType, session, UserUpdateSchema, user, userRole, verification } from './schema';
 
 export type User = typeof user.$inferSelect;
 export type NewUser = typeof user.$inferInsert;
-export type UserUpdate = v.InferInput<typeof UserUpdateSchema>
+export type UserUpdate = v.InferInput<typeof UserUpdateSchema>;
 
 export type Role = (typeof roleEnum.enumValues)[number];
 
@@ -107,10 +75,10 @@ export type NewMessageImage = typeof messageImage.$inferInsert;
 
 export type PaymentMethod = typeof paymentMethod.$inferSelect;
 export type NewPaymentMethod = typeof paymentMethod.$inferInsert;
-export type UpdatePaymentMethod = v.InferInput<typeof PaymentMethodUpdateSchema>
+export type UpdatePaymentMethod = v.InferInput<typeof PaymentMethodUpdateSchema>;
 export type PaymentAuditLog = typeof paymentAuditLog.$inferSelect;
 export type NewPaymentAuditLog = typeof paymentAuditLog.$inferInsert;
-export type UpdatePaymentAuditLog = v.InferInput<typeof PaymentAuditLogUpdateSchema>
+export type UpdatePaymentAuditLog = v.InferInput<typeof PaymentAuditLogUpdateSchema>;
 
 export type PaymentAuditLogType = (typeof paymentAuditLogEnum.enumValues)[number];
 
