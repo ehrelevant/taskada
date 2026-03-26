@@ -4,7 +4,15 @@ import { Session } from '@thallesp/nestjs-better-auth';
 
 import { Session as UserSession } from '../../auth';
 
-import { CreateCustomerResponseDto, GetCustomerListResponseDto, GetPaymentChannelsRequestDto, GetPaymentChannelsResponseDto, UpdateCustomerRequestDto, UpdateCustomerResponseDto } from '../dto';
+import {
+  CreateCustomerResponseDto,
+  GetCustomerListResponseDto,
+  GetPaymentChannelsRequestDto,
+  GetPaymentChannelsResponseDto,
+  GetCustomerResponseDto,
+  UpdateCustomerRequestDto,
+  UpdateCustomerResponseDto,
+} from '../dto';
 import { path_case } from '../utils';
 import { PaymentEngineService } from '../payment-engine.service';
 
@@ -17,23 +25,12 @@ export class CustomerController {
 
   @Post()
   @ApiOperation({
-    summary: 'Create customer',
+    summary: 'Create customer through authenticated user',
     description: 'Create a customer record in the payment engine using session data.',
   })
   @ApiResponse({ status: 201, description: 'Customer created', type: CreateCustomerResponseDto })
-  // @ApiBody({ type: CreateCustomerRequestDto })
   createCustomer(@Session() session: UserSession): Promise<CreateCustomerResponseDto> {
-    return this.paymentEngineService.createCustomer({
-      reference_id: session.user.id,
-      type: 'INDIVIDUAL',
-      individual_detail: {
-        given_names: session.user.name,
-        surname: session.user.lastName,
-      },
-      email: session.user.email,
-      mobile_number: session.user.phoneNumber,
-      date_of_registration: session.user.createdAt.toISOString(),
-    });
+    return this.paymentEngineService.createCustomer(session.user.id)
   }
 
   @Get('')
@@ -41,47 +38,19 @@ export class CustomerController {
     summary: 'Get customer through authenticated user',
     description: "Retrieve customers matching the authenticated user's id.",
   })
-  @ApiResponse({ status: 200, description: 'List of customers', type: GetCustomerListResponseDto })
-  getCustomerList(@Session() session: UserSession): Promise<GetCustomerListResponseDto> {
-    return this.paymentEngineService.getCustomerList({ reference_id: session.user.id });
+  @ApiResponse({ status: 200, description: 'List of customers', type: GetCustomerResponseDto })
+  getCustomer(@Session() session: UserSession): Promise<GetCustomerResponseDto> {
+    return this.paymentEngineService.getCustomer(session.user.id);
   }
 
-  @Get('channels')
-  @ApiOperation({
-    summary: 'List payment channels',
-    description: 'Return available payment channels, optionally filtered by name, category or code.',
-  })
-  @ApiQuery({
-    name: 'channel_name',
-    required: false,
-    description: 'Filter by channel friendly name',
-    schema: { type: 'string', example: 'BCA' },
-  })
-  @ApiQuery({
-    name: 'channel_category',
-    required: false,
-    description: 'Filter by channel category',
-    schema: { type: 'string', enum: ['BANK', 'EWALLET', 'OTC'] },
-  })
-  @ApiQuery({
-    name: 'channel_code',
-    required: false,
-    description: 'Filter by provider channel code',
-    schema: { type: 'string', example: 'bca_va' },
-  })
-  @ApiResponse({ status: 200, description: 'Payment channels list', type: GetPaymentChannelsResponseDto })
-  getPaymentChannels(@Query() query: GetPaymentChannelsRequestDto): Promise<GetPaymentChannelsResponseDto> {
-    return this.paymentEngineService.getPaymentChannels(query);
-  }
-
-  @Patch(':customer_id')
-  @ApiOperation({ summary: 'Update customer', description: 'Update an existing customer.' })
+  @Patch('')
+  @ApiOperation({ summary: 'Update customer through authenticated user', description: 'Update an existing customer.' })
   @ApiBody({ type: UpdateCustomerRequestDto })
   @ApiResponse({ status: 200, description: 'Customer updated', type: UpdateCustomerResponseDto })
   updateCustomer(
-    @Param('customer_id') customer_id: string,
+    @Session() session: UserSession,
     @Body() body: UpdateCustomerRequestDto,
   ): Promise<UpdateCustomerResponseDto> {
-    return this.paymentEngineService.updateCustomer(body);
+    return this.paymentEngineService.updateCustomer(session.user.id, body);
   }
 }

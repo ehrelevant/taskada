@@ -70,10 +70,10 @@ export class PayoutController {
     description: 'Return available payment channels, optionally filtered by name, category or code.',
   })
   @ApiQuery({
-    name: 'channel_name',
+    name: 'currency',
     required: false,
-    description: 'Filter by channel friendly name',
-    schema: { type: 'string', example: 'BCA' },
+    description: 'Filter by currency',
+    schema: { type: 'string', example: "PHP"},
   })
   @ApiQuery({
     name: 'channel_category',
@@ -85,7 +85,7 @@ export class PayoutController {
     name: 'channel_code',
     required: false,
     description: 'Filter by provider channel code',
-    schema: { type: 'string', example: 'bca_va' },
+    schema: { type: 'string' },
   })
   @ApiResponse({ status: 200, description: 'Payment channels list', type: GetPaymentChannelsResponseDto })
   getPaymentChannels(@Query() query: GetPaymentChannelsRequestDto): Promise<GetPaymentChannelsResponseDto> {

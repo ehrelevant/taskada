@@ -19,6 +19,7 @@ import { SeekersModule } from './seekers/seekers.module';
 import { ServicesModule } from './services/services.module';
 import { ServiceTypesModule } from './service-types/service-types.module';
 import { UsersModule } from './users/users.module';
+import { PaymentMethodModule } from './payment_method/payment_method.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { UsersModule } from './users/users.module';
     PushNotificationsModule,
     PaymentEngineModule,
     ReviewsModule,
+    PaymentMethodModule,
   ],
 })
 export class AppModule {}

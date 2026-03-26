@@ -3,20 +3,92 @@ import { colors, spacing } from '@repo/theme';
 import { CreditCard, Plus, Trash2, Wallet } from 'lucide-react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { OptionsStackParamList } from '@navigation/OptionsStack';
-import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, TouchableOpacity, View, Image, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
+import { apiFetch } from '@lib/helpers';
+import BPI from "./assets/BPI/logo.svg"
+import GCASH from "./assets/GCash/logo.svg"
+import GRAB from "./assets/Grab/logo.jpeg"
+import MAYA from "./assets/Maya/logo.svg"
+import RCBC from "./assets/RCBC/logo.svg"
+import UBP from "./assets/UBP/logo.svg"
+import {PaymentMethod} from "@repo/database"
 
 type NavProp = NativeStackNavigationProp<OptionsStackParamList, 'PaymentMethods'>;
 
-// Mock Data
-// TODO: Replace with real data fetching with onEffect
-const SAVED_METHODS = [
-  { id: '1', type: 'CARD', label: 'Visa ending in 4242', icon: 'visa' },
-  { id: '2', type: 'EWALLET', label: 'GCash (0917 *** 8888)', icon: 'gcash' },
-];
+type SavedMethod = { id: string; type: string; icon?: React.JSX.Element; label: string };
+
+// Load saved methods from API
 
 export function PaymentMethodsScreen() {
   const navigation = useNavigation<NavProp>();
+  const [methods, setMethods] = useState<SavedMethod[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let mounted = true;
+
+    async function load() {
+      try {
+        const res = await apiFetch('/payment-method', 'GET');
+        if (!res.ok) throw new Error('Failed to load payment methods');
+        const data: PaymentMethod[] = await res.json();
+
+        const mapped: SavedMethod[] = data.map(pm => {
+          const type = pm.type
+          const channel = pm.channelCode
+
+          // Determine icon
+          let icon = undefined;
+          let label = channel;
+          const ch = channel.toLowerCase();
+          if (ch.includes('gcash')) {
+            icon = <GCASH width={28} height={28} />
+            label = "GCASH"
+          } else if (ch.includes('bpi')) {
+            icon = <BPI width={28} height={28} />
+          } else if (ch.includes('grab')) {
+            icon = <GRAB width={28} height={28} />
+          } else if (ch.includes('maya')) {
+            icon = <MAYA width={28} height={28} />
+            label = (pm.metadata as Record<string, string>).account_number;
+          } else if (ch.includes('rcbc')) {
+            icon = <RCBC width={28} height={28} />
+          } else if (ch.includes('ubp') || ch.includes('unionbank')) {
+            icon = <UBP width={28} height={28} />
+          }
+
+          // if (metadata?.card?.last4) label = `Card ending in ${metadata.card.last4}`;
+          // else if (metadata?.phone) label = `${channel} (${metadata.phone})`;
+
+          return { id: pm.id, type, icon, label };
+        });
+
+        if (mounted) setMethods(mapped);
+      } catch (err) {
+        console.error('Load payment methods', err);
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    }
+
+    load();
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  async function handleDelete(id: string) {
+    try {
+      const res = await apiFetch(`/payment-method/${id}`, 'DELETE');
+      if (!res.ok) throw new Error('Failed to delete payment method');
+      setMethods(prev => prev.filter(m => m.id !== id));
+    } catch (err) {
+      console.error('Delete payment method', err);
+      Alert.alert('Error', 'Failed to delete payment method');
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -27,30 +99,43 @@ export function PaymentMethodsScreen() {
         </Typography>
 
         <View style={styles.savedMethodsContainer}>
-          {SAVED_METHODS.length > 0 ? (
-            SAVED_METHODS.map(method => (
-              <Card key={method.id} style={styles.methodCard} padding="m">
-                <View style={styles.methodInfo}>
-                  <View style={styles.iconContainer}>
-                    {method.type === 'CARD' ? (
-                      <CreditCard color={colors.textPrimary} size={24} />
-                    ) : (
-                      <Wallet color={colors.textPrimary} size={24} />
-                    )}
-                  </View>
-                  <Typography variant="body1" weight="medium">
-                    {method.label}
-                  </Typography>
-                </View>
-                <TouchableOpacity>
-                  <Trash2 color={colors.error.base} size={20} />
-                </TouchableOpacity>
-              </Card>
-            ))
-          ) : (
+          {!loading && methods.length === 0 ? (
             <View style={styles.emptyState}>
               <Typography color={colors.textSecondary}>No payment methods added yet.</Typography>
             </View>
+          ) : (
+              methods.map(method => {
+                return (
+                  <Card key={method.id} style={styles.methodCard} padding="m">
+                    <View style={styles.methodInfo}>
+                      <View style={styles.iconContainer}>
+                        {
+                          method.icon ?? (
+                            <CreditCard color={colors.textPrimary} size={24} />
+                          )
+                        }
+                      </View>
+                      <Typography variant="body1" weight="medium">
+                        {method.label}
+                      </Typography>
+                    </View>
+                    <TouchableOpacity
+                      onPress={() =>
+                        Alert.alert(
+                          'Delete payment method',
+                          'Are you sure you want to remove this payment method?',
+                          [
+                            { text: 'Cancel', style: 'cancel' },
+                            { text: 'Delete', style: 'destructive', onPress: () => handleDelete(method.id) },
+                          ]
+                        )
+                      }
+                    >
+                      <Trash2 color={colors.error.base} size={20} />
+                    </TouchableOpacity>
+                  </Card>
+                );
+              })
           )}
         </View>
 
@@ -60,31 +145,13 @@ export function PaymentMethodsScreen() {
         </Typography>
 
         <View style={styles.actionsContainer}>
-          <TouchableOpacity onPress={() => navigation.navigate('AddCard')}>
+          <TouchableOpacity onPress={() => navigation.navigate('PaymentMethodLinking')}>
             <Card style={styles.actionCard} padding="m">
               <View style={[styles.actionIcon, { backgroundColor: '#E3F2FD' }]}>
                 <CreditCard color={colors.actionPrimary} size={24} />
               </View>
               <View>
-                <Typography variant="subtitle2">Credit / Debit Card</Typography>
-                <Typography variant="caption" color={colors.textSecondary}>
-                  Visa, Mastercard, JCB
-                </Typography>
-              </View>
-              <Plus color={colors.textSecondary} size={20} style={{ marginLeft: 'auto' }} />
-            </Card>
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => navigation.navigate('AddEWallet')}>
-            <Card style={styles.actionCard} padding="m">
-              <View style={[styles.actionIcon, { backgroundColor: '#E8F5E9' }]}>
-                <Wallet color={colors.success.base} size={24} />
-              </View>
-              <View>
-                <Typography variant="subtitle2">E-Wallet</Typography>
-                <Typography variant="caption" color={colors.textSecondary}>
-                  GCash, Maya
-                </Typography>
+                <Typography variant="subtitle2">Add new Payment Method</Typography>
               </View>
               <Plus color={colors.textSecondary} size={20} style={{ marginLeft: 'auto' }} />
             </Card>
@@ -124,10 +191,14 @@ const styles = StyleSheet.create({
   iconContainer: {
     width: 40,
     height: 40,
-    borderRadius: 20,
+    borderRadius: 10,
     backgroundColor: colors.surfaceSecondary,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  logoImage: {
+    width: 28,
+    height: 28,
   },
   emptyState: {
     padding: spacing.l,

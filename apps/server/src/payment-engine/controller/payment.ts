@@ -51,4 +51,9 @@ export class PaymentController {
   refundPayment(@Body() body: CreateRefundRequestDto): Promise<CreateRefundResponseDto> {
     return this.paymentEngineService.refundPayment(body as unknown as CreateRefundRequest);
   }
+
+  @Get("token/:payment_token_id")
+  getPaymentTokenStatus(@Param("payment_token_id") payment_token_id: string){
+    return this.paymentEngineService.getPaymentTokenStatus({payment_token_id})
+  }
 }

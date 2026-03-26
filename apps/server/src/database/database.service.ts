@@ -1,9 +1,11 @@
 import 'dotenv/config';
 import * as schema from '@repo/database';
+import type { UserUpdate  } from '@repo/database';
 
 import { drizzle, type NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { Injectable } from '@nestjs/common';
 import { Pool } from 'pg';
+import { eq } from 'drizzle-orm';
 
 @Injectable()
 export class DatabaseService {
@@ -19,5 +21,24 @@ export class DatabaseService {
       connectionTimeoutMillis: 10000,
     });
     this.db = drizzle(pool, { schema, casing: 'snake_case' });
+  }
+
+  public async getUser(user_id: string) {
+    const [user_row] = await this.db
+      .select()
+      .from(schema.user)
+      .where(eq(schema.user.id, user_id))
+      .limit(1)
+    return user_row
+  }
+
+  public async updateUser(user_id: string, update_values:UserUpdate) {
+    const [user_row] = await this.db
+      .update(schema.user)
+      .set(update_values)
+      .where(eq(schema.user.id, user_id))
+      .returning()
+
+    return user_row
   }
 }

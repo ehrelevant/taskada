@@ -12,6 +12,7 @@ import {
 } from '@repo/xendit-payment-engine';
 
 import { createStandardDto } from '@mag123c/nestjs-stdschema';
+import { ApiHideProperty } from '@nestjs/swagger';
 
 export class CancelPayoutRequestDto extends createStandardDto(CancelPayoutRequestSchema) {}
 export class CancelPayoutResponseDto extends createStandardDto(CancelPayoutResponseSchema) {}
