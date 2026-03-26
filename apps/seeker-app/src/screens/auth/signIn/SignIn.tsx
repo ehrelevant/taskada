@@ -12,10 +12,10 @@ export function SignInScreen() {
 
   return (
     <ScreenContainer scrollable padding="l" style={styles.container}>
-      <Typography variant="h3" weight="bold" style={styles.title}>
+      <Typography variant="h1" weight="bold" align="center" style={styles.title}>
         Welcome Back
       </Typography>
-      <Typography variant="body1" color="textSecondary" style={styles.subtitle}>
+      <Typography variant="body1" color="textSecondary" align="center" style={styles.subtitle}>
         Sign in to continue
       </Typography>
 
@@ -38,7 +38,7 @@ export function SignInScreen() {
       />
 
       {errorMessage !== '' && (
-        <Typography variant="body2" color={colors.error.base} style={styles.error}>
+        <Typography variant="body2" color="error" align="center" style={styles.error}>
           {errorMessage}
         </Typography>
       )}

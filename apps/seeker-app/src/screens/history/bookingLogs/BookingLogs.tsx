@@ -1,8 +1,7 @@
-import { ActivityIndicator, ScrollView, TextInput, TouchableOpacity, View } from 'react-native';
-import { Avatar, Button, Card, Header, Rating, ReviewCard, StarRatingInput, Typography } from '@repo/components';
-import { ChevronLeft, Flag } from 'lucide-react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { spacing, useTheme } from '@repo/theme';
+import { Avatar, Button, Card, EmptyState, Header, Rating, ReviewCard, ScreenContainer, Section, StarRatingInput, StatusBadge, Typography } from '@repo/components';
+import { Flag } from 'lucide-react-native';
+import { TextInput, TouchableOpacity, View } from 'react-native';
+import { useTheme } from '@repo/theme';
 
 import { createStyles } from './BookingLogs.styles';
 import { useBookingLogs } from './BookingLogs.hooks';
@@ -31,14 +30,9 @@ export function BookingLogsScreen() {
 
   if (isLoading) {
     return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={colors.actionPrimary} />
-          <Typography variant="body1" style={styles.loadingText}>
-            Loading...
-          </Typography>
-        </View>
-      </SafeAreaView>
+      <ScreenContainer>
+        <EmptyState loading loadingMessage="Loading..." />
+      </ScreenContainer>
     );
   }
 
@@ -51,15 +45,20 @@ export function BookingLogsScreen() {
   const isCompleted = transaction?.status === 'completed';
 
   return (
-    <SafeAreaView style={styles.container}>
+    <ScreenContainer
+      scrollable
+      padding="none"
+      stickyFooter={
+        <View style={styles.footerButtons}>
+          <Button title="View Request Details" onPress={handleViewRequestDetails} />
+          <Button title="View Chat Logs" variant="outline" onPress={handleViewChatLogs} />
+        </View>
+      }
+    >
       <Header
         title="Transaction Details"
         size="small"
-        leftContent={
-          <TouchableOpacity onPress={handleGoBack}>
-            <ChevronLeft size={24} color={colors.textPrimary} />
-          </TouchableOpacity>
-        }
+        onBack={handleGoBack}
         rightContent={
           <TouchableOpacity onPress={handleReport}>
             <Flag size={20} color={colors.textSecondary} />
@@ -67,7 +66,7 @@ export function BookingLogsScreen() {
         }
       />
 
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+      <View style={styles.content}>
         <TouchableOpacity onPress={handleViewServiceDetails} activeOpacity={0.8}>
           <Card elevation="m" padding="l" style={styles.serviceCard}>
             <View style={styles.providerSection}>
@@ -76,14 +75,14 @@ export function BookingLogsScreen() {
                 size={80}
                 name={providerName}
               />
-              <Typography variant="h6" style={{ marginTop: spacing.s }}>
+              <Typography variant="h6" style={styles.providerName}>
                 {providerName}
               </Typography>
               <Typography variant="body2" color="textSecondary">
                 {transaction?.serviceType?.name}
               </Typography>
               {transaction?.serviceRating && (
-                <View style={{ marginTop: spacing.s }}>
+                <View style={styles.ratingRow}>
                   <Rating
                     value={transaction.serviceRating.avgRating}
                     reviewCount={transaction.serviceRating.reviewCount}
@@ -91,66 +90,38 @@ export function BookingLogsScreen() {
                 </View>
               )}
             </View>
-            <Typography variant="caption" color="actionPrimary" style={styles.tapHint}>
+            <Typography variant="caption" color="actionPrimary" align="center" style={styles.tapHint}>
               Tap to view service details
             </Typography>
           </Card>
         </TouchableOpacity>
 
-        <View style={styles.section}>
-          <Typography variant="h6" style={styles.sectionTitle}>
-            Booking Details
-          </Typography>
-
-          <View style={styles.detailRow}>
-            <Typography variant="subtitle2" color="textSecondary">
-              Service Cost
-            </Typography>
-            <Typography variant="h5" style={styles.costValue}>
+        <Section label="Booking Details">
+          <Section label="Service Cost">
+            <Typography variant="h5" color="actionPrimary">
               ${transaction?.cost?.toFixed(2) || '0.00'}
             </Typography>
-          </View>
+          </Section>
 
           {transaction?.specifications && (
-            <View style={styles.detailRow}>
-              <Typography variant="subtitle2" color="textSecondary">
-                Specifications
-              </Typography>
-              <View style={styles.specificationsBox}>
-                <Typography variant="body1" style={styles.specificationsText}>
-                  {transaction.specifications}
-                </Typography>
-              </View>
-            </View>
+            <Section label="Specifications" variant="card">
+              <Typography variant="body1">{transaction.specifications}</Typography>
+            </Section>
           )}
 
-          <View style={styles.detailRow}>
-            <Typography variant="subtitle2" color="textSecondary">
-              Booking Date and Time
-            </Typography>
+          <Section label="Booking Date and Time">
             <Typography variant="body1">
               {transaction?.createdAt ? formatDateTime(transaction.createdAt) : 'N/A'}
             </Typography>
-          </View>
+          </Section>
 
-          <View style={styles.detailRow}>
-            <Typography variant="subtitle2" color="textSecondary">
-              Status
-            </Typography>
-            <View style={styles.statusBadge}>
-              <Typography variant="body1" style={styles.statusText}>
-                {transaction?.status?.toUpperCase()}
-              </Typography>
-            </View>
-          </View>
-        </View>
+          <Section label="Status">
+            <StatusBadge status="info" label={transaction?.status?.toUpperCase() || 'UNKNOWN'} />
+          </Section>
+        </Section>
 
         {isCompleted && (
-          <View style={styles.section}>
-            <Typography variant="h6" style={styles.sectionTitle}>
-              {hasReviewed ? 'Your Review' : 'Leave a Review'}
-            </Typography>
-
+          <Section label={hasReviewed ? 'Your Review' : 'Leave a Review'}>
             {hasReviewed && userReview ? (
               <ReviewCard
                 reviewerName={userReview.reviewerName}
@@ -159,7 +130,7 @@ export function BookingLogsScreen() {
                 date={userReview.createdAt}
               />
             ) : (
-              <Card elevation="s" padding="m" style={styles.reviewCard}>
+              <Card elevation="s" padding="m">
                 <Typography variant="body2" color="textSecondary" style={styles.reviewLabel}>
                   Rate your experience:
                 </Typography>
@@ -167,11 +138,7 @@ export function BookingLogsScreen() {
                   <StarRatingInput value={rating} onChange={setRating} size={32} />
                 </View>
 
-                <Typography
-                  variant="body2"
-                  color="textSecondary"
-                  style={[styles.reviewLabel, { marginTop: spacing.m }]}
-                >
+                <Typography variant="body2" color="textSecondary" style={styles.commentLabel}>
                   Comments (optional):
                 </Typography>
                 <TextInput
@@ -190,18 +157,13 @@ export function BookingLogsScreen() {
                   onPress={handleSubmitReview}
                   disabled={rating === 0 || isSubmitting}
                   isLoading={isSubmitting}
-                  style={{ marginTop: spacing.m }}
+                  style={styles.submitButton}
                 />
               </Card>
             )}
-          </View>
+          </Section>
         )}
-      </ScrollView>
-
-      <View style={styles.buttonContainer}>
-        <Button title="View Request Details" onPress={handleViewRequestDetails} />
-        <Button title="View Chat Logs" variant="outline" onPress={handleViewChatLogs} style={styles.secondaryButton} />
       </View>
-    </SafeAreaView>
+    </ScreenContainer>
   );
 }

@@ -1,18 +1,10 @@
-import {
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import { Avatar, Button, Header, Typography } from '@repo/components';
-import { CheckCircle2, ChevronLeft, ImagePlus, X } from 'lucide-react-native';
+import { Avatar, Button, EmptyState, Header, Typography } from '@repo/components';
+import { CheckCircle2, ImagePlus, X } from 'lucide-react-native';
 import { Controller } from 'react-hook-form';
+import { KeyboardAvoidingView, Platform, ScrollView, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { spacing, useTheme } from '@repo/theme';
 import { useEffect } from 'react';
+import { useTheme } from '@repo/theme';
 
 import { createStyles } from './Report.styles';
 import { REPORT_REASONS, useReport } from './Report.hooks';
@@ -43,18 +35,8 @@ export function ReportScreen() {
   if (isChecking) {
     return (
       <SafeAreaView style={styles.container}>
-        <Header
-          title="Report User"
-          size="small"
-          leftContent={
-            <TouchableOpacity onPress={handleGoBack}>
-              <ChevronLeft size={24} color={colors.textPrimary} />
-            </TouchableOpacity>
-          }
-        />
-        <View style={styles.alreadyReportedContainer}>
-          <ActivityIndicator size="large" color={colors.actionPrimary} />
-        </View>
+        <Header title="Report User" size="small" onBack={handleGoBack} />
+        <EmptyState loading loadingMessage="Checking..." />
       </SafeAreaView>
     );
   }
@@ -62,21 +44,13 @@ export function ReportScreen() {
   if (hasAlreadyReported) {
     return (
       <SafeAreaView style={styles.container}>
-        <Header
-          title="Report User"
-          size="small"
-          leftContent={
-            <TouchableOpacity onPress={handleGoBack}>
-              <ChevronLeft size={24} color={colors.textPrimary} />
-            </TouchableOpacity>
-          }
-        />
+        <Header title="Report User" size="small" onBack={handleGoBack} />
         <View style={styles.alreadyReportedContainer}>
           <CheckCircle2 size={48} color={colors.success.base} />
-          <Typography variant="h6" style={{ marginTop: spacing.m }}>
+          <Typography variant="h6" style={styles.alreadyReportedTitle}>
             Report Already Submitted
           </Typography>
-          <Typography variant="body1" color="textSecondary" style={{ marginTop: spacing.s, textAlign: 'center' }}>
+          <Typography variant="body1" color="textSecondary" style={styles.alreadyReportedSubtitle}>
             You have already submitted a report for this booking. Our team will review it.
           </Typography>
         </View>
@@ -88,15 +62,7 @@ export function ReportScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header
-        title="Report User"
-        size="small"
-        leftContent={
-          <TouchableOpacity onPress={handleGoBack}>
-            <ChevronLeft size={24} color={colors.textPrimary} />
-          </TouchableOpacity>
-        }
-      />
+      <Header title="Report User" size="small" onBack={handleGoBack} />
 
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.keyboardView}>
         <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
@@ -142,12 +108,12 @@ export function ReportScreen() {
             )}
           />
           {errors.reason && (
-            <Typography variant="caption" color="error" style={{ marginTop: spacing.xs }}>
+            <Typography variant="caption" color="error" style={styles.errorText}>
               {errors.reason.message}
             </Typography>
           )}
 
-          <View style={{ marginTop: spacing.l }}>
+          <View style={styles.descriptionSection}>
             <Typography variant="subtitle2" style={styles.sectionLabel}>
               Description {selectedReason === 'other' ? '*' : '(Optional)'}
             </Typography>
@@ -169,7 +135,7 @@ export function ReportScreen() {
               )}
             />
             {errors.description && (
-              <Typography variant="caption" color="error" style={{ marginTop: spacing.xs }}>
+              <Typography variant="caption" color="error" style={styles.errorText}>
                 {errors.description.message}
               </Typography>
             )}

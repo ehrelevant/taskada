@@ -1,9 +1,7 @@
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import { ActivityIndicator, ScrollView, TouchableOpacity, View } from 'react-native';
-import { ChevronLeft } from 'lucide-react-native';
-import { Header, Typography } from '@repo/components';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Card, EmptyState, Header, ScreenContainer, StatusBadge, Typography } from '@repo/components';
 import { useTheme } from '@repo/theme';
+import { View } from 'react-native';
 
 import { createStyles } from './BookingDetails.styles';
 import { useBookingDetails } from './BookingDetails.hooks';
@@ -18,35 +16,19 @@ export function BookingDetailsScreen() {
 
   if (isLoading) {
     return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={colors.actionPrimary} />
-          <Typography variant="body1" style={styles.loadingText}>
-            Loading...
-          </Typography>
-        </View>
-      </SafeAreaView>
+      <ScreenContainer>
+        <EmptyState loading loadingMessage="Loading..." />
+      </ScreenContainer>
     );
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Header
-        title="Booking Details"
-        size="small"
-        leftContent={
-          <TouchableOpacity onPress={handleGoBack}>
-            <ChevronLeft size={24} color={colors.textPrimary} />
-          </TouchableOpacity>
-        }
-      />
+    <ScreenContainer scrollable padding="none">
+      <Header title="Booking Details" size="small" onBack={handleGoBack} />
 
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+      <View style={styles.content}>
         {booking?.address && (
           <View style={styles.mapSection}>
-            <Typography variant="subtitle2" style={styles.sectionLabel}>
-              Service Location
-            </Typography>
             <View style={styles.mapContainer}>
               <MapView
                 provider={PROVIDER_GOOGLE}
@@ -66,53 +48,43 @@ export function BookingDetailsScreen() {
               </MapView>
             </View>
             <View style={styles.addressContainer}>
-              <Typography variant="body2" style={styles.addressText}>
-                {booking.address.label || 'Location not specified'}
-              </Typography>
+              <Typography variant="body2">{booking.address.label || 'Location not specified'}</Typography>
             </View>
           </View>
         )}
 
-        <View style={styles.section}>
-          <Typography variant="subtitle2" style={styles.sectionLabel}>
+        <Card elevation="s" padding="m" style={styles.detailsCard}>
+          <Typography variant="h5" color="textSecondary" style={styles.cardLabel}>
             Service Cost
           </Typography>
-          <Typography variant="h5" style={styles.costValue}>
+          <Typography variant="h2" color={colors.actionSecondary}>
             ${booking?.cost?.toFixed(2) || '0.00'}
           </Typography>
-        </View>
 
-        {booking?.specifications && (
-          <View style={styles.section}>
-            <Typography variant="subtitle2" style={styles.sectionLabel}>
-              Specifications
-            </Typography>
-            <View style={styles.specificationsBox}>
-              <Typography variant="body1" style={styles.specificationsText}>
-                {booking.specifications}
-              </Typography>
-            </View>
-          </View>
-        )}
+          <View style={styles.divider} />
 
-        <View style={styles.section}>
-          <Typography variant="subtitle2" style={styles.sectionLabel}>
-            Booking Date and Time
+          <Typography variant="h5" color="textSecondary" style={styles.cardLabel}>
+            Booking Date
           </Typography>
           <Typography variant="body1">{booking?.createdAt ? formatDateTime(booking.createdAt) : 'N/A'}</Typography>
-        </View>
 
-        <View style={styles.section}>
-          <Typography variant="subtitle2" style={styles.sectionLabel}>
+          <View style={styles.divider} />
+
+          <Typography variant="h5" color="textSecondary" style={styles.cardLabel}>
             Status
           </Typography>
-          <View style={styles.statusBadge}>
-            <Typography variant="body1" style={styles.statusText}>
-              {booking?.status?.toUpperCase()}
+          <StatusBadge status="info" label={booking?.status?.toUpperCase() || 'UNKNOWN'} />
+        </Card>
+
+        {booking?.specifications && (
+          <Card elevation="s" padding="m" style={styles.detailsCard}>
+            <Typography variant="h5" color="textSecondary" style={styles.cardLabel}>
+              Specifications
             </Typography>
-          </View>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+            <Typography variant="body1">{booking.specifications}</Typography>
+          </Card>
+        )}
+      </View>
+    </ScreenContainer>
   );
 }

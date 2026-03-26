@@ -3,18 +3,6 @@ import { StyleSheet } from 'react-native';
 
 export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: colors.background,
-    },
-    loadingContainer: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    loadingText: {
-      marginTop: spacing.m,
-    },
     messagesList: {
       padding: spacing.m,
     },
@@ -59,11 +47,5 @@ export const createStyles = (colors: ThemeColors) =>
       height: 100,
       borderRadius: radius.s,
       marginRight: spacing.xs,
-    },
-    emptyContainer: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: spacing.xl,
     },
   });

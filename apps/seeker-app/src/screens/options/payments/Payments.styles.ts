@@ -1,27 +1,20 @@
-import { radius, spacing, ThemeColors } from '@repo/theme';
+import { spacing, ThemeColors } from '@repo/theme';
 import { StyleSheet } from 'react-native';
 
 export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: colors.backgroundSecondary,
-    },
-    scrollContent: {
-      padding: spacing.m,
-    },
     sectionTitle: {
       marginBottom: spacing.m,
-      marginTop: spacing.s,
-      marginLeft: spacing.xs,
     },
     savedMethodsContainer: {
-      gap: spacing.s,
+      gap: spacing.m,
+      marginBottom: spacing.xl,
     },
     methodCard: {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
+      borderRadius: 16,
     },
     methodInfo: {
       flexDirection: 'row',
@@ -36,27 +29,29 @@ export const createStyles = (colors: ThemeColors) =>
       alignItems: 'center',
       justifyContent: 'center',
     },
-    emptyState: {
-      padding: spacing.l,
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: colors.surface,
-      borderRadius: radius.m,
-      marginBottom: spacing.l,
-    },
     actionsContainer: {
-      gap: spacing.s,
+      gap: spacing.m,
     },
     actionCard: {
       flexDirection: 'row',
       alignItems: 'center',
       gap: spacing.m,
+      borderRadius: 16,
     },
     actionIcon: {
       width: 48,
       height: 48,
-      borderRadius: radius.xl,
+      borderRadius: 24,
       alignItems: 'center',
       justifyContent: 'center',
+    },
+    cardIconBg: {
+      backgroundColor: colors.secondary.light,
+    },
+    walletIconBg: {
+      backgroundColor: colors.secondary.light,
+    },
+    plusIcon: {
+      marginLeft: 'auto',
     },
   });

@@ -3,40 +3,19 @@ import { StyleSheet } from 'react-native';
 
 export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: colors.background,
-    },
-    scrollView: {
-      flex: 1,
-      paddingHorizontal: spacing.m,
-    },
-    section: {
-      marginVertical: spacing.m,
-    },
-    sectionTitle: {
-      marginBottom: spacing.m,
-      color: colors.textPrimary,
-    },
     avatarSection: {
-      flex: 1,
-      flexDirection: 'column',
       alignItems: 'center',
+      marginVertical: spacing.m,
     },
     avatarContainer: {
       alignItems: 'center',
       marginBottom: spacing.m,
     },
-    avatar: {
-      width: 120,
-      height: 120,
-      borderRadius: 60,
-    },
     cameraButton: {
       position: 'absolute',
       bottom: 0,
       right: 0,
-      backgroundColor: colors.actionPrimary,
+      backgroundColor: colors.secondary.base,
       width: 36,
       height: 36,
       borderRadius: 18,
@@ -53,6 +32,13 @@ export const createStyles = (colors: ThemeColors) =>
       borderRadius: 14,
       justifyContent: 'center',
       alignItems: 'center',
+    },
+    sectionCard: {
+      marginBottom: spacing.l,
+      borderRadius: 16,
+    },
+    sectionTitle: {
+      marginBottom: spacing.m,
     },
     readonlyInput: {
       backgroundColor: colors.backgroundSecondary,

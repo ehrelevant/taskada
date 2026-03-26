@@ -55,6 +55,9 @@ export const createStyles = (colors: ThemeColors) =>
       alignItems: 'center',
       backgroundColor: colors.backgroundSecondary,
     },
+    addImageLabel: {
+      marginTop: 4,
+    },
     submitButton: {
       marginTop: spacing.l,
     },

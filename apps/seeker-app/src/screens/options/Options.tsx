@@ -1,4 +1,4 @@
-import { Avatar, Button, MenuButton, ScreenContainer, Typography } from '@repo/components';
+import { Avatar, Button, MenuButton, ScreenContainer, SectionHeader, Typography } from '@repo/components';
 import { ColorScheme, useTheme } from '@repo/theme';
 import { CreditCard, LogOut, MessageSquareWarning, Moon, Sun, UserPen } from 'lucide-react-native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -28,8 +28,8 @@ export function OptionsScreen() {
   };
 
   const getThemeIcon = () => {
-    if (colorScheme === 'dark') return <Moon size={24} color={colors.actionPrimary} />;
-    if (colorScheme === 'light') return <Sun size={24} color={colors.actionPrimary} />;
+    if (colorScheme === 'dark') return <Moon size={24} color={colors.secondary.base} />;
+    if (colorScheme === 'light') return <Sun size={24} color={colors.secondary.base} />;
     return <Sun size={24} color={colors.textDisabled} />;
   };
 
@@ -40,14 +40,16 @@ export function OptionsScreen() {
   };
 
   return (
-    <ScreenContainer scrollable padding="m" verticalPadding="none">
+    <ScreenContainer scrollable padding="none" verticalPadding="none">
       <View style={styles.profileSection}>
         <Avatar
           source={profile?.avatarUrl ? { uri: profile.avatarUrl } : null}
           name={`${user.name} ${user.lastName}`}
-          size={100}
+          size={80}
+          borderColor={colors.secondary.base}
+          borderWidth={3}
         />
-        <Typography variant="h4" weight="bold" style={styles.userName}>
+        <Typography variant="h3" weight="bold" style={styles.userName}>
           {user.name} {user.lastName}
         </Typography>
         <Typography variant="body2" color="textSecondary">
@@ -56,36 +58,30 @@ export function OptionsScreen() {
       </View>
 
       <View style={styles.menuSection}>
-        <Typography variant="h6" style={styles.sectionTitle}>
-          Account
-        </Typography>
+        <SectionHeader title="Account" style={styles.sectionHeader} />
 
         <MenuButton
           title="Manage Profile"
-          icon={<UserPen size={24} color={colors.actionPrimary} />}
+          icon={<UserPen size={24} color={colors.secondary.base} />}
           onPress={() => navigation.navigate('Profile')}
           style={styles.menuButton}
         />
         <MenuButton
           title="Manage Payment Methods"
-          icon={<CreditCard size={24} color={colors.actionPrimary} />}
+          icon={<CreditCard size={24} color={colors.secondary.base} />}
           onPress={() => navigation.navigate('PaymentMethods')}
           style={styles.menuButton}
         />
 
-        <Typography variant="h6" style={styles.sectionTitle}>
-          Preferences
-        </Typography>
+        <SectionHeader title="Preferences" style={styles.sectionHeader} />
 
         <MenuButton title={getThemeLabel()} icon={getThemeIcon()} onPress={cycleTheme} style={styles.menuButton} />
 
-        <Typography variant="h6" style={styles.sectionTitle}>
-          Support
-        </Typography>
+        <SectionHeader title="Support" style={styles.sectionHeader} />
 
         <MenuButton
           title="Report Issue"
-          icon={<MessageSquareWarning size={24} color={colors.actionPrimary} />}
+          icon={<MessageSquareWarning size={24} color={colors.secondary.base} />}
           onPress={() => undefined}
           style={styles.menuButton}
         />

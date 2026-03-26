@@ -1,5 +1,5 @@
 import { ActivityIndicator, View } from 'react-native';
-import { Button, Typography } from '@repo/components';
+import { Button, EmptyState, ScreenContainer, Typography } from '@repo/components';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '@repo/theme';
 
@@ -14,31 +14,26 @@ export function StandbyScreen() {
 
   if (isConnecting) {
     return (
-      <View style={styles.container}>
-        <ActivityIndicator size="large" color={colors.actionPrimary} />
-        <Typography variant="body1" style={styles.connectingText}>
-          Connecting to service providers...
-        </Typography>
-      </View>
+      <ScreenContainer>
+        <EmptyState loading loadingMessage="Connecting to service providers..." />
+      </ScreenContainer>
     );
   }
 
   if (error) {
     return (
-      <View style={styles.container}>
-        <Typography variant="h5" color="error" style={styles.errorText}>
-          Error
-        </Typography>
-        <Typography variant="body1" color="textSecondary" style={styles.errorMessage}>
-          {error}
-        </Typography>
-        <Button title="Go Back" onPress={() => navigation.goBack()} style={styles.button} />
-      </View>
+      <ScreenContainer>
+        <EmptyState
+          title="Error"
+          message={error}
+          action={<Button title="Go Back" onPress={() => navigation.goBack()} />}
+        />
+      </ScreenContainer>
     );
   }
 
   return (
-    <View style={styles.container}>
+    <ScreenContainer padding="m">
       <View style={styles.content}>
         <Typography variant="h4">Reaching out to service providers.</Typography>
         <Typography variant="h4">This may take awhile.</Typography>
@@ -55,9 +50,8 @@ export function StandbyScreen() {
           onPress={handleCancelRequest}
           isLoading={isCancelling}
           disabled={isCancelling}
-          style={styles.cancelButton}
         />
       </View>
-    </View>
+    </ScreenContainer>
   );
 }

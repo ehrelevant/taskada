@@ -1,12 +1,8 @@
 import { spacing, ThemeColors } from '@repo/theme';
 import { StyleSheet } from 'react-native';
 
-export const createStyles = (colors: ThemeColors) =>
+export const createStyles = (_colors: ThemeColors) =>
   StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: colors.background,
-    },
     scrollContent: {
       padding: spacing.m,
     },
@@ -22,11 +18,5 @@ export const createStyles = (colors: ThemeColors) =>
     },
     halfInput: {
       flex: 1,
-    },
-    footer: {
-      padding: spacing.m,
-      borderTopWidth: 1,
-      borderTopColor: colors.border,
-      backgroundColor: colors.surface,
     },
   });

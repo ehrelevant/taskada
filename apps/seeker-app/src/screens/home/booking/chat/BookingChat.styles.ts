@@ -3,9 +3,12 @@ import { StyleSheet } from 'react-native';
 
 export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: colors.background,
+    headerCenter: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    headerCenterText: {
+      marginLeft: spacing.s,
     },
     messagesList: {
       padding: spacing.m,

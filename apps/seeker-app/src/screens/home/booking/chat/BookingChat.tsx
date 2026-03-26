@@ -1,16 +1,48 @@
 import { ActivityIndicator, FlatList, Image, ScrollView, TextInput, TouchableOpacity, View } from 'react-native';
-import { Avatar, Header, ImageViewer, Typography } from '@repo/components';
+import { Avatar, Header, ImageViewer, ScreenContainer, Typography } from '@repo/components';
 import { Flag, Image as ImageIcon, Send, X } from 'lucide-react-native';
 import { KeyboardStickyView } from 'react-native-keyboard-controller';
 import type { Message } from '@repo/shared';
+import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '@repo/theme';
 
 import { createStyles } from './BookingChat.styles';
 import { useBookingChat } from './BookingChat.hooks';
 
+function ChatHeaderCenter({
+  avatarUrl,
+  firstName,
+  lastName,
+  isTyping,
+}: {
+  avatarUrl: string | null;
+  firstName: string;
+  lastName: string;
+  isTyping: boolean;
+}) {
+  const styles = createStyles(useTheme().colors);
+
+  return (
+    <View style={styles.headerCenter}>
+      <Avatar source={avatarUrl ? { uri: avatarUrl } : null} name={`${firstName} ${lastName}`} size={36} />
+      <View style={styles.headerCenterText}>
+        <Typography variant="h5" weight="bold">
+          {firstName} {lastName}
+        </Typography>
+        {isTyping && (
+          <Typography variant="caption" color="textSecondary">
+            Typing...
+          </Typography>
+        )}
+      </View>
+    </View>
+  );
+}
+
 export function ChatScreen() {
   const { colors } = useTheme();
   const styles = createStyles(colors);
+  const navigation = useNavigation();
   const {
     messages,
     inputText,
@@ -30,6 +62,10 @@ export function ChatScreen() {
     handleRemoveImage,
     handleReport,
   } = useBookingChat();
+
+  const handleGoBack = () => {
+    navigation.goBack();
+  };
 
   const renderMessage = ({ item }: { item: Message }) => {
     const isOwnMessage = item.userId === currentUserId;
@@ -67,26 +103,16 @@ export function ChatScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <ScreenContainer useSafeArea={false} padding="none">
       <Header
+        onBack={handleGoBack}
         centerContent={
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Avatar
-              source={providerInfo.avatarUrl ? { uri: providerInfo.avatarUrl } : null}
-              name={`${providerInfo.firstName} ${providerInfo.lastName}`}
-              size={36}
-            />
-            <View style={{ marginLeft: 8 }}>
-              <Typography variant="h5" weight="bold">
-                {providerInfo.firstName} {providerInfo.lastName}
-              </Typography>
-              {isTyping && (
-                <Typography variant="caption" color="textSecondary">
-                  Typing...
-                </Typography>
-              )}
-            </View>
-          </View>
+          <ChatHeaderCenter
+            avatarUrl={providerInfo.avatarUrl}
+            firstName={providerInfo.firstName}
+            lastName={providerInfo.lastName}
+            isTyping={isTyping}
+          />
         }
         rightContent={
           <TouchableOpacity onPress={handleReport}>
@@ -154,6 +180,6 @@ export function ChatScreen() {
         imageUri={selectedImage || ''}
         onClose={() => setSelectedImage(null)}
       />
-    </View>
+    </ScreenContainer>
   );
 }

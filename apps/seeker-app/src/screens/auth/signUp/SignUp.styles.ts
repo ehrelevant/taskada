@@ -8,6 +8,9 @@ export const createStyles = (_colors: ThemeColors) =>
       justifyContent: 'center',
       alignItems: 'center',
       gap: spacing.s,
-      paddingHorizontal: spacing.s,
+      paddingHorizontal: spacing.m,
+    },
+    signInLink: {
+      textDecorationLine: 'underline',
     },
   });

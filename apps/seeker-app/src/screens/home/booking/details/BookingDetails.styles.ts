@@ -3,23 +3,12 @@ import { StyleSheet } from 'react-native';
 
 export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: colors.background,
-    },
-    loadingContainer: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    loadingText: {
-      marginTop: spacing.m,
-    },
-    scrollContent: {
+    content: {
       padding: spacing.m,
+      gap: spacing.l,
     },
     mapSection: {
-      marginBottom: spacing.l,
+      marginBottom: spacing.xs,
     },
     mapContainer: {
       height: 200,
@@ -34,46 +23,21 @@ export const createStyles = (colors: ThemeColors) =>
     addressContainer: {
       marginTop: spacing.s,
       padding: spacing.m,
-      backgroundColor: colors.surface,
+      backgroundColor: colors.backgroundSecondary,
       borderRadius: radius.s,
       borderWidth: 1,
       borderColor: colors.border,
     },
-    addressText: {
-      lineHeight: 22,
+    detailsCard: {
+      gap: spacing.xs,
     },
-    section: {
-      marginBottom: spacing.l,
+    cardLabel: {
+      fontWeight: '400',
+      fontSize: 12,
     },
-    sectionLabel: {
-      marginBottom: spacing.s,
-      color: colors.textSecondary,
-    },
-    statusBadge: {
-      backgroundColor: colors.surface,
-      padding: spacing.m,
-      borderRadius: radius.s,
-      borderWidth: 1,
-      borderColor: colors.border,
-      alignSelf: 'flex-start',
-    },
-    statusText: {
-      fontWeight: '600',
-      color: colors.actionPrimary,
-    },
-    costValue: {
-      color: colors.actionPrimary,
-      fontWeight: '700',
-    },
-    specificationsBox: {
-      backgroundColor: colors.surface,
-      padding: spacing.m,
-      borderRadius: radius.m,
-      borderWidth: 1,
-      borderColor: colors.border,
-      minHeight: 120,
-    },
-    specificationsText: {
-      lineHeight: 22,
+    divider: {
+      height: 1,
+      backgroundColor: colors.border,
+      marginVertical: spacing.s,
     },
   });

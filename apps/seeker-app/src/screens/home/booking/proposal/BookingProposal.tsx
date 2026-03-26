@@ -1,8 +1,7 @@
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import { Button, Header, Typography } from '@repo/components';
+import { Button, Header, ScreenContainer, Section, Typography } from '@repo/components';
 import { Flag } from 'lucide-react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { ScrollView, TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { useTheme } from '@repo/theme';
 
 import { createStyles } from './BookingProposal.styles';
@@ -24,7 +23,16 @@ export function BookingProposalScreen() {
   } = useBookingProposal();
 
   return (
-    <SafeAreaView style={styles.container}>
+    <ScreenContainer
+      scrollable
+      padding="none"
+      stickyFooter={
+        <View style={styles.buttonContainer}>
+          <Button title="Accept Service Specifications" onPress={handleAccept} />
+          <Button title="Decline and Chat Again" variant="outline" onPress={handleDecline} />
+        </View>
+      }
+    >
       <Header
         title="Service Proposal"
         size="small"
@@ -35,72 +43,47 @@ export function BookingProposalScreen() {
         }
       />
 
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        <View style={styles.mapSection}>
-          <View style={styles.mapContainer}>
-            <MapView
-              provider={PROVIDER_GOOGLE}
-              style={styles.map}
-              initialRegion={{
-                latitude,
-                longitude,
-                latitudeDelta: 0.01,
-                longitudeDelta: 0.01,
-              }}
-              scrollEnabled={false}
-              zoomEnabled={false}
-              pitchEnabled={false}
-              rotateEnabled={false}
-            >
-              <Marker coordinate={{ latitude, longitude }} />
-            </MapView>
-          </View>
+      <View style={styles.content}>
+        <View style={styles.mapContainer}>
+          <MapView
+            provider={PROVIDER_GOOGLE}
+            style={styles.map}
+            initialRegion={{
+              latitude,
+              longitude,
+              latitudeDelta: 0.01,
+              longitudeDelta: 0.01,
+            }}
+            scrollEnabled={false}
+            zoomEnabled={false}
+            pitchEnabled={false}
+            rotateEnabled={false}
+          >
+            <Marker coordinate={{ latitude, longitude }} />
+          </MapView>
         </View>
 
-        <View style={styles.section}>
-          <Typography variant="subtitle2" style={styles.sectionLabel}>
-            Service Location
-          </Typography>
-          <Typography variant="body1" style={styles.addressText}>
-            📍 {address?.label || 'Location not specified'}
-          </Typography>
-        </View>
+        <Section label="Service Location" variant="card">
+          <Typography variant="body1">📍 {address?.label || 'Location not specified'}</Typography>
+        </Section>
 
         <View style={styles.rowSection}>
-          <View style={styles.rowItem}>
-            <Typography variant="subtitle2" style={styles.sectionLabel}>
-              Service Type
-            </Typography>
-            <Typography variant="body1" style={styles.rowValue}>
+          <Section label="Service Type" variant="card" style={styles.rowItem}>
+            <Typography variant="body1" weight="medium">
               {serviceTypeName}
             </Typography>
-          </View>
-          <View style={styles.rowItem}>
-            <Typography variant="subtitle2" style={styles.sectionLabel}>
-              Cost
-            </Typography>
-            <Typography variant="h6" style={styles.costValue}>
+          </Section>
+          <Section label="Cost" variant="card" style={styles.rowItem}>
+            <Typography variant="h2" color="actionSecondary">
               ₱{cost.toFixed(2)}
             </Typography>
-          </View>
+          </Section>
         </View>
 
-        <View style={styles.section}>
-          <Typography variant="subtitle2" style={styles.sectionLabel}>
-            Service Specifications
-          </Typography>
-          <View style={styles.specificationsBox}>
-            <Typography variant="body1" style={styles.specificationsText}>
-              {specifications}
-            </Typography>
-          </View>
-        </View>
-      </ScrollView>
-
-      <View style={styles.buttonContainer}>
-        <Button title="Accept Service Specifications" onPress={handleAccept} style={styles.acceptButton} />
-        <Button title="Decline and Chat Again" variant="outline" onPress={handleDecline} style={styles.declineButton} />
+        <Section label="Service Specifications" variant="card" style={styles.specificationsCard}>
+          <Typography variant="body1">{specifications}</Typography>
+        </Section>
       </View>
-    </SafeAreaView>
+    </ScreenContainer>
   );
 }

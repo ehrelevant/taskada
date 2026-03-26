@@ -1,4 +1,4 @@
-import { Button, Card, Input, Typography } from '@repo/components';
+import { Button, Card, Input, ScreenContainer, Typography } from '@repo/components';
 import { Check } from 'lucide-react-native';
 import { Controller } from 'react-hook-form';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
@@ -19,7 +19,10 @@ export function AddEWalletScreen() {
   const { control, handleSubmit, setValue, errors, isSubmitting, selectedChannel, onSubmit } = useAddEWallet();
 
   return (
-    <View style={styles.container}>
+    <ScreenContainer
+      padding="none"
+      stickyFooter={<Button title="Link Account" onPress={handleSubmit(onSubmit)} isLoading={isSubmitting} />}
+    >
       <KeyboardAwareScrollView contentContainerStyle={styles.scrollContent}>
         <Typography variant="h5" style={styles.sectionTitle}>
           Select Wallet
@@ -76,10 +79,6 @@ export function AddEWalletScreen() {
           )}
         />
       </KeyboardAwareScrollView>
-
-      <View style={styles.footer}>
-        <Button title="Link Account" onPress={handleSubmit(onSubmit)} isLoading={isSubmitting} />
-      </View>
-    </View>
+    </ScreenContainer>
   );
 }

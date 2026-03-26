@@ -1,15 +1,15 @@
 import {
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import { Avatar, Button, Header, Rating, StarRatingInput, Typography } from '@repo/components';
-import { Flag, X } from 'lucide-react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+  Avatar,
+  Button,
+  Header,
+  Rating,
+  ScreenContainer,
+  Section,
+  StarRatingInput,
+  Typography,
+} from '@repo/components';
+import { CheckCircle, Flag, X } from 'lucide-react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, TextInput, TouchableOpacity, View } from 'react-native';
 import { useTheme } from '@repo/theme';
 
 import { createStyles } from './BookingDone.styles';
@@ -37,7 +37,7 @@ export function BookingDoneScreen() {
   const providerName = `${providerInfo.firstName} ${providerInfo.lastName}`;
 
   return (
-    <SafeAreaView style={styles.container}>
+    <ScreenContainer padding="none" useSafeArea={false}>
       <Header
         leftContent={
           <TouchableOpacity onPress={handleGoHome}>
@@ -53,34 +53,32 @@ export function BookingDoneScreen() {
 
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.keyboardView}>
         <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
-          <View style={styles.titleContainer}>
-            <Typography variant="h4" style={styles.title}>
+          <View style={styles.heroSection}>
+            <CheckCircle size={48} color={colors.actionSecondary} />
+            <Typography variant="h1" align="center" style={styles.title}>
               Complete!
             </Typography>
           </View>
 
-          <View style={styles.section}>
-            <Typography variant="subtitle2" style={styles.sectionLabel}>
-              Service Provider
-            </Typography>
+          <Section label="Service Provider">
             <View style={styles.providerCard}>
-              <View style={styles.providerImageContainer}>
-                {providerInfo.avatarUrl ? (
-                  <Avatar source={{ uri: providerInfo.avatarUrl }} size={80} name={providerName} />
-                ) : (
-                  <Avatar source={null} size={80} name={providerName} />
-                )}
-              </View>
+              <Avatar
+                source={providerInfo.avatarUrl ? { uri: providerInfo.avatarUrl } : null}
+                size={80}
+                name={providerName}
+              />
               <View style={styles.providerInfo}>
                 <Typography variant="h6" style={styles.providerName}>
                   {providerName}
                 </Typography>
-                <Typography variant="overline" color="textSecondary" style={styles.serviceType}>
+                <Typography variant="overline" color="textSecondary">
                   {serviceTypeName}
                 </Typography>
                 <View style={styles.ratingContainer}>
                   {isLoadingRating ? (
-                    <ActivityIndicator size="small" color={colors.actionPrimary} />
+                    <Typography variant="caption" color="textDisabled">
+                      Loading...
+                    </Typography>
                   ) : (
                     <Rating
                       value={bookingData?.serviceRating?.avgRating ?? 0}
@@ -91,19 +89,17 @@ export function BookingDoneScreen() {
                 </View>
               </View>
             </View>
-          </View>
+          </Section>
 
           <TouchableOpacity onPress={handleViewDetails} style={styles.detailsButton}>
-            <Typography variant="body1" style={styles.detailsButtonText}>
+            <Typography variant="body1" color="actionPrimary" weight="medium">
               View Booking Details
             </Typography>
           </TouchableOpacity>
-
-          <View style={styles.spacer} />
         </ScrollView>
 
         <View style={styles.reviewFormContainer}>
-          <Typography variant="subtitle1" style={styles.reviewFormTitle}>
+          <Typography variant="subtitle1" align="center" style={styles.reviewFormTitle}>
             Rate Your Experience
           </Typography>
 
@@ -129,6 +125,6 @@ export function BookingDoneScreen() {
           />
         </View>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </ScreenContainer>
   );
 }

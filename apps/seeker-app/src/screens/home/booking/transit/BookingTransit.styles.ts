@@ -1,75 +1,33 @@
-import { radius, spacing, ThemeColors } from '@repo/theme';
+import { spacing, ThemeColors } from '@repo/theme';
 import { StyleSheet } from 'react-native';
 
 export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: colors.background,
-    },
-    scrollContent: {
+    content: {
       padding: spacing.m,
+      gap: spacing.xl,
     },
     statusSection: {
-      marginBottom: spacing.l,
       alignItems: 'center',
-      paddingVertical: spacing.m,
+      paddingVertical: spacing.l,
+      paddingHorizontal: spacing.l,
+      backgroundColor: colors.backgroundSecondary,
+      borderRadius: 16,
+      gap: spacing.s,
     },
     statusTitle: {
-      textAlign: 'center',
-      marginBottom: spacing.s,
-    },
-    statusSubtitle: {
-      textAlign: 'center',
-    },
-    arrivalBadge: {
-      backgroundColor: colors.success.base,
-      paddingHorizontal: spacing.m,
-      paddingVertical: spacing.s,
-      borderRadius: 20,
-      marginBottom: spacing.m,
-    },
-    arrivalBadgeText: {
-      color: colors.textInverse,
-      fontWeight: '600',
-    },
-    section: {
-      marginBottom: spacing.l,
-    },
-    sectionLabel: {
-      marginBottom: spacing.s,
-      color: colors.textSecondary,
+      marginTop: spacing.s,
     },
     providerCard: {
-      backgroundColor: colors.surface,
-      borderRadius: radius.m,
-      borderWidth: 1,
-      borderColor: colors.border,
-      padding: spacing.m,
       flexDirection: 'row',
       alignItems: 'center',
     },
-    providerImageContainer: {
-      marginRight: spacing.m,
-    },
     providerInfo: {
       flex: 1,
+      marginLeft: spacing.m,
     },
     providerName: {
       marginBottom: spacing.xs,
-    },
-    serviceType: {
-      marginBottom: spacing.xs,
-    },
-    ratingContainer: {
-      marginTop: spacing.xs,
-    },
-    detailsCard: {
-      backgroundColor: colors.surface,
-      borderRadius: radius.m,
-      borderWidth: 1,
-      borderColor: colors.border,
-      padding: spacing.m,
     },
     detailRow: {
       flexDirection: 'row',
@@ -80,21 +38,9 @@ export const createStyles = (colors: ThemeColors) =>
     divider: {
       height: 1,
       backgroundColor: colors.border,
-      marginVertical: spacing.s,
+      marginVertical: spacing.xs,
     },
-    costValue: {
-      fontWeight: '700',
-      color: colors.actionPrimary,
-    },
-    specificationsBox: {
-      backgroundColor: colors.surface,
-      padding: spacing.m,
-      borderRadius: radius.m,
-      borderWidth: 1,
-      borderColor: colors.border,
-      minHeight: 120,
-    },
-    specificationsText: {
-      lineHeight: 22,
+    specificationsCard: {
+      padding: spacing.l,
     },
   });

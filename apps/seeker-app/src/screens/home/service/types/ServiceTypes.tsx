@@ -1,15 +1,12 @@
-import { ActivityIndicator, FlatList, View } from 'react-native';
+import { EmptyState, ScreenContainer, ServiceTypeCard } from '@repo/components';
+import { FlatList } from 'react-native';
 import type { ServiceType } from '@repo/types';
-import { ServiceTypeCard, Typography } from '@repo/components';
-
-import { useTheme } from '@repo/theme';
 
 import { createStyles } from './ServiceTypes.styles';
 import { useServiceTypes } from './ServiceTypes.hooks';
 
 export function ServiceTypesListScreen() {
-  const { colors } = useTheme();
-  const styles = createStyles(colors);
+  const styles = createStyles();
   const { serviceTypes, loading, error, handleServiceTypePress } = useServiceTypes();
 
   const renderItem = ({ item }: { item: ServiceType }) => (
@@ -18,24 +15,22 @@ export function ServiceTypesListScreen() {
 
   if (loading) {
     return (
-      <View style={styles.centerContainer}>
-        <ActivityIndicator size="large" color={colors.actionPrimary} />
-      </View>
+      <ScreenContainer>
+        <EmptyState loading loadingMessage="Loading services..." />
+      </ScreenContainer>
     );
   }
 
   if (error) {
     return (
-      <View style={styles.centerContainer}>
-        <Typography variant="body1" color="error">
-          {error}
-        </Typography>
-      </View>
+      <ScreenContainer>
+        <EmptyState message={error} />
+      </ScreenContainer>
     );
   }
 
   return (
-    <View style={styles.container}>
+    <ScreenContainer padding="none">
       <FlatList
         data={serviceTypes}
         renderItem={renderItem}
@@ -44,6 +39,6 @@ export function ServiceTypesListScreen() {
         contentContainerStyle={styles.listContent}
         columnWrapperStyle={styles.columnWrapper}
       />
-    </View>
+    </ScreenContainer>
   );
 }

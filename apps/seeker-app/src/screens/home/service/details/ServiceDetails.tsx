@@ -1,6 +1,6 @@
-import { ActivityIndicator, ScrollView, View } from 'react-native';
-import { Avatar, Button, Rating, ReviewCard, Typography } from '@repo/components';
-import { spacing, useTheme } from '@repo/theme';
+import { Avatar, Button, EmptyState, Rating, ReviewCard, ScreenContainer, Typography } from '@repo/components';
+import { useTheme } from '@repo/theme';
+import { View } from 'react-native';
 
 import { createStyles } from './ServiceDetails.styles';
 import { useServiceDetails } from './ServiceDetails.hooks';
@@ -12,62 +12,61 @@ export function ServiceDetailsScreen() {
 
   if (loading) {
     return (
-      <View style={styles.centerContainer}>
-        <ActivityIndicator size="large" color={colors.actionPrimary} />
-      </View>
+      <ScreenContainer>
+        <EmptyState loading loadingMessage="Loading service..." />
+      </ScreenContainer>
     );
   }
 
   if (error || !details) {
     return (
-      <View style={styles.centerContainer}>
-        <Typography variant="body1" color="error">
-          {error || 'Service not found'}
-        </Typography>
-      </View>
+      <ScreenContainer>
+        <EmptyState message={error || 'Service not found'} />
+      </ScreenContainer>
     );
   }
 
   return (
-    <ScrollView style={styles.container}>
+    <ScreenContainer scrollable>
       <View style={styles.providerSection}>
         <Avatar
           source={details.providerAvatar ? { uri: details.providerAvatar } : null}
-          size={80}
+          size={96}
           name={details.providerName}
+          borderColor={colors.secondary.base}
+          borderWidth={3}
         />
-        <Typography variant="h6" style={{ marginTop: spacing.s }}>
+        <Typography variant="h2" style={styles.providerName}>
           {details.providerName}
         </Typography>
-        <Typography variant="body2" color="textSecondary">
+        <Typography variant="overline" color="textSecondary" style={styles.serviceType}>
           {details.serviceTypeName}
         </Typography>
-        <View style={{ marginTop: spacing.s }}>
-          <Rating value={details.avgRating} reviewCount={details.reviewCount} />
+        <View style={styles.ratingRow}>
+          <Rating value={details.avgRating} reviewCount={details.reviewCount} size={16} />
         </View>
       </View>
 
-      <View style={styles.section}>
-        <Typography variant="h6">About this service</Typography>
-        <Typography variant="body1" color="textSecondary" style={{ marginTop: spacing.s }}>
+      <View style={styles.priceRow}>
+        <Typography variant="h1" color={colors.actionSecondary}>
           ${details.initialCost.toFixed(2)}
         </Typography>
         <Button
-          title={returnTo === 'RequestForm' ? 'Select This Service' : 'Request Provider'}
+          title={returnTo === 'RequestForm' ? 'Select' : 'Request'}
           onPress={handleRequestService}
-          style={{ marginTop: spacing.m }}
+          style={styles.requestButton}
         />
       </View>
 
-      <View style={styles.section}>
-        <Typography variant="h6">Reviews ({details.reviewCount})</Typography>
-        {reviews.length === 0 ? (
-          <Typography variant="body2" color="textSecondary" style={{ marginTop: spacing.s }}>
-            No reviews yet
-          </Typography>
-        ) : (
-          <View style={{ marginTop: spacing.s }}>
-            {reviews.map(review => (
+      <View style={styles.reviewsSection}>
+        <Typography variant="h3">Reviews ({details.reviewCount})</Typography>
+        <View style={styles.reviewsContent}>
+          {reviews.length === 0 ? (
+            <Typography variant="body2" color="textSecondary">
+              No reviews yet
+            </Typography>
+          ) : (
+            reviews.map(review => (
               <ReviewCard
                 key={review.id}
                 reviewerName={review.reviewerName}
@@ -76,10 +75,10 @@ export function ServiceDetailsScreen() {
                 comment={review.comment}
                 date={review.createdAt}
               />
-            ))}
-          </View>
-        )}
+            ))
+          )}
+        </View>
       </View>
-    </ScrollView>
+    </ScreenContainer>
   );
 }

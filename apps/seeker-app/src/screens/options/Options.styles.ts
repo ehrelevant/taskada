@@ -9,26 +9,28 @@ export const createStyles = (colors: ThemeColors) =>
     },
     profileSection: {
       alignItems: 'center',
-      paddingVertical: spacing.xl,
+      paddingVertical: spacing.xxl,
+      backgroundColor: colors.backgroundSecondary,
     },
     userName: {
       marginTop: spacing.m,
       marginBottom: spacing.xs,
     },
     menuSection: {
-      marginTop: spacing.m,
-    },
-    sectionTitle: {
       marginTop: spacing.l,
+      paddingHorizontal: spacing.m,
+    },
+    sectionHeader: {
+      marginTop: spacing.xl,
       marginBottom: spacing.s,
-      marginLeft: spacing.xs,
     },
     menuButton: {
       marginBottom: spacing.s,
     },
     footer: {
-      marginTop: spacing.xl,
-      marginBottom: spacing.m,
+      marginTop: spacing.xxl,
+      marginBottom: spacing.l,
+      paddingHorizontal: spacing.m,
     },
     signOutButton: {
       borderColor: colors.error.base,

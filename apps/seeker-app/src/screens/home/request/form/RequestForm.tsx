@@ -111,7 +111,7 @@ export function RequestFormScreen() {
                 ListFooterComponent={
                   <TouchableOpacity style={styles.addImageButton} onPress={pickImages}>
                     <Camera size={24} color={colors.actionPrimary} />
-                    <Typography variant="caption" color="actionPrimary" style={{ marginTop: 4 }}>
+                    <Typography variant="caption" color="actionPrimary" style={styles.addImageLabel}>
                       Add
                     </Typography>
                   </TouchableOpacity>

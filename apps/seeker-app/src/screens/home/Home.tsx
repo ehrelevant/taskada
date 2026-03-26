@@ -1,8 +1,18 @@
-import { ActivityIndicator, FlatList, TouchableOpacity, View } from 'react-native';
-import { Avatar, FeaturedServiceCard, Rating, SearchBar, ServiceTypeCard, Typography } from '@repo/components';
+import {
+  Avatar,
+  EmptyState,
+  FeaturedServiceCard,
+  Rating,
+  ScreenContainer,
+  SearchBar,
+  SectionHeader,
+  ServiceTypeCard,
+  Typography,
+} from '@repo/components';
 import type { FeaturedService, SearchResult, ServiceType } from '@repo/types';
-import { spacing, useTheme } from '@repo/theme';
+import { FlatList, TouchableOpacity, View } from 'react-native';
 import { useCallback, useMemo } from 'react';
+import { useTheme } from '@repo/theme';
 
 import { createStyles } from './Home.styles';
 import { useHome } from './Home.hooks';
@@ -37,7 +47,7 @@ export function HomeScreen() {
         onPress={() => navigateToService(item.serviceId)}
         activeOpacity={0.7}
       >
-        <View style={{ flex: 1 }}>
+        <View style={styles.searchResultContent}>
           <Typography variant="body2" weight="medium">
             {item.serviceTypeName}
           </Typography>
@@ -48,7 +58,7 @@ export function HomeScreen() {
         <Rating value={item.avgRating} size={12} />
       </TouchableOpacity>
     ),
-    [navigateToService, styles.searchResultItem],
+    [navigateToService, styles.searchResultItem, styles.searchResultContent],
   );
 
   const renderServiceTypeItem = useCallback(
@@ -73,46 +83,39 @@ export function HomeScreen() {
   );
 
   const serviceTypeListHeader = useMemo(
-    () => (
-      <View style={styles.sectionHeader}>
-        <Typography variant="h6">Services</Typography>
-        <TouchableOpacity onPress={navigateToServiceTypesList}>
-          <Typography variant="body2" color="actionPrimary">
-            View All
-          </Typography>
-        </TouchableOpacity>
-      </View>
-    ),
-    [navigateToServiceTypesList, styles.sectionHeader],
+    () => <SectionHeader title="Services" onViewAllPress={navigateToServiceTypesList} />,
+    [navigateToServiceTypesList],
   );
 
   if (loading) {
     return (
-      <View style={styles.centerContainer}>
-        <ActivityIndicator size="large" color={colors.actionPrimary} />
-      </View>
+      <ScreenContainer useSafeArea={false} padding="none">
+        <EmptyState loading />
+      </ScreenContainer>
     );
   }
 
   return (
-    <View>
+    <ScreenContainer padding="none">
       <View style={styles.header}>
         <View style={styles.greetingRow}>
           <Avatar
             source={profile?.avatarUrl ? { uri: profile.avatarUrl } : null}
             name={`${session?.user?.name ?? ''} ${session?.user?.lastName ?? ''}`.trim() || 'User'}
-            size={48}
+            size={56}
+            borderColor={colors.secondary.base}
+            borderWidth={3}
           />
-          <View style={{ marginLeft: spacing.s }}>
-            <Typography variant="body1" color="textSecondary">
-              Hello,
+          <View style={styles.greetingText}>
+            <Typography variant="h2" color="textSecondary">
+              Good morning,
             </Typography>
-            <Typography variant="h4">
+            <Typography variant="h1">
               {`${session?.user?.name ?? ''} ${session?.user?.lastName ?? ''}`.trim() || 'User'}
             </Typography>
           </View>
         </View>
-        <Typography variant="body1" color="textSecondary" style={{ marginTop: spacing.xs }}>
+        <Typography variant="body1" color="textSecondary" style={styles.subtitle}>
           What help do you need today?
         </Typography>
       </View>
@@ -128,7 +131,7 @@ export function HomeScreen() {
           <View style={styles.searchResults}>
             {searchLoading ? (
               <View style={styles.searchLoading}>
-                <ActivityIndicator size="small" color={colors.actionPrimary} />
+                <EmptyState loading loadingSize="small" />
               </View>
             ) : searchResults.length > 0 ? (
               <FlatList
@@ -142,11 +145,7 @@ export function HomeScreen() {
                 removeClippedSubviews={true}
               />
             ) : (
-              <View style={styles.noResults}>
-                <Typography variant="body2" color="textSecondary">
-                  No services found
-                </Typography>
-              </View>
+              <EmptyState message="No services found" />
             )}
           </View>
         )}
@@ -171,14 +170,12 @@ export function HomeScreen() {
         removeClippedSubviews={true}
       />
 
-      <View style={styles.section}>
-        <Typography variant="h6" style={{ marginBottom: spacing.s }}>
-          Featured Services
-        </Typography>
+      <View style={styles.featuredSection}>
+        <SectionHeader title="Featured Services" />
         {featuredServices.length > 0 ? (
           <FlatList
             data={featuredServices}
-            contentContainerStyle={{ gap: spacing.m, width: '100%' }}
+            contentContainerStyle={styles.featuredList}
             keyExtractor={featuredServiceKeyExtractor}
             renderItem={renderFeaturedServiceItem}
             horizontal
@@ -189,11 +186,9 @@ export function HomeScreen() {
             removeClippedSubviews={true}
           />
         ) : (
-          <Typography variant="body2" color="textSecondary">
-            No featured services available
-          </Typography>
+          <EmptyState message="No featured services available" />
         )}
       </View>
-    </View>
+    </ScreenContainer>
   );
 }

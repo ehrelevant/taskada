@@ -8,24 +8,21 @@ export const createStyles = (colors: ThemeColors) =>
     },
     title: {
       marginBottom: spacing.s,
-      textAlign: 'center',
     },
     subtitle: {
-      marginBottom: spacing.xl,
-      textAlign: 'center',
+      marginBottom: spacing.xxl,
     },
     input: {
       marginBottom: spacing.m,
     },
     error: {
       marginBottom: spacing.m,
-      textAlign: 'center',
     },
     button: {
       marginTop: spacing.s,
     },
     footer: {
-      marginTop: spacing.xl,
+      marginTop: spacing.xxl,
       alignItems: 'center',
     },
     link: {

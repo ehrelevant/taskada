@@ -1,49 +1,36 @@
-import { ActivityIndicator, Image, ScrollView, View } from 'react-native';
-import { Button, Card, Header, Typography } from '@repo/components';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useTheme } from '@repo/theme';
+import { Button, Card, EmptyState, Header, ScreenContainer, Typography } from '@repo/components';
+import { Image, View } from 'react-native';
 
 import { createStyles } from './RequestLogs.styles';
 import { useRequestLogs } from './RequestLogs.hooks';
 
 export function RequestLogsScreen() {
-  const { colors } = useTheme();
-  const styles = createStyles(colors);
+  const styles = createStyles();
   const { request, isLoading, error, handleGoBack } = useRequestLogs();
 
   if (isLoading) {
     return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={colors.actionPrimary} />
-          <Typography variant="body1" style={styles.loadingText}>
-            Loading request details...
-          </Typography>
-        </View>
-      </SafeAreaView>
+      <ScreenContainer>
+        <EmptyState loading loadingMessage="Loading request details..." />
+      </ScreenContainer>
     );
   }
 
   if (error || !request) {
     return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.loadingContainer}>
-          <Typography variant="body1" color="error">
-            {error || 'Request not found'}
-          </Typography>
-          <Button title="Go Back" onPress={handleGoBack} style={styles.button} />
-        </View>
-      </SafeAreaView>
+      <ScreenContainer>
+        <EmptyState message={error || 'Request not found'} action={<Button title="Go Back" onPress={handleGoBack} />} />
+      </ScreenContainer>
     );
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <ScreenContainer scrollable padding="none" stickyFooter={<Button title="Go Back" onPress={handleGoBack} />}>
       <Header title="Request Details" size="small" />
 
-      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        <Card elevation="s" padding="m" style={styles.section}>
-          <Typography variant="subtitle2" color="textSecondary" style={styles.sectionLabel}>
+      <View style={styles.content}>
+        <Card elevation="s" padding="m" style={styles.card}>
+          <Typography variant="subtitle2" color="textSecondary" style={styles.cardLabel}>
             Service Type
           </Typography>
           <View style={styles.serviceTypeRow}>
@@ -52,16 +39,16 @@ export function RequestLogsScreen() {
           </View>
         </Card>
 
-        <Card elevation="s" padding="m" style={styles.section}>
-          <Typography variant="subtitle2" color="textSecondary" style={styles.sectionLabel}>
+        <Card elevation="s" padding="m" style={styles.card}>
+          <Typography variant="subtitle2" color="textSecondary" style={styles.cardLabel}>
             Location
           </Typography>
           <Typography variant="body1">{request.address?.label || 'Address not specified'}</Typography>
         </Card>
 
         {request.description && (
-          <Card elevation="s" padding="m" style={styles.section}>
-            <Typography variant="subtitle2" color="textSecondary" style={styles.sectionLabel}>
+          <Card elevation="s" padding="m" style={styles.card}>
+            <Typography variant="subtitle2" color="textSecondary" style={styles.cardLabel}>
               Description
             </Typography>
             <Typography variant="body1" style={styles.description}>
@@ -71,8 +58,8 @@ export function RequestLogsScreen() {
         )}
 
         {request.images && request.images.length > 0 && (
-          <Card elevation="s" padding="m" style={styles.section}>
-            <Typography variant="subtitle2" color="textSecondary" style={styles.sectionLabel}>
+          <Card elevation="s" padding="m" style={styles.card}>
+            <Typography variant="subtitle2" color="textSecondary" style={styles.cardLabel}>
               Photos ({request.images.length})
             </Typography>
             <View style={styles.imagesContainer}>
@@ -82,11 +69,7 @@ export function RequestLogsScreen() {
             </View>
           </Card>
         )}
-      </ScrollView>
-
-      <View style={styles.buttonContainer}>
-        <Button title="Go Back" onPress={handleGoBack} />
       </View>
-    </SafeAreaView>
+    </ScreenContainer>
   );
 }

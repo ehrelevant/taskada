@@ -3,26 +3,27 @@ import { StyleSheet } from 'react-native';
 
 export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
-    centerContainer: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: colors.background,
-    },
     header: {
-      padding: spacing.l,
-      paddingBottom: spacing.s,
-      backgroundColor: colors.surface,
-      borderBottomWidth: 1,
-      borderBottomColor: colors.border,
+      paddingTop: spacing.xl,
+      paddingBottom: spacing.l,
+      paddingHorizontal: spacing.l,
+      backgroundColor: colors.backgroundSecondary,
     },
     greetingRow: {
       flexDirection: 'row',
       alignItems: 'center',
     },
+    greetingText: {
+      marginLeft: spacing.m,
+      flex: 1,
+    },
+    subtitle: {
+      marginTop: spacing.s,
+    },
     searchContainer: {
-      padding: spacing.m,
-      backgroundColor: colors.background,
+      paddingHorizontal: spacing.m,
+      marginTop: -spacing.l,
+      zIndex: 10,
     },
     searchResults: {
       position: 'absolute',
@@ -30,20 +31,16 @@ export const createStyles = (colors: ThemeColors) =>
       left: spacing.m,
       right: spacing.m,
       backgroundColor: colors.surface,
-      borderRadius: radius.m,
+      borderRadius: radius.l,
       shadowColor: colors.black,
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.15,
-      shadowRadius: 4,
-      elevation: 3,
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.12,
+      shadowRadius: 8,
+      elevation: 4,
       maxHeight: 300,
       zIndex: 1000,
     },
     searchLoading: {
-      padding: spacing.m,
-      alignItems: 'center',
-    },
-    noResults: {
       padding: spacing.m,
       alignItems: 'center',
     },
@@ -54,6 +51,9 @@ export const createStyles = (colors: ThemeColors) =>
       borderBottomWidth: 1,
       borderBottomColor: colors.border,
     },
+    searchResultContent: {
+      flex: 1,
+    },
     serviceTypeGrid: {
       justifyContent: 'center',
       gap: spacing.s,
@@ -61,15 +61,17 @@ export const createStyles = (colors: ThemeColors) =>
     serviceTypesContent: {
       width: '100%',
       paddingHorizontal: spacing.m,
-      paddingBottom: spacing.s,
+      paddingTop: spacing.s,
+      paddingBottom: spacing.m,
     },
-    sectionHeader: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      marginVertical: spacing.s,
+    featuredSection: {
+      marginTop: spacing.l,
+      paddingHorizontal: spacing.m,
+      paddingBottom: spacing.xl,
     },
-    section: {
-      padding: spacing.m,
+    featuredList: {
+      gap: spacing.m,
+      width: '100%',
+      paddingTop: spacing.s,
     },
   });

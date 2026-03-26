@@ -1,29 +1,15 @@
-import { radius, spacing, ThemeColors } from '@repo/theme';
+import { radius, spacing } from '@repo/theme';
 import { StyleSheet } from 'react-native';
 
-export const createStyles = (colors: ThemeColors) =>
+export const createStyles = () =>
   StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: colors.background,
-    },
-    loadingContainer: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: spacing.l,
-    },
-    loadingText: {
-      marginTop: spacing.m,
-    },
-    scrollContent: {
+    content: {
       padding: spacing.m,
-      paddingBottom: spacing.xl,
     },
-    section: {
+    card: {
       marginBottom: spacing.m,
     },
-    sectionLabel: {
+    cardLabel: {
       marginBottom: spacing.s,
     },
     serviceTypeRow: {
@@ -48,14 +34,5 @@ export const createStyles = (colors: ThemeColors) =>
       width: 100,
       height: 100,
       borderRadius: radius.s,
-    },
-    buttonContainer: {
-      padding: spacing.m,
-      borderTopWidth: 1,
-      borderTopColor: colors.border,
-      backgroundColor: colors.background,
-    },
-    button: {
-      marginTop: spacing.m,
     },
   });

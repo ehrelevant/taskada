@@ -1,5 +1,5 @@
 import { Alert, View } from 'react-native';
-import { Button, Input, Typography } from '@repo/components';
+import { Button, Input, ScreenContainer, Typography } from '@repo/components';
 import { Controller } from 'react-hook-form';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { useCallback, useState } from 'react';
@@ -57,10 +57,13 @@ export function AddCardScreen() {
   );
 
   return (
-    <View style={styles.container}>
+    <ScreenContainer
+      padding="none"
+      stickyFooter={<Button title="Add Card" onPress={handleSubmit(onSubmit)} isLoading={isSubmitting} />}
+    >
       <KeyboardAwareScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.header}>
-          <Typography variant="body2" color={colors.textSecondary}>
+          <Typography variant="body2" color="textSecondary">
             We verify your card with a temporary charge that is immediately refunded.
           </Typography>
         </View>
@@ -145,10 +148,6 @@ export function AddCardScreen() {
           />
         </View>
       </KeyboardAwareScrollView>
-
-      <View style={styles.footer}>
-        <Button title="Add Card" onPress={handleSubmit(onSubmit)} isLoading={isSubmitting} />
-      </View>
-    </View>
+    </ScreenContainer>
   );
 }

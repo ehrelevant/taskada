@@ -3,10 +3,6 @@ import { StyleSheet } from 'react-native';
 
 export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: colors.background,
-    },
     scrollContent: {
       padding: spacing.m,
     },
@@ -48,11 +44,5 @@ export const createStyles = (colors: ThemeColors) =>
       backgroundColor: colors.actionPrimary,
       borderRadius: 10,
       padding: 2,
-    },
-    footer: {
-      padding: spacing.m,
-      borderTopWidth: 1,
-      borderTopColor: colors.border,
-      backgroundColor: colors.surface,
     },
   });

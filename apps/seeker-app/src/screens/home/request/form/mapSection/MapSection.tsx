@@ -1,7 +1,7 @@
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import { ActivityIndicator, View } from 'react-native';
-import { Typography } from '@repo/components';
+import { EmptyState, Typography } from '@repo/components';
 import { useTheme } from '@repo/theme';
+import { View } from 'react-native';
 
 import { createStyles } from './MapSection.styles';
 import { MapSectionProps } from './MapSection.hooks';
@@ -19,7 +19,7 @@ export function MapSection({ onLocationUpdate, initialLat, initialLng }: MapSect
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={colors.actionPrimary} />
+        <EmptyState loading />
       </View>
     );
   }

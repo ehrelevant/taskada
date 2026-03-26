@@ -103,12 +103,22 @@ export const createStyles = (colors: ThemeColors) =>
       backgroundColor: colors.background,
     },
     errorText: {
-      marginTop: spacing.s,
+      marginTop: spacing.xs,
+    },
+    descriptionSection: {
+      marginTop: spacing.l,
     },
     alreadyReportedContainer: {
       flex: 1,
       alignItems: 'center',
       justifyContent: 'center',
       padding: spacing.xl,
+    },
+    alreadyReportedTitle: {
+      marginTop: spacing.m,
+    },
+    alreadyReportedSubtitle: {
+      marginTop: spacing.s,
+      textAlign: 'center',
     },
   });
