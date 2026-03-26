@@ -1,0 +1,1 @@
+ALTER TABLE "app"."payment_audit_log" ALTER COLUMN "external_id" DROP NOT NULL;

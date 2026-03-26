@@ -1,12 +1,15 @@
-import type { KyResponse } from 'ky';
+import { HTTPError } from 'ky';
 
 import { ErrorResponseSchema } from './schema';
 
-export async function handle_error(response: KyResponse, message?: string): Promise<void> {
-  if (!response.ok) {
+export async function handle_error(error: HTTPError): Promise<HTTPError> {
+  const { response } = error;
+
+  if (response.url.includes('xendit')) {
     const error_message = ErrorResponseSchema.parse(await response.json());
-    throw new Error(
-      `${message ?? 'An error occurred while processing the session'} due to ${error_message.error_code}`,
-    );
+    error.name = 'XenditError';
+    console.error(error_message);
   }
+
+  return error;
 }

@@ -5,7 +5,7 @@ export * from './booking';
 export * from './geography';
 export * from './interest';
 export * from './message';
-export * from './payment_method';
+export * from './payments';
 export * from './portfolio';
 export * from './provider';
 export * from './request';

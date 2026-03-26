@@ -1,6 +1,7 @@
 import * as z from 'zod';
 import ky from 'ky';
 import { Buffer } from 'buffer';
+import { handle_error } from '@standard/index';
 
 const API_URL = z.string('Environment variable `XENDIT_API_URL` is missing.').parse(process.env.XENDIT_API_URL);
 const secret_key = z
@@ -16,6 +17,9 @@ const client = ky.create({
     authorization: `Basic ${encoded}`,
   },
   credentials: 'same-origin',
+  hooks: {
+    beforeError: [handle_error],
+  },
 });
 
 export default client;

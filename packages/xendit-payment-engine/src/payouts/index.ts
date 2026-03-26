@@ -1,5 +1,4 @@
 import client from '@src/client';
-import { handle_error } from '@src/standard';
 import { v4 as uuid4 } from 'uuid';
 
 import type {
@@ -34,7 +33,6 @@ async function create_payout(request: CreatePayoutRequest): Promise<CreatePayout
     headers: { 'idempotency-key': uuid4() },
   });
 
-  await handle_error(response, 'Failed to create payout');
   return CreatePayoutResponseSchema.parse(await response.json());
 }
 
@@ -42,7 +40,6 @@ async function get_payout(request: GetPayoutRequest): Promise<GetPayoutResponse>
   const validated_request = GetPayoutRequestSchema.parse(request);
   const response = await client.get(`v2/payouts/${validated_request.payout_id}`);
 
-  await handle_error(response, 'Failed to retrieve payout');
   return GetPayoutResponseSchema.parse(await response.json());
 }
 
@@ -52,7 +49,6 @@ async function get_payout_by_reference_id(request: ListPayoutsRequest): Promise<
     searchParams: { reference_id: validated_request.reference_id },
   });
 
-  await handle_error(response, 'Failed to list payouts');
   return ListPayoutsResponseSchema.parse(await response.json());
 }
 
@@ -60,20 +56,17 @@ async function cancel_payout(request: CancelPayoutRequest): Promise<CancelPayout
   const validated_request = CancelPayoutRequestSchema.parse(request);
   const response = await client.post(`v2/payouts/${validated_request.payout_id}/cancel`);
 
-  await handle_error(response, 'Failed to cancel payout');
   return CancelPayoutResponseSchema.parse(await response.json());
 }
 
 async function get_payment_channels(request: GetPaymentChannelsRequest): Promise<GetPaymentChannelsResponse> {
   const validated_request = GetPaymentChannelsRequestSchema.parse(request);
   const params: Record<string, string> = {};
-  if (validated_request.channel_name) params.channel_name = validated_request.channel_name;
+  if (validated_request.currency) params.currency = validated_request.currency;
   if (validated_request.channel_category) params.channel_category = validated_request.channel_category;
   if (validated_request.channel_code) params.channel_code = validated_request.channel_code;
 
   const response = await client.get('v2/payouts/channels', { searchParams: params });
-
-  await handle_error(response, 'Failed to retrieve payout channels');
 
   return GetPaymentChannelsResponseSchema.parse(await response.json());
 }

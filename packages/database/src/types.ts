@@ -26,10 +26,17 @@ import {
   user,
   userRole,
   verification,
+  UserUpdateSchema,
+  paymentAuditLog,
+  PaymentAuditLogUpdateSchema,
+  paymentAuditLogEnum,
+  PaymentMethodUpdateSchema
 } from './schema';
+import * as v from "valibot"
 
 export type User = typeof user.$inferSelect;
 export type NewUser = typeof user.$inferInsert;
+export type UserUpdate = v.InferInput<typeof UserUpdateSchema>
 
 export type Role = (typeof roleEnum.enumValues)[number];
 
@@ -100,6 +107,12 @@ export type NewMessageImage = typeof messageImage.$inferInsert;
 
 export type PaymentMethod = typeof paymentMethod.$inferSelect;
 export type NewPaymentMethod = typeof paymentMethod.$inferInsert;
+export type UpdatePaymentMethod = v.InferInput<typeof PaymentMethodUpdateSchema>
+export type PaymentAuditLog = typeof paymentAuditLog.$inferSelect;
+export type NewPaymentAuditLog = typeof paymentAuditLog.$inferInsert;
+export type UpdatePaymentAuditLog = v.InferInput<typeof PaymentAuditLogUpdateSchema>
+
+export type PaymentAuditLogType = (typeof paymentAuditLogEnum.enumValues)[number];
 
 export type PushToken = typeof pushToken.$inferSelect;
 export type NewPushToken = typeof pushToken.$inferInsert;

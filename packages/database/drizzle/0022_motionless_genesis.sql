@@ -1,0 +1,1 @@
+ALTER TABLE "app"."payment_method" ADD COLUMN "payment_token" text NOT NULL;

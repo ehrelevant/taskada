@@ -16,7 +16,9 @@ export const CreateSessionRequestSchema = z
       .string()
       .regex(/^[a-zA-Z0-9-]{41}$/)
       .meta({ description: 'Customer id' }),
-    customer: SessionCustomerDetailsSchema.meta({ description: 'Customer details object for the payment session.' }),
+    customer: SessionCustomerDetailsSchema.meta({
+      description: 'Customer details object for the payment session.',
+    }).optional(),
     session_type: z.enum(['SAVE', 'PAY']).meta({ description: 'The use case for Payment Session.' }),
     allow_save_payment_method: z
       .enum(['DISABLED', 'OPTIONAL', 'FORCED'])
@@ -48,11 +50,11 @@ export const CreateSessionRequestSchema = z
       .regex(/^[a-zA-Z]{2}$/)
       .optional()
       .meta({ description: 'ISO 639-1 two-letter language code for Hosted Checkout page.' }),
-    metadata: MetadataSchema.nullable().optional(),
+    metadata: MetadataSchema,
     description: z.string().min(1).max(1000).optional().meta({ description: 'A custom description for the Session.' }),
     items: z.array(ItemSchema).nullable().optional(),
-    success_return_url: z.string().optional(),
-    cancel_return_url: z.string().optional(),
+    success_return_url: z.url().optional(),
+    cancel_return_url: z.url().optional(),
   })
   .superRefine((data, ctx) => {
     if (data.session_type === 'SAVE' && data.amount !== 0) {

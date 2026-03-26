@@ -42,7 +42,7 @@ export const CancelPayoutRequestSchema = z.object({
 });
 
 export const GetPaymentChannelsRequestSchema = z.object({
-  channel_name: z.string().optional(),
+  currency: z.string().default('PHP').optional(),
   channel_category: z.enum(['BANK', 'EWALLET', 'OTC']).optional(),
   channel_code: z.string().optional(),
 });

@@ -1,4 +1,5 @@
 import * as z from 'zod';
+import { MetadataSchema } from '@standard/schema';
 
 import { ChannelPropertiesSchema } from './channel_properties';
 
@@ -22,13 +23,14 @@ const SessionResponseSchema = z
     session_type: z.enum(['SAVE', 'PAY']).meta({ description: 'The use case for Payment Session.' }),
     allow_save_payment_method: z
       .enum(['DISABLED', 'OPTIONAL', 'FORCED'])
+      .optional()
       .meta({ description: 'Option to save payment details from a customer for the PAY session_type.' }),
     currency: z
       .enum(['IDR', 'PHP', 'VND', 'THB', 'SGD', 'MYR', 'USD'])
       .meta({ description: 'ISO 4217 three-letter currency code for the payment.' }),
     amount: z.number().min(0).meta({ description: 'The payment amount to be collected from the customer.' }),
     country: z
-      .enum(['ID', 'PHP', 'VND', 'TH', 'SG', 'MY'])
+      .enum(['ID', 'PH', 'VND', 'TH', 'SG', 'MY'])
       .meta({ description: 'ISO 3166-1 alpha-2 two-letter country code for the payment.' }),
     mode: z
       .enum(['PAYMENT_LINK', 'COMPONENTS'])
@@ -43,9 +45,7 @@ const SessionResponseSchema = z
     allowed_payment_channels: z.array(z.string()).optional(),
     expires_at: z.string().optional().meta({ description: 'ISO 8601 date-time format.' }),
     locale: z.string().meta({ description: 'ISO 639-1 two-letter language code for Hosted Checkout page.' }),
-    metadata: z
-      .record(z.string(), z.any())
-      .meta({ description: 'Key-value entries for your custom data/information.' }),
+    metadata: MetadataSchema,
     items: z.array(z.object({})).nullable().optional(),
     success_return_url: z
       .string()

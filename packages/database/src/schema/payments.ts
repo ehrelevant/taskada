@@ -1,10 +1,11 @@
 import * as v from 'valibot';
 import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-valibot';
-import { jsonb, pgSchema, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { jsonb, pgEnum, pgSchema, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 import { user } from './user';
 
 const app = pgSchema('app');
+
 
 export const paymentMethod = app.table('payment_method', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
@@ -22,3 +23,19 @@ export const paymentMethod = app.table('payment_method', {
 export const PaymentMethodSelectSchema = createSelectSchema(paymentMethod);
 export const PaymentMethodInsertSchema = v.omit(createInsertSchema(paymentMethod), ['id']);
 export const PaymentMethodUpdateSchema = v.omit(createUpdateSchema(paymentMethod), ['id']);
+
+
+
+export const paymentAuditLogEnum = pgEnum("payment_audit_log_types", ["SESSION_SAVE", "SESSION_PAY", "PAYMENT"])
+export const paymentAuditLog = app.table('payment_audit_log', {
+  id: uuid("id").primaryKey().notNull().defaultRandom(),
+  userId: uuid('user_id')
+    .notNull()
+    .references(() => user.id, { onUpdate: 'cascade', onDelete: 'cascade' }),
+  type: paymentAuditLogEnum("type").notNull(),
+  externalId: text('external_id'),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+})
+
+export const PaymentAuditLogUpdateSchema = v.omit(createUpdateSchema(paymentAuditLog), ['id', "userId", "createdAt", "updatedAt"]);

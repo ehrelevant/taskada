@@ -1,5 +1,4 @@
 import defaultClient from '@src/client';
-import { handle_error } from '@src/standard';
 
 import type {
   CancelPaymentRequestRequest,
@@ -31,8 +30,6 @@ export async function get_payment_request_status(
 
   const response = await client.get(`v3/payment_requests/${validated_request.payment_request_id}`);
 
-  await handle_error(response);
-
   return GetPaymentRequestStatusResponseSchema.parse(await response.json());
 }
 
@@ -43,8 +40,6 @@ export async function cancel_payment_request(
 
   const response = await client.post(`v3/payment_requests/${validated_request.payment_request_id}/cancel`);
 
-  await handle_error(response);
-
   return CancelPaymentRequestResponseSchema.parse(await response.json());
 }
 
@@ -54,8 +49,6 @@ export async function simulate_payment(request: SimulatePaymentRequest): Promise
   const response = await client.post(`v3/payment_requests/${validated_request.payment_request_id}/simulate`, {
     body: JSON.stringify({ amount: validated_request.amount }),
   });
-
-  await handle_error(response);
 
   return SimulatePaymentResponseSchema.parse(await response.json());
 }

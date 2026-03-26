@@ -1,5 +1,4 @@
 import defaultClient from '@src/client';
-import { ErrorResponseSchema } from '@standard/schema';
 import { v4 as uuid4 } from 'uuid';
 
 import type {
@@ -27,25 +26,17 @@ const client = defaultClient.extend({
   },
 });
 
-
 async function get_customer(request: GetCustomerRequest): Promise<GetCustomerResponse> {
   const validated_request = GetCustomerRequestSchema.parse(request);
   const response = await client.get(`customers/${validated_request.customer_id}`);
 
-  if (!response.ok) {
-    const error_message = ErrorResponseSchema.parse(await response.json());
-    throw new Error(`Failed to retrieve customer detail due to ${error_message.error_code}`);
-  }
   return CustomerSchema.parse(await response.json());
 }
 
 async function get_customer_list(request: GetCustomerListRequest): Promise<GetCustomerListResponse> {
   const validated_request = GetCustomerListRequestSchema.parse(request);
   const response = await client.get('customers', { searchParams: { reference_id: validated_request.reference_id } });
-  if (!response.ok) {
-    const error_message = ErrorResponseSchema.parse(await response.json());
-    throw new Error(`Failed to retrieve customer list due to ${error_message.error_code}`);
-  }
+
   return GetCustomerListResponseSchema.parse(await response.json());
 }
 
@@ -55,13 +46,6 @@ async function create_customer(request: CreateCustomerRequest): Promise<CreateCu
     body: JSON.stringify(validated_request),
     headers: { 'idempotency-key': uuid4() },
   });
-  if (!response.ok) {
-    const error_message = ErrorResponseSchema.parse(await response.json());
-    console.log(response);
-    throw new Error(
-      `Failed to create customer due to ${error_message.error_code}. ${JSON.stringify(ErrorResponseSchema)}`,
-    );
-  }
   return CustomerSchema.parse(await response.json());
 }
 
@@ -71,10 +55,7 @@ async function update_customer(request: UpdateCustomerRequest): Promise<UpdateCu
   const response = await client.patch(`customers/${customer_id}`, {
     body: JSON.stringify(body),
   });
-  if (!response.ok) {
-    const error_message = ErrorResponseSchema.parse(await response.json());
-    throw new Error(`Failed to update customer due to ${error_message.error_code}`);
-  }
+
   return CustomerSchema.parse(await response.json());
 }
 
