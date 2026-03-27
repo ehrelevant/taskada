@@ -1,42 +1,102 @@
-import { colors, spacing } from '@repo/theme';
 import { ReactNode } from 'react';
-import { StyleSheet, View, ViewProps } from 'react-native';
+import { spacing, useTheme } from '@repo/theme';
+import { StyleSheet, TouchableOpacity, View, ViewProps } from 'react-native';
+import { X } from 'lucide-react-native';
 
+import { BackButton } from '../BackButton';
 import { Typography } from '../Typography';
 
-interface HeaderProps extends ViewProps {
-  title: string;
+export interface HeaderProps extends ViewProps {
+  title?: string;
   subtitle?: string;
   align?: 'left' | 'center';
-  rightContent?: ReactNode;
   size?: 'large' | 'medium' | 'small';
+  balancedSides?: boolean;
+  sideSlotWidth?: number;
+  onBack?: () => void;
+  onClose?: () => void;
+  leftContent?: ReactNode;
+  centerContent?: ReactNode;
+  rightContent?: ReactNode;
+  bottomBorder?: boolean;
 }
 
 export function Header({
   title,
   subtitle,
   align = 'left',
-  rightContent,
   size = 'medium',
+  balancedSides = false,
+  sideSlotWidth = 40,
+  onBack,
+  onClose,
+  leftContent,
+  centerContent,
+  rightContent,
+  bottomBorder = false,
   style,
   ...rest
 }: HeaderProps) {
+  const { colors } = useTheme();
   const titleVariant = size === 'large' ? 'h3' : size === 'small' ? 'h5' : 'h4';
   const subtitleVariant = size === 'large' ? 'body1' : 'body2';
 
-  return (
-    <View style={[styles.container, styles[align], style]} {...rest}>
-      <View style={styles.textContainer}>
-        <Typography variant={titleVariant} weight="bold" style={styles.title}>
-          {title}
-        </Typography>
-        {subtitle && (
-          <Typography variant={subtitleVariant} color="textSecondary" style={styles.subtitle}>
-            {subtitle}
+  const resolvedLeftContent = onBack ? <BackButton onPress={onBack} /> : leftContent;
+
+  const resolvedRightContent = onClose ? (
+    <TouchableOpacity
+      onPress={onClose}
+      hitSlop={{ top: spacing.s, bottom: spacing.s, left: spacing.s, right: spacing.s }}
+    >
+      <X size={24} color={colors.textSecondary} />
+    </TouchableOpacity>
+  ) : (
+    rightContent
+  );
+
+  const renderCenter = () => {
+    if (centerContent) {
+      return <View style={styles.centerContent}>{centerContent}</View>;
+    }
+
+    if (title) {
+      return (
+        <View style={styles.textContainer}>
+          <Typography variant={titleVariant} weight="bold" align={align}>
+            {title}
           </Typography>
-        )}
-      </View>
-      {rightContent && <View style={styles.rightContent}>{rightContent}</View>}
+          {subtitle && (
+            <Typography variant={subtitleVariant} color="textSecondary" align={align} style={styles.subtitle}>
+              {subtitle}
+            </Typography>
+          )}
+        </View>
+      );
+    }
+
+    return null;
+  };
+
+  const borderStyle = bottomBorder ? { borderBottomWidth: 1, borderBottomColor: colors.border } : undefined;
+  const sideSlotStyle = balancedSides ? { width: sideSlotWidth } : undefined;
+  const balancedLeftSlotStyle = balancedSides
+    ? { marginRight: 0, alignItems: 'center' as const, justifyContent: 'center' as const }
+    : undefined;
+  const balancedRightSlotStyle = balancedSides
+    ? { marginLeft: 0, alignItems: 'center' as const, justifyContent: 'center' as const }
+    : undefined;
+
+  return (
+    <View style={[styles.container, borderStyle, style]} {...rest}>
+      {resolvedLeftContent ? (
+        <View style={[styles.leftContent, sideSlotStyle, balancedLeftSlotStyle]}>{resolvedLeftContent}</View>
+      ) : null}
+      {!resolvedLeftContent && balancedSides ? <View style={sideSlotStyle} /> : null}
+      {renderCenter()}
+      {resolvedRightContent ? (
+        <View style={[styles.rightContent, sideSlotStyle, balancedRightSlotStyle]}>{resolvedRightContent}</View>
+      ) : null}
+      {!resolvedRightContent && balancedSides ? <View style={sideSlotStyle} /> : null}
     </View>
   );
 }
@@ -47,20 +107,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: spacing.m,
   },
-  left: {
-    justifyContent: 'flex-start',
-  },
-  center: {
-    justifyContent: 'center',
+  leftContent: {
+    marginRight: spacing.s,
   },
   textContainer: {
     flex: 1,
   },
-  title: {
-    color: colors.textPrimary,
+  centerContent: {
+    flex: 1,
   },
   subtitle: {
-    marginTop: spacing.xs,
+    marginTop: spacing.xxs,
   },
   rightContent: {
     marginLeft: spacing.m,

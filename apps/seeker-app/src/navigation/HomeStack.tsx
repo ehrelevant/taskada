@@ -1,14 +1,9 @@
-import { BookingCompleteScreen } from '@screens/home/booking/BookingCompleteScreen';
-import { BookingDetailsScreen } from '@screens/home/booking/BookingDetailsScreen';
-import { BookingTransitScreen } from '@screens/home/booking/BookingTransitScreen';
-import { ChatScreen } from '@screens/home/chat/ChatScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { HomeScreen } from '@screens/home/HomeScreen';
-import { RequestFormScreen } from '@screens/request-form/RequestFormScreen';
-import { ServiceDetailsScreen } from '@screens/service-details/ServiceDetailsScreen';
-import { ServiceTypesListScreen } from '@screens/service-types/ServiceTypesListScreen';
-import { StandbyScreen } from '@screens/standby/StandbyScreen';
-import { ViewProposalScreen } from '@screens/home/proposal/ViewProposalScreen';
+import { HomeScreen } from '@screens/home/Home';
+import { RequestFormScreen } from '@screens/home/request/form/RequestForm';
+import { ServiceDetailsScreen } from '@screens/home/service/details/ServiceDetails';
+import { ServiceTypesListScreen } from '@screens/home/service/types/ServiceTypes';
+import { StackHeader } from '@repo/components';
 
 export type HomeStackParamList = {
   Home: undefined;
@@ -17,74 +12,6 @@ export type HomeStackParamList = {
   RequestForm: {
     serviceTypeId?: string;
     serviceId?: string;
-  };
-  Standby: {
-    requestId: string;
-  };
-  Chat: {
-    bookingId: string;
-    providerInfo: {
-      id: string;
-      firstName: string;
-      lastName: string;
-      avatarUrl: string | null;
-    };
-    requestId: string;
-  };
-  ViewProposal: {
-    bookingId: string;
-    providerInfo: {
-      id: string;
-      firstName: string;
-      lastName: string;
-      avatarUrl: string | null;
-    };
-    proposal: {
-      cost: number;
-      specifications: string;
-      serviceTypeName: string;
-      address:
-        | {
-            label: string | null;
-            coordinates: [number, number];
-          }
-        | undefined;
-    };
-    requestId: string;
-  };
-  BookingTransit: {
-    bookingId: string;
-    providerInfo: {
-      id: string;
-      firstName: string;
-      lastName: string;
-      avatarUrl: string | null;
-    };
-    proposal: {
-      cost: number;
-      specifications: string;
-      serviceTypeName: string;
-      address:
-        | {
-            label: string | null;
-            coordinates: [number, number];
-          }
-        | undefined;
-    };
-  };
-  BookingComplete: {
-    bookingId: string;
-    providerInfo: {
-      id: string;
-      firstName: string;
-      lastName: string;
-      avatarUrl: string | null;
-    };
-    serviceTypeName: string;
-    cost: number;
-  };
-  BookingDetails: {
-    bookingId: string;
   };
 };
 
@@ -96,6 +23,13 @@ export function HomeStack() {
       initialRouteName="Home"
       screenOptions={{
         animationDuration: 400,
+        header: ({ navigation, options, route, back }) => (
+          <StackHeader
+            title={typeof options.title === 'string' ? options.title : route.name}
+            canGoBack={Boolean(back)}
+            onBack={() => navigation.goBack()}
+          />
+        ),
       }}
     >
       <Stack.Screen
@@ -125,54 +59,6 @@ export function HomeStack() {
         component={RequestFormScreen}
         options={{
           title: 'Request Service',
-        }}
-      />
-      <Stack.Screen
-        name="Standby"
-        component={StandbyScreen}
-        options={{
-          title: 'Finding Provider',
-          headerBackVisible: false,
-        }}
-      />
-      <Stack.Screen
-        name="Chat"
-        component={ChatScreen}
-        options={{
-          title: 'Chat',
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="ViewProposal"
-        component={ViewProposalScreen}
-        options={{
-          title: 'Service Proposal',
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="BookingTransit"
-        component={BookingTransitScreen}
-        options={{
-          title: 'Provider In Transit',
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="BookingComplete"
-        component={BookingCompleteScreen}
-        options={{
-          title: 'Service Complete',
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="BookingDetails"
-        component={BookingDetailsScreen}
-        options={{
-          title: 'Booking Details',
-          headerShown: false,
         }}
       />
     </Stack.Navigator>

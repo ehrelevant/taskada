@@ -16,6 +16,7 @@ export * from './service';
 export * from './token';
 export * from './role';
 export * from './user';
+export * from './report';
 
 // TODO: Add relation.ts
 

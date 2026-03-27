@@ -10,6 +10,7 @@ import {
 import { Logger, UseGuards } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
 
+import { CORS_ORIGINS } from '../env';
 import { MessagesService } from '../messages/messages.service';
 import { PushNotificationsService } from '../push-notifications/push-notifications.service';
 import { WsAuthGuard } from '../matching/ws-auth.guard';
@@ -36,7 +37,7 @@ interface JoinBookingData {
 
 @WebSocketGateway({
   cors: {
-    origin: '*',
+    origin: CORS_ORIGINS,
     credentials: true,
   },
   namespace: '/chat',
@@ -197,8 +198,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       // Get booking participants to identify the seeker
       const participants = await this.messagesService.getBookingParticipants(bookingId);
 
-      // Broadcast to all users in the booking room
-      await this.broadcastBookingDeclined(bookingId, requestId, participants.seekerUserId);
+      // Broadcast to all users in the booking room (except the provider who declined)
+      await this.broadcastBookingDeclined(client, bookingId, requestId, participants.seekerUserId);
 
       this.logger.log(`Booking ${bookingId} declined by provider ${client.userId}`);
     } catch (error) {
@@ -207,10 +208,15 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
   }
 
-  // Method to broadcast booking_declined event to seeker
-  async broadcastBookingDeclined(bookingId: string, requestId: string, seekerUserId: string): Promise<void> {
+  // Method to broadcast booking_declined event to seeker (excluding the provider who declined)
+  async broadcastBookingDeclined(
+    client: AuthenticatedSocket,
+    bookingId: string,
+    requestId: string,
+    seekerUserId: string,
+  ): Promise<void> {
     const roomName = `booking:${bookingId}`;
-    this.server.to(roomName).emit('booking_declined', {
+    client.to(roomName).emit('booking_declined', {
       bookingId,
       requestId,
     });
@@ -228,6 +234,61 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     );
 
     this.logger.log(`Broadcasted booking_declined for booking ${bookingId}`);
+  }
+
+  @UseGuards(WsAuthGuard)
+  @SubscribeMessage('cancel_booking')
+  async handleCancelBooking(
+    @ConnectedSocket() client: AuthenticatedSocket,
+    @MessageBody() data: { bookingId: string },
+  ) {
+    if (!client.userId) {
+      client.emit('error', { message: 'Unauthorized: User not authenticated' });
+      return;
+    }
+
+    const { bookingId } = data;
+
+    try {
+      // Get booking participants to identify the provider
+      const participants = await this.messagesService.getBookingParticipants(bookingId);
+
+      // Broadcast to all users in the booking room (except the seeker who cancelled)
+      await this.broadcastBookingCancelled(client, bookingId, participants.providerUserId);
+
+      this.logger.log(`Booking ${bookingId} cancelled by seeker ${client.userId}`);
+    } catch (error) {
+      this.logger.error(`Error cancelling booking: ${error.message}`);
+      client.emit('error', { message: error.message || 'Failed to cancel booking' });
+    }
+  }
+
+  // Method to broadcast booking_cancelled event to provider (excluding the seeker who cancelled)
+  async broadcastBookingCancelled(
+    client: AuthenticatedSocket | null,
+    bookingId: string,
+    providerUserId: string,
+  ): Promise<void> {
+    const roomName = `booking:${bookingId}`;
+
+    if (client) {
+      client.to(roomName).emit('booking_cancelled', { bookingId });
+    } else {
+      this.server.to(roomName).emit('booking_cancelled', { bookingId });
+    }
+
+    // Also send push notification to provider
+    await this.pushNotificationsService.sendPushNotification(
+      providerUserId,
+      'Booking Cancelled',
+      'The seeker has cancelled the booking.',
+      {
+        type: 'booking_cancelled',
+        bookingId,
+      },
+    );
+
+    this.logger.log(`Broadcasted booking_cancelled for booking ${bookingId}`);
   }
 
   // Method to broadcast new booking to seeker

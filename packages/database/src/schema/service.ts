@@ -1,6 +1,6 @@
 import * as v from 'valibot';
 import { boolean, numeric, pgSchema, text, uuid } from 'drizzle-orm/pg-core';
-import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-valibot';
+import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-zod';
 
 import { provider } from './provider';
 
@@ -13,8 +13,8 @@ export const serviceType = app.table('service_type', {
   iconUrl: text('icon_url'),
 });
 export const ServiceTypeSelectSchema = createSelectSchema(serviceType);
-export const ServiceTypeInsertSchema = v.omit(createInsertSchema(serviceType), ['id']);
-export const ServiceTypeUpdateSchema = v.omit(createUpdateSchema(serviceType), ['id']);
+export const ServiceTypeInsertSchema = createInsertSchema(serviceType).omit({ id: true });
+export const ServiceTypeUpdateSchema = createUpdateSchema(serviceType).omit({ id: true });
 
 export const service = app.table('service', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
@@ -28,5 +28,5 @@ export const service = app.table('service', {
   isEnabled: boolean('is_enabled').notNull().default(false),
 });
 export const ServiceSelectSchema = createSelectSchema(service);
-export const ServiceInsertSchema = v.omit(createInsertSchema(service), ['id']);
-export const ServiceUpdateSchema = v.omit(createUpdateSchema(service), ['id']);
+export const ServiceInsertSchema = createInsertSchema(service).omit({ id: true });
+export const ServiceUpdateSchema = createUpdateSchema(service).omit({ id: true });

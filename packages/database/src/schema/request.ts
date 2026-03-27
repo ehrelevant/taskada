@@ -1,5 +1,5 @@
 import * as v from 'valibot';
-import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-valibot';
+import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-zod';
 import { pgEnum, pgSchema, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 import { address } from './address';
@@ -32,8 +32,8 @@ export const request = app.table('request', {
     .$onUpdate(() => new Date()),
 });
 export const RequestSelectSchema = createSelectSchema(request);
-export const RequestInsertSchema = v.omit(createInsertSchema(request), ['id', 'createdAt', 'updatedAt']);
-export const RequestUpdateSchema = v.omit(createUpdateSchema(request), ['id', 'createdAt', 'updatedAt']);
+export const RequestInsertSchema = createInsertSchema(request).omit({ id: true, createdAt: true, updatedAt: true });
+export const RequestUpdateSchema = createUpdateSchema(request).omit({ id: true, createdAt: true, updatedAt: true });
 
 export const requestImage = app.table('request_image', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
@@ -43,5 +43,5 @@ export const requestImage = app.table('request_image', {
   image: text('image').notNull(),
 });
 export const RequestImageSelectSchema = createSelectSchema(requestImage);
-export const RequestImageInsertSchema = v.omit(createInsertSchema(requestImage), ['id']);
-export const RequestImageUpdateSchema = v.omit(createUpdateSchema(requestImage), ['id']);
+export const RequestImageInsertSchema = createInsertSchema(requestImage).omit({ id: true });
+export const RequestImageUpdateSchema = createUpdateSchema(requestImage).omit({ id: true });

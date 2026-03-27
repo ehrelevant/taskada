@@ -1,1 +1,0 @@
-DROP TABLE "app"."xendit_details" CASCADE;

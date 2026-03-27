@@ -1,15 +1,13 @@
-import { colors } from '@repo/theme';
+import { spacing, useTheme } from '@repo/theme';
 import { Star } from 'lucide-react-native';
-import { StyleProp, TouchableOpacity, View, ViewStyle } from 'react-native';
-import { useState } from 'react';
+import { StyleSheet, TouchableOpacity, View, ViewProps } from 'react-native';
 
-export interface StarRatingInputProps {
+export interface StarRatingInputProps extends ViewProps {
   value: number;
   onChange: (value: number) => void;
   size?: number;
   maxStars?: number;
   disabled?: boolean;
-  style?: StyleProp<ViewStyle>;
 }
 
 export function StarRatingInput({
@@ -19,8 +17,9 @@ export function StarRatingInput({
   maxStars = 5,
   disabled = false,
   style,
+  ...rest
 }: StarRatingInputProps) {
-  const [hoveredValue, setHoveredValue] = useState(0);
+  const { colors } = useTheme();
 
   const handlePress = (starValue: number) => {
     if (!disabled) {
@@ -28,28 +27,16 @@ export function StarRatingInput({
     }
   };
 
-  const handleHoverIn = (starValue: number) => {
-    if (!disabled) {
-      setHoveredValue(starValue);
-    }
-  };
-
-  const handleHoverOut = () => {
-    setHoveredValue(0);
-  };
-
   return (
-    <View style={[{ flexDirection: 'row', alignItems: 'center', gap: 8 }, style]}>
+    <View style={[styles.container, style]} {...rest}>
       {Array.from({ length: maxStars }, (_, index) => {
         const starValue = index + 1;
-        const isFilled = starValue <= (hoveredValue || value);
+        const isFilled = starValue <= value;
 
         return (
           <TouchableOpacity
             key={starValue}
             onPress={() => handlePress(starValue)}
-            onPressIn={() => handleHoverIn(starValue)}
-            onPressOut={handleHoverOut}
             disabled={disabled}
             activeOpacity={disabled ? 1 : 0.7}
           >
@@ -65,3 +52,11 @@ export function StarRatingInput({
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.s,
+  },
+});

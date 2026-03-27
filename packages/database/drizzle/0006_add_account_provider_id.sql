@@ -1,1 +1,0 @@
-ALTER TABLE "auth"."account" ADD COLUMN "provider_id" text NOT NULL;

@@ -1,6 +1,6 @@
 import { ActivityIndicator, Text, TouchableOpacity, TouchableOpacityProps, View } from 'react-native';
-import { colors } from '@repo/theme';
 import { ReactNode } from 'react';
+import { useTheme } from '@repo/theme';
 
 import { createStyles } from './Button.styles';
 
@@ -33,12 +33,14 @@ export function Button({
   style,
   ...rest
 }: ButtonProps) {
+  const { colors } = useTheme();
   const isDisabled = disabled || isLoading;
-  const styles = createStyles(variant, size, isDisabled);
+  const styles = createStyles(variant, size, isDisabled, colors);
 
   const getLoadingColor = () => {
-    if (variant === 'primary' || variant === 'secondary') return colors.white;
-    if (variant === 'danger') return colors.error.base;
+    if (variant === 'primary') return colors.textInverse;
+    if (variant === 'secondary') return colors.secondary.text;
+    if (variant === 'danger') return colors.textInverse;
     return colors.actionPrimary;
   };
 
@@ -47,7 +49,7 @@ export function Button({
       return (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="small" color={getLoadingColor()} />
-          {loadingText && loadingText !== 'Loading...' && <Text style={styles.loadingText}>{loadingText}</Text>}
+            {loadingText && <Text style={[styles.loadingText, { color: getLoadingColor() }]}>{loadingText}</Text>}
         </View>
       );
     }

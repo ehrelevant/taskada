@@ -1,5 +1,5 @@
 import * as v from 'valibot';
-import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-valibot';
+import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-zod';
 import { pgSchema, text, uuid } from 'drizzle-orm/pg-core';
 
 const app = pgSchema('app');
@@ -11,5 +11,5 @@ export const agency = app.table('agency', {
   avatarUrl: text('avatar_url'),
 });
 export const AgencySelectSchema = createSelectSchema(agency);
-export const AgencyInsertSchema = v.omit(createInsertSchema(agency), ['id']);
-export const AgencyUpdateSchema = v.omit(createUpdateSchema(agency), ['id']);
+export const AgencyInsertSchema = createInsertSchema(agency).omit({ id: true });
+export const AgencyUpdateSchema = createUpdateSchema(agency).omit({ id: true });

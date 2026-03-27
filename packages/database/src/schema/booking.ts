@@ -1,5 +1,5 @@
 import * as v from 'valibot';
-import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-valibot';
+import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-zod';
 import { numeric, pgEnum, pgSchema, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 import { provider } from './provider';
@@ -31,5 +31,5 @@ export const booking = app.table('booking', {
     .$onUpdate(() => new Date()),
 });
 export const BookingSelectSchema = createSelectSchema(booking);
-export const BookingInsertSchema = v.omit(createInsertSchema(booking), ['id', 'createdAt', 'updatedAt']);
-export const BookingUpdateSchema = v.omit(createUpdateSchema(booking), ['id', 'createdAt', 'updatedAt']);
+export const BookingInsertSchema = createInsertSchema(booking).omit({ id: true, createdAt: true, updatedAt: true });
+export const BookingUpdateSchema = createUpdateSchema(booking).omit({ id: true, createdAt: true, updatedAt: true });

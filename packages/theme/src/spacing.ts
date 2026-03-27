@@ -7,6 +7,12 @@ export const spacing = {
   xl: 32,
   xxl: 48,
   xxxl: 64,
+  sectionGap: 28,
+  pageHorizontal: 20,
+  pageTop: 18,
+  heroInset: 22,
+  cardInset: 14,
+  gridGap: 10,
 };
 
 export const touchTarget = {
@@ -20,5 +26,6 @@ export const radius = {
   m: 12,
   l: 16,
   xl: 24,
+  xxl: 32,
   round: 9999,
 };

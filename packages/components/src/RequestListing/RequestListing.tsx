@@ -1,21 +1,29 @@
 import { spacing } from '@repo/theme';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, ViewProps } from 'react-native';
 
 import { Button } from '../Button';
 import { Card } from '../Card';
 import { Typography } from '../Typography';
 
-type Props = {
+export interface RequestListingProps extends ViewProps {
   title: string;
   distance?: string;
   address?: string;
   onViewDetails?: () => void;
   subtitle?: string;
-};
+}
 
-export function RequestListing({ title, distance, address, onViewDetails, subtitle }: Props) {
+export function RequestListing({
+  title,
+  distance,
+  address,
+  onViewDetails,
+  subtitle,
+  style,
+  ...rest
+}: RequestListingProps) {
   return (
-    <Card style={styles.card}>
+    <Card style={[styles.card, style]} {...rest}>
       <View style={styles.row}>
         <View style={styles.info}>
           <Typography variant="h5" style={styles.title}>
@@ -48,7 +56,6 @@ export function RequestListing({ title, distance, address, onViewDetails, subtit
 
 const styles = StyleSheet.create({
   card: {
-    marginHorizontal: spacing.m,
     marginVertical: spacing.s,
   },
   row: {

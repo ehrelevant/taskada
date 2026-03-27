@@ -1,1 +1,0 @@
-ALTER TABLE "auth"."account" ADD COLUMN "id_token" text;

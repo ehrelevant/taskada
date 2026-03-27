@@ -1,5 +1,7 @@
-import { PartialType } from '@nestjs/swagger';
+import { createZodDto } from 'nestjs-zod';
 
-import { CreateSeekerSwaggerDto } from './create-seeker.dto';
+import { CreateSeekerSchema } from './create-seeker.dto';
 
-export class UpdateSeekerSwaggerDto extends PartialType(CreateSeekerSwaggerDto) {}
+export const UpdateSeekerSchema = CreateSeekerSchema.partial();
+
+export class UpdateSeekerDto extends createZodDto(UpdateSeekerSchema) {}

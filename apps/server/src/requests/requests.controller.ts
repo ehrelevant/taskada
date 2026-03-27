@@ -10,20 +10,17 @@ import {
   Query,
   UploadedFiles,
   UseInterceptors,
-  UsePipes,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
 import { Session, UserSession } from '@thallesp/nestjs-better-auth';
-import { ValibotPipe } from 'src/valibot/valibot.pipe';
 
 import { MatchingService } from '../matching/matching.service';
 
 import { RequestsService } from './requests.service';
 
-import { CreateRequestSchema, UpdateRequestStatusSchema } from './dto/create-request.dto';
-import { CreateRequestSwaggerDto } from './dto/create-request-swagger.dto';
-import { UpdateRequestStatusSwaggerDto } from './dto/update-request-status-swagger.dto';
+import { CreateRequestDto } from './dto/create-request.dto';
+import { UpdateRequestStatusDto } from './dto/update-request-status.dto';
 
 @Controller('requests')
 export class RequestsController {
@@ -33,8 +30,7 @@ export class RequestsController {
   ) {}
 
   @Post()
-  @UsePipes(new ValibotPipe(CreateRequestSchema))
-  async createRequest(@Session() { user }: UserSession, @Body() body: CreateRequestSwaggerDto) {
+  async createRequest(@Session() { user }: UserSession, @Body() body: CreateRequestDto) {
     return this.requestsService.createRequest(body, user.id);
   }
 
@@ -95,8 +91,7 @@ export class RequestsController {
   }
 
   @Patch(':id/status')
-  @UsePipes(new ValibotPipe(UpdateRequestStatusSchema))
-  async updateRequestStatus(@Param('id') id: string, @Body() body: UpdateRequestStatusSwaggerDto) {
+  async updateRequestStatus(@Param('id') id: string, @Body() body: UpdateRequestStatusDto) {
     await this.requestsService.updateRequestStatus(id, body.status);
     return { message: `Request status updated to ${body.status}` };
   }

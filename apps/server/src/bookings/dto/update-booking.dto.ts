@@ -1,11 +1,8 @@
-import { ApiProperty } from '@nestjs/swagger';
-import type { BookingStatus } from '@repo/database';
+import { createZodDto } from 'nestjs-zod';
+import { z } from 'zod';
 
-export class UpdateBookingSwaggerDto {
-  @ApiProperty({
-    description: 'The status of the booking',
-    enum: ['in_transit', 'serving', 'completed', 'cancelled'],
-    example: 'serving',
-  })
-  status: BookingStatus;
-}
+export const UpdateBookingSchema = z.object({
+  status: z.enum(['in_transit', 'serving', 'completed', 'cancelled']),
+});
+
+export class UpdateBookingDto extends createZodDto(UpdateBookingSchema) {}

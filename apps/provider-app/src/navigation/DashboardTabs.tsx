@@ -1,28 +1,38 @@
 import { BottomTabBarProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { ClipboardList, HardHat, History, Menu } from 'lucide-react-native';
-import { colors, palette } from '@repo/theme';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Typography } from '@repo/components';
+import { useTheme } from '@repo/theme';
 
+import { BookingStack } from './BookingStack';
+import { HistoryStack } from './HistoryStack';
 import { OptionsStack } from './OptionsStack';
 import { RequestsStack } from './RequestsStack';
 import { ServicesStack } from './ServicesStack';
-import { TransactionHistoryStack } from './TransactionHistoryStack';
 
 export type DashboardTabsParamList = {
   RequestsStack: undefined;
   ServicesStack: undefined;
-  TransactionHistoryStack: undefined;
+  HistoryStack: undefined;
   OptionsStack: undefined;
+  BookingStack: undefined;
 };
 
 const Tab = createBottomTabNavigator<DashboardTabsParamList>();
 
 function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
+  const { colors } = useTheme();
+
   return (
-    <View style={styles.tabsContainer}>
+    <View
+      style={[styles.tabsContainer, { backgroundColor: colors.backgroundSecondary, borderTopColor: colors.border }]}
+    >
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
+
+        // Do not render if tabBarButton is disabled
+        if (options.tabBarButton) return null;
+
         const label =
           options.tabBarLabel !== undefined
             ? options.tabBarLabel
@@ -47,7 +57,7 @@ function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
         const renderIcon = () => {
           const iconProps = {
             size: 24,
-            color: isFocused ? colors.actionPrimary : palette.gray500,
+            color: isFocused ? colors.actionPrimary : colors.textDisabled,
             strokeWidth: 2,
           };
 
@@ -55,7 +65,7 @@ function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
             return <ClipboardList {...iconProps} />;
           } else if (route.name === 'ServicesStack') {
             return <HardHat {...iconProps} />;
-          } else if (route.name === 'TransactionHistoryStack') {
+          } else if (route.name === 'HistoryStack') {
             return <History {...iconProps} />;
           } else {
             return <Menu {...iconProps} />;
@@ -74,11 +84,7 @@ function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
           >
             <View style={styles.tabContent}>
               {renderIcon()}
-              <Typography
-                variant="caption"
-                color={isFocused ? colors.actionPrimary : palette.gray500}
-                style={styles.label}
-              >
+              <Typography variant="caption" color={isFocused ? 'actionPrimary' : 'textDisabled'} style={styles.label}>
                 {label.toString()}
               </Typography>
             </View>
@@ -98,8 +104,15 @@ export function DashboardTabs() {
     >
       <Tab.Screen name="RequestsStack" component={RequestsStack} options={{ title: 'Requests' }} />
       <Tab.Screen name="ServicesStack" component={ServicesStack} options={{ title: 'Services' }} />
-      <Tab.Screen name="TransactionHistoryStack" component={TransactionHistoryStack} options={{ title: 'History' }} />
+      <Tab.Screen name="HistoryStack" component={HistoryStack} options={{ title: 'History' }} />
       <Tab.Screen name="OptionsStack" component={OptionsStack} options={{ title: 'Options' }} />
+      <Tab.Screen
+        name="BookingStack"
+        component={BookingStack}
+        options={{
+          tabBarButton: () => null,
+        }}
+      />
     </Tab.Navigator>
   );
 }
@@ -109,8 +122,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: 64,
     paddingTop: 8,
-    backgroundColor: colors.backgroundSecondary,
-    borderTopColor: colors.border,
     borderTopWidth: 2,
   },
   tabButton: {

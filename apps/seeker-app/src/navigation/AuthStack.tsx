@@ -1,7 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
-import { SignInScreen } from '@screens/auth/SignInScreen';
-import { SignUpScreen } from '@screens/auth/SignUpScreen';
+import { SignInScreen } from '@screens/auth/signIn/SignIn';
+import { SignUpScreen } from '@screens/auth/signUp/SignUp';
+import { StackHeader } from '@repo/components';
 
 export type AuthStackParamList = {
   SignIn: undefined;
@@ -16,6 +16,13 @@ export function AuthStack() {
       initialRouteName="SignIn"
       screenOptions={{
         animationDuration: 400,
+        header: ({ navigation, options, route, back }) => (
+          <StackHeader
+            title={typeof options.title === 'string' ? options.title : route.name}
+            canGoBack={Boolean(back)}
+            onBack={() => navigation.goBack()}
+          />
+        ),
       }}
     >
       <Stack.Screen

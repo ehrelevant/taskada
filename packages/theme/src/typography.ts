@@ -1,20 +1,20 @@
-import { TextStyle } from 'react-native';
+import { Platform, TextStyle } from 'react-native';
 
 export const fontFamily = {
-  regular: 'System',
-  medium: 'System',
-  bold: 'System',
+  regular: Platform.select({ ios: 'AvenirNext-Regular', android: 'sans-serif', default: 'System' }),
+  medium: Platform.select({ ios: 'AvenirNext-Medium', android: 'sans-serif-medium', default: 'System' }),
+  bold: Platform.select({ ios: 'AvenirNext-DemiBold', android: 'sans-serif-condensed', default: 'System' }),
 };
 
 export const fontSize = {
-  xs: 12,
-  s: 14,
+  xs: 11,
+  s: 13,
   m: 16,
-  l: 18,
-  xl: 20,
-  xxl: 22,
-  xxxl: 28,
-  display: 36,
+  l: 19,
+  xl: 24,
+  xxl: 30,
+  xxxl: 36,
+  display: 44,
 };
 
 export const fontWeight = {
@@ -25,11 +25,11 @@ export const fontWeight = {
 };
 
 export const lineHeight = {
-  xs: 18,
-  s: 22,
+  xs: 16,
+  s: 20,
   m: 24,
-  l: 26,
-  xl: 30,
-  xxl: 34,
-  xxxl: 42,
+  l: 28,
+  xl: 34,
+  xxl: 40,
+  xxxl: 46,
 };

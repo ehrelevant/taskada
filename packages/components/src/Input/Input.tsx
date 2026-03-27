@@ -1,6 +1,6 @@
-import { colors } from '@repo/theme';
 import { ReactNode, useId, useState } from 'react';
 import { StyleProp, Text, TextInput, TextInputProps, TouchableOpacity, View, ViewStyle } from 'react-native';
+import { useTheme } from '@repo/theme';
 
 import { createStyles } from './Input.styles';
 
@@ -33,8 +33,9 @@ export function Input({
   style,
   ...rest
 }: InputProps) {
+  const { colors } = useTheme();
   const [isFocused, setIsFocused] = useState(false);
-  const styles = createStyles(error, isFocused);
+  const styles = createStyles(colors, error, isFocused);
   const inputId = useId();
   const labelledById = `${inputId}-label`;
 

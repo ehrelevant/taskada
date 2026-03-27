@@ -1,4 +1,5 @@
 import * as v from 'valibot';
+import * as z from 'zod';
 
 import {
   account,
@@ -33,11 +34,18 @@ import {
   user,
   userRole,
   verification,
+  auditLog,
+  auditActionEnum,
+  moderationNote,
+  reportImage,
+  report,
+  reportReasonEnum,
+  reportStatusEnum
 } from './schema';
 
 export type User = typeof user.$inferSelect;
 export type NewUser = typeof user.$inferInsert;
-export type UserUpdate = v.InferInput<typeof UserUpdateSchema>;
+export type UserUpdate = z.infer<typeof UserUpdateSchema>
 
 export type Role = (typeof roleEnum.enumValues)[number];
 
@@ -108,12 +116,32 @@ export type NewMessageImage = typeof messageImage.$inferInsert;
 
 export type PaymentMethod = typeof paymentMethod.$inferSelect;
 export type NewPaymentMethod = typeof paymentMethod.$inferInsert;
-export type UpdatePaymentMethod = v.InferInput<typeof PaymentMethodUpdateSchema>;
+export type UpdatePaymentMethod = z.infer<typeof PaymentMethodUpdateSchema>;
 export type PaymentAuditLog = typeof paymentAuditLog.$inferSelect;
 export type NewPaymentAuditLog = typeof paymentAuditLog.$inferInsert;
-export type UpdatePaymentAuditLog = v.InferInput<typeof PaymentAuditLogUpdateSchema>;
+export type UpdatePaymentAuditLog = z.infer<typeof PaymentAuditLogUpdateSchema>;
 
 export type PaymentAuditLogType = (typeof paymentAuditLogEnum.enumValues)[number];
 
 export type PushToken = typeof pushToken.$inferSelect;
 export type NewPushToken = typeof pushToken.$inferInsert;
+
+export type AuditLog = typeof auditLog.$inferSelect;
+export type NewAuditLog = typeof auditLog.$inferInsert;
+
+
+export type AuditAction = (typeof auditActionEnum.enumValues)[number];
+
+export type ModerationNote = typeof moderationNote.$inferSelect;
+export type NewModerationNote = typeof moderationNote.$inferInsert;
+
+export type ReportImage = typeof reportImage.$inferSelect;
+export type NewReportImage = typeof reportImage.$inferInsert;
+
+export type Report = typeof report.$inferSelect;
+export type NewReport = typeof report.$inferInsert;
+
+
+export type ReportReason = (typeof reportReasonEnum.enumValues)[number];
+
+export type ReportStatus = (typeof reportStatusEnum.enumValues)[number];

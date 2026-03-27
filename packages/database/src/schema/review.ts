@@ -1,6 +1,6 @@
 import * as v from 'valibot';
 import { check, integer, pgSchema, text, timestamp, uuid } from 'drizzle-orm/pg-core';
-import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-valibot';
+import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-zod';
 import { sql } from 'drizzle-orm';
 
 import { service } from './service';
@@ -29,8 +29,8 @@ export const review = app.table(
   ({ rating }) => [check('review_rating_range', sql`${rating} IS NULL OR ${rating} BETWEEN 1 AND 5`)],
 );
 export const ReviewSelectSchema = createSelectSchema(review);
-export const ReviewInsertSchema = v.omit(createInsertSchema(review), ['id', 'createdAt', 'updatedAt']);
-export const ReviewUpdateSchema = v.omit(createUpdateSchema(review), ['id', 'createdAt', 'updatedAt']);
+export const ReviewInsertSchema = createInsertSchema(review).omit({ id: true, createdAt: true, updatedAt: true });
+export const ReviewUpdateSchema = createUpdateSchema(review).omit({ id: true, createdAt: true, updatedAt: true });
 
 export const reviewImage = app.table('review_image', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
@@ -40,5 +40,5 @@ export const reviewImage = app.table('review_image', {
   image: text('image').notNull(),
 });
 export const ReviewImageSelectSchema = createSelectSchema(reviewImage);
-export const ReviewImageInsertSchema = v.omit(createInsertSchema(reviewImage), ['id']);
-export const ReviewImageUpdateSchema = v.omit(createUpdateSchema(reviewImage), ['id']);
+export const ReviewImageInsertSchema = createInsertSchema(reviewImage).omit({ id: true });
+export const ReviewImageUpdateSchema = createUpdateSchema(reviewImage).omit({ id: true });

@@ -1,1 +1,0 @@
-ALTER TABLE "app"."user" DROP COLUMN "birth_date";

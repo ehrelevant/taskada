@@ -13,23 +13,18 @@
     "S3_BUCKET_NAME",
     "S3_PUBLIC_URL",
     "XENDIT_CLIENT_SECRET",
-    "XENDIT_API_URL"
+    "XENDIT_API_URL",
+    "VITE_API_URL",
+    "CORS_ORIGINS",
+    "SEED_ADMIN_EMAIL",
+    "SEED_ADMIN_PHONE",
+    "SEED_ADMIN_PASSWORD"
   ],
   "tasks": {
     "dev": {
       "cache": false,
       "persistent": true,
       "dependsOn": ["^dev"]
-    },
-    "dev:android": {
-      "cache": false,
-      "persistent": true,
-      "dependsOn": ["^dev:android"]
-    },
-    "dev:ios": {
-      "cache": false,
-      "persistent": true,
-      "dependsOn": ["^dev:ios"]
     }
   }
 }

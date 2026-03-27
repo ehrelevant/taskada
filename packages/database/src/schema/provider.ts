@@ -1,5 +1,5 @@
 import { boolean, pgSchema, uuid } from 'drizzle-orm/pg-core';
-import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-valibot';
+import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-zod';
 
 import { agency } from './agency';
 import { user } from './user';

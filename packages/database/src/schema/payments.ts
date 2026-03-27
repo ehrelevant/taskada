@@ -1,5 +1,5 @@
 import * as v from 'valibot';
-import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-valibot';
+import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-zod';
 import { jsonb, pgEnum, pgSchema, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 import { user } from './user';
@@ -20,8 +20,8 @@ export const paymentMethod = app.table('payment_method', {
   updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
 });
 export const PaymentMethodSelectSchema = createSelectSchema(paymentMethod);
-export const PaymentMethodInsertSchema = v.omit(createInsertSchema(paymentMethod), ['id']);
-export const PaymentMethodUpdateSchema = v.omit(createUpdateSchema(paymentMethod), ['id']);
+export const PaymentMethodInsertSchema = createInsertSchema(paymentMethod).omit({ id: true });
+export const PaymentMethodUpdateSchema = createUpdateSchema(paymentMethod).omit({ id: true });
 
 export const paymentAuditLogEnum = pgEnum('payment_audit_log_types', ['SESSION_SAVE', 'SESSION_PAY', 'PAYMENT']);
 export const paymentAuditLog = app.table('payment_audit_log', {
@@ -35,9 +35,9 @@ export const paymentAuditLog = app.table('payment_audit_log', {
   updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
 });
 
-export const PaymentAuditLogUpdateSchema = v.omit(createUpdateSchema(paymentAuditLog), [
-  'id',
-  'userId',
-  'createdAt',
-  'updatedAt',
-]);
+export const PaymentAuditLogUpdateSchema =createUpdateSchema(paymentAuditLog).omit({
+  id: true,
+  userId: true,
+  createdAt:true,
+  updatedAt: true,
+});

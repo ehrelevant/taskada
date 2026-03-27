@@ -4,6 +4,7 @@ node_modules/
 # Build folders
 build/
 dist/
+releases/
 
 # Dotfiles
 .*
@@ -13,3 +14,4 @@ dist/
 !.env.example
 !.github
 **/coverage
+!.env.*.example

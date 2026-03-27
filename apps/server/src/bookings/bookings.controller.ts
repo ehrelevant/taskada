@@ -1,13 +1,11 @@
-import { Body, Controller, Get, Param, Patch, Post, Query, UsePipes } from '@nestjs/common';
-import { BookingUpdateSchema } from '@repo/database';
-import { Session, UserSession } from '@thallesp/nestjs-better-auth';
-import { ValibotPipe } from 'src/valibot/valibot.pipe';
+import { Body, Controller, Get, Param, Patch, Post, Query, Session } from '@nestjs/common';
+import { UserSession } from '@thallesp/nestjs-better-auth';
 
 import { BookingsService } from './bookings.service';
 
-import { CreateBookingSwaggerDto } from './dto/create-booking.dto';
-import { SubmitProposalSchema, SubmitProposalSwaggerDto } from './dto/submit-proposal.dto';
-import { UpdateBookingSwaggerDto } from './dto/update-booking.dto';
+import { CreateBookingDto } from './dto/create-booking.dto';
+import { SubmitProposalDto } from './dto/submit-proposal.dto';
+import { UpdateBookingDto } from './dto/update-booking.dto';
 
 @Controller('bookings')
 export class BookingsController {
@@ -34,25 +32,22 @@ export class BookingsController {
   }
 
   @Post()
-  async createBooking(@Session() { user }: UserSession, @Body() createBookingDto: CreateBookingSwaggerDto) {
-    // The provider is the current authenticated user
+  async createBooking(@Session() { user }: UserSession, @Body() createBookingDto: CreateBookingDto) {
     return await this.bookingsService.createBooking(user.id, createBookingDto.requestId, createBookingDto.serviceId);
   }
 
   @Patch(':id')
-  @UsePipes(new ValibotPipe(BookingUpdateSchema))
-  async updateStatus(@Param('id') id: string, @Body() updateStatusDto: UpdateBookingSwaggerDto) {
+  async updateStatus(@Param('id') id: string, @Body() updateStatusDto: UpdateBookingDto) {
     return await this.bookingsService.updateBooking(id, {
       status: updateStatusDto.status,
     });
   }
 
   @Patch(':id/proposal')
-  @UsePipes(new ValibotPipe(SubmitProposalSchema))
   async submitProposal(
     @Session() { user }: UserSession,
     @Param('id') id: string,
-    @Body() submitProposalDto: SubmitProposalSwaggerDto,
+    @Body() submitProposalDto: SubmitProposalDto,
   ) {
     return await this.bookingsService.submitProposal(
       user.id,

@@ -6,6 +6,8 @@ import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { expo } from '@better-auth/expo';
 import { Pool } from 'pg';
 
+import { CORS_ORIGINS } from './env';
+
 const connectionString = process.env.DATABASE_URL as string;
 const pool = new Pool({ connectionString });
 const db = drizzle(pool, { schema, casing: 'snake_case' });
@@ -16,7 +18,7 @@ export const auth = betterAuth({
     debugLogs: false,
   }),
   plugins: [expo()],
-  trustedOrigins: ['provider-app://'],
+  trustedOrigins: CORS_ORIGINS,
   emailAndPassword: {
     enabled: true,
   },

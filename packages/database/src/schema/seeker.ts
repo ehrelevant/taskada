@@ -1,4 +1,4 @@
-import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-valibot';
+import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-zod';
 import { pgSchema, uuid } from 'drizzle-orm/pg-core';
 
 import { user } from './user';

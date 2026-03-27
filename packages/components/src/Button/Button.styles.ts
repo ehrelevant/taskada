@@ -1,10 +1,11 @@
-import { colors, fontFamily, fontSize, fontWeight, radius, spacing, touchTarget } from '@repo/theme';
 import { FlexStyle, StyleSheet } from 'react-native';
+import { fontFamily, fontSize, fontWeight, radius, spacing, ThemeColors, touchTarget } from '@repo/theme';
 
 export function createStyles(
   variant: 'primary' | 'secondary' | 'outline' | 'text' | 'danger',
   size: 'small' | 'medium' | 'large',
   isDisabled: boolean,
+  colors: ThemeColors,
 ) {
   // Base styles
   const baseButtonStyles = {
@@ -79,10 +80,10 @@ export function createStyles(
 
   const textVariantStyles = {
     primary: {
-      color: colors.textInverse,
+    color: colors.textInverse,
     },
     secondary: {
-      color: colors.textInverse,
+      color: colors.secondary.text,
     },
     outline: {
       color: isDisabled ? colors.textDisabled : colors.primary.base,
@@ -91,7 +92,7 @@ export function createStyles(
       color: isDisabled ? colors.textDisabled : colors.primary.base,
     },
     danger: {
-      color: colors.textInverse,
+        color: colors.textInverse,
     },
   };
 
@@ -120,7 +121,6 @@ export function createStyles(
     },
     loadingText: {
       marginLeft: spacing.xs,
-      color: colors.textInverse,
       fontSize: fontSize.s,
     },
     fullWidth: {

@@ -1,66 +1,101 @@
-import { colors, spacing } from '@repo/theme';
 import { ReactNode } from 'react';
+import { RefreshControlProps, ScrollView, StyleSheet, View, ViewProps } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ScrollView, StyleSheet, View, ViewProps } from 'react-native';
+import { spacing, useTheme } from '@repo/theme';
 
-interface ScreenContainerProps extends ViewProps {
+type PaddingSize = 'none' | 's' | 'm' | 'l';
+
+export interface ScreenContainerProps extends ViewProps {
   children: ReactNode;
   scrollable?: boolean;
   useSafeArea?: boolean;
-  backgroundColor?: string;
-  padding?: 'none' | 's' | 'm' | 'l';
-  verticalPadding?: 'none' | 's' | 'm' | 'l';
+  edges?: ('top' | 'bottom' | 'left' | 'right')[];
+  padding?: PaddingSize;
+  verticalPadding?: PaddingSize;
+  stickyFooter?: ReactNode;
+  refreshControl?: React.ReactElement<RefreshControlProps>;
+  keyboardShouldPersistTaps?: 'always' | 'handled' | 'never';
 }
+
+const PADDING_MAP: Record<PaddingSize, number> = {
+  none: 0,
+  s: spacing.s,
+  m: spacing.m,
+  l: spacing.l,
+};
 
 export function ScreenContainer({
   children,
   scrollable = false,
   useSafeArea = true,
-  backgroundColor = colors.background,
+  edges,
   padding = 'm',
   verticalPadding,
+  stickyFooter,
+  refreshControl,
+  keyboardShouldPersistTaps = 'handled',
   style,
   ...rest
 }: ScreenContainerProps) {
-  const paddingValues = {
-    none: 0,
-    s: spacing.s,
-    m: spacing.m,
-    l: spacing.l,
-  };
-
-  const horizontalPadding = paddingValues[padding];
-  const vertical = verticalPadding !== undefined ? paddingValues[verticalPadding] : horizontalPadding;
+  const { colors } = useTheme();
+  const horizontalPadding = PADDING_MAP[padding];
+  const vertical = verticalPadding !== undefined ? PADDING_MAP[verticalPadding] : horizontalPadding;
 
   const containerStyles = [
     styles.container,
-    { backgroundColor, paddingHorizontal: horizontalPadding, paddingVertical: vertical },
+    { backgroundColor: colors.background, paddingHorizontal: horizontalPadding, paddingVertical: vertical },
     style,
   ];
 
-  const content = scrollable ? (
-    <ScrollView
-      style={styles.scrollView}
-      contentContainerStyle={styles.scrollContent}
-      showsVerticalScrollIndicator={false}
-    >
-      {children}
-    </ScrollView>
-  ) : (
-    <View style={styles.content}>{children}</View>
-  );
+  const renderContent = () => {
+    if (scrollable) {
+      return (
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+          refreshControl={refreshControl}
+          keyboardShouldPersistTaps={keyboardShouldPersistTaps}
+        >
+          {children}
+        </ScrollView>
+      );
+    }
+
+    return <View style={styles.content}>{children}</View>;
+  };
+
+  const renderBody = () => {
+    if (stickyFooter) {
+      return (
+        <>
+          <View style={styles.mainContent}>{renderContent()}</View>
+          <View
+            style={[
+              styles.stickyFooter,
+              { backgroundColor: colors.backgroundSecondary, borderTopColor: colors.border },
+            ]}
+          >
+            {stickyFooter}
+          </View>
+        </>
+      );
+    }
+
+    return renderContent();
+  };
 
   if (useSafeArea) {
     return (
-      <SafeAreaView style={containerStyles} {...rest}>
-        {content}
+      <SafeAreaView style={containerStyles} edges={edges} {...rest}>
+        {renderBody()}
       </SafeAreaView>
     );
   }
 
   return (
     <View style={containerStyles} {...rest}>
-      {content}
+      {renderBody()}
     </View>
   );
 }
@@ -77,5 +112,12 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
+  },
+  mainContent: {
+    flex: 1,
+  },
+  stickyFooter: {
+    padding: spacing.m,
+    borderTopWidth: 1,
   },
 });

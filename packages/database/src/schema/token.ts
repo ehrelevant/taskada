@@ -1,5 +1,5 @@
 import * as v from 'valibot';
-import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-valibot';
+import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-zod';
 import { pgSchema, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 import { user } from './user';
@@ -20,5 +20,5 @@ export const pushToken = app.table('push_token', {
     .$onUpdate(() => new Date()),
 });
 export const PushTokenSelectSchema = createSelectSchema(pushToken);
-export const PushTokenInsertSchema = v.omit(createInsertSchema(pushToken), ['id', 'createdAt', 'updatedAt']);
-export const PushTokenUpdateSchema = v.omit(createUpdateSchema(pushToken), ['id', 'createdAt', 'updatedAt']);
+export const PushTokenInsertSchema = createInsertSchema(pushToken).omit({ id: true, createdAt: true, updatedAt: true });
+export const PushTokenUpdateSchema = createUpdateSchema(pushToken).omit({ id: true, createdAt: true, updatedAt: true });

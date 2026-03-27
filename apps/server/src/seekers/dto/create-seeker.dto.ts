@@ -1,9 +1,8 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { createZodDto } from 'nestjs-zod';
+import { z } from 'zod';
 
-export class CreateSeekerSwaggerDto {
-  @ApiProperty({
-    description: 'The user ID of the seeker',
-    example: '550e8400-e29b-41d4-a716-446655440000',
-  })
-  userId: string;
-}
+export const CreateSeekerSchema = z.object({
+  userId: z.string().uuid(),
+});
+
+export class CreateSeekerDto extends createZodDto(CreateSeekerSchema) {}

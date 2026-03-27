@@ -3,14 +3,7 @@ import { UserSession } from '@thallesp/nestjs-better-auth';
 
 import { PushNotificationsService } from './push-notifications.service';
 
-interface RegisterTokenDto {
-  token: string;
-  platform: string;
-}
-
-interface UnregisterTokenDto {
-  token: string;
-}
+import { RegisterTokenDto, UnregisterTokenDto } from './dto/push-token.dto';
 
 @Controller('push-notifications')
 export class PushNotificationsController {

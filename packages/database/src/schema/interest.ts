@@ -1,5 +1,5 @@
 import * as v from 'valibot';
-import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-valibot';
+import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-zod';
 import { pgEnum, pgSchema, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 import { provider } from './provider';
@@ -29,13 +29,13 @@ export const providerInterest = app.table('provider_interest', {
     .$onUpdate(() => new Date()),
 });
 export const ProviderInterestSelectSchema = createSelectSchema(providerInterest);
-export const ProviderInterestInsertSchema = v.omit(createInsertSchema(providerInterest), [
-  'id',
-  'createdAt',
-  'updatedAt',
-]);
-export const ProviderInterestUpdateSchema = v.omit(createUpdateSchema(providerInterest), [
-  'id',
-  'createdAt',
-  'updatedAt',
-]);
+export const ProviderInterestInsertSchema = createInsertSchema(providerInterest).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+export const ProviderInterestUpdateSchema = createUpdateSchema(providerInterest).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});

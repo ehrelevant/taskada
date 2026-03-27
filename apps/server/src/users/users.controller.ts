@@ -1,24 +1,12 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Post,
-  Put,
-  Session,
-  UploadedFile,
-  UseInterceptors,
-  UsePipes,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post, Put, Session, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
 import { UserSession } from '@thallesp/nestjs-better-auth';
-import { ValibotPipe } from 'src/valibot/valibot.pipe';
 
 import { UsersService } from './users.service';
 
-import { ChangePasswordSchema, UpdateUserProfileSchema } from './dto/user.dto';
-import { ChangePasswordSwaggerDto, UpdateUserProfileSwaggerDto } from './dto/user-swagger.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
 export class UsersController {
@@ -30,20 +18,12 @@ export class UsersController {
   }
 
   @Put('profile')
-  @UsePipes(new ValibotPipe(UpdateUserProfileSchema))
-  async updateUserProfile(
-    @Session() { user: { id: userId } }: UserSession,
-    @Body() updateData: UpdateUserProfileSwaggerDto,
-  ) {
+  async updateUserProfile(@Session() { user: { id: userId } }: UserSession, @Body() updateData: UpdateUserDto) {
     return await this.usersService.updateUserProfile(userId, updateData);
   }
 
   @Put('password')
-  @UsePipes(new ValibotPipe(ChangePasswordSchema))
-  async changePassword(
-    @Session() { user: { id: userId } }: UserSession,
-    @Body() passwordData: ChangePasswordSwaggerDto,
-  ) {
+  async changePassword(@Session() { user: { id: userId } }: UserSession, @Body() passwordData: ChangePasswordDto) {
     return await this.usersService.changePassword(userId, passwordData.oldPassword, passwordData.newPassword);
   }
 

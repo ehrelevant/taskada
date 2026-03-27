@@ -1,8 +1,9 @@
-import { apiFetch } from '@lib/helpers';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { OptionsScreen } from '@screens/options/OptionsScreen';
 import { PaymentMethodLinkingScreen, PaymentMethodsScreen } from '@repo/screens';
-import { ProfileScreen } from '@screens/options/profile/ProfileScreen';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { OptionsScreen } from '@screens/options/Options';
+import { ProfileScreen } from '@screens/options/profile/Profile';
+import { StackHeader } from '@repo/components';
+import { seekerClient } from '@lib/seekerClient';
 
 export type OptionsStackParamList = {
   Options: undefined;
@@ -22,15 +23,22 @@ export function OptionsStack() {
       initialRouteName="Options"
       screenOptions={{
         animationDuration: 400,
+        header: ({ navigation, options, route, back }) => (
+          <StackHeader
+            title={typeof options.title === 'string' ? options.title : route.name}
+            canGoBack={Boolean(back)}
+            onBack={() => navigation.goBack()}
+          />
+        ),
       }}
     >
-      <Stack.Screen name="Options" component={OptionsScreen} options={{ title: 'Options' }} />
+      <Stack.Screen name="Options" component={OptionsScreen} options={{ title: 'Options', headerShown: false }} />
       <Stack.Screen name="Profile" component={ProfileScreen} options={{ title: 'Profile' }} />
       <Stack.Screen name="PaymentMethods" options={{ title: 'Payment Methods' }}>
-        {({ navigation }) => <PaymentMethodsScreen apiFetch={apiFetch} navigation={navigation} />}
+        {({ navigation }) => <PaymentMethodsScreen apiFetch={seekerClient.apiFetch} navigation={navigation} />}
       </Stack.Screen>
       <Stack.Screen name="PaymentMethodLinking" options={{ title: 'Payment Method Linking' }}>
-        {({ navigation }) => <PaymentMethodLinkingScreen apiFetch={apiFetch} navigation={navigation} />}
+        {({ navigation }) => <PaymentMethodLinkingScreen apiFetch={seekerClient.apiFetch} navigation={navigation} />}
       </Stack.Screen>
     </Stack.Navigator>
   );
