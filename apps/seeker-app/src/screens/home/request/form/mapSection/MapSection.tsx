@@ -1,5 +1,6 @@
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { EmptyState, Typography } from '@repo/components';
+import { MapPin } from 'lucide-react-native';
 import { useTheme } from '@repo/theme';
 import { View } from 'react-native';
 
@@ -7,13 +8,14 @@ import { createStyles } from './MapSection.styles';
 import { MapSectionProps } from './MapSection.hooks';
 import { useMapSection } from './MapSection.hooks';
 
-export function MapSection({ onLocationUpdate, initialLat, initialLng }: MapSectionProps) {
+export function MapSection({ onLocationUpdate, initialLat, initialLng, forwardedCoords }: MapSectionProps) {
   const { colors } = useTheme();
   const styles = createStyles(colors);
-  const { location, loading, handleMarkerDragEnd } = useMapSection({
+  const { location, loading, mapRef, handleRegionChangeComplete } = useMapSection({
     onLocationUpdate,
     initialLat,
     initialLng,
+    forwardedCoords,
   });
 
   if (loading) {
@@ -37,6 +39,7 @@ export function MapSection({ onLocationUpdate, initialLat, initialLng }: MapSect
   return (
     <View style={styles.container}>
       <MapView
+        ref={mapRef}
         style={styles.map}
         provider={PROVIDER_GOOGLE}
         initialRegion={{
@@ -45,13 +48,11 @@ export function MapSection({ onLocationUpdate, initialLat, initialLng }: MapSect
           latitudeDelta: 0.01,
           longitudeDelta: 0.01,
         }}
-      >
-        <Marker
-          coordinate={{ latitude: location.lat, longitude: location.lng }}
-          draggable
-          onDragEnd={handleMarkerDragEnd}
-        />
-      </MapView>
+        onRegionChangeComplete={handleRegionChangeComplete}
+      />
+      <View style={styles.centerPin} pointerEvents="none">
+        <MapPin size={42} color={colors.border} fill={colors.actionPrimary} />
+      </View>
     </View>
   );
 }

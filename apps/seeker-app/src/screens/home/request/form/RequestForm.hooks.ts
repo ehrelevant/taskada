@@ -23,6 +23,9 @@ export function useRequestForm() {
   const [serviceSearchLoading, setServiceSearchLoading] = useState(false);
   const [serviceSearchQuery, setServiceSearchQuery] = useState('');
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [forwardedCoords, setForwardedCoords] = useState<{ lat: number; lng: number } | null>(null);
+  const addressDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isProgrammaticAddressChange = useRef(false);
   const initialLoadAttempted = useRef(false);
 
   const methods = useForm<RequestFormData>({
@@ -80,7 +83,34 @@ export function useRequestForm() {
     (lat: number, lng: number, address: string) => {
       setValue('latitude', lat);
       setValue('longitude', lng);
+      isProgrammaticAddressChange.current = true;
       setValue('addressLabel', address);
+      setForwardedCoords({ lat, lng });
+      setTimeout(() => {
+        isProgrammaticAddressChange.current = false;
+      }, 200);
+    },
+    [setValue],
+  );
+
+  const handleAddressChange = useCallback(
+    (text: string) => {
+      setValue('addressLabel', text);
+
+      if (isProgrammaticAddressChange.current) return;
+
+      if (addressDebounceRef.current) {
+        clearTimeout(addressDebounceRef.current);
+      }
+      addressDebounceRef.current = setTimeout(async () => {
+        if (text.trim().length < 3) return;
+        const coords = await seekerClient.forwardGeocode(text);
+        if (coords) {
+          setValue('latitude', coords.lat);
+          setValue('longitude', coords.lng);
+          setForwardedCoords({ lat: coords.lat, lng: coords.lng });
+        }
+      }, 800);
     },
     [setValue],
   );
@@ -183,6 +213,8 @@ export function useRequestForm() {
     selectedImage,
     setSelectedImage,
     handleLocationUpdate,
+    handleAddressChange,
+    forwardedCoords,
     searchServicesForSelection,
     handleServiceSelect,
     handleClearSelection,

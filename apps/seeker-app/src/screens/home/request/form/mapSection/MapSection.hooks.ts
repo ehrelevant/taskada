@@ -1,18 +1,22 @@
 import * as Location from 'expo-location';
-import type { MarkerDragStartEndEvent } from 'react-native-maps';
+import type MapView from 'react-native-maps';
+import type { Region } from 'react-native-maps';
 import { seekerClient } from '@lib/seekerClient';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 export interface MapSectionProps {
   onLocationUpdate: (lat: number, lng: number, address: string) => void;
   initialLat?: number;
   initialLng?: number;
+  forwardedCoords?: { lat: number; lng: number } | null;
 }
 
-export function useMapSection({ onLocationUpdate, initialLat, initialLng }: MapSectionProps) {
+export function useMapSection({ onLocationUpdate, initialLat, initialLng, forwardedCoords }: MapSectionProps) {
   const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [_address, setAddress] = useState('');
   const [loading, setLoading] = useState(true);
+  const mapRef = useRef<MapView>(null);
+  const isAnimatingRef = useRef(false);
 
   const fetchAddress = useCallback(
     async (lat: number, lng: number) => {
@@ -55,11 +59,33 @@ export function useMapSection({ onLocationUpdate, initialLat, initialLng }: MapS
     getLocation();
   }, [initialLat, initialLng, fetchAddress]);
 
-  const handleMarkerDragEnd = useCallback(
-    async (e: MarkerDragStartEndEvent) => {
-      const { latitude, longitude } = e.nativeEvent.coordinate;
-      setLocation({ lat: latitude, lng: longitude });
-      await fetchAddress(latitude, longitude);
+  const lastForwardedRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (!forwardedCoords) return;
+    const key = `${forwardedCoords.lat},${forwardedCoords.lng}`;
+    if (key === lastForwardedRef.current) return;
+    lastForwardedRef.current = key;
+    setLocation({ lat: forwardedCoords.lat, lng: forwardedCoords.lng });
+    isAnimatingRef.current = true;
+    mapRef.current?.animateToRegion(
+      {
+        latitude: forwardedCoords.lat,
+        longitude: forwardedCoords.lng,
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
+      },
+      300,
+    );
+  }, [forwardedCoords]);
+
+  const handleRegionChangeComplete = useCallback(
+    (region: Region) => {
+      if (isAnimatingRef.current) {
+        isAnimatingRef.current = false;
+        return;
+      }
+      setLocation({ lat: region.latitude, lng: region.longitude });
+      fetchAddress(region.latitude, region.longitude);
     },
     [fetchAddress],
   );
@@ -67,6 +93,7 @@ export function useMapSection({ onLocationUpdate, initialLat, initialLng }: MapS
   return {
     location,
     loading,
-    handleMarkerDragEnd,
+    mapRef,
+    handleRegionChangeComplete,
   };
 }

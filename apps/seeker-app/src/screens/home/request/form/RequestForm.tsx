@@ -41,6 +41,8 @@ export function RequestFormScreen() {
     selectedImage,
     setSelectedImage,
     handleLocationUpdate,
+    handleAddressChange,
+    forwardedCoords,
     searchServicesForSelection,
     handleServiceSelect,
     handleClearSelection,
@@ -91,24 +93,24 @@ export function RequestFormScreen() {
             </View>
 
             <View style={styles.mapContainer}>
-              <MapSection onLocationUpdate={handleLocationUpdate} />
+              <MapSection onLocationUpdate={handleLocationUpdate} forwardedCoords={forwardedCoords} />
             </View>
 
             <Controller
               control={methods.control}
               name="addressLabel"
-              render={({
-                field: { onChange, value },
-              }: {
-                field: { onChange: (val: string) => void; value: string };
-              }) => (
+              render={({ field: { value } }: { field: { value: string } }) => (
                 <Input
                   label="Address"
                   value={value}
-                  onChangeText={onChange}
+                  onChangeText={handleAddressChange}
                   error={errors.addressLabel?.message}
                   placeholder="Enter your address"
                   containerStyle={styles.input}
+                  multiline
+                  numberOfLines={3}
+                  inputContainerStyle={{ alignItems: 'flex-start', minHeight: 90 }}
+                  style={{ textAlignVertical: 'top' }}
                 />
               )}
             />

@@ -22,4 +22,11 @@ export const createStyles = (colors: ThemeColors) =>
     map: {
       flex: 1,
     },
+    centerPin: {
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      marginLeft: -18,
+      marginTop: -36,
+    },
   });
