@@ -198,8 +198,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       // Get booking participants to identify the seeker
       const participants = await this.messagesService.getBookingParticipants(bookingId);
 
-      // Broadcast to all users in the booking room
-      await this.broadcastBookingDeclined(bookingId, requestId, participants.seekerUserId);
+      // Broadcast to all users in the booking room (except the provider who declined)
+      await this.broadcastBookingDeclined(client, bookingId, requestId, participants.seekerUserId);
 
       this.logger.log(`Booking ${bookingId} declined by provider ${client.userId}`);
     } catch (error) {
@@ -208,10 +208,15 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
   }
 
-  // Method to broadcast booking_declined event to seeker
-  async broadcastBookingDeclined(bookingId: string, requestId: string, seekerUserId: string): Promise<void> {
+  // Method to broadcast booking_declined event to seeker (excluding the provider who declined)
+  async broadcastBookingDeclined(
+    client: AuthenticatedSocket,
+    bookingId: string,
+    requestId: string,
+    seekerUserId: string,
+  ): Promise<void> {
     const roomName = `booking:${bookingId}`;
-    this.server.to(roomName).emit('booking_declined', {
+    client.to(roomName).emit('booking_declined', {
       bookingId,
       requestId,
     });
