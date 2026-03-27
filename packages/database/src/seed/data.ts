@@ -9,4 +9,5 @@ export const SERVICE_TYPES = [
   { name: 'Appliance Repair', description: 'Home appliance diagnostics and repair' },
   { name: 'Moving', description: 'Packing, hauling, and services' },
   { name: 'Gardening', description: 'Landscaping, lawn care, and plant maintenance' },
+  { name: 'Car Mechanic', description: 'Vehicle diagnostics and repair' },
 ] as const;
