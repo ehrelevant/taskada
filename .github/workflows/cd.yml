@@ -24,7 +24,8 @@ jobs:
           script: |
             REPO_DIR=/home/${{ secrets.DEPLOY_USER }}/taskada
             REPO_URL=https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-            if [ ! -d "$REPO_DIR" ]; then
+            if [ ! -d "$REPO_DIR/.git" ]; then
+              rm -rf "$REPO_DIR"
               git clone "$REPO_URL" "$REPO_DIR"
             fi
             cd "$REPO_DIR"
