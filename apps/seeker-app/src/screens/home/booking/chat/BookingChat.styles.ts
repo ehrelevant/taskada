@@ -130,6 +130,16 @@ export const createStyles = (colors: ThemeColors) =>
       borderTopWidth: 1,
       borderTopColor: colors.card.stroke,
     },
+    actionButtonsContainer: {
+      paddingHorizontal: spacing.pageHorizontal,
+      paddingVertical: spacing.m,
+      borderTopWidth: 1,
+      borderTopColor: colors.card.stroke,
+      backgroundColor: colors.canvas.base,
+    },
+    cancelButton: {
+      flex: 1,
+    },
     textInput: {
       flex: 1,
       backgroundColor: colors.card.base,

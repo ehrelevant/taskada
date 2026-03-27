@@ -104,6 +104,14 @@ export function useBookingChat() {
         }
       });
 
+      seekerClient.onBookingCancelled(data => {
+        if (data.bookingId === bookingId) {
+          Alert.alert('Booking Cancelled', 'The booking has been cancelled.', [
+            { text: 'OK', onPress: () => navigation.getParent()?.goBack() },
+          ]);
+        }
+      });
+
       seekerClient.onProposalSubmitted(data => {
         if (data.bookingId === bookingId) {
           navigation.navigate('BookingProposal', {
@@ -185,6 +193,33 @@ export function useBookingChat() {
     });
   }, [bookingId, navigation, providerInfo]);
 
+  const handleCancel = useCallback(async () => {
+    Alert.alert('Cancel Booking', 'Are you sure you want to cancel this booking?', [
+      { text: 'No', style: 'cancel' },
+      {
+        text: 'Yes, Cancel',
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            const response = await seekerClient.apiFetch(`/requests/${requestId}/status`, 'PATCH', {
+              body: JSON.stringify({ status: 'pending' }),
+            });
+
+            if (response.ok) {
+              seekerClient.cancelBooking(bookingId);
+              Alert.alert('Cancelled', 'The booking has been cancelled.', [
+                { text: 'OK', onPress: () => navigation.getParent()?.goBack() },
+              ]);
+            }
+          } catch (error) {
+            console.error('Failed to cancel booking:', error);
+            Alert.alert('Error', 'Failed to cancel booking. Please try again.');
+          }
+        },
+      },
+    ]);
+  }, [bookingId, navigation, requestId]);
+
   return {
     messages,
     inputText,
@@ -203,5 +238,6 @@ export function useBookingChat() {
     handlePickImage,
     handleRemoveImage,
     handleReport,
+    handleCancel,
   };
 }

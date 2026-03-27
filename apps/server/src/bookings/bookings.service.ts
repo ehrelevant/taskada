@@ -93,6 +93,11 @@ export class BookingsService {
       await this.chatGateway.broadcastBookingCompleted(bookingId, updated.seekerUserId);
     }
 
+    // If status changed to cancelled, notify provider
+    if (updateBookingDto.status === 'cancelled' && updated) {
+      await this.chatGateway.broadcastBookingCancelled(null, bookingId, updated.providerUserId);
+    }
+
     return updated;
   }
 

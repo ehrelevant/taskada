@@ -236,6 +236,61 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.logger.log(`Broadcasted booking_declined for booking ${bookingId}`);
   }
 
+  @UseGuards(WsAuthGuard)
+  @SubscribeMessage('cancel_booking')
+  async handleCancelBooking(
+    @ConnectedSocket() client: AuthenticatedSocket,
+    @MessageBody() data: { bookingId: string },
+  ) {
+    if (!client.userId) {
+      client.emit('error', { message: 'Unauthorized: User not authenticated' });
+      return;
+    }
+
+    const { bookingId } = data;
+
+    try {
+      // Get booking participants to identify the provider
+      const participants = await this.messagesService.getBookingParticipants(bookingId);
+
+      // Broadcast to all users in the booking room (except the seeker who cancelled)
+      await this.broadcastBookingCancelled(client, bookingId, participants.providerUserId);
+
+      this.logger.log(`Booking ${bookingId} cancelled by seeker ${client.userId}`);
+    } catch (error) {
+      this.logger.error(`Error cancelling booking: ${error.message}`);
+      client.emit('error', { message: error.message || 'Failed to cancel booking' });
+    }
+  }
+
+  // Method to broadcast booking_cancelled event to provider (excluding the seeker who cancelled)
+  async broadcastBookingCancelled(
+    client: AuthenticatedSocket | null,
+    bookingId: string,
+    providerUserId: string,
+  ): Promise<void> {
+    const roomName = `booking:${bookingId}`;
+
+    if (client) {
+      client.to(roomName).emit('booking_cancelled', { bookingId });
+    } else {
+      this.server.to(roomName).emit('booking_cancelled', { bookingId });
+    }
+
+    // Also send push notification to provider
+    await this.pushNotificationsService.sendPushNotification(
+      providerUserId,
+      'Booking Cancelled',
+      'The seeker has cancelled the booking.',
+      {
+        type: 'booking_cancelled',
+        bookingId,
+      },
+    );
+
+    this.logger.log(`Broadcasted booking_cancelled for booking ${bookingId}`);
+  }
+
   // Method to broadcast new booking to seeker
   async broadcastNewBooking(
     bookingId: string,

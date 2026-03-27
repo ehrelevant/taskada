@@ -1,5 +1,5 @@
 import { ActivityIndicator, FlatList, Image, ScrollView, TextInput, TouchableOpacity, View } from 'react-native';
-import { Avatar, Header, ImageViewer, ScreenContainer, Typography } from '@repo/components';
+import { Avatar, Button, Header, ImageViewer, ScreenContainer, Typography } from '@repo/components';
 import { BadgeCheck, Flag, Image as ImageIcon, Radio, Send, X } from 'lucide-react-native';
 import { KeyboardStickyView } from 'react-native-keyboard-controller';
 import type { Message } from '@repo/shared';
@@ -61,6 +61,7 @@ export function ChatScreen() {
     handlePickImage,
     handleRemoveImage,
     handleReport,
+    handleCancel,
   } = useBookingChat();
 
   const handleGoBack = () => {
@@ -157,6 +158,10 @@ export function ChatScreen() {
       />
 
       <KeyboardStickyView>
+        <View style={styles.actionButtonsContainer}>
+          <Button title="Cancel Booking" variant="outline" onPress={handleCancel} style={styles.cancelButton} />
+        </View>
+
         {selectedImages.length > 0 && (
           <ScrollView horizontal style={styles.selectedImagesContainer} showsHorizontalScrollIndicator={false}>
             {selectedImages.map((uri, index) => (
