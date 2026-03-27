@@ -23,7 +23,7 @@ async function bootstrap() {
 
   const config = new DocumentBuilder().setTitle('Taskada API Backend').setVersion('0.0.1').addBearerAuth().build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, cleanupOpenApiDoc(documentFactory), {
+  SwaggerModule.setup('api', app, cleanupOpenApiDoc(documentFactory()), {
     swaggerOptions: {
       deepLinking: true,
       displayRequestDuration: true,

@@ -45,10 +45,14 @@ export function OptionsStack() {
         }}
       />
       <Stack.Screen name="Payments" options={{ title: 'Payment Methods' }}>
-        {({ navigation }) => <PaymentMethodsScreen apiFetch={providerClient.apiFetch} navigation={navigation} />}
+          {({ navigation }) => (
+           <PaymentMethodsScreen apiFetch={(...args) => providerClient.apiFetch(...args)} navigation={navigation} />
+          )}
       </Stack.Screen>
       <Stack.Screen name="PaymentMethodLinking" options={{ title: 'Payment Method Linking' }}>
-        {({ navigation }) => <PaymentMethodLinkingScreen apiFetch={providerClient.apiFetch} navigation={navigation} />}
+          {({ navigation }) => (
+           <PaymentMethodLinkingScreen apiFetch={(...args) => providerClient.apiFetch(...args)} navigation={navigation} />
+          )}
       </Stack.Screen>
     </Stack.Navigator>
   );

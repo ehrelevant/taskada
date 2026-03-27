@@ -35,10 +35,14 @@ export function OptionsStack() {
       <Stack.Screen name="Options" component={OptionsScreen} options={{ title: 'Options', headerShown: false }} />
       <Stack.Screen name="Profile" component={ProfileScreen} options={{ title: 'Profile' }} />
       <Stack.Screen name="PaymentMethods" options={{ title: 'Payment Methods' }}>
-        {({ navigation }) => <PaymentMethodsScreen apiFetch={seekerClient.apiFetch} navigation={navigation} />}
+        {({ navigation }) => (
+          <PaymentMethodsScreen apiFetch={(...args) => seekerClient.apiFetch(...args)} navigation={navigation} />
+        )}
       </Stack.Screen>
       <Stack.Screen name="PaymentMethodLinking" options={{ title: 'Payment Method Linking' }}>
-        {({ navigation }) => <PaymentMethodLinkingScreen apiFetch={seekerClient.apiFetch} navigation={navigation} />}
+        {({ navigation }) => (
+          <PaymentMethodLinkingScreen apiFetch={(...args) => seekerClient.apiFetch(...args)} navigation={navigation} />
+        )}
       </Stack.Screen>
     </Stack.Navigator>
   );
