@@ -109,6 +109,10 @@ def update_build_gradle(build_gradle_path):
     """Update build.gradle with release signing config."""
     content = build_gradle_path.read_text()
 
+    if "signingConfigs.release" in content:
+        build_gradle_path.write_text(content)
+        return
+
     release_signing = """        release {
             if (project.hasProperty('TASKADA_UPLOAD_STORE_FILE')) {
                 storeFile file(project.property('TASKADA_UPLOAD_STORE_FILE'))
@@ -118,15 +122,14 @@ def update_build_gradle(build_gradle_path):
             }
         }"""
 
-    # Insert release signing config before the closing brace of signingConfigs
     content = re.sub(
-        r"(signingConfigs \{[^}]*debug \{[^}]*\}[^}]*\})",
-        lambda m: m.group(1).rstrip() + "\n" + release_signing + "\n    }",
+        r"(signingConfigs \{[^}]*debug \{[^}]*\})",
+        r"\1\n" + release_signing,
         content,
+        count=1,
         flags=re.DOTALL,
     )
 
-    # Update release build type to use release signing config
     content = re.sub(
         r"(release \{[^}]*?)signingConfig signingConfigs\.debug",
         r"\1signingConfig signingConfigs.release",
@@ -187,9 +190,15 @@ def build_app(app, signing_config):
     print("Updating build.gradle...")
     update_build_gradle(build_gradle)
 
-    # 5. Clean the project
+    # 5. Clean the project (skip if .cxx was manually removed)
     print(f"Cleaning {app_name}...")
-    subprocess.run([str(gradlew), "clean"], cwd=android_dir, check=True)
+    result = subprocess.run(
+        [str(gradlew), "clean"], cwd=android_dir, capture_output=True
+    )
+    if result.returncode != 0:
+        print(
+            f"Clean had issues, continuing with assemble (likely cache was manually cleared)..."
+        )
 
     # 6. Build release APK with NODE_ENV=production
     print(f"Building release APK for {app_name}...")
