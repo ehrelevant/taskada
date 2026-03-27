@@ -1,5 +1,5 @@
 import { BadgeCheck, CircleDollarSign, Pencil, Plus, Trash2, Wrench } from 'lucide-react-native';
-import { Card, Typography } from '@repo/components';
+import { Card, ScreenContainer, Typography } from '@repo/components';
 import { FlatList, Switch, TouchableOpacity, View } from 'react-native';
 import type { ProviderService } from '@repo/types';
 import { useTheme } from '@repo/theme';
@@ -67,7 +67,7 @@ export function ServicesScreen() {
   );
 
   return (
-    <View style={styles.container}>
+    <ScreenContainer padding="none" style={styles.container}>
       <FlatList
         data={services}
         renderItem={renderItem}
@@ -108,6 +108,6 @@ export function ServicesScreen() {
         onClose={handleCloseModal}
         onSuccess={fetchServices}
       />
-    </View>
+    </ScreenContainer>
   );
 }

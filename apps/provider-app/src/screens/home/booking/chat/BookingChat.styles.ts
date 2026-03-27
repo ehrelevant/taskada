@@ -10,6 +10,9 @@ export const createStyles = (colors: ThemeColors) =>
     iconButton: {
       padding: spacing.xs,
     },
+    header: {
+      padding: spacing.pageHorizontal,
+    },
     headerContent: {
       flexDirection: 'row',
       alignItems: 'center',

@@ -106,6 +106,14 @@ export function useBookingChat() {
           ]);
         }
       });
+
+      providerClient.onBookingCancelled(data => {
+        if (data.bookingId === bookingId) {
+          Alert.alert('Booking Cancelled', 'The seeker has cancelled the booking.', [
+            { text: 'OK', onPress: () => navigation.getParent()?.goBack() },
+          ]);
+        }
+      });
     };
 
     setupSocket();

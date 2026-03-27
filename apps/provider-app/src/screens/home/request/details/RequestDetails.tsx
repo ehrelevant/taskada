@@ -59,115 +59,117 @@ export function RequestDetailsScreen() {
   }
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-      <View style={styles.heroCard}>
-        <View style={styles.heroPill}>
-          <ShieldCheck size={14} color={colors.home.chipText} />
-          <Typography variant="caption" color={colors.home.chipText}>
-            incoming request
-          </Typography>
-        </View>
-        <Typography variant="h3" color="textInverse" style={styles.serviceTypeName}>
-          {request.serviceType.name}
-        </Typography>
-        <Typography variant="body2" color="textInverse" style={styles.heroSubtitle}>
-          Review details before opening chat and settling this request.
-        </Typography>
-      </View>
-
-      <View style={styles.sectionCard}>
-        <View style={styles.sectionLabelRow}>
-          <UserCircle2 size={15} color={colors.textSecondary} />
-          <Typography variant="subtitle2" style={styles.sectionLabel}>
-            Seeker Information
-          </Typography>
-        </View>
-        <View style={styles.seekerInfo}>
-          <Avatar
-            source={request.seeker.avatarUrl ? { uri: request.seeker.avatarUrl } : null}
-            name={`${request.seeker.firstName} ${request.seeker.lastName}`}
-            size={56}
-          />
-          <View style={styles.seekerDetails}>
-            <Typography variant="h2" weight="bold">
-              {request.seeker.firstName} {request.seeker.lastName}
-            </Typography>
-            <Typography variant="body2" color="textSecondary">
-              {request.seeker.phoneNumber}
+    <View style={styles.outerContainer}>
+      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+        <View style={styles.heroCard}>
+          <View style={styles.heroPill}>
+            <ShieldCheck size={14} color={colors.home.chipText} />
+            <Typography variant="caption" color={colors.home.chipText}>
+              incoming request
             </Typography>
           </View>
-        </View>
-      </View>
-
-      <View style={styles.sectionCard}>
-        <View style={styles.sectionLabelRow}>
-          <MapPin size={15} color={colors.textSecondary} />
-          <Typography variant="subtitle2" style={styles.sectionLabel}>
-            Location
+          <Typography variant="h3" color="textInverse" style={styles.serviceTypeName}>
+            {request.serviceType.name}
+          </Typography>
+          <Typography variant="body2" color="textInverse" style={styles.heroSubtitle}>
+            Review details before opening chat and settling this request.
           </Typography>
         </View>
-        {request.address.coordinates &&
-          request.address.coordinates[0] !== 0 &&
-          request.address.coordinates[1] !== 0 && (
-            <View style={styles.mapContainer}>
-              <MapView
-                provider={PROVIDER_GOOGLE}
-                style={styles.map}
-                initialRegion={{
-                  latitude: request.address.coordinates[1],
-                  longitude: request.address.coordinates[0],
-                  latitudeDelta: 0.01,
-                  longitudeDelta: 0.01,
-                }}
-                scrollEnabled={false}
-                zoomEnabled={false}
-                pitchEnabled={false}
-                rotateEnabled={false}
-              >
-                <Marker
-                  coordinate={{ latitude: request.address.coordinates[1], longitude: request.address.coordinates[0] }}
-                />
-              </MapView>
+
+        <View style={styles.sectionCard}>
+          <View style={styles.sectionLabelRow}>
+            <UserCircle2 size={15} color={colors.textSecondary} />
+            <Typography variant="subtitle2" style={styles.sectionLabel}>
+              Seeker Information
+            </Typography>
+          </View>
+          <View style={styles.seekerInfo}>
+            <Avatar
+              source={request.seeker.avatarUrl ? { uri: request.seeker.avatarUrl } : null}
+              name={`${request.seeker.firstName} ${request.seeker.lastName}`}
+              size={56}
+            />
+            <View style={styles.seekerDetails}>
+              <Typography variant="h2" weight="bold">
+                {request.seeker.firstName} {request.seeker.lastName}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                {request.seeker.phoneNumber}
+              </Typography>
             </View>
-          )}
-        <View style={styles.addressContainer}>
-          <Typography variant="body1">{request.address.label || 'Address not specified'}</Typography>
+          </View>
         </View>
-      </View>
 
-      {request.description && (
         <View style={styles.sectionCard}>
           <View style={styles.sectionLabelRow}>
-            <MessageSquareText size={15} color={colors.textSecondary} />
+            <MapPin size={15} color={colors.textSecondary} />
             <Typography variant="subtitle2" style={styles.sectionLabel}>
-              Description
+              Location
             </Typography>
           </View>
-          <View style={styles.descriptionBox}>
-            <Typography variant="body1" style={styles.description}>
-              {request.description}
-            </Typography>
+          {request.address.coordinates &&
+            request.address.coordinates[0] !== 0 &&
+            request.address.coordinates[1] !== 0 && (
+              <View style={styles.mapContainer}>
+                <MapView
+                  provider={PROVIDER_GOOGLE}
+                  style={styles.map}
+                  initialRegion={{
+                    latitude: request.address.coordinates[1],
+                    longitude: request.address.coordinates[0],
+                    latitudeDelta: 0.01,
+                    longitudeDelta: 0.01,
+                  }}
+                  scrollEnabled={false}
+                  zoomEnabled={false}
+                  pitchEnabled={false}
+                  rotateEnabled={false}
+                >
+                  <Marker
+                    coordinate={{ latitude: request.address.coordinates[1], longitude: request.address.coordinates[0] }}
+                  />
+                </MapView>
+              </View>
+            )}
+          <View style={styles.addressContainer}>
+            <Typography variant="body1">{request.address.label || 'Address not specified'}</Typography>
           </View>
         </View>
-      )}
 
-      {request.images && request.images.length > 0 && (
-        <View style={styles.sectionCard}>
-          <View style={styles.sectionLabelRow}>
-            <Sparkles size={15} color={colors.textSecondary} />
-            <Typography variant="subtitle2" style={styles.sectionLabel}>
-              Photos ({request.images.length})
-            </Typography>
+        {request.description && (
+          <View style={styles.sectionCard}>
+            <View style={styles.sectionLabelRow}>
+              <MessageSquareText size={15} color={colors.textSecondary} />
+              <Typography variant="subtitle2" style={styles.sectionLabel}>
+                Description
+              </Typography>
+            </View>
+            <View style={styles.descriptionBox}>
+              <Typography variant="body1" style={styles.description}>
+                {request.description}
+              </Typography>
+            </View>
           </View>
-          <View style={styles.imagesContainer}>
-            {request.images.map((image, index) => (
-              <TouchableOpacity key={index} onPress={() => setSelectedImage(image)} activeOpacity={0.8}>
-                <Image source={{ uri: image }} style={styles.image} resizeMode="cover" />
-              </TouchableOpacity>
-            ))}
+        )}
+
+        {request.images && request.images.length > 0 && (
+          <View style={styles.sectionCard}>
+            <View style={styles.sectionLabelRow}>
+              <Sparkles size={15} color={colors.textSecondary} />
+              <Typography variant="subtitle2" style={styles.sectionLabel}>
+                Photos ({request.images.length})
+              </Typography>
+            </View>
+            <View style={styles.imagesContainer}>
+              {request.images.map((image, index) => (
+                <TouchableOpacity key={index} onPress={() => setSelectedImage(image)} activeOpacity={0.8}>
+                  <Image source={{ uri: image }} style={styles.image} resizeMode="cover" />
+                </TouchableOpacity>
+              ))}
+            </View>
           </View>
-        </View>
-      )}
+        )}
+      </ScrollView>
 
       <View style={styles.buttonContainer}>
         <Button
@@ -185,6 +187,6 @@ export function RequestDetailsScreen() {
         imageUri={selectedImage || ''}
         onClose={() => setSelectedImage(null)}
       />
-    </ScrollView>
+    </View>
   );
 }

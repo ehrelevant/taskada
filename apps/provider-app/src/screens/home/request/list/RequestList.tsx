@@ -94,41 +94,42 @@ export function RequestListScreen() {
 
   if (isAccepting) {
     return (
-      <ScreenContainer padding="none" useSafeArea={false} style={styles.container}>
-        <View style={styles.liveHeader}>
-          <View style={styles.liveTitleRow}>
-            <View style={styles.liveDot} />
-            <Typography variant="h4" color="textInverse">
-              Live Requests
+      <View style={styles.outerContainer}>
+        <ScreenContainer padding="none" useSafeArea={false} style={styles.container}>
+          <View style={styles.liveHeader}>
+            <View style={styles.liveTitleRow}>
+              <View style={styles.liveDot} />
+              <Typography variant="h4" color="textInverse">
+                Live Requests
+              </Typography>
+            </View>
+            <Typography variant="body2" color="textInverse">
+              You are visible to seekers in your enabled services.
             </Typography>
-          </View>
-          <Typography variant="body2" color="textInverse">
-            You are visible to seekers in your enabled services.
-          </Typography>
-          <View style={styles.liveStatsRow}>
-            <View style={styles.liveStatPill}>
-              <Sparkles size={14} color={colors.home.chipText} />
-              <Typography variant="caption" color={colors.home.chipText}>
-                {requests.length} pending
-              </Typography>
-            </View>
-            <View style={styles.liveStatPill}>
-              <Radio size={14} color={colors.home.chipText} />
-              <Typography variant="caption" color={colors.home.chipText}>
-                actively listening
-              </Typography>
+            <View style={styles.liveStatsRow}>
+              <View style={styles.liveStatPill}>
+                <Sparkles size={14} color={colors.home.chipText} />
+                <Typography variant="caption" color={colors.home.chipText}>
+                  {requests.length} pending
+                </Typography>
+              </View>
+              <View style={styles.liveStatPill}>
+                <Radio size={14} color={colors.home.chipText} />
+                <Typography variant="caption" color={colors.home.chipText}>
+                  actively listening
+                </Typography>
+              </View>
             </View>
           </View>
-        </View>
 
-        <FlatList
-          data={requests}
-          keyExtractor={item => item.id}
-          renderItem={renderRequestCard}
-          contentContainerStyle={styles.requestListContent}
-          ListEmptyComponent={<EmptyState message="No requests yet. Waiting for seekers..." />}
-        />
-
+          <FlatList
+            data={requests}
+            keyExtractor={item => item.id}
+            renderItem={renderRequestCard}
+            contentContainerStyle={styles.requestListContent}
+            ListEmptyComponent={<EmptyState message="No requests yet. Waiting for seekers..." />}
+          />
+        </ScreenContainer>
         <BottomActionBar style={styles.bottomBar}>
           <Button
             title="Stop Receiving Requests"
@@ -137,12 +138,13 @@ export function RequestListScreen() {
             isLoading={isConnecting}
           />
         </BottomActionBar>
-      </ScreenContainer>
+      </View>
     );
   }
 
   return (
-    <ScreenContainer padding="none" useSafeArea={false} style={styles.centeredContainer}>
+    <View style={styles.outerContainer}>
+      <ScreenContainer padding="none" style={styles.centeredContainer}>
         <View style={styles.idleHero}>
           <View style={styles.idleBadge}>
             <Radio size={16} color={colors.home.chipText} />
@@ -178,10 +180,11 @@ export function RequestListScreen() {
             </Typography>
           </View>
         </View>
+      </ScreenContainer>
 
       <BottomActionBar style={styles.bottomBar}>
         <Button title="Start Receiving Requests" onPress={enableRequests} isLoading={isConnecting} />
       </BottomActionBar>
-    </ScreenContainer>
+    </View>
   );
 }

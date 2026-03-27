@@ -1,5 +1,5 @@
 import { ActivityIndicator, FlatList, View } from 'react-native';
-import { Avatar, Button, Card, Typography } from '@repo/components';
+import { Avatar, Button, Card, ScreenContainer, Typography } from '@repo/components';
 import { BadgeCheck, CalendarClock, CircleDollarSign } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '@repo/theme';
@@ -77,18 +77,18 @@ export function HistoryScreen() {
 
   if (error) {
     return (
-      <SafeAreaView style={styles.container}>
+      <ScreenContainer padding="none" style={styles.container}>
         <View style={styles.loadingContainer}>
           <Typography variant="body1" color="error">
             {error}
           </Typography>
         </View>
-      </SafeAreaView>
+      </ScreenContainer>
     );
   }
 
   return (
-    <View style={styles.container}>
+    <ScreenContainer padding="none" style={styles.container}>
       <FlatList
         data={bookings}
         renderItem={renderBookingCard}
@@ -119,6 +119,6 @@ export function HistoryScreen() {
           </View>
         }
       />
-    </View>
+    </ScreenContainer>
   );
 }

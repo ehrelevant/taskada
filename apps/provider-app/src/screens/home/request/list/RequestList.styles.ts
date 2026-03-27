@@ -98,6 +98,9 @@ export const createStyles = (colors: ThemeColors) =>
       justifyContent: 'space-between',
       alignItems: 'center',
     },
+    outerContainer: {
+      flex: 1,
+    },
     centeredContainer: {
       flex: 1,
       backgroundColor: colors.canvas.base,

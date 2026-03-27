@@ -3,14 +3,17 @@ import { StyleSheet } from 'react-native';
 
 export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
-    container: {
+    outerContainer: {
       flex: 1,
       backgroundColor: colors.canvas.base,
     },
+    container: {
+      flex: 1,
+      backgroundColor: colors.canvas.base,
+      paddingVertical: spacing.s,
+    },
     contentContainer: {
       paddingHorizontal: spacing.pageHorizontal,
-      paddingTop: spacing.pageTop,
-      paddingBottom: spacing.xxxl,
     },
     centerContainer: {
       flex: 1,
@@ -103,10 +106,9 @@ export const createStyles = (colors: ThemeColors) =>
       padding: spacing.s,
     },
     buttonContainer: {
-      marginTop: spacing.m,
       borderTopWidth: 1,
       borderTopColor: colors.card.stroke,
-      paddingTop: spacing.m,
+      padding: spacing.m,
     },
     button: {
       marginTop: spacing.s,

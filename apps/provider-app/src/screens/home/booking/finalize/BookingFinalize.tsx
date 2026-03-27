@@ -37,7 +37,7 @@ export function BookingFinalizeScreen() {
   } = useBookingFinalize();
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView edges={['top']} style={styles.container}>
       <Header
         title="Finalize Service Details"
         size="small"

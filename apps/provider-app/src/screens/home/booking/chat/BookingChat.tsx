@@ -70,7 +70,7 @@ export function BookingChatScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView edges={['top']} style={styles.container}>
       <Header
         centerContent={
           <View style={styles.headerContent}>
@@ -96,6 +96,7 @@ export function BookingChatScreen() {
             <Flag size={20} color={colors.textSecondary} />
           </TouchableOpacity>
         }
+        style={styles.header}
       />
 
       <View style={styles.introBanner}>
