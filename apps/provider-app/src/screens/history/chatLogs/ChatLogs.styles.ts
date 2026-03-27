@@ -5,7 +5,10 @@ export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: colors.background,
+      backgroundColor: colors.canvas.base,
+    },
+    iconButton: {
+      padding: spacing.xs,
     },
     loadingContainer: {
       flex: 1,
@@ -16,7 +19,9 @@ export const createStyles = (colors: ThemeColors) =>
       marginTop: spacing.m,
     },
     messagesList: {
-      padding: spacing.m,
+      paddingHorizontal: spacing.pageHorizontal,
+      paddingTop: spacing.pageTop,
+      paddingBottom: spacing.xxxl,
     },
     messageContainer: {
       flexDirection: 'row',
@@ -38,18 +43,22 @@ export const createStyles = (colors: ThemeColors) =>
     messageBubble: {
       maxWidth: '70%',
       padding: spacing.m,
-      borderRadius: radius.l,
+      borderRadius: radius.m,
+      borderWidth: 1,
     },
     ownBubble: {
       backgroundColor: colors.actionPrimary,
+      borderColor: colors.interactive.primaryBg,
       borderBottomRightRadius: radius.xs,
     },
     otherBubble: {
-      backgroundColor: colors.actionSecondary,
+      backgroundColor: colors.card.base,
+      borderColor: colors.card.stroke,
       borderBottomLeftRadius: radius.xs,
     },
     messageTime: {
       marginTop: spacing.xs,
+      opacity: 0.75,
     },
     imageContainer: {
       marginBottom: spacing.xs,

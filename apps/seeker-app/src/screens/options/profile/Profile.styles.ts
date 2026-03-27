@@ -1,11 +1,27 @@
-import { spacing, ThemeColors } from '@repo/theme';
+import { radius, spacing, ThemeColors } from '@repo/theme';
 import { StyleSheet } from 'react-native';
 
 export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
     avatarSection: {
+      borderRadius: radius.xxl,
+      borderWidth: 1,
+      borderColor: colors.home.heroAccent,
+      backgroundColor: colors.home.heroStart,
       alignItems: 'center',
-      marginVertical: spacing.m,
+      marginBottom: spacing.m,
+      padding: spacing.heroInset,
+    },
+    profilePill: {
+      alignSelf: 'flex-start',
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.xs,
+      borderRadius: radius.round,
+      backgroundColor: colors.home.chipBg,
+      paddingHorizontal: spacing.s,
+      paddingVertical: spacing.xs,
+      marginBottom: spacing.m,
     },
     avatarContainer: {
       alignItems: 'center',
@@ -35,13 +51,17 @@ export const createStyles = (colors: ThemeColors) =>
     },
     sectionCard: {
       marginBottom: spacing.l,
-      borderRadius: 16,
+      borderRadius: radius.l,
+      borderWidth: 1,
+      borderColor: colors.card.stroke,
+      backgroundColor: colors.card.base,
     },
     sectionTitle: {
       marginBottom: spacing.m,
+      color: colors.textSecondary,
     },
     readonlyInput: {
-      backgroundColor: colors.backgroundSecondary,
+      backgroundColor: colors.card.muted,
       color: colors.textDisabled,
     },
     buttonContainer: {
@@ -50,9 +70,12 @@ export const createStyles = (colors: ThemeColors) =>
     },
     saveButton: {
       marginBottom: spacing.s,
+      backgroundColor: colors.actionPrimary,
     },
     cancelButton: {
       marginBottom: spacing.m,
+      backgroundColor: colors.card.base,
+      borderColor: colors.card.stroke,
     },
     errorText: {
       color: colors.error.base,

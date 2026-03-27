@@ -15,7 +15,10 @@ export function BackButton({ onPress, color, size = 24 }: BackButtonProps) {
   return (
     <TouchableOpacity
       onPress={onPress}
-      hitSlop={{ top: spacing.s, bottom: spacing.s, left: spacing.s, right: spacing.s }}
+      accessibilityRole="button"
+      accessibilityLabel="Go back"
+      hitSlop={{ top: spacing.xs, bottom: spacing.xs, left: spacing.xs, right: spacing.xs }}
+      style={{ width: 40, height: 40, alignItems: 'center', justifyContent: 'center' }}
     >
       <ChevronLeft size={size} color={resolvedColor} />
     </TouchableOpacity>

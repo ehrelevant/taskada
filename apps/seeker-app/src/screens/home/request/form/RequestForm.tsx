@@ -1,7 +1,7 @@
 import { ActivityIndicator, FlatList, Image, Modal, TouchableOpacity, View } from 'react-native';
-import { Button, ImageViewer, Input, Typography } from '@repo/components';
-import { Camera, X } from 'lucide-react-native';
+import { Button, ImageViewer, Input, Rating, Typography } from '@repo/components';
 import { Controller, FormProvider } from 'react-hook-form';
+import { ImagePlus, LocateFixed, Search, ShieldCheck, Sparkles, X } from 'lucide-react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { useTheme } from '@repo/theme';
 
@@ -10,6 +10,18 @@ import { useRequestForm } from './RequestForm.hooks';
 
 import { MapSection } from './mapSection/MapSection';
 import { ServiceSelection } from './serviceSelection/ServiceSelection';
+
+function formatCurrency(amount: number): string {
+  try {
+    return new Intl.NumberFormat('en-PH', {
+      style: 'currency',
+      currency: 'PHP',
+      maximumFractionDigits: 0,
+    }).format(amount);
+  } catch {
+    return `PHP ${amount.toLocaleString()}`;
+  }
+}
 
 export function RequestFormScreen() {
   const { colors } = useTheme();
@@ -41,9 +53,47 @@ export function RequestFormScreen() {
     <KeyboardAwareScrollView contentContainerStyle={styles.scrollContent}>
       <FormProvider {...methods}>
         <View style={styles.container}>
-          <MapSection onLocationUpdate={handleLocationUpdate} />
+          <View style={styles.heroCard}>
+            <View style={styles.heroPill}>
+              <Sparkles size={14} color={colors.home.chipText} />
+              <Typography variant="caption" color={colors.home.chipText}>
+                smart request flow
+              </Typography>
+            </View>
+            <Typography variant="h3" color="textInverse" style={styles.heroTitle}>
+              Tell us what you need
+            </Typography>
+            <Typography variant="body2" color="textInverse" style={styles.heroSubtitle}>
+              Share location, choose a service, and add details so providers can respond faster.
+            </Typography>
+            <View style={styles.heroBadgeRow}>
+              <View style={styles.heroBadge}>
+                <ShieldCheck size={14} color={colors.home.chipText} />
+                <Typography variant="caption" color={colors.home.chipText}>
+                  verified providers
+                </Typography>
+              </View>
+              <View style={styles.heroBadge}>
+                <LocateFixed size={14} color={colors.home.chipText} />
+                <Typography variant="caption" color={colors.home.chipText}>
+                  precise location pin
+                </Typography>
+              </View>
+            </View>
+          </View>
 
-          <View style={styles.formSection}>
+          <View style={styles.sectionCard}>
+            <View style={styles.sectionHeadingRow}>
+              <Typography variant="h5">Location</Typography>
+              <Typography variant="caption" color="textSecondary">
+                Drag the map marker
+              </Typography>
+            </View>
+
+            <View style={styles.mapContainer}>
+              <MapSection onLocationUpdate={handleLocationUpdate} />
+            </View>
+
             <Controller
               control={methods.control}
               name="addressLabel"
@@ -62,6 +112,18 @@ export function RequestFormScreen() {
                 />
               )}
             />
+          </View>
+
+          <View style={styles.sectionCard}>
+            <View style={styles.sectionHeadingRow}>
+              <Typography variant="h5">Service Details</Typography>
+              <View style={styles.sectionHintPill}>
+                <Search size={12} color={colors.textSecondary} />
+                <Typography variant="caption" color="textSecondary">
+                  optional provider selection
+                </Typography>
+              </View>
+            </View>
 
             <ServiceSelection
               onOpenSearch={() => setShowServiceSearch(true)}
@@ -82,18 +144,24 @@ export function RequestFormScreen() {
                   value={value}
                   onChangeText={onChange}
                   error={errors.description?.message}
-                  placeholder="Describe what you need..."
+                  placeholder="Describe what you need done, preferred timing, and important notes"
                   multiline
-                  numberOfLines={4}
+                  numberOfLines={5}
                   containerStyle={styles.input}
                 />
               )}
             />
+          </View>
+
+          <View style={styles.sectionCard}>
+            <View style={styles.sectionHeadingRow}>
+              <Typography variant="h5">Attachments</Typography>
+              <Typography variant="caption" color="textSecondary">
+                optional photos
+              </Typography>
+            </View>
 
             <View style={styles.imageSection}>
-              <Typography variant="body2" color="textSecondary">
-                Images (optional)
-              </Typography>
               <FlatList
                 horizontal
                 data={images}
@@ -110,7 +178,7 @@ export function RequestFormScreen() {
                 )}
                 ListFooterComponent={
                   <TouchableOpacity style={styles.addImageButton} onPress={pickImages}>
-                    <Camera size={24} color={colors.actionPrimary} />
+                    <ImagePlus size={24} color={colors.actionPrimary} />
                     <Typography variant="caption" color="actionPrimary" style={styles.addImageLabel}>
                       Add
                     </Typography>
@@ -119,22 +187,31 @@ export function RequestFormScreen() {
                 contentContainerStyle={styles.imageList}
               />
             </View>
-
-            <Button
-              title="Request a Booking"
-              onPress={handleSubmit}
-              isLoading={loading || isSubmitting}
-              disabled={loading || isSubmitting}
-              style={styles.submitButton}
-            />
           </View>
+
+          <Button
+            title="Request a Booking"
+            onPress={handleSubmit}
+            isLoading={loading || isSubmitting}
+            disabled={loading || isSubmitting}
+            style={styles.submitButton}
+          />
+
+          <Typography variant="caption" color="textSecondary" align="center" style={styles.footerNote}>
+            Submitting will notify matching providers and move you to standby.
+          </Typography>
         </View>
       </FormProvider>
 
       <Modal animationType="slide" visible={showServiceSearch}>
         <View style={styles.modalContainer}>
           <View style={styles.modalHeader}>
-            <Typography variant="h6">Select a Service</Typography>
+            <View>
+              <Typography variant="h6">Select a Service</Typography>
+              <Typography variant="caption" color="textSecondary" style={styles.modalSubtext}>
+                Search by service type or provider
+              </Typography>
+            </View>
             <TouchableOpacity onPress={() => setShowServiceSearch(false)}>
               <X size={24} color={colors.textPrimary} />
             </TouchableOpacity>
@@ -159,12 +236,18 @@ export function RequestFormScreen() {
                 renderItem={({ item }) => (
                   <TouchableOpacity style={styles.serviceResult} onPress={() => handleServiceSelect(item)}>
                     <View style={styles.serviceResultContent}>
-                      <Typography variant="body1" weight="medium">
+                      <Typography variant="body1" weight="semiBold" numberOfLines={1}>
                         {item.serviceTypeName}
                       </Typography>
-                      <Typography variant="caption" color="textSecondary">
-                        by {item.providerName}
+                      <Typography variant="caption" color="textSecondary" numberOfLines={1}>
+                        {item.providerName}
                       </Typography>
+                      <View style={styles.serviceResultMeta}>
+                        <Rating value={item.avgRating} size={12} />
+                        <Typography variant="caption" color="actionPrimary">
+                          {formatCurrency(item.initialCost)}
+                        </Typography>
+                      </View>
                     </View>
                   </TouchableOpacity>
                 )}

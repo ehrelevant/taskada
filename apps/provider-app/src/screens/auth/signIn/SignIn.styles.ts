@@ -1,18 +1,34 @@
-import { spacing, ThemeColors } from '@repo/theme';
+import { radius, spacing, ThemeColors } from '@repo/theme';
 import { StyleSheet } from 'react-native';
 
 export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
     container: {
+      backgroundColor: colors.canvas.base,
       justifyContent: 'center',
     },
+    heroCard: {
+      borderRadius: radius.xxl,
+      borderWidth: 1,
+      borderColor: colors.home.heroAccent,
+      backgroundColor: colors.home.heroStart,
+      padding: spacing.heroInset,
+      marginBottom: spacing.m,
+    },
     title: {
-      marginBottom: spacing.s,
-      textAlign: 'center',
+      textAlign: 'left',
     },
     subtitle: {
-      marginBottom: spacing.xl,
-      textAlign: 'center',
+      marginTop: spacing.xs,
+      textAlign: 'left',
+      opacity: 0.94,
+    },
+    formCard: {
+      borderRadius: radius.l,
+      borderWidth: 1,
+      borderColor: colors.card.stroke,
+      backgroundColor: colors.card.base,
+      padding: spacing.m,
     },
     input: {
       marginBottom: spacing.m,

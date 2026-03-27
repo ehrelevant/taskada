@@ -1,6 +1,6 @@
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import { BadgeCheck, Flag, MapPin } from 'lucide-react-native';
 import { Button, Header, Typography } from '@repo/components';
-import { Flag } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView, TouchableOpacity, View } from 'react-native';
 import { useTheme } from '@repo/theme';
@@ -32,7 +32,7 @@ export function BookingTransitScreen() {
         size="small"
         rightContent={
           seekerUser ? (
-            <TouchableOpacity onPress={handleReport}>
+            <TouchableOpacity onPress={handleReport} style={styles.iconButton}>
               <Flag size={20} color={colors.textSecondary} />
             </TouchableOpacity>
           ) : undefined
@@ -40,6 +40,21 @@ export function BookingTransitScreen() {
       />
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
+        <View style={styles.heroCard}>
+          <View style={styles.heroPill}>
+            <BadgeCheck size={14} color={colors.home.chipText} />
+            <Typography variant="caption" color={colors.home.chipText}>
+              live route active
+            </Typography>
+          </View>
+          <Typography variant="h3" color="textInverse">
+            Navigate to seeker location
+          </Typography>
+          <Typography variant="body2" color="textInverse" style={styles.heroSubtitle}>
+            Keep this screen open for map guidance and update the booking once you arrive.
+          </Typography>
+        </View>
+
         <View style={styles.mapSection}>
           <View style={styles.mapContainer}>
             <MapView
@@ -75,9 +90,12 @@ export function BookingTransitScreen() {
         </View>
 
         <View style={styles.section}>
-          <Typography variant="subtitle2" style={styles.sectionLabel}>
-            Service Location Address
-          </Typography>
+          <View style={styles.sectionLabelRow}>
+            <MapPin size={14} color={colors.actionPrimary} />
+            <Typography variant="subtitle2" style={styles.sectionLabel}>
+              Service Location Address
+            </Typography>
+          </View>
           <Typography variant="body1" style={styles.addressText}>
             {address?.label || 'Location not specified'}
           </Typography>
@@ -94,7 +112,7 @@ export function BookingTransitScreen() {
 
       <View style={styles.buttonContainer}>
         <Button
-          title="Press this Button if you have arrived"
+          title="Mark as Arrived"
           onPress={handleArrived}
           isLoading={isArriving}
           disabled={isArriving}

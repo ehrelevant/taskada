@@ -2,8 +2,7 @@ import { createZodDto } from 'nestjs-zod';
 import { z } from 'zod';
 
 export const CreateProviderSchema = z.object({
-  userId: z.string().uuid(),
-  agencyId: z.string().uuid().nullable().optional(),
+  agencyId: z.uuid().nullable().optional(),
   isAccepting: z.boolean().optional(),
 });
 

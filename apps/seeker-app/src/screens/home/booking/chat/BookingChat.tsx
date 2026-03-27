@@ -1,6 +1,6 @@
 import { ActivityIndicator, FlatList, Image, ScrollView, TextInput, TouchableOpacity, View } from 'react-native';
 import { Avatar, Header, ImageViewer, ScreenContainer, Typography } from '@repo/components';
-import { Flag, Image as ImageIcon, Send, X } from 'lucide-react-native';
+import { BadgeCheck, Flag, Image as ImageIcon, Radio, Send, X } from 'lucide-react-native';
 import { KeyboardStickyView } from 'react-native-keyboard-controller';
 import type { Message } from '@repo/shared';
 import { useNavigation } from '@react-navigation/native';
@@ -26,7 +26,7 @@ function ChatHeaderCenter({
     <View style={styles.headerCenter}>
       <Avatar source={avatarUrl ? { uri: avatarUrl } : null} name={`${firstName} ${lastName}`} size={36} />
       <View style={styles.headerCenterText}>
-        <Typography variant="h5" weight="bold">
+        <Typography variant="h5" weight="bold" numberOfLines={1}>
           {firstName} {lastName}
         </Typography>
         {isTyping && (
@@ -121,6 +121,21 @@ export function ChatScreen() {
         }
       />
 
+      <View style={styles.sessionBanner}>
+        <View style={styles.sessionBadge}>
+          <BadgeCheck size={13} color={colors.home.chipText} />
+          <Typography variant="caption" color={colors.home.chipText}>
+            active booking chat
+          </Typography>
+        </View>
+        <View style={styles.sessionBadge}>
+          <Radio size={13} color={colors.home.chipText} />
+          <Typography variant="caption" color={colors.home.chipText}>
+            real-time updates
+          </Typography>
+        </View>
+      </View>
+
       <FlatList
         ref={flatListRef}
         data={messages}
@@ -129,6 +144,15 @@ export function ChatScreen() {
         contentContainerStyle={styles.messagesList}
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0.5}
+        ListEmptyComponent={
+          isLoading ? null : (
+            <View style={styles.emptyStateCard}>
+              <Typography variant="body2" color="textSecondary" align="center">
+                Start the conversation to align on service details.
+              </Typography>
+            </View>
+          )
+        }
         ListFooterComponent={isLoading ? <ActivityIndicator color={colors.actionPrimary} /> : null}
       />
 

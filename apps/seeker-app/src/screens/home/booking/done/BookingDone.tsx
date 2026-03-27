@@ -8,12 +8,24 @@ import {
   StarRatingInput,
   Typography,
 } from '@repo/components';
-import { CheckCircle, Flag, X } from 'lucide-react-native';
+import { BadgeCheck, CheckCircle, CircleDollarSign, Flag, Sparkles, X } from 'lucide-react-native';
 import { KeyboardAvoidingView, Platform, ScrollView, TextInput, TouchableOpacity, View } from 'react-native';
 import { useTheme } from '@repo/theme';
 
 import { createStyles } from './BookingDone.styles';
 import { useBookingDone } from './BookingDone.hooks';
+
+function formatCurrency(amount: number): string {
+  try {
+    return new Intl.NumberFormat('en-PH', {
+      style: 'currency',
+      currency: 'PHP',
+      maximumFractionDigits: 0,
+    }).format(amount);
+  } catch {
+    return `PHP ${amount.toLocaleString()}`;
+  }
+}
 
 export function BookingDoneScreen() {
   const { colors } = useTheme();
@@ -21,6 +33,7 @@ export function BookingDoneScreen() {
   const {
     providerInfo,
     serviceTypeName,
+    cost,
     rating,
     setRating,
     reviewText,
@@ -40,12 +53,12 @@ export function BookingDoneScreen() {
     <ScreenContainer padding="none" useSafeArea={false}>
       <Header
         leftContent={
-          <TouchableOpacity onPress={handleGoHome}>
+          <TouchableOpacity onPress={handleGoHome} style={styles.iconButton}>
             <X size={24} color={colors.textPrimary} />
           </TouchableOpacity>
         }
         rightContent={
-          <TouchableOpacity onPress={handleReport}>
+          <TouchableOpacity onPress={handleReport} style={styles.iconButton}>
             <Flag size={20} color={colors.textSecondary} />
           </TouchableOpacity>
         }
@@ -55,13 +68,31 @@ export function BookingDoneScreen() {
         <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
           <View style={styles.heroSection}>
             <CheckCircle size={48} color={colors.actionSecondary} />
-            <Typography variant="h1" align="center" style={styles.title}>
+            <Typography variant="h2" align="center" color="textInverse" style={styles.title}>
               Complete!
             </Typography>
+            <Typography variant="body2" color="textInverse" align="center" style={styles.heroSubtitle}>
+              Your service booking has been completed successfully.
+            </Typography>
+
+            <View style={styles.heroBadgeRow}>
+              <View style={styles.heroBadge}>
+                <BadgeCheck size={13} color={colors.home.chipText} />
+                <Typography variant="caption" color={colors.home.chipText}>
+                  booking closed
+                </Typography>
+              </View>
+              <View style={styles.heroBadge}>
+                <Sparkles size={13} color={colors.home.chipText} />
+                <Typography variant="caption" color={colors.home.chipText}>
+                  review helps others
+                </Typography>
+              </View>
+            </View>
           </View>
 
           <Section label="Service Provider">
-            <View style={styles.providerCard}>
+            <View style={styles.providerCardShell}>
               <Avatar
                 source={providerInfo.avatarUrl ? { uri: providerInfo.avatarUrl } : null}
                 size={80}
@@ -88,6 +119,16 @@ export function BookingDoneScreen() {
                   )}
                 </View>
               </View>
+            </View>
+
+            <View style={styles.costPill}>
+              <CircleDollarSign size={14} color={colors.actionPrimary} />
+              <Typography variant="caption" color="textSecondary">
+                Final cost
+              </Typography>
+              <Typography variant="subtitle2" color="actionPrimary" style={styles.costValue}>
+                {formatCurrency(cost)}
+              </Typography>
             </View>
           </Section>
 

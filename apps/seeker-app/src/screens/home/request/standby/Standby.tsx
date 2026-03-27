@@ -1,5 +1,6 @@
 import { ActivityIndicator, View } from 'react-native';
 import { Button, EmptyState, ScreenContainer, Typography } from '@repo/components';
+import { Clock3, Radio, ShieldCheck, Sparkles } from 'lucide-react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '@repo/theme';
 
@@ -33,13 +34,51 @@ export function StandbyScreen() {
   }
 
   return (
-    <ScreenContainer padding="m">
-      <View style={styles.content}>
-        <Typography variant="h4">Reaching out to service providers.</Typography>
-        <Typography variant="h4">This may take awhile.</Typography>
+    <ScreenContainer padding="none">
+      <View style={styles.heroShell}>
+        <View style={styles.heroCard}>
+          <View style={styles.livePill}>
+            <Radio size={14} color={colors.home.chipText} />
+            <Typography variant="caption" color={colors.home.chipText}>
+              request is live
+            </Typography>
+          </View>
 
-        <View style={styles.spinnerContainer}>
-          <ActivityIndicator size="large" color={colors.actionPrimary} />
+          <Typography variant="h3" color="textInverse" style={styles.title}>
+            Looking for the right provider
+          </Typography>
+          <Typography variant="body2" color="textInverse" style={styles.subtitle}>
+            We are notifying nearby verified providers that match your request details.
+          </Typography>
+
+          <View style={styles.statusRows}>
+            <View style={styles.statusPill}>
+              <ShieldCheck size={14} color={colors.home.chipText} />
+              <Typography variant="caption" color={colors.home.chipText}>
+                verified matches only
+              </Typography>
+            </View>
+            <View style={styles.statusPill}>
+              <Clock3 size={14} color={colors.home.chipText} />
+              <Typography variant="caption" color={colors.home.chipText}>
+                updates in real time
+              </Typography>
+            </View>
+          </View>
+
+          <View style={styles.spinnerCard}>
+            <ActivityIndicator size="large" color={colors.actionPrimary} />
+            <Typography variant="body2" color="textSecondary" style={styles.spinnerText}>
+              Waiting for provider response...
+            </Typography>
+          </View>
+
+          <View style={styles.tipRow}>
+            <Sparkles size={14} color={colors.textSecondary} />
+            <Typography variant="caption" color="textSecondary">
+              Keep this screen open to receive instant updates.
+            </Typography>
+          </View>
         </View>
       </View>
 

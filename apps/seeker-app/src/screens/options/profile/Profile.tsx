@@ -1,7 +1,6 @@
-import { Avatar, Button, Card, Header, Input, ScreenContainer, Typography } from '@repo/components';
-import { Camera, Eye, EyeOff, X } from 'lucide-react-native';
+import { Avatar, Button, Card, Input, ScreenContainer, Typography } from '@repo/components';
+import { BadgeCheck, Camera, Eye, EyeOff, X } from 'lucide-react-native';
 import { TouchableOpacity, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '@repo/theme';
 
 import { createStyles } from './Profile.styles';
@@ -10,7 +9,6 @@ import { useProfile } from './Profile.hooks';
 export function ProfileScreen() {
   const { colors } = useTheme();
   const styles = createStyles(colors);
-  const navigation = useNavigation();
   const {
     userSession,
     profileData,
@@ -33,9 +31,13 @@ export function ProfileScreen() {
 
   return (
     <ScreenContainer scrollable padding="m" verticalPadding="none">
-      <Header title="Profile" onBack={() => navigation.goBack()} />
-
       <View style={styles.avatarSection}>
+        <View style={styles.profilePill}>
+          <BadgeCheck size={14} color={colors.home.chipText} />
+          <Typography variant="caption" color={colors.home.chipText}>
+            seeker profile
+          </Typography>
+        </View>
         <View style={styles.avatarContainer}>
           <Avatar source={profileData?.avatarUrl ? { uri: profileData.avatarUrl } : null} size={100} />
           <TouchableOpacity style={styles.cameraButton} onPress={pickImage}>
@@ -47,6 +49,9 @@ export function ProfileScreen() {
             </TouchableOpacity>
           ) : null}
         </View>
+        <Typography variant="caption" color="textInverse">
+          Update your photo so providers can recognize you.
+        </Typography>
       </View>
 
       <Card elevation="xs" padding="m" style={styles.sectionCard}>

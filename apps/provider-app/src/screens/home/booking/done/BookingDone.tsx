@@ -1,5 +1,5 @@
 import { ActivityIndicator, ScrollView, TouchableOpacity, View } from 'react-native';
-import { Flag } from 'lucide-react-native';
+import { BadgeCheck, CircleDollarSign, Flag, Sparkles } from 'lucide-react-native';
 import { Header, Typography } from '@repo/components';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '@repo/theme';
@@ -30,7 +30,7 @@ export function BookingDoneScreen() {
     <SafeAreaView style={styles.container}>
       <Header
         rightContent={
-          <TouchableOpacity onPress={handleReport}>
+          <TouchableOpacity onPress={handleReport} style={styles.iconButton}>
             <Flag size={20} color={colors.textSecondary} />
           </TouchableOpacity>
         }
@@ -39,6 +39,12 @@ export function BookingDoneScreen() {
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.centeredContent}>
           <View style={styles.header}>
+            <View style={styles.heroPill}>
+              <BadgeCheck size={14} color={colors.home.chipText} />
+              <Typography variant="caption" color={colors.home.chipText}>
+                booking completed
+              </Typography>
+            </View>
             <Typography variant="h4" style={styles.headerTitle}>
               Well Done, Provider!
             </Typography>
@@ -73,9 +79,12 @@ export function BookingDoneScreen() {
               <Typography variant="subtitle2" color="textSecondary">
                 Service Cost
               </Typography>
-              <Typography variant="h6" style={styles.costValue}>
-                ₱{bookingDetails?.cost?.toFixed(2) || '0.00'}
-              </Typography>
+              <View style={styles.costRow}>
+                <CircleDollarSign size={15} color={colors.actionPrimary} />
+                <Typography variant="h6" style={styles.costValue}>
+                  ₱{bookingDetails?.cost?.toFixed(2) || '0.00'}
+                </Typography>
+              </View>
             </View>
           </View>
 
@@ -83,6 +92,7 @@ export function BookingDoneScreen() {
             <Typography variant="body1" style={styles.detailsButtonText}>
               View Booking Details
             </Typography>
+            <Sparkles size={14} color={colors.actionPrimary} />
           </TouchableOpacity>
         </View>
       </ScrollView>

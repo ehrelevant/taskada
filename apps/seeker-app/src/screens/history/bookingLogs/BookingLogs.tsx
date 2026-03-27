@@ -1,5 +1,5 @@
 import { Avatar, Button, Card, EmptyState, Header, Rating, ReviewCard, ScreenContainer, Section, StarRatingInput, StatusBadge, Typography } from '@repo/components';
-import { Flag } from 'lucide-react-native';
+import { BadgeCheck, Flag } from 'lucide-react-native';
 import { TextInput, TouchableOpacity, View } from 'react-native';
 import { useTheme } from '@repo/theme';
 
@@ -60,13 +60,28 @@ export function BookingLogsScreen() {
         size="small"
         onBack={handleGoBack}
         rightContent={
-          <TouchableOpacity onPress={handleReport}>
+          <TouchableOpacity onPress={handleReport} style={styles.iconButton}>
             <Flag size={20} color={colors.textSecondary} />
           </TouchableOpacity>
         }
       />
 
       <View style={styles.content}>
+        <View style={styles.heroCard}>
+          <View style={styles.heroPill}>
+            <BadgeCheck size={14} color={colors.home.chipText} />
+            <Typography variant="caption" color={colors.home.chipText}>
+              transaction record
+            </Typography>
+          </View>
+          <Typography variant="h3" color="textInverse">
+            Booking summary
+          </Typography>
+          <Typography variant="body2" color="textInverse" style={styles.heroSubtitle}>
+            Review booking details, chat history, and service outcome.
+          </Typography>
+        </View>
+
         <TouchableOpacity onPress={handleViewServiceDetails} activeOpacity={0.8}>
           <Card elevation="m" padding="l" style={styles.serviceCard}>
             <View style={styles.providerSection}>

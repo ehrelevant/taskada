@@ -5,14 +5,30 @@ export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: colors.background,
+      backgroundColor: colors.canvas.base,
     },
-    header: {
-      paddingHorizontal: spacing.m,
-      paddingVertical: spacing.s,
-      borderBottomWidth: 1,
-      borderBottomColor: colors.border,
-      backgroundColor: colors.background,
+    heroCard: {
+      borderRadius: radius.xxl,
+      borderWidth: 1,
+      borderColor: colors.home.heroAccent,
+      backgroundColor: colors.home.heroStart,
+      padding: spacing.heroInset,
+      marginBottom: spacing.m,
+    },
+    heroPill: {
+      alignSelf: 'flex-start',
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.xs,
+      borderRadius: radius.round,
+      backgroundColor: colors.home.chipBg,
+      paddingHorizontal: spacing.s,
+      paddingVertical: spacing.xs,
+      marginBottom: spacing.s,
+    },
+    heroSubtitle: {
+      marginTop: spacing.xs,
+      opacity: 0.94,
     },
     loadingContainer: {
       flex: 1,
@@ -23,10 +39,16 @@ export const createStyles = (colors: ThemeColors) =>
       marginTop: spacing.m,
     },
     listContent: {
-      padding: spacing.m,
+      paddingHorizontal: spacing.pageHorizontal,
+      paddingTop: spacing.pageTop,
+      paddingBottom: spacing.xxxl,
     },
     card: {
       marginBottom: spacing.m,
+      borderRadius: radius.l,
+      borderWidth: 1,
+      borderColor: colors.card.stroke,
+      backgroundColor: colors.card.base,
     },
     providerHeader: {
       flexDirection: 'row',
@@ -49,7 +71,7 @@ export const createStyles = (colors: ThemeColors) =>
     statusBadge: {
       paddingHorizontal: spacing.s,
       paddingVertical: spacing.xs,
-      borderRadius: radius.xs,
+      borderRadius: radius.round,
     },
     statusText: {
       fontWeight: '600',

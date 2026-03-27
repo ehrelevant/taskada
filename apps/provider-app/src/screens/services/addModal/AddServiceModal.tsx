@@ -1,4 +1,5 @@
 import { ActivityIndicator, Modal, TouchableOpacity, View } from 'react-native';
+import { BadgeCheck } from 'lucide-react-native';
 import { Button, Input, Typography } from '@repo/components';
 import { Controller } from 'react-hook-form';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
@@ -35,14 +36,25 @@ export function AddServiceModal({ visible, serviceToEdit, onClose, onSuccess }: 
     <Modal visible={visible} animationType="slide" transparent onRequestClose={onClose}>
       <View style={styles.overlay}>
         <View style={styles.container}>
-          <Typography variant="h4" style={styles.title}>
-            {isEditing ? 'Edit Service' : 'New Service'}
-          </Typography>
+          <View style={styles.titleWrap}>
+            <View style={styles.titlePill}>
+              <BadgeCheck size={14} color={colors.home.chipText} />
+              <Typography variant="caption" color={colors.home.chipText}>
+                service listing
+              </Typography>
+            </View>
+            <Typography variant="h4" style={styles.title}>
+              {isEditing ? 'Edit Service' : 'New Service'}
+            </Typography>
+          </View>
 
           <KeyboardAwareScrollView contentContainerStyle={styles.scrollContent}>
             <View style={styles.fieldContainer}>
               <Typography variant="subtitle2" style={styles.label}>
                 Select Service Type
+              </Typography>
+              <Typography variant="caption" color={colors.textSecondary}>
+                {isEditing ? 'Service type cannot be changed while editing.' : 'Choose the service you offer.'}
               </Typography>
 
               {isLoadingTypes ? (

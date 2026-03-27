@@ -3,27 +3,59 @@ import { radius, spacing, ThemeColors } from '@repo/theme';
 
 export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
+    iconButton: {
+      padding: spacing.xs,
+    },
     keyboardView: {
       flex: 1,
     },
     scrollContent: {
       flexGrow: 1,
-      padding: spacing.m,
-      gap: spacing.xl,
+      paddingHorizontal: spacing.pageHorizontal,
+      paddingTop: spacing.pageTop,
+      paddingBottom: spacing.xl,
+      gap: spacing.m,
     },
     heroSection: {
       alignItems: 'center',
-      paddingVertical: spacing.l,
-      backgroundColor: colors.secondary.light,
-      borderRadius: 16,
+      paddingVertical: spacing.heroInset,
+      paddingHorizontal: spacing.m,
+      backgroundColor: colors.home.heroStart,
+      borderWidth: 1,
+      borderColor: colors.home.heroAccent,
+      borderRadius: 28,
       gap: spacing.s,
     },
     title: {
       fontWeight: '700',
     },
-    providerCard: {
+    heroSubtitle: {
+      opacity: 0.94,
+    },
+    heroBadgeRow: {
+      flexDirection: 'row',
+      gap: spacing.s,
+      flexWrap: 'wrap',
+      justifyContent: 'center',
+      marginTop: spacing.s,
+    },
+    heroBadge: {
       flexDirection: 'row',
       alignItems: 'center',
+      gap: spacing.xs,
+      borderRadius: radius.round,
+      backgroundColor: colors.home.chipBg,
+      paddingHorizontal: spacing.s,
+      paddingVertical: spacing.xs,
+    },
+    providerCardShell: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      borderRadius: radius.l,
+      borderWidth: 1,
+      borderColor: colors.card.stroke,
+      backgroundColor: colors.card.base,
+      padding: spacing.m,
     },
     providerInfo: {
       flex: 1,
@@ -35,20 +67,38 @@ export const createStyles = (colors: ThemeColors) =>
     ratingContainer: {
       marginTop: spacing.xs,
     },
+    costPill: {
+      marginTop: spacing.s,
+      alignSelf: 'flex-start',
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.xs,
+      borderRadius: radius.round,
+      backgroundColor: colors.card.muted,
+      borderWidth: 1,
+      borderColor: colors.card.stroke,
+      paddingHorizontal: spacing.s,
+      paddingVertical: spacing.xs,
+    },
+    costValue: {
+      marginLeft: spacing.xxs,
+    },
     detailsButton: {
       alignItems: 'center',
       padding: spacing.m,
-      backgroundColor: colors.surface,
+      backgroundColor: colors.card.base,
       borderRadius: radius.m,
       borderWidth: 1,
-      borderColor: colors.border,
+      borderColor: colors.card.stroke,
     },
     reviewFormContainer: {
-      backgroundColor: colors.surface,
+      backgroundColor: colors.card.base,
       borderTopLeftRadius: 16,
       borderTopRightRadius: 16,
       padding: spacing.l,
-      paddingBottom: Platform.OS === 'ios' ? spacing.l : spacing.l,
+      paddingBottom: Platform.OS === 'ios' ? spacing.xl : spacing.l,
+      borderTopWidth: 1,
+      borderTopColor: colors.card.stroke,
     },
     reviewFormTitle: {
       marginBottom: spacing.m,
@@ -58,10 +108,10 @@ export const createStyles = (colors: ThemeColors) =>
       marginBottom: spacing.m,
     },
     reviewInput: {
-      backgroundColor: colors.background,
+      backgroundColor: colors.canvas.base,
       borderRadius: radius.s,
       borderWidth: 1,
-      borderColor: colors.border,
+      borderColor: colors.card.stroke,
       padding: spacing.m,
       minHeight: 80,
       marginBottom: spacing.m,

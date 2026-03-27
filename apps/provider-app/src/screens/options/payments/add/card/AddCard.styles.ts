@@ -5,15 +5,48 @@ export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: colors.background,
+      backgroundColor: colors.canvas.base,
     },
     scrollContent: {
-      padding: spacing.m,
+      paddingHorizontal: spacing.pageHorizontal,
+      paddingTop: spacing.pageTop,
+      paddingBottom: spacing.xxxl,
+      gap: spacing.m,
+    },
+    heroCard: {
+      borderRadius: 28,
+      borderWidth: 1,
+      borderColor: colors.home.heroAccent,
+      backgroundColor: colors.home.heroStart,
+      padding: spacing.heroInset,
+      gap: spacing.xs,
+    },
+    heroPill: {
+      alignSelf: 'flex-start',
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.xs,
+      borderRadius: 999,
+      backgroundColor: colors.home.chipBg,
+      paddingHorizontal: spacing.s,
+      paddingVertical: spacing.xs,
+    },
+    heroSubtitle: {
+      opacity: 0.94,
     },
     header: {
-      marginBottom: spacing.l,
+      backgroundColor: colors.card.base,
+      borderRadius: 16,
+      borderWidth: 1,
+      borderColor: colors.card.stroke,
+      padding: spacing.m,
     },
     form: {
+      backgroundColor: colors.card.base,
+      borderRadius: 16,
+      borderWidth: 1,
+      borderColor: colors.card.stroke,
+      padding: spacing.m,
       gap: spacing.m,
     },
     row: {
@@ -24,9 +57,11 @@ export const createStyles = (colors: ThemeColors) =>
       flex: 1,
     },
     footer: {
-      padding: spacing.m,
+      paddingHorizontal: spacing.pageHorizontal,
+      paddingTop: spacing.m,
+      paddingBottom: spacing.xl,
       borderTopWidth: 1,
-      borderTopColor: colors.border,
-      backgroundColor: colors.surface,
+      borderTopColor: colors.card.stroke,
+      backgroundColor: colors.canvas.base,
     },
   });

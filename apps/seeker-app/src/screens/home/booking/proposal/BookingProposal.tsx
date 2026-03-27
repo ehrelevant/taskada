@@ -1,11 +1,23 @@
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import { BadgeCheck, CircleDollarSign, FileText, Flag, MapPin } from 'lucide-react-native';
 import { Button, Header, ScreenContainer, Section, Typography } from '@repo/components';
-import { Flag } from 'lucide-react-native';
 import { TouchableOpacity, View } from 'react-native';
 import { useTheme } from '@repo/theme';
 
 import { createStyles } from './BookingProposal.styles';
 import { useBookingProposal } from './BookingProposal.hooks';
+
+function formatCurrency(amount: number): string {
+  try {
+    return new Intl.NumberFormat('en-PH', {
+      style: 'currency',
+      currency: 'PHP',
+      maximumFractionDigits: 0,
+    }).format(amount);
+  } catch {
+    return `PHP ${amount.toLocaleString()}`;
+  }
+}
 
 export function BookingProposalScreen() {
   const { colors } = useTheme();
@@ -37,13 +49,29 @@ export function BookingProposalScreen() {
         title="Service Proposal"
         size="small"
         rightContent={
-          <TouchableOpacity onPress={handleReport}>
+          <TouchableOpacity onPress={handleReport} style={styles.reportButton}>
             <Flag size={20} color={colors.textSecondary} />
           </TouchableOpacity>
         }
       />
 
       <View style={styles.content}>
+        <View style={styles.heroCard}>
+          <View style={styles.heroPill}>
+            <BadgeCheck size={14} color={colors.home.chipText} />
+            <Typography variant="caption" color={colors.home.chipText}>
+              proposal received
+            </Typography>
+          </View>
+
+          <Typography variant="h3" color="textInverse" style={styles.heroTitle}>
+            Review the service proposal
+          </Typography>
+          <Typography variant="body2" color="textInverse" style={styles.heroSubtitle}>
+            Confirm the details below before accepting and moving to transit.
+          </Typography>
+        </View>
+
         <View style={styles.mapContainer}>
           <MapView
             provider={PROVIDER_GOOGLE}
@@ -63,24 +91,45 @@ export function BookingProposalScreen() {
           </MapView>
         </View>
 
-        <Section label="Service Location" variant="card">
-          <Typography variant="body1">📍 {address?.label || 'Location not specified'}</Typography>
-        </Section>
+        <View style={styles.locationCard}>
+          <View style={styles.locationLabelRow}>
+            <MapPin size={16} color={colors.actionPrimary} />
+            <Typography variant="caption" color="textSecondary">
+              Service location
+            </Typography>
+          </View>
+          <Typography variant="body1">{address?.label || 'Location not specified'}</Typography>
+        </View>
 
         <View style={styles.rowSection}>
-          <Section label="Service Type" variant="card" style={styles.rowItem}>
-            <Typography variant="body1" weight="medium">
+          <View style={styles.rowItem}>
+            <Typography variant="caption" color="textSecondary">
+              Service type
+            </Typography>
+            <Typography variant="body1" weight="medium" style={styles.rowValue}>
               {serviceTypeName}
             </Typography>
-          </Section>
-          <Section label="Cost" variant="card" style={styles.rowItem}>
-            <Typography variant="h2" color="actionSecondary">
-              ₱{cost.toFixed(2)}
+          </View>
+          <View style={styles.rowItem}>
+            <View style={styles.costLabelRow}>
+              <CircleDollarSign size={14} color={colors.actionPrimary} />
+              <Typography variant="caption" color="textSecondary">
+                Proposed cost
+              </Typography>
+            </View>
+            <Typography variant="h3" color="actionPrimary" style={styles.rowValue}>
+              {formatCurrency(cost)}
             </Typography>
-          </Section>
+          </View>
         </View>
 
         <Section label="Service Specifications" variant="card" style={styles.specificationsCard}>
+          <View style={styles.specLabelRow}>
+            <FileText size={16} color={colors.textSecondary} />
+            <Typography variant="caption" color="textSecondary">
+              Scope details
+            </Typography>
+          </View>
           <Typography variant="body1">{specifications}</Typography>
         </Section>
       </View>

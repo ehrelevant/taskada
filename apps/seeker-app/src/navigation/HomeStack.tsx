@@ -3,6 +3,7 @@ import { HomeScreen } from '@screens/home/Home';
 import { RequestFormScreen } from '@screens/home/request/form/RequestForm';
 import { ServiceDetailsScreen } from '@screens/home/service/details/ServiceDetails';
 import { ServiceTypesListScreen } from '@screens/home/service/types/ServiceTypes';
+import { StackHeader } from '@repo/components';
 
 export type HomeStackParamList = {
   Home: undefined;
@@ -22,6 +23,13 @@ export function HomeStack() {
       initialRouteName="Home"
       screenOptions={{
         animationDuration: 400,
+        header: ({ navigation, options, route, back }) => (
+          <StackHeader
+            title={typeof options.title === 'string' ? options.title : route.name}
+            canGoBack={Boolean(back)}
+            onBack={() => navigation.goBack()}
+          />
+        ),
       }}
     >
       <Stack.Screen

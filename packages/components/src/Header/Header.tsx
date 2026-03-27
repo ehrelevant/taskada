@@ -11,6 +11,8 @@ export interface HeaderProps extends ViewProps {
   subtitle?: string;
   align?: 'left' | 'center';
   size?: 'large' | 'medium' | 'small';
+  balancedSides?: boolean;
+  sideSlotWidth?: number;
   onBack?: () => void;
   onClose?: () => void;
   leftContent?: ReactNode;
@@ -24,6 +26,8 @@ export function Header({
   subtitle,
   align = 'left',
   size = 'medium',
+  balancedSides = false,
+  sideSlotWidth = 40,
   onBack,
   onClose,
   leftContent,
@@ -74,12 +78,25 @@ export function Header({
   };
 
   const borderStyle = bottomBorder ? { borderBottomWidth: 1, borderBottomColor: colors.border } : undefined;
+  const sideSlotStyle = balancedSides ? { width: sideSlotWidth } : undefined;
+  const balancedLeftSlotStyle = balancedSides
+    ? { marginRight: 0, alignItems: 'center' as const, justifyContent: 'center' as const }
+    : undefined;
+  const balancedRightSlotStyle = balancedSides
+    ? { marginLeft: 0, alignItems: 'center' as const, justifyContent: 'center' as const }
+    : undefined;
 
   return (
     <View style={[styles.container, borderStyle, style]} {...rest}>
-      {resolvedLeftContent && <View style={styles.leftContent}>{resolvedLeftContent}</View>}
+      {resolvedLeftContent ? (
+        <View style={[styles.leftContent, sideSlotStyle, balancedLeftSlotStyle]}>{resolvedLeftContent}</View>
+      ) : null}
+      {!resolvedLeftContent && balancedSides ? <View style={sideSlotStyle} /> : null}
       {renderCenter()}
-      {resolvedRightContent && <View style={styles.rightContent}>{resolvedRightContent}</View>}
+      {resolvedRightContent ? (
+        <View style={[styles.rightContent, sideSlotStyle, balancedRightSlotStyle]}>{resolvedRightContent}</View>
+      ) : null}
+      {!resolvedRightContent && balancedSides ? <View style={sideSlotStyle} /> : null}
     </View>
   );
 }

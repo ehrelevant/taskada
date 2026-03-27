@@ -1,5 +1,5 @@
 import { ActivityIndicator, ScrollView, TouchableOpacity, View } from 'react-native';
-import { Flag } from 'lucide-react-native';
+import { BadgeCheck, CircleDollarSign, Flag, Sparkles } from 'lucide-react-native';
 import { Header, Typography } from '@repo/components';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '@repo/theme';
@@ -31,7 +31,7 @@ export function BookingServingScreen() {
     <SafeAreaView style={styles.container}>
       <Header
         rightContent={
-          <TouchableOpacity onPress={handleReport}>
+          <TouchableOpacity onPress={handleReport} style={styles.iconButton}>
             <Flag size={20} color={colors.textSecondary} />
           </TouchableOpacity>
         }
@@ -40,13 +40,19 @@ export function BookingServingScreen() {
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.centeredContent}>
           <View style={styles.header}>
-            <Typography variant="h5" style={styles.headerTitle}>
+            <View style={styles.heroPill}>
+              <BadgeCheck size={14} color={colors.home.chipText} />
+              <Typography variant="caption" color={colors.home.chipText}>
+                service currently active
+              </Typography>
+            </View>
+            <Typography variant="h3" style={styles.headerTitle}>
               Currently Serving!
             </Typography>
           </View>
 
           <View style={styles.instructionContainer}>
-            <Typography variant="body1" style={styles.instructionText}>
+            <Typography variant="body2" style={styles.instructionText}>
               Please click the Paid button below if the seeker gave cash payment to you.
             </Typography>
           </View>
@@ -64,7 +70,7 @@ export function BookingServingScreen() {
               {isUpdatingStatus ? (
                 <ActivityIndicator size="large" color={colors.textInverse} />
               ) : (
-                <Typography variant="h4" style={styles.buttonText}>
+                <Typography variant="h5" style={styles.buttonText}>
                   {isPaid ? 'DONE' : 'PAID'}
                 </Typography>
               )}
@@ -86,9 +92,12 @@ export function BookingServingScreen() {
               <Typography variant="subtitle2" color="textSecondary">
                 Service Cost
               </Typography>
-              <Typography variant="h6" style={styles.costValue}>
-                ₱{bookingDetails?.cost?.toFixed(2) || '0.00'}
-              </Typography>
+              <View style={styles.costRow}>
+                <CircleDollarSign size={15} color={colors.actionPrimary} />
+                <Typography variant="h6" style={styles.costValue}>
+                  ₱{bookingDetails?.cost?.toFixed(2) || '0.00'}
+                </Typography>
+              </View>
             </View>
           </View>
 
@@ -96,6 +105,7 @@ export function BookingServingScreen() {
             <Typography variant="body1" style={styles.detailsButtonText}>
               View Booking Details
             </Typography>
+            <Sparkles size={14} color={colors.actionPrimary} />
           </TouchableOpacity>
         </View>
       </ScrollView>

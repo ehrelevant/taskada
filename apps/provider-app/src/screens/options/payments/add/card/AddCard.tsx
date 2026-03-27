@@ -1,3 +1,4 @@
+import { BadgeCheck } from 'lucide-react-native';
 import { Button, Input, Typography } from '@repo/components';
 import { Controller } from 'react-hook-form';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
@@ -16,6 +17,21 @@ export function AddCardScreen() {
   return (
     <View style={styles.container}>
       <KeyboardAwareScrollView contentContainerStyle={styles.scrollContent}>
+        <View style={styles.heroCard}>
+          <View style={styles.heroPill}>
+            <BadgeCheck size={14} color={colors.home.chipText} />
+            <Typography variant="caption" color={colors.home.chipText}>
+              secure payout setup
+            </Typography>
+          </View>
+          <Typography variant="h3" color="textInverse">
+            Add a card
+          </Typography>
+          <Typography variant="body2" color="textInverse" style={styles.heroSubtitle}>
+            Cards are used to receive payout transfers from completed services.
+          </Typography>
+        </View>
+
         <View style={styles.header}>
           <Typography variant="body2" color={colors.textSecondary}>
             We verify your card with a temporary charge that is immediately refunded.

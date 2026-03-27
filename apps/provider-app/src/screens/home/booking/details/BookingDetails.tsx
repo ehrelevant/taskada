@@ -1,5 +1,6 @@
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { ActivityIndicator, ScrollView, View } from 'react-native';
+import { BadgeCheck, CalendarClock, CircleDollarSign, FileText, MapPin } from 'lucide-react-native';
 import { Button, Header, Typography } from '@repo/components';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '@repo/theme';
@@ -31,11 +32,29 @@ export function BookingDetailsScreen() {
       <Header title="Booking Details" size="small" />
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
+        <View style={styles.heroCard}>
+          <View style={styles.heroPill}>
+            <BadgeCheck size={14} color={colors.home.chipText} />
+            <Typography variant="caption" color={colors.home.chipText}>
+              confirmed booking snapshot
+            </Typography>
+          </View>
+          <Typography variant="h3" color="textInverse">
+            Full service details
+          </Typography>
+          <Typography variant="body2" color="textInverse" style={styles.heroSubtitle}>
+            Review location, price, and scope before closing out this booking.
+          </Typography>
+        </View>
+
         {booking?.address && (
           <View style={styles.mapSection}>
-            <Typography variant="subtitle2" style={styles.sectionLabel}>
-              Service Location
-            </Typography>
+            <View style={styles.sectionLabelRow}>
+              <MapPin size={15} color={colors.textSecondary} />
+              <Typography variant="subtitle2" style={styles.sectionLabel}>
+                Service Location
+              </Typography>
+            </View>
             <View style={styles.mapContainer}>
               <MapView
                 provider={PROVIDER_GOOGLE}
@@ -63,9 +82,12 @@ export function BookingDetailsScreen() {
         )}
 
         <View style={styles.section}>
-          <Typography variant="subtitle2" style={styles.sectionLabel}>
-            Service Cost
-          </Typography>
+          <View style={styles.sectionLabelRow}>
+            <CircleDollarSign size={15} color={colors.textSecondary} />
+            <Typography variant="subtitle2" style={styles.sectionLabel}>
+              Service Cost
+            </Typography>
+          </View>
           <Typography variant="h5" style={styles.costValue}>
             ₱{booking?.cost?.toFixed(2) || '0.00'}
           </Typography>
@@ -73,9 +95,12 @@ export function BookingDetailsScreen() {
 
         {booking?.specifications && (
           <View style={styles.section}>
-            <Typography variant="subtitle2" style={styles.sectionLabel}>
-              Specifications
-            </Typography>
+            <View style={styles.sectionLabelRow}>
+              <FileText size={15} color={colors.textSecondary} />
+              <Typography variant="subtitle2" style={styles.sectionLabel}>
+                Specifications
+              </Typography>
+            </View>
             <View style={styles.specificationsBox}>
               <Typography variant="body1" style={styles.specificationsText}>
                 {booking.specifications}
@@ -85,9 +110,12 @@ export function BookingDetailsScreen() {
         )}
 
         <View style={styles.section}>
-          <Typography variant="subtitle2" style={styles.sectionLabel}>
-            Booking Date and Time
-          </Typography>
+          <View style={styles.sectionLabelRow}>
+            <CalendarClock size={15} color={colors.textSecondary} />
+            <Typography variant="subtitle2" style={styles.sectionLabel}>
+              Booking Date and Time
+            </Typography>
+          </View>
           <Typography variant="body1">{booking?.createdAt ? formatDateTime(booking.createdAt) : 'N/A'}</Typography>
         </View>
 

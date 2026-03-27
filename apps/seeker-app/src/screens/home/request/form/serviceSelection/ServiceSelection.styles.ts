@@ -4,7 +4,7 @@ import { StyleSheet } from 'react-native';
 export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
     container: {
-      marginVertical: spacing.s,
+      marginVertical: spacing.xs,
     },
     label: {
       marginBottom: spacing.s,
@@ -16,21 +16,25 @@ export const createStyles = (colors: ThemeColors) =>
       padding: spacing.m,
       borderRadius: radius.m,
       borderWidth: 1,
-      borderColor: colors.actionPrimary,
+      borderColor: colors.card.stroke,
       borderStyle: 'dashed',
-      backgroundColor: colors.backgroundSecondary,
+      backgroundColor: colors.interactive.secondaryBg,
     },
     searchButtonText: {
       marginLeft: spacing.s,
     },
     serviceCard: {
-      flexDirection: 'row',
-      alignItems: 'center',
       padding: spacing.s,
       borderRadius: radius.m,
-      backgroundColor: colors.background,
+      backgroundColor: colors.card.muted,
       borderWidth: 1,
-      borderColor: colors.border,
+      borderColor: colors.card.stroke,
+    },
+    serviceTopRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: spacing.s,
     },
     serviceImageContainer: {
       width: 60,
@@ -49,10 +53,15 @@ export const createStyles = (colors: ThemeColors) =>
     providerRow: {
       flexDirection: 'row',
       alignItems: 'center',
-      marginTop: 2,
+      marginTop: spacing.xxs,
     },
     providerName: {
       marginLeft: spacing.xs,
+      flex: 1,
+    },
+    priceText: {
+      marginTop: spacing.xxs,
+      fontWeight: '600',
     },
     clearButton: {
       padding: spacing.xs,
@@ -60,7 +69,12 @@ export const createStyles = (colors: ThemeColors) =>
     autoMatchHint: {
       marginTop: spacing.s,
       padding: spacing.s,
-      backgroundColor: colors.backgroundSecondary,
+      backgroundColor: colors.card.muted,
       borderRadius: radius.s,
+      borderWidth: 1,
+      borderColor: colors.card.stroke,
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.xs,
     },
   });

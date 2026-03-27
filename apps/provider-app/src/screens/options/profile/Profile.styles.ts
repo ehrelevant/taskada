@@ -1,27 +1,56 @@
-import { spacing, ThemeColors } from '@repo/theme';
+import { radius, spacing, ThemeColors } from '@repo/theme';
 import { StyleSheet } from 'react-native';
 
 export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: colors.background,
+      backgroundColor: colors.canvas.base,
     },
     scrollView: {
       flex: 1,
-      paddingHorizontal: spacing.m,
+      paddingHorizontal: spacing.pageHorizontal,
+    },
+    content: {
+      paddingTop: spacing.pageTop,
+      paddingBottom: spacing.xxxl,
+      gap: spacing.m,
     },
     section: {
-      marginVertical: spacing.m,
+      borderRadius: radius.l,
+      borderWidth: 1,
+      borderColor: colors.card.stroke,
+      backgroundColor: colors.card.base,
+      padding: spacing.m,
     },
     sectionTitle: {
       marginBottom: spacing.m,
-      color: colors.textPrimary,
+      color: colors.textSecondary,
+    },
+    sectionTitleRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.xs,
     },
     avatarSection: {
-      flex: 1,
+      borderRadius: radius.xxl,
+      borderWidth: 1,
+      borderColor: colors.home.heroAccent,
+      backgroundColor: colors.home.heroStart,
       flexDirection: 'column',
       alignItems: 'center',
+      padding: spacing.heroInset,
+    },
+    profilePill: {
+      alignSelf: 'flex-start',
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.xs,
+      borderRadius: radius.round,
+      backgroundColor: colors.home.chipBg,
+      paddingHorizontal: spacing.s,
+      paddingVertical: spacing.xs,
+      marginBottom: spacing.m,
     },
     avatarContainer: {
       alignItems: 'center',
@@ -50,18 +79,19 @@ export const createStyles = (colors: ThemeColors) =>
       alignItems: 'center',
     },
     readonlyInput: {
-      backgroundColor: colors.backgroundSecondary,
+      backgroundColor: colors.card.muted,
       color: colors.textDisabled,
     },
     buttonContainer: {
-      marginVertical: spacing.l,
       gap: spacing.s,
+      marginBottom: spacing.xl,
     },
     saveButton: {
-      marginBottom: spacing.s,
+      backgroundColor: colors.actionPrimary,
     },
     cancelButton: {
-      marginBottom: spacing.m,
+      backgroundColor: colors.card.base,
+      borderColor: colors.card.stroke,
     },
     errorText: {
       color: colors.error.base,

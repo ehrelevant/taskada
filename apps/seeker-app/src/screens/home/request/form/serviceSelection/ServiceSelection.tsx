@@ -1,7 +1,7 @@
 import { Avatar, Typography } from '@repo/components';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Image, TouchableOpacity, View } from 'react-native';
-import { Search, X } from 'lucide-react-native';
+import { Search, Sparkles, X } from 'lucide-react-native';
 import type { SearchResult } from '@repo/types';
 import { useTheme } from '@repo/theme';
 
@@ -17,6 +17,18 @@ export function ServiceSelection({ onOpenSearch, selectedService, onClearSelecti
   const { colors } = useTheme();
   const styles = createStyles(colors);
   const { control } = useFormContext();
+
+  const formatCurrency = (amount: number): string => {
+    try {
+      return new Intl.NumberFormat('en-PH', {
+        style: 'currency',
+        currency: 'PHP',
+        maximumFractionDigits: 0,
+      }).format(amount);
+    } catch {
+      return `PHP ${amount.toLocaleString()}`;
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -38,6 +50,15 @@ export function ServiceSelection({ onOpenSearch, selectedService, onClearSelecti
               </TouchableOpacity>
             ) : selectedService ? (
               <View style={styles.serviceCard}>
+                <View style={styles.serviceTopRow}>
+                  <Typography variant="overline" color={colors.home.chipText}>
+                    {selectedService.serviceTypeName}
+                  </Typography>
+                  <TouchableOpacity style={styles.clearButton} onPress={onClearSelection}>
+                    <X size={20} color={colors.textSecondary} />
+                  </TouchableOpacity>
+                </View>
+
                 <View style={styles.serviceImageContainer}>
                   {selectedService.providerAvatar ? (
                     <Image
@@ -51,9 +72,6 @@ export function ServiceSelection({ onOpenSearch, selectedService, onClearSelecti
                 </View>
 
                 <View style={styles.serviceInfo}>
-                  <Typography variant="overline" color="textSecondary">
-                    {selectedService.serviceTypeName}
-                  </Typography>
                   <View style={styles.providerRow}>
                     <Avatar
                       source={selectedService.providerAvatar ? { uri: selectedService.providerAvatar } : null}
@@ -64,19 +82,16 @@ export function ServiceSelection({ onOpenSearch, selectedService, onClearSelecti
                       {selectedService.providerName}
                     </Typography>
                   </View>
-                  <Typography variant="body2" color="textSecondary">
-                    ${selectedService.initialCost.toFixed(2)}
+                  <Typography variant="body2" color="actionPrimary" style={styles.priceText}>
+                    {formatCurrency(selectedService.initialCost)}
                   </Typography>
                 </View>
-
-                <TouchableOpacity style={styles.clearButton} onPress={onClearSelection}>
-                  <X size={20} color={colors.textSecondary} />
-                </TouchableOpacity>
               </View>
             ) : null}
 
             {!value && (
               <View style={styles.autoMatchHint}>
+                <Sparkles size={14} color={colors.textSecondary} />
                 <Typography variant="caption" color="textSecondary">
                   Leave empty to be matched with the best available provider
                 </Typography>

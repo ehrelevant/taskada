@@ -1,4 +1,5 @@
 import { Alert, View } from 'react-native';
+import { BadgeCheck } from 'lucide-react-native';
 import { Button, Input, ScreenContainer, Typography } from '@repo/components';
 import { Controller } from 'react-hook-form';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
@@ -59,9 +60,26 @@ export function AddCardScreen() {
   return (
     <ScreenContainer
       padding="none"
-      stickyFooter={<Button title="Add Card" onPress={handleSubmit(onSubmit)} isLoading={isSubmitting} />}
+      stickyFooter={
+        <Button title="Add Card" onPress={handleSubmit(onSubmit)} isLoading={isSubmitting} style={styles.footerButton} />
+      }
     >
       <KeyboardAwareScrollView contentContainerStyle={styles.scrollContent}>
+        <View style={styles.heroCard}>
+          <View style={styles.heroPill}>
+            <BadgeCheck size={14} color={colors.home.chipText} />
+            <Typography variant="caption" color={colors.home.chipText}>
+              secure checkout
+            </Typography>
+          </View>
+          <Typography variant="h3" color="textInverse">
+            Add a card
+          </Typography>
+          <Typography variant="body2" color="textInverse" style={styles.heroSubtitle}>
+            Your card details are encrypted and stored securely.
+          </Typography>
+        </View>
+
         <View style={styles.header}>
           <Typography variant="body2" color="textSecondary">
             We verify your card with a temporary charge that is immediately refunded.

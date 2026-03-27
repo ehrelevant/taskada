@@ -5,7 +5,10 @@ export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: colors.background,
+      backgroundColor: colors.canvas.base,
+    },
+    iconButton: {
+      padding: spacing.xs,
     },
     loadingContainer: {
       flex: 1,
@@ -17,20 +20,35 @@ export const createStyles = (colors: ThemeColors) =>
     },
     scrollContent: {
       flexGrow: 1,
-      padding: spacing.m,
+      paddingHorizontal: spacing.pageHorizontal,
+      paddingTop: spacing.pageTop,
+      paddingBottom: spacing.xl,
+      gap: spacing.m,
     },
     centeredContent: {
-      flex: 1,
-      justifyContent: 'center',
-      minHeight: 400,
+      backgroundColor: colors.home.heroStart,
+      borderRadius: radius.xxl,
+      borderWidth: 1,
+      borderColor: colors.home.heroAccent,
+      padding: spacing.heroInset,
     },
     header: {
       alignItems: 'center',
-      marginBottom: spacing.l,
+      marginBottom: spacing.s,
+    },
+    heroPill: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.xs,
+      borderRadius: radius.round,
+      backgroundColor: colors.home.chipBg,
+      paddingHorizontal: spacing.s,
+      paddingVertical: spacing.xs,
+      marginBottom: spacing.s,
     },
     headerTitle: {
       textAlign: 'center',
-      color: colors.actionPrimary,
+      color: colors.textInverse,
       fontWeight: '700',
     },
     messageContainer: {
@@ -41,7 +59,8 @@ export const createStyles = (colors: ThemeColors) =>
     messageText: {
       textAlign: 'center',
       lineHeight: 24,
-      color: colors.textSecondary,
+      color: colors.textInverse,
+      opacity: 0.94,
     },
     buttonContainer: {
       alignItems: 'center',
@@ -68,10 +87,11 @@ export const createStyles = (colors: ThemeColors) =>
       fontWeight: '700',
     },
     bottomSection: {
-      marginTop: spacing.l,
-      paddingTop: spacing.l,
-      borderTopWidth: 1,
-      borderTopColor: colors.border,
+      backgroundColor: colors.card.base,
+      borderRadius: radius.l,
+      borderWidth: 1,
+      borderColor: colors.card.stroke,
+      padding: spacing.m,
     },
     infoRow: {
       flexDirection: 'row',
@@ -81,24 +101,33 @@ export const createStyles = (colors: ThemeColors) =>
     },
     infoItem: {
       flex: 1,
-      backgroundColor: colors.surface,
+      backgroundColor: colors.card.muted,
       padding: spacing.m,
       borderRadius: radius.m,
       borderWidth: 1,
-      borderColor: colors.border,
+      borderColor: colors.card.stroke,
     },
     costValue: {
       color: colors.actionPrimary,
       fontWeight: '700',
       marginTop: spacing.xs,
     },
-    detailsButton: {
+    costRow: {
+      flexDirection: 'row',
       alignItems: 'center',
+      gap: spacing.xs,
+      marginTop: spacing.xs,
+    },
+    detailsButton: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      gap: spacing.xs,
       padding: spacing.m,
-      backgroundColor: colors.surface,
+      backgroundColor: colors.card.base,
       borderRadius: radius.m,
       borderWidth: 1,
-      borderColor: colors.border,
+      borderColor: colors.card.stroke,
     },
     detailsButtonText: {
       color: colors.actionPrimary,

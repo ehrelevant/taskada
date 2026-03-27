@@ -1,10 +1,10 @@
 import { ActivityIndicator, FlatList, Image, ScrollView, TextInput, TouchableOpacity, View } from 'react-native';
 import { Avatar, Button, Header, ImageViewer, Typography } from '@repo/components';
-import { Flag, Image as ImageIcon, Send, X } from 'lucide-react-native';
+import { BadgeCheck, Flag, Image as ImageIcon, Send, Sparkles, X } from 'lucide-react-native';
 import { KeyboardStickyView } from 'react-native-keyboard-controller';
 import type { Message } from '@repo/shared';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { spacing, useTheme } from '@repo/theme';
+import { useTheme } from '@repo/theme';
 
 import { createStyles } from './BookingChat.styles';
 import { useBookingChat } from './BookingChat.hooks';
@@ -73,13 +73,13 @@ export function BookingChatScreen() {
     <SafeAreaView style={styles.container}>
       <Header
         centerContent={
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <View style={styles.headerContent}>
             <Avatar
               source={otherUser.avatarUrl ? { uri: otherUser.avatarUrl } : null}
               name={`${otherUser.firstName} ${otherUser.lastName}`}
               size={36}
             />
-            <View style={{ marginLeft: spacing.s }}>
+            <View style={styles.headerMeta}>
               <Typography variant="h5" weight="bold">
                 {otherUser.firstName} {otherUser.lastName}
               </Typography>
@@ -92,11 +92,19 @@ export function BookingChatScreen() {
           </View>
         }
         rightContent={
-          <TouchableOpacity onPress={handleReport}>
+          <TouchableOpacity onPress={handleReport} style={styles.iconButton}>
             <Flag size={20} color={colors.textSecondary} />
           </TouchableOpacity>
         }
       />
+
+      <View style={styles.introBanner}>
+        <BadgeCheck size={14} color={colors.home.chipText} />
+        <Typography variant="caption" color={colors.home.chipText}>
+          finalize cost and details when you are ready
+        </Typography>
+        <Sparkles size={14} color={colors.home.chipText} />
+      </View>
 
       <FlatList
         data={messages}

@@ -1,10 +1,10 @@
+import { AlertTriangle, BadgeCheck, CheckCircle2, ImagePlus, ShieldAlert, X } from 'lucide-react-native';
 import { Avatar, Button, EmptyState, Header, Typography } from '@repo/components';
-import { CheckCircle2, ImagePlus, X } from 'lucide-react-native';
 import { Controller } from 'react-hook-form';
 import { KeyboardAvoidingView, Platform, ScrollView, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { spacing, useTheme } from '@repo/theme';
 import { useEffect } from 'react';
-import { useTheme } from '@repo/theme';
 
 import { createStyles } from './Report.styles';
 import { REPORT_REASONS, useReport } from './Report.hooks';
@@ -66,6 +66,21 @@ export function ReportScreen() {
 
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.keyboardView}>
         <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
+          <View style={styles.heroCard}>
+            <View style={styles.heroPill}>
+              <BadgeCheck size={14} color={colors.home.chipText} />
+              <Typography variant="caption" color={colors.home.chipText}>
+                safety and trust
+              </Typography>
+            </View>
+            <Typography variant="h3" color="textInverse">
+              File a report
+            </Typography>
+            <Typography variant="body2" color="textInverse" style={styles.heroSubtitle}>
+              Share clear details and evidence so moderators can review faster.
+            </Typography>
+          </View>
+
           <View style={styles.userCard}>
             <Avatar
               source={reportedUser.avatarUrl ? { uri: reportedUser.avatarUrl } : null}
@@ -80,43 +95,48 @@ export function ReportScreen() {
             </View>
           </View>
 
-          <Typography variant="subtitle2" style={styles.sectionLabel}>
-            Reason for Reporting *
-          </Typography>
-          <Controller
-            control={control}
-            name="reason"
-            render={({ field: { onChange, value } }) => (
-              <View style={styles.reasonsContainer}>
-                {REPORT_REASONS.map(reason => (
-                  <TouchableOpacity
-                    key={reason.value}
-                    style={[styles.reasonChip, value === reason.value && styles.reasonChipSelected]}
-                    onPress={() => onChange(value === reason.value ? undefined : reason.value)}
-                  >
-                    <Typography
-                      variant="body1"
-                      style={styles.reasonChipText}
-                      color={value === reason.value ? 'actionPrimary' : 'textPrimary'}
-                    >
-                      {reason.label}
-                    </Typography>
-                    {value === reason.value && <CheckCircle2 size={20} color={colors.actionPrimary} />}
-                  </TouchableOpacity>
-                ))}
-              </View>
-            )}
-          />
-          {errors.reason && (
-            <Typography variant="caption" color="error" style={styles.errorText}>
-              {errors.reason.message}
-            </Typography>
-          )}
-
-          <View style={styles.descriptionSection}>
+          <View style={styles.sectionCard}>
             <Typography variant="subtitle2" style={styles.sectionLabel}>
-              Description {selectedReason === 'other' ? '*' : '(Optional)'}
+              Reason for Reporting *
             </Typography>
+            <Controller
+              control={control}
+              name="reason"
+              render={({ field: { onChange, value } }) => (
+                <View style={styles.reasonsContainer}>
+                  {REPORT_REASONS.map(reason => (
+                    <TouchableOpacity
+                      key={reason.value}
+                      style={[styles.reasonChip, value === reason.value && styles.reasonChipSelected]}
+                      onPress={() => onChange(value === reason.value ? undefined : reason.value)}
+                    >
+                      <Typography
+                        variant="body1"
+                        style={styles.reasonChipText}
+                        color={value === reason.value ? 'actionPrimary' : 'textPrimary'}
+                      >
+                        {reason.label}
+                      </Typography>
+                      {value === reason.value && <CheckCircle2 size={20} color={colors.actionPrimary} />}
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              )}
+            />
+            {errors.reason && (
+              <Typography variant="caption" color="error" style={styles.errorText}>
+                {errors.reason.message}
+              </Typography>
+            )}
+          </View>
+
+          <View style={styles.sectionCard}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}>
+              <ShieldAlert size={15} color={colors.textSecondary} />
+              <Typography variant="subtitle2" style={styles.sectionLabel}>
+                Description {selectedReason === 'other' ? '*' : '(Optional)'}
+              </Typography>
+            </View>
             <Controller
               control={control}
               name="description"
@@ -141,10 +161,13 @@ export function ReportScreen() {
             )}
           </View>
 
-          <View style={styles.imageSection}>
-            <Typography variant="subtitle2" style={styles.sectionLabel}>
-              Evidence (Optional)
-            </Typography>
+          <View style={styles.sectionCard}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}>
+              <AlertTriangle size={15} color={colors.textSecondary} />
+              <Typography variant="subtitle2" style={styles.sectionLabel}>
+                Evidence (Optional)
+              </Typography>
+            </View>
             <TouchableOpacity
               style={[styles.imagePickerButton, selectedImages.length >= 4 && styles.imagePickerDisabled]}
               onPress={handlePickImage}

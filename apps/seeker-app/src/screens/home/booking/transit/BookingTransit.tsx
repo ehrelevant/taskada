@@ -1,10 +1,22 @@
 import { Avatar, Header, ScreenContainer, Section, StatusBadge, Typography } from '@repo/components';
-import { Flag } from 'lucide-react-native';
+import { BadgeCheck, CircleDollarSign, Flag, Sparkles, Truck } from 'lucide-react-native';
 import { TouchableOpacity, View } from 'react-native';
 import { useTheme } from '@repo/theme';
 
 import { createStyles } from './BookingTransit.styles';
 import { useBookingTransit } from './BookingTransit.hooks';
+
+function formatCurrency(amount: number): string {
+  try {
+    return new Intl.NumberFormat('en-PH', {
+      style: 'currency',
+      currency: 'PHP',
+      maximumFractionDigits: 0,
+    }).format(amount);
+  } catch {
+    return `PHP ${amount.toLocaleString()}`;
+  }
+}
 
 export function BookingTransitScreen() {
   const { colors } = useTheme();
@@ -18,29 +30,52 @@ export function BookingTransitScreen() {
         title={hasProviderArrived ? 'Provider Arrived' : 'Provider En Route'}
         size="small"
         rightContent={
-          <TouchableOpacity onPress={handleReport}>
+          <TouchableOpacity onPress={handleReport} style={styles.reportButton}>
             <Flag size={20} color={colors.textSecondary} />
           </TouchableOpacity>
         }
       />
 
       <View style={styles.content}>
-        <View style={styles.statusSection}>
+        <View style={styles.heroCard}>
+          <View style={styles.heroPill}>
+            <BadgeCheck size={14} color={colors.home.chipText} />
+            <Typography variant="caption" color={colors.home.chipText}>
+              booking in progress
+            </Typography>
+          </View>
+
           {hasProviderArrived && <StatusBadge status="success" label="Provider has arrived" />}
-          <Typography variant="h2" align="center" style={styles.statusTitle}>
+
+          <Typography variant="h3" color="textInverse" align="center" style={styles.statusTitle}>
             {hasProviderArrived
               ? 'Your service provider has arrived and is currently serving!'
               : 'Your service provider is on their way'}
           </Typography>
-          <Typography variant="body1" color="textSecondary" align="center">
+          <Typography variant="body2" color="textInverse" align="center" style={styles.statusSubtitle}>
             {hasProviderArrived
               ? 'The provider is ready to serve you. Please prepare for the service.'
               : 'Please wait while your provider arrives at your location'}
           </Typography>
+
+          <View style={styles.heroBadgeRow}>
+            <View style={styles.heroBadge}>
+              <Truck size={14} color={colors.home.chipText} />
+              <Typography variant="caption" color={colors.home.chipText}>
+                live transit updates
+              </Typography>
+            </View>
+            <View style={styles.heroBadge}>
+              <Sparkles size={14} color={colors.home.chipText} />
+              <Typography variant="caption" color={colors.home.chipText}>
+                auto-completes on finish
+              </Typography>
+            </View>
+          </View>
         </View>
 
         <Section label="Service Provider">
-          <View style={styles.providerCard}>
+          <View style={styles.providerCardShell}>
             <Avatar
               source={providerInfo.avatarUrl ? { uri: providerInfo.avatarUrl } : null}
               size={80}
@@ -71,9 +106,12 @@ export function BookingTransitScreen() {
             <Typography variant="body1" color="textSecondary">
               Cost
             </Typography>
-            <Typography variant="h4" color="actionSecondary">
-              ${cost.toFixed(2)}
-            </Typography>
+            <View style={styles.costRow}>
+              <CircleDollarSign size={14} color={colors.actionPrimary} />
+              <Typography variant="h4" color="actionPrimary">
+                {formatCurrency(cost)}
+              </Typography>
+            </View>
           </View>
         </Section>
 

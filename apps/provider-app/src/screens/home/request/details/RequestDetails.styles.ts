@@ -5,11 +5,12 @@ export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: colors.background,
+      backgroundColor: colors.canvas.base,
     },
     contentContainer: {
-      padding: spacing.m,
-      paddingBottom: spacing.xl,
+      paddingHorizontal: spacing.pageHorizontal,
+      paddingTop: spacing.pageTop,
+      paddingBottom: spacing.xxxl,
     },
     centerContainer: {
       flex: 1,
@@ -17,23 +18,46 @@ export const createStyles = (colors: ThemeColors) =>
       alignItems: 'center',
       padding: spacing.l,
     },
-    headerContainer: {
-      flex: 1,
+    heroCard: {
+      borderRadius: radius.xxl,
+      borderWidth: 1,
+      borderColor: colors.home.heroAccent,
+      backgroundColor: colors.home.heroStart,
+      padding: spacing.heroInset,
+      marginBottom: spacing.m,
+    },
+    heroPill: {
+      alignSelf: 'flex-start',
+      flexDirection: 'row',
       alignItems: 'center',
+      gap: spacing.xs,
+      borderRadius: radius.round,
+      backgroundColor: colors.home.chipBg,
+      paddingHorizontal: spacing.s,
+      paddingVertical: spacing.xs,
+      marginBottom: spacing.s,
     },
     serviceTypeName: {
       marginBottom: spacing.xs,
     },
+    heroSubtitle: {
+      opacity: 0.94,
+    },
     sectionCard: {
-      backgroundColor: colors.surface,
+      backgroundColor: colors.card.base,
       padding: spacing.m,
       borderRadius: radius.m,
       borderWidth: 1,
-      borderColor: colors.border,
+      borderColor: colors.card.stroke,
       marginBottom: spacing.m,
     },
-    sectionLabel: {
+    sectionLabelRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.xs,
       marginBottom: spacing.s,
+    },
+    sectionLabel: {
       color: colors.textSecondary,
     },
     seekerInfo: {
@@ -48,11 +72,11 @@ export const createStyles = (colors: ThemeColors) =>
       lineHeight: 22,
     },
     descriptionBox: {
-      backgroundColor: colors.background,
+      backgroundColor: colors.card.muted,
       padding: spacing.m,
       borderRadius: radius.s,
       borderWidth: 1,
-      borderColor: colors.border,
+      borderColor: colors.card.stroke,
     },
     imagesContainer: {
       flexDirection: 'row',
@@ -69,7 +93,7 @@ export const createStyles = (colors: ThemeColors) =>
       borderRadius: radius.s,
       overflow: 'hidden',
       borderWidth: 1,
-      borderColor: colors.border,
+      borderColor: colors.card.stroke,
       marginBottom: spacing.s,
     },
     map: {
@@ -81,7 +105,7 @@ export const createStyles = (colors: ThemeColors) =>
     buttonContainer: {
       marginTop: spacing.m,
       borderTopWidth: 1,
-      borderTopColor: colors.border,
+      borderTopColor: colors.card.stroke,
       paddingTop: spacing.m,
     },
     button: {

@@ -1,6 +1,7 @@
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { ActivityIndicator, Image, ScrollView, TouchableOpacity, View } from 'react-native';
 import { Avatar, Button, ImageViewer, Typography } from '@repo/components';
+import { MapPin, MessageSquareText, ShieldCheck, Sparkles, UserCircle2 } from 'lucide-react-native';
 import { useTheme } from '@repo/theme';
 
 import { createStyles } from './RequestDetails.styles';
@@ -59,16 +60,28 @@ export function RequestDetailsScreen() {
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-      <View style={styles.headerContainer}>
-        <Typography variant="h1" style={styles.serviceTypeName}>
+      <View style={styles.heroCard}>
+        <View style={styles.heroPill}>
+          <ShieldCheck size={14} color={colors.home.chipText} />
+          <Typography variant="caption" color={colors.home.chipText}>
+            incoming request
+          </Typography>
+        </View>
+        <Typography variant="h3" color="textInverse" style={styles.serviceTypeName}>
           {request.serviceType.name}
+        </Typography>
+        <Typography variant="body2" color="textInverse" style={styles.heroSubtitle}>
+          Review details before opening chat and settling this request.
         </Typography>
       </View>
 
       <View style={styles.sectionCard}>
-        <Typography variant="subtitle2" style={styles.sectionLabel}>
-          Seeker Information
-        </Typography>
+        <View style={styles.sectionLabelRow}>
+          <UserCircle2 size={15} color={colors.textSecondary} />
+          <Typography variant="subtitle2" style={styles.sectionLabel}>
+            Seeker Information
+          </Typography>
+        </View>
         <View style={styles.seekerInfo}>
           <Avatar
             source={request.seeker.avatarUrl ? { uri: request.seeker.avatarUrl } : null}
@@ -87,9 +100,12 @@ export function RequestDetailsScreen() {
       </View>
 
       <View style={styles.sectionCard}>
-        <Typography variant="subtitle2" style={styles.sectionLabel}>
-          Location
-        </Typography>
+        <View style={styles.sectionLabelRow}>
+          <MapPin size={15} color={colors.textSecondary} />
+          <Typography variant="subtitle2" style={styles.sectionLabel}>
+            Location
+          </Typography>
+        </View>
         {request.address.coordinates &&
           request.address.coordinates[0] !== 0 &&
           request.address.coordinates[1] !== 0 && (
@@ -121,9 +137,12 @@ export function RequestDetailsScreen() {
 
       {request.description && (
         <View style={styles.sectionCard}>
-          <Typography variant="subtitle2" style={styles.sectionLabel}>
-            Description
-          </Typography>
+          <View style={styles.sectionLabelRow}>
+            <MessageSquareText size={15} color={colors.textSecondary} />
+            <Typography variant="subtitle2" style={styles.sectionLabel}>
+              Description
+            </Typography>
+          </View>
           <View style={styles.descriptionBox}>
             <Typography variant="body1" style={styles.description}>
               {request.description}
@@ -134,9 +153,12 @@ export function RequestDetailsScreen() {
 
       {request.images && request.images.length > 0 && (
         <View style={styles.sectionCard}>
-          <Typography variant="subtitle2" style={styles.sectionLabel}>
-            Photos ({request.images.length})
-          </Typography>
+          <View style={styles.sectionLabelRow}>
+            <Sparkles size={15} color={colors.textSecondary} />
+            <Typography variant="subtitle2" style={styles.sectionLabel}>
+              Photos ({request.images.length})
+            </Typography>
+          </View>
           <View style={styles.imagesContainer}>
             {request.images.map((image, index) => (
               <TouchableOpacity key={index} onPress={() => setSelectedImage(image)} activeOpacity={0.8}>

@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { OptionsScreen } from '@screens/options/Options';
 import { PaymentMethodsScreen } from '@screens/options/payments/Payments';
 import { ProfileScreen } from '@screens/options/profile/Profile';
+import { StackHeader } from '@repo/components';
 
 export type OptionsStackParamList = {
   Options: undefined;
@@ -21,9 +22,16 @@ export function OptionsStack() {
       initialRouteName="Options"
       screenOptions={{
         animationDuration: 400,
+        header: ({ navigation, options, route, back }) => (
+          <StackHeader
+            title={typeof options.title === 'string' ? options.title : route.name}
+            canGoBack={Boolean(back)}
+            onBack={() => navigation.goBack()}
+          />
+        ),
       }}
     >
-      <Stack.Screen name="Options" component={OptionsScreen} options={{ title: 'Options' }} />
+      <Stack.Screen name="Options" component={OptionsScreen} options={{ title: 'Options', headerShown: false }} />
       <Stack.Screen name="Profile" component={ProfileScreen} options={{ title: 'Profile' }} />
       <Stack.Screen name="PaymentMethods" component={PaymentMethodsScreen} options={{ title: 'Payment Methods' }} />
       <Stack.Screen name="AddCard" component={AddCardScreen} options={{ title: 'Add Card' }} />

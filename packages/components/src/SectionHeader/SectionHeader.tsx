@@ -29,7 +29,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: spacing.m,
     paddingVertical: spacing.s,
   },
   viewAllButton: {

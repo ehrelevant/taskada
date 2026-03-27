@@ -44,6 +44,7 @@ export function HistoryStack() {
         component={HistoryScreen}
         options={{
           title: 'Transaction History',
+          headerShown: false,
         }}
       />
       <Stack.Screen

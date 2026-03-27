@@ -3,24 +3,61 @@ import { StyleSheet } from 'react-native';
 
 export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
-    content: {
-      padding: spacing.m,
-      gap: spacing.xl,
+    reportButton: {
+      padding: spacing.xs,
     },
-    statusSection: {
-      alignItems: 'center',
-      paddingVertical: spacing.l,
-      paddingHorizontal: spacing.l,
-      backgroundColor: colors.backgroundSecondary,
-      borderRadius: 16,
+    content: {
+      paddingHorizontal: spacing.pageHorizontal,
+      paddingTop: spacing.pageTop,
+      paddingBottom: spacing.xxxl,
+      gap: spacing.m,
+    },
+    heroCard: {
+      borderRadius: 28,
+      borderWidth: 1,
+      borderColor: colors.home.heroAccent,
+      backgroundColor: colors.home.heroStart,
+      padding: spacing.heroInset,
       gap: spacing.s,
+    },
+    heroPill: {
+      alignSelf: 'flex-start',
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.xs,
+      borderRadius: 999,
+      backgroundColor: colors.home.chipBg,
+      paddingHorizontal: spacing.s,
+      paddingVertical: spacing.xs,
+    },
+    heroBadgeRow: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: spacing.s,
+    },
+    heroBadge: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.xs,
+      borderRadius: 999,
+      backgroundColor: colors.home.chipBg,
+      paddingHorizontal: spacing.s,
+      paddingVertical: spacing.xs,
     },
     statusTitle: {
       marginTop: spacing.s,
     },
-    providerCard: {
+    statusSubtitle: {
+      opacity: 0.94,
+    },
+    providerCardShell: {
       flexDirection: 'row',
       alignItems: 'center',
+      borderRadius: 16,
+      borderWidth: 1,
+      borderColor: colors.card.stroke,
+      backgroundColor: colors.card.base,
+      padding: spacing.m,
     },
     providerInfo: {
       flex: 1,
@@ -41,6 +78,11 @@ export const createStyles = (colors: ThemeColors) =>
       marginVertical: spacing.xs,
     },
     specificationsCard: {
-      padding: spacing.l,
+      padding: spacing.m,
+    },
+    costRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.xs,
     },
   });

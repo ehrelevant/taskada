@@ -38,8 +38,9 @@ export function Button({
   const styles = createStyles(variant, size, isDisabled, colors);
 
   const getLoadingColor = () => {
-    if (variant === 'primary' || variant === 'secondary') return colors.white;
-    if (variant === 'danger') return colors.error.base;
+    if (variant === 'primary') return colors.textInverse;
+    if (variant === 'secondary') return colors.secondary.text;
+    if (variant === 'danger') return colors.textInverse;
     return colors.actionPrimary;
   };
 
@@ -48,7 +49,7 @@ export function Button({
       return (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="small" color={getLoadingColor()} />
-          {loadingText && <Text style={styles.loadingText}>{loadingText}</Text>}
+            {loadingText && <Text style={[styles.loadingText, { color: getLoadingColor() }]}>{loadingText}</Text>}
         </View>
       );
     }

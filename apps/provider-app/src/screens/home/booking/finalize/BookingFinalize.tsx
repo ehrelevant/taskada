@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { ArrowLeft, Flag } from 'lucide-react-native';
+import { ArrowLeft, CircleDollarSign, FileText, Flag, MapPin, ShieldCheck } from 'lucide-react-native';
 import { Button, Header, Typography } from '@repo/components';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '@repo/theme';
@@ -42,12 +42,12 @@ export function BookingFinalizeScreen() {
         title="Finalize Service Details"
         size="small"
         leftContent={
-          <TouchableOpacity onPress={handleGoBack}>
+          <TouchableOpacity onPress={handleGoBack} style={styles.iconButton}>
             <ArrowLeft size={24} color={colors.textPrimary} />
           </TouchableOpacity>
         }
         rightContent={
-          <TouchableOpacity onPress={handleReport}>
+          <TouchableOpacity onPress={handleReport} style={styles.iconButton}>
             <Flag size={20} color={colors.textSecondary} />
           </TouchableOpacity>
         }
@@ -55,6 +55,21 @@ export function BookingFinalizeScreen() {
 
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.keyboardView}>
         <ScrollView contentContainerStyle={styles.scrollContent}>
+          <View style={styles.heroCard}>
+            <View style={styles.heroPill}>
+              <ShieldCheck size={14} color={colors.home.chipText} />
+              <Typography variant="caption" color={colors.home.chipText}>
+                final review before approval
+              </Typography>
+            </View>
+            <Typography variant="h3" color="textInverse">
+              Finalize this service proposal
+            </Typography>
+            <Typography variant="body2" color="textInverse" style={styles.heroSubtitle}>
+              Share clear cost and specifications so the seeker can approve quickly.
+            </Typography>
+          </View>
+
           <View style={styles.mapSection}>
             <Typography variant="subtitle1" style={styles.sectionTitle}>
               Service Location
@@ -78,17 +93,23 @@ export function BookingFinalizeScreen() {
               </MapView>
             </View>
             <View style={styles.locationTextContainer}>
-              <Typography variant="body2" color="textSecondary">
-                📍 {seekerLocation.label || 'Location not specified'}
-              </Typography>
+              <View style={styles.locationRow}>
+                <MapPin size={14} color={colors.actionPrimary} />
+                <Typography variant="body2" color="textSecondary">
+                  {seekerLocation.label || 'Location not specified'}
+                </Typography>
+              </View>
             </View>
           </View>
 
           <View style={styles.formSection}>
             <View style={styles.inputContainer}>
-              <Typography variant="subtitle2" style={styles.inputLabel}>
-                Service Cost (PHP) *
-              </Typography>
+              <View style={styles.inputLabelRow}>
+                <CircleDollarSign size={14} color={colors.actionPrimary} />
+                <Typography variant="subtitle2" style={styles.inputLabel}>
+                  Service Cost (PHP) *
+                </Typography>
+              </View>
               <View style={styles.costInputContainer}>
                 <Typography variant="h6" style={styles.currencySymbol}>
                   ₱
@@ -105,9 +126,12 @@ export function BookingFinalizeScreen() {
             </View>
 
             <View style={styles.inputContainer}>
-              <Typography variant="subtitle2" style={styles.inputLabel}>
-                Service Specifications *
-              </Typography>
+              <View style={styles.inputLabelRow}>
+                <FileText size={14} color={colors.actionPrimary} />
+                <Typography variant="subtitle2" style={styles.inputLabel}>
+                  Service Specifications *
+                </Typography>
+              </View>
               <TextInput
                 style={styles.specificationsInput}
                 value={serviceSpecifications}

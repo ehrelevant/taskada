@@ -1,5 +1,6 @@
 import { ActivityIndicator, FlatList, View } from 'react-native';
 import { Avatar, Button, Card, Typography } from '@repo/components';
+import { BadgeCheck, CalendarClock, CircleDollarSign } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '@repo/theme';
 
@@ -28,9 +29,12 @@ export function HistoryScreen() {
             </Typography>
           </View>
           <View style={styles.costContainer}>
-            <Typography variant="h6" weight="bold" color="actionPrimary">
-              ₱{item.cost?.toFixed(2) || '0.00'}
-            </Typography>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+              <CircleDollarSign size={14} color={colors.actionPrimary} />
+              <Typography variant="h6" weight="bold" color="actionPrimary">
+                ₱{item.cost?.toFixed(2) || '0.00'}
+              </Typography>
+            </View>
           </View>
         </View>
 
@@ -40,9 +44,12 @@ export function HistoryScreen() {
               {item.status.toUpperCase()}
             </Typography>
           </View>
-          <Typography variant="body2" color="textSecondary">
-            {formatDateTime(item.createdAt)}
-          </Typography>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+            <CalendarClock size={14} color={colors.textSecondary} />
+            <Typography variant="body2" color="textSecondary">
+              {formatDateTime(item.createdAt)}
+            </Typography>
+          </View>
         </View>
 
         <Button
@@ -88,6 +95,22 @@ export function HistoryScreen() {
         keyExtractor={item => item.id}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
+        ListHeaderComponent={
+          <View style={styles.heroCard}>
+            <View style={styles.heroPill}>
+              <BadgeCheck size={14} color={colors.home.chipText} />
+              <Typography variant="caption" color={colors.home.chipText}>
+                booking history
+              </Typography>
+            </View>
+            <Typography variant="h3" color="textInverse">
+              Completed and cancelled jobs
+            </Typography>
+            <Typography variant="body2" color="textInverse" style={styles.heroSubtitle}>
+              Review past transactions, costs, and service outcomes.
+            </Typography>
+          </View>
+        }
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <Typography variant="body1" color="textSecondary">

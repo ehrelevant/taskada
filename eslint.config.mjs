@@ -10,7 +10,7 @@ import turbo from 'eslint-plugin-turbo';
 import { defineConfig } from 'eslint/config';
 
 export default defineConfig([
-  { ignores: ['**/node_modules/**/*', '**/build/**/*', '**/dist/**/*'] },
+  { ignores: ['**/node_modules/**/*', '**/build/**/*', '**/dist/**/*', '**/.output/**/*', "**/routeTree.gen.ts"] },
   { languageOptions: { globals: { ...globals.node } } },
   {
     files: ['**/*.{js,jsx,cjs,mjs,ts,tsx}'],

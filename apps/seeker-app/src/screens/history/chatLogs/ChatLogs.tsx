@@ -36,7 +36,7 @@ export function ChatLogsScreen() {
         size="small"
         onBack={handleGoBack}
         rightContent={
-          <TouchableOpacity onPress={handleReport}>
+          <TouchableOpacity onPress={handleReport} style={styles.iconButton}>
             <Flag size={20} color={colors.textSecondary} />
           </TouchableOpacity>
         }

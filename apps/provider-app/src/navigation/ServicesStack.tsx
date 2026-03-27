@@ -20,6 +20,7 @@ export function ServicesStack() {
         component={ServicesScreen}
         options={{
           title: 'Services',
+          headerShown: false,
         }}
       />
     </Stack.Navigator>

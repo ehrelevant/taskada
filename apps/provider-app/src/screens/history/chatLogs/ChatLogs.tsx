@@ -81,12 +81,12 @@ export function ChatLogsScreen() {
         subtitle="Chat History"
         size="small"
         leftContent={
-          <TouchableOpacity onPress={handleGoBack}>
+          <TouchableOpacity onPress={handleGoBack} style={styles.iconButton}>
             <ChevronLeft size={24} color={colors.textPrimary} />
           </TouchableOpacity>
         }
         rightContent={
-          <TouchableOpacity onPress={handleReport}>
+          <TouchableOpacity onPress={handleReport} style={styles.iconButton}>
             <Flag size={20} color={colors.textSecondary} />
           </TouchableOpacity>
         }

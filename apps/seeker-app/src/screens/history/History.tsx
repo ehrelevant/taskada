@@ -1,4 +1,5 @@
 import { Avatar, Card, EmptyState, ScreenContainer, StatusBadge, Typography } from '@repo/components';
+import { BadgeCheck, CalendarClock, CircleDollarSign } from 'lucide-react-native';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { useTheme } from '@repo/theme';
 
@@ -16,6 +17,18 @@ export function HistoryScreen() {
   const { colors } = useTheme();
   const styles = createStyles(colors);
   const { bookings, isLoading, error, formatDateTime, handleViewDetails } = useHistory();
+
+  const formatCurrency = (amount: number): string => {
+    try {
+      return new Intl.NumberFormat('en-PH', {
+        style: 'currency',
+        currency: 'PHP',
+        maximumFractionDigits: 0,
+      }).format(amount);
+    } catch {
+      return `PHP ${amount.toLocaleString()}`;
+    }
+  };
 
   if (isLoading) {
     return (
@@ -37,6 +50,22 @@ export function HistoryScreen() {
     <ScreenContainer padding="none">
       <FlatList
         data={bookings}
+        ListHeaderComponent={
+          <View style={styles.heroCard}>
+            <View style={styles.heroPill}>
+              <BadgeCheck size={14} color={colors.home.chipText} />
+              <Typography variant="caption" color={colors.home.chipText}>
+                booking history
+              </Typography>
+            </View>
+            <Typography variant="h3" color="textInverse">
+              Completed and cancelled jobs
+            </Typography>
+            <Typography variant="body2" color="textInverse" style={styles.heroSubtitle}>
+              Review your past services, costs, and booking outcomes.
+            </Typography>
+          </View>
+        }
         renderItem={({ item }) => {
           const providerName = item.provider
             ? `${item.provider.firstName} ${item.provider.lastName}`
@@ -62,12 +91,18 @@ export function HistoryScreen() {
                 <View style={styles.bottomRow}>
                   <StatusBadge status={STATUS_MAP[item.status] || 'default'} label={item.status.toUpperCase()} />
                   <View style={styles.costDate}>
-                    <Typography variant="h5" color={colors.actionSecondary}>
-                      ${item.cost?.toFixed(2) || '0.00'}
-                    </Typography>
-                    <Typography variant="caption" color="textSecondary">
-                      {formatDateTime(item.createdAt)}
-                    </Typography>
+                    <View style={styles.metaRow}>
+                      <CircleDollarSign size={14} color={colors.actionPrimary} />
+                      <Typography variant="h5" color={colors.actionPrimary}>
+                        {formatCurrency(item.cost || 0)}
+                      </Typography>
+                    </View>
+                    <View style={styles.metaRow}>
+                      <CalendarClock size={13} color={colors.textSecondary} />
+                      <Typography variant="caption" color="textSecondary">
+                        {formatDateTime(item.createdAt)}
+                      </Typography>
+                    </View>
                   </View>
                 </View>
               </Card>

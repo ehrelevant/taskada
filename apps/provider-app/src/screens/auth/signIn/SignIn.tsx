@@ -1,5 +1,5 @@
 import { Button, Input, ScreenContainer, Typography } from '@repo/components';
-import { Pressable, Text } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { useTheme } from '@repo/theme';
 
 import { createStyles } from './SignIn.styles';
@@ -13,41 +13,45 @@ export function SignInScreen() {
 
   return (
     <ScreenContainer scrollable padding="l" style={styles.container}>
-      <Typography variant="h3" weight="bold" style={styles.title}>
-        Welcome Back
-      </Typography>
-      <Typography variant="body1" color="textSecondary" style={styles.subtitle}>
-        Sign in to continue
-      </Typography>
-
-      <Input
-        label="Email"
-        placeholder="Enter your email"
-        autoComplete="email"
-        value={email}
-        onChangeText={setEmail}
-        containerStyle={styles.input}
-      />
-      <Input
-        label="Password"
-        placeholder="Enter your password"
-        autoComplete="password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-        containerStyle={styles.input}
-      />
-
-      {errorMessage !== '' && (
-        <Typography variant="body2" color={colors.error.base} style={styles.error}>
-          {errorMessage}
+      <View style={styles.heroCard}>
+        <Typography variant="h3" weight="bold" color="textInverse" style={styles.title}>
+          Welcome Back Service Provider
         </Typography>
-      )}
+        <Typography variant="body1" color="textInverse" style={styles.subtitle}>
+          Sign in to serve your clients.
+        </Typography>
+      </View>
 
-      <Button title="Sign In" onPress={handleSignIn} style={styles.button} />
+      <View style={styles.formCard}>
+        <Input
+          label="Email"
+          placeholder="Enter your email"
+          autoComplete="email"
+          value={email}
+          onChangeText={setEmail}
+          containerStyle={styles.input}
+        />
+        <Input
+          label="Password"
+          placeholder="Enter your password"
+          autoComplete="password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+          containerStyle={styles.input}
+        />
+
+        {errorMessage !== '' && (
+          <Typography variant="body2" color={colors.error.base} style={styles.error}>
+            {errorMessage}
+          </Typography>
+        )}
+
+        <Button title="Sign In" onPress={handleSignIn} style={styles.button} />
+      </View>
 
       <Pressable onPress={() => navigation.replace('SignUp')} style={styles.footer}>
-        <Typography variant="body2" color="textSecondary">
+        <Typography variant="body1" color="textSecondary">
           Don&apos;t have an account? <Text style={styles.link}>Sign Up</Text>
         </Typography>
       </Pressable>

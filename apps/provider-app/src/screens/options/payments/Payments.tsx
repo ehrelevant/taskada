@@ -1,5 +1,5 @@
+import { BadgeCheck, CreditCard, Plus, Trash2, Wallet } from 'lucide-react-native';
 import { Card, Typography } from '@repo/components';
-import { CreditCard, Plus, Trash2, Wallet } from 'lucide-react-native';
 import { ScrollView, TouchableOpacity, View } from 'react-native';
 import { useTheme } from '@repo/theme';
 
@@ -15,6 +15,21 @@ export function PaymentsScreen() {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
+        <View style={styles.heroCard}>
+          <View style={styles.heroPill}>
+            <BadgeCheck size={14} color={colors.home.chipText} />
+            <Typography variant="caption" color={colors.home.chipText}>
+              payment methods
+            </Typography>
+          </View>
+          <Typography variant="h3" color="textInverse">
+            Payout setup
+          </Typography>
+          <Typography variant="body2" color="textInverse" style={styles.heroSubtitle}>
+            Add and manage where your earnings are sent.
+          </Typography>
+        </View>
+
         <Typography variant="h5" style={styles.sectionTitle}>
           Saved Methods
         </Typography>

@@ -164,6 +164,16 @@ export function useRequestList() {
     const loadProviderState = async () => {
       try {
         const response = await providerClient.apiFetch(`/providers`, 'GET');
+
+        if (response.status === 404) {
+          return;
+        }
+
+        if (!response.ok) {
+          console.error('Failed to load provider state:', response.status);
+          return;
+        }
+
         const providerData: Provider = await response.json();
 
         if (isMounted) {
