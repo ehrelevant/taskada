@@ -1,10 +1,9 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { PaymentMethodLinkingScreen, PaymentMethodsScreen } from '@repo/screens';
 import { OptionsScreen } from '@screens/options/Options';
+import { PaymentMethodLinkingScreen, PaymentMethodsScreen } from '@repo/screens';
 import { ProfileScreen } from '@screens/options/profile/Profile';
-import { StackHeader } from '@repo/components';
-import { apiFetch } from "@repo/shared";
 import { providerClient } from '@lib/providerClient';
+import { StackHeader } from '@repo/components';
 
 export type OptionsStackParamList = {
   Options: undefined;

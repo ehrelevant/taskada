@@ -1,4 +1,4 @@
-import { pgEnum, boolean, check, pgSchema, primaryKey, text, timestamp, uuid, integer } from 'drizzle-orm/pg-core';
+import { boolean, check, integer, pgEnum, pgSchema, primaryKey, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-zod';
 import { sql } from 'drizzle-orm';
 
@@ -43,7 +43,6 @@ export const UserUpdateSchema = createUpdateSchema(user, {
   email: schema => schema.email(),
 }).omit({ id: true, createdAt: true, updatedAt: true });
 
-
 export const userRole = app.table(
   'user_role',
   {
@@ -58,6 +57,3 @@ export const userRole = app.table(
 export const UserRoleSelectSchema = createSelectSchema(userRole);
 export const UserRoleInsertSchema = createInsertSchema(userRole).omit({ assigned_at: true });
 export const UserRoleUpdateSchema = createUpdateSchema(userRole).omit({ assigned_at: true });
-
-
-

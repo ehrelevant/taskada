@@ -83,12 +83,7 @@ export function OptionsScreen() {
             Preferences
           </Typography>
 
-          <MenuButton
-            title={getThemeLabel()}
-            icon={getThemeIcon()}
-            onPress={cycleTheme}
-            style={styles.menuButton}
-          />
+          <MenuButton title={getThemeLabel()} icon={getThemeIcon()} onPress={cycleTheme} style={styles.menuButton} />
         </View>
 
         <View style={styles.footer}>

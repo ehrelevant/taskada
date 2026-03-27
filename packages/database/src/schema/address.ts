@@ -1,4 +1,3 @@
-import * as v from 'valibot';
 import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-zod';
 import { pgSchema, text, uuid } from 'drizzle-orm/pg-core';
 
@@ -12,5 +11,5 @@ export const address = app.table('address', {
   coordinates: geographyPointColumnType().notNull(),
 });
 export const AddressSelectSchema = createSelectSchema(address);
-export const AddressInsertSchema = createInsertSchema(address).omit({'id':true});
-export const AddressUpdateSchema = createUpdateSchema(address).omit({'id':true});
+export const AddressInsertSchema = createInsertSchema(address).omit({ id: true });
+export const AddressUpdateSchema = createUpdateSchema(address).omit({ id: true });

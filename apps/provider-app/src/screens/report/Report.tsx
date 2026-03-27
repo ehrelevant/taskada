@@ -1,4 +1,12 @@
-import { ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, TextInput, TouchableOpacity, View } from 'react-native';
+import {
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { AlertTriangle, BadgeCheck, CheckCircle2, ChevronLeft, ImagePlus, ShieldAlert, X } from 'lucide-react-native';
 import { Avatar, Button, Header, Typography } from '@repo/components';
 import { Controller } from 'react-hook-form';

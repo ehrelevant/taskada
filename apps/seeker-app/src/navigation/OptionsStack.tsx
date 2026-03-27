@@ -1,9 +1,9 @@
-import { PaymentMethodLinkingScreen, PaymentMethodsScreen } from '@repo/screens';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { OptionsScreen } from '@screens/options/Options';
+import { PaymentMethodLinkingScreen, PaymentMethodsScreen } from '@repo/screens';
 import { ProfileScreen } from '@screens/options/profile/Profile';
-import { StackHeader } from '@repo/components';
 import { seekerClient } from '@lib/seekerClient';
+import { StackHeader } from '@repo/components';
 
 export type OptionsStackParamList = {
   Options: undefined;

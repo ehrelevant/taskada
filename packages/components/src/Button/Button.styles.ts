@@ -80,7 +80,7 @@ export function createStyles(
 
   const textVariantStyles = {
     primary: {
-    color: colors.textInverse,
+      color: colors.textInverse,
     },
     secondary: {
       color: colors.secondary.text,
@@ -92,7 +92,7 @@ export function createStyles(
       color: isDisabled ? colors.textDisabled : colors.primary.base,
     },
     danger: {
-        color: colors.textInverse,
+      color: colors.textInverse,
     },
   };
 

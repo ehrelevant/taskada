@@ -1,4 +1,3 @@
-import * as v from 'valibot';
 import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-zod';
 import { jsonb, pgEnum, pgSchema, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
@@ -35,9 +34,9 @@ export const paymentAuditLog = app.table('payment_audit_log', {
   updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
 });
 
-export const PaymentAuditLogUpdateSchema =createUpdateSchema(paymentAuditLog).omit({
+export const PaymentAuditLogUpdateSchema = createUpdateSchema(paymentAuditLog).omit({
   id: true,
   userId: true,
-  createdAt:true,
+  createdAt: true,
   updatedAt: true,
 });

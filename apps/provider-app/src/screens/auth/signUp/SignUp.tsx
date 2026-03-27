@@ -70,12 +70,7 @@ export function SignUpScreen() {
           onChangeText={setPassword}
           secureTextEntry
         />
-        <Input
-          label="Phone Number*"
-          placeholder="Phone Number"
-          value={phoneNumber}
-          onChangeText={setPhoneNumber}
-        />
+        <Input label="Phone Number*" placeholder="Phone Number" value={phoneNumber} onChangeText={setPhoneNumber} />
 
         {errorMessage !== '' && (
           <Typography variant="body1" color={colors.error.base} style={styles.errorText}>

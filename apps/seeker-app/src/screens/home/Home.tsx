@@ -80,11 +80,7 @@ export function HomeScreen() {
         onPress={() => navigateToService(item.serviceId)}
         activeOpacity={0.7}
       >
-        <Avatar
-          source={item.providerAvatar ? { uri: item.providerAvatar } : null}
-          name={item.providerName}
-          size={34}
-        />
+        <Avatar source={item.providerAvatar ? { uri: item.providerAvatar } : null} name={item.providerName} size={34} />
         <View style={styles.searchResultContent}>
           <Typography variant="body2" weight="semiBold" numberOfLines={1}>
             {item.serviceName}
@@ -229,7 +225,11 @@ export function HomeScreen() {
         )}
       </View>
 
-      <ScrollView style={styles.scrollArea} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.scrollArea}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
         <View>
           <View style={styles.heroCard}>
             <View style={styles.profileRow}>
@@ -290,7 +290,11 @@ export function HomeScreen() {
         </View>
 
         <View style={styles.quickActionGrid}>
-          <TouchableOpacity style={styles.quickActionCardPrimary} onPress={handlePrimaryQuickAction} activeOpacity={0.85}>
+          <TouchableOpacity
+            style={styles.quickActionCardPrimary}
+            onPress={handlePrimaryQuickAction}
+            activeOpacity={0.85}
+          >
             <Typography variant="overline" color="textInverse">
               Quick Request
             </Typography>

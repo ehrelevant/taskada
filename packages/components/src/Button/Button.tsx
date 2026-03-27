@@ -49,7 +49,7 @@ export function Button({
       return (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="small" color={getLoadingColor()} />
-            {loadingText && <Text style={[styles.loadingText, { color: getLoadingColor() }]}>{loadingText}</Text>}
+          {loadingText && <Text style={[styles.loadingText, { color: getLoadingColor() }]}>{loadingText}</Text>}
         </View>
       );
     }

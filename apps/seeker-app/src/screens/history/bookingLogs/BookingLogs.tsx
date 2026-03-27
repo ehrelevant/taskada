@@ -1,4 +1,17 @@
-import { Avatar, Button, Card, EmptyState, Header, Rating, ReviewCard, ScreenContainer, Section, StarRatingInput, StatusBadge, Typography } from '@repo/components';
+import {
+  Avatar,
+  Button,
+  Card,
+  EmptyState,
+  Header,
+  Rating,
+  ReviewCard,
+  ScreenContainer,
+  Section,
+  StarRatingInput,
+  StatusBadge,
+  Typography,
+} from '@repo/components';
 import { BadgeCheck, Flag } from 'lucide-react-native';
 import { TextInput, TouchableOpacity, View } from 'react-native';
 import { useTheme } from '@repo/theme';

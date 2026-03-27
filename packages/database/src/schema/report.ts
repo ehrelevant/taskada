@@ -1,23 +1,8 @@
-import {
-  boolean,
-  check,
-  integer,
-  jsonb,
-  numeric,
-  pgEnum,
-  pgSchema,
-  primaryKey,
-  text,
-  timestamp,
-  unique,
-  uuid,
-} from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-zod';
-import { sql } from 'drizzle-orm';
+import { pgEnum, pgSchema, text, timestamp, unique, uuid } from 'drizzle-orm/pg-core';
 
-import { user } from "./user"
-import { booking } from "./booking"
-
+import { booking } from './booking';
+import { user } from './user';
 
 const app = pgSchema('app');
 

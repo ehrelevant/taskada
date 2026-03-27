@@ -1,4 +1,3 @@
-import * as v from 'valibot';
 import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-zod';
 import { numeric, pgEnum, pgSchema, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 

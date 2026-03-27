@@ -11,7 +11,7 @@ import unusedImports from 'eslint-plugin-unused-imports';
 import { defineConfig } from 'eslint/config';
 
 export default defineConfig([
-  { ignores: ['**/node_modules/**/*', '**/build/**/*', '**/dist/**/*', '**/.output/**/*', "**/routeTree.gen.ts"] },
+  { ignores: ['**/node_modules/**/*', '**/build/**/*', '**/dist/**/*', '**/.output/**/*', '**/routeTree.gen.ts'] },
   { languageOptions: { globals: { ...globals.node } } },
   {
     files: ['**/*.{js,jsx,cjs,mjs,ts,tsx}'],

@@ -1,15 +1,17 @@
-import * as v from 'valibot';
 import * as z from 'zod';
 
 import {
   account,
   address,
   agency,
+  auditActionEnum,
+  auditLog,
   booking,
   bookingStatusEnum,
   interestStatusEnum,
   message,
   messageImage,
+  moderationNote,
   PaymentAuditLogUpdateSchema,
   PaymentMethodUpdateSchema,
   paymentAuditLog,
@@ -20,6 +22,10 @@ import {
   provider,
   providerInterest,
   pushToken,
+  report,
+  reportImage,
+  reportReasonEnum,
+  reportStatusEnum,
   request,
   requestImage,
   requestStatusEnum,
@@ -34,18 +40,11 @@ import {
   user,
   userRole,
   verification,
-  auditLog,
-  auditActionEnum,
-  moderationNote,
-  reportImage,
-  report,
-  reportReasonEnum,
-  reportStatusEnum
 } from './schema';
 
 export type User = typeof user.$inferSelect;
 export type NewUser = typeof user.$inferInsert;
-export type UserUpdate = z.infer<typeof UserUpdateSchema>
+export type UserUpdate = z.infer<typeof UserUpdateSchema>;
 
 export type Role = (typeof roleEnum.enumValues)[number];
 
@@ -129,7 +128,6 @@ export type NewPushToken = typeof pushToken.$inferInsert;
 export type AuditLog = typeof auditLog.$inferSelect;
 export type NewAuditLog = typeof auditLog.$inferInsert;
 
-
 export type AuditAction = (typeof auditActionEnum.enumValues)[number];
 
 export type ModerationNote = typeof moderationNote.$inferSelect;
@@ -140,7 +138,6 @@ export type NewReportImage = typeof reportImage.$inferInsert;
 
 export type Report = typeof report.$inferSelect;
 export type NewReport = typeof report.$inferInsert;
-
 
 export type ReportReason = (typeof reportReasonEnum.enumValues)[number];
 

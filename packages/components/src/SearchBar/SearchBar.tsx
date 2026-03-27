@@ -1,4 +1,13 @@
-import { ActivityIndicator, StyleProp, StyleSheet, TextInput, TextInputProps, TouchableOpacity, View, ViewStyle } from 'react-native';
+import {
+  ActivityIndicator,
+  StyleProp,
+  StyleSheet,
+  TextInput,
+  TextInputProps,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from 'react-native';
 import { fontFamily, fontSize, radius, spacing, useTheme } from '@repo/theme';
 import { Search } from 'lucide-react-native';
 import { useState } from 'react';

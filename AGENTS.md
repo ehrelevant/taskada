@@ -58,7 +58,6 @@ pnpm docker:down              # Stop Docker containers
 ```
 
 The database runs on port 5432 with PostGIS spatial extensions enabled.
->>>>>>> fix/general-fixes
 
 ## Build, Lint, and Test Commands
 

@@ -126,7 +126,9 @@ export function ProfileScreen(props: ProfileScreenProps) {
               secureTextEntry={!showPasswords.oldPassword}
               error={errors.oldPassword}
               rightIcon={
-                <TouchableOpacity onPress={() => setShowPasswords(prev => ({ ...prev, oldPassword: !prev.oldPassword }))}>
+                <TouchableOpacity
+                  onPress={() => setShowPasswords(prev => ({ ...prev, oldPassword: !prev.oldPassword }))}
+                >
                   {showPasswords.oldPassword ? (
                     <EyeOff size={20} color={colors.textSecondary} />
                   ) : (
@@ -143,7 +145,9 @@ export function ProfileScreen(props: ProfileScreenProps) {
               secureTextEntry={!showPasswords.newPassword}
               error={errors.newPassword}
               rightIcon={
-                <TouchableOpacity onPress={() => setShowPasswords(prev => ({ ...prev, newPassword: !prev.newPassword }))}>
+                <TouchableOpacity
+                  onPress={() => setShowPasswords(prev => ({ ...prev, newPassword: !prev.newPassword }))}
+                >
                   {showPasswords.newPassword ? (
                     <EyeOff size={20} color={colors.textSecondary} />
                   ) : (
