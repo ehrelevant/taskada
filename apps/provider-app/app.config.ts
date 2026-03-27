@@ -2,7 +2,7 @@ import { ConfigContext, ExpoConfig } from '@expo/config';
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
-  name: 'provider-app',
+  name: 'Taskada Provider',
   slug: 'provider-app',
   version: '1.0.0',
   orientation: 'portrait',
