@@ -6,22 +6,19 @@ declare module '*.svg' {
 }
 
 declare module '*.png' {
-  import React from 'react';
-  import { ImageProps } from 'react-native';
-  const value: React.FC<ImageProps>;
+  import { ImageSourcePropType } from 'react-native';
+  const value: ImageSourcePropType;
   export default value;
 }
 
 declare module '*.jpg' {
-  import React from 'react';
-  import { ImageProps } from 'react-native';
-  const value: React.FC<ImageProps>;
+  import { ImageSourcePropType } from 'react-native';
+  const value: ImageSourcePropType;
   export default value;
 }
 
 declare module '*.jpeg' {
-  import React from 'react';
-  import { ImageProps } from 'react-native';
-  const value: React.FC<ImageProps>;
+  import { ImageSourcePropType } from 'react-native';
+  const value: ImageSourcePropType;
   export default value;
 }

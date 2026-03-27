@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Alert, ScrollView, StyleSheet, TouchableOpacity, View, Image } from 'react-native';
 import { Card, Typography } from '@repo/components';
 import { colors, spacing } from '@repo/theme';
 import { CreditCard, Plus, Trash2 } from 'lucide-react-native';
@@ -41,7 +41,7 @@ export function PaymentMethodsScreen({ apiFetch, navigation }: Props) {
           } else if (ch.includes('bpi')) {
             icon = <BPI width={28} height={28} />;
           } else if (ch.includes('grab')) {
-            icon = <GRAB width={28} height={28} />;
+            icon = <Image source={GRAB} style={styles.logoImage} />;
           } else if (ch.includes('maya')) {
             icon = <MAYA width={28} height={28} />;
             label = (pm.metadata as Record<string, string>).account_number;

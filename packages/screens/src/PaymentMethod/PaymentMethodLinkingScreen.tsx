@@ -49,7 +49,7 @@ export function PaymentMethodLinkingScreen({ apiFetch, navigation }: Props) {
     // Intercept navigation so we can await the cancel API before leaving
     const unsubscribeBeforeRemove = navigation.addListener('beforeRemove', e => {
       if (sessionHandled.current) return;
-      (e as {preventDefault:()=>void}).preventDefault();
+      (e as { preventDefault: () => void }).preventDefault();
       const doCancelThenNavigate = async () => {
         mounted = false;
         try {
@@ -58,7 +58,7 @@ export function PaymentMethodLinkingScreen({ apiFetch, navigation }: Props) {
         } catch (err) {
           console.error(err);
         }
-        navigation.dispatch((e as { data: {action: unknown}}).data.action);
+        navigation.dispatch((e as { data: { action: unknown } }).data.action);
       };
       doCancelThenNavigate();
     });

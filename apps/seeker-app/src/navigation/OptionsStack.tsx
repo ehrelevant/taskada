@@ -9,8 +9,6 @@ export type OptionsStackParamList = {
   Options: undefined;
   Profile: undefined;
   PaymentMethods: undefined;
-  AddCard: undefined;
-  AddEWallet: undefined;
   TransactionHistory: undefined;
   PaymentMethodLinking: undefined;
 };

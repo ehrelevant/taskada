@@ -142,7 +142,6 @@ export class PaymentEngineService {
     this.logger.debug('createSession');
     const user_row = await this.dbService.getUser(user_id);
 
-
     let xenditCustomerId = user_row.xenditCustomerId;
     if (!xenditCustomerId) {
       const created = await this.createCustomer(user_id);

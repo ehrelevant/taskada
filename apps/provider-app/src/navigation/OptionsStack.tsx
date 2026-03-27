@@ -8,7 +8,7 @@ import { StackHeader } from '@repo/components';
 export type OptionsStackParamList = {
   Options: undefined;
   Profile: undefined;
-  Payments: undefined;
+  PaymentMethods: undefined;
   PaymentMethodLinking: undefined;
 };
 
@@ -44,15 +44,18 @@ export function OptionsStack() {
           title: 'Profile',
         }}
       />
-      <Stack.Screen name="Payments" options={{ title: 'Payment Methods' }}>
-          {({ navigation }) => (
-           <PaymentMethodsScreen apiFetch={(...args) => providerClient.apiFetch(...args)} navigation={navigation} />
-          )}
+      <Stack.Screen name="PaymentMethods" options={{ title: 'Payment Methods' }}>
+        {({ navigation }) => (
+          <PaymentMethodsScreen apiFetch={(...args) => providerClient.apiFetch(...args)} navigation={navigation} />
+        )}
       </Stack.Screen>
       <Stack.Screen name="PaymentMethodLinking" options={{ title: 'Payment Method Linking' }}>
-          {({ navigation }) => (
-           <PaymentMethodLinkingScreen apiFetch={(...args) => providerClient.apiFetch(...args)} navigation={navigation} />
-          )}
+        {({ navigation }) => (
+          <PaymentMethodLinkingScreen
+            apiFetch={(...args) => providerClient.apiFetch(...args)}
+            navigation={navigation}
+          />
+        )}
       </Stack.Screen>
     </Stack.Navigator>
   );

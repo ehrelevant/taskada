@@ -75,7 +75,7 @@ export function OptionsScreen() {
           <MenuButton
             title="Manage Payment Methods"
             icon={<CreditCard size={24} color={colors.actionPrimary} />}
-            onPress={() => navigation.navigate('Payments')}
+            onPress={() => navigation.navigate('PaymentMethods')}
             style={styles.menuButton}
           />
 
