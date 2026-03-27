@@ -242,7 +242,7 @@ export function HomeScreen() {
                   borderWidth={3}
                 />
                 <View style={styles.profileCopy}>
-                  <Typography variant="caption" color={colors.home.chipText}>
+                  <Typography variant="caption" color={colors.textInverse}>
                     {greeting}
                   </Typography>
                   <Typography variant="h3" color="textInverse" numberOfLines={1}>
