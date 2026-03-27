@@ -141,11 +141,19 @@ export class PaymentEngineService {
   async createSession(user_id: string): Promise<CreateSessionResponse> {
     this.logger.debug('createSession');
     const user_row = await this.dbService.getUser(user_id);
+
+
+    let xenditCustomerId = user_row.xenditCustomerId;
+    if (!xenditCustomerId) {
+      const created = await this.createCustomer(user_id);
+      xenditCustomerId = created.id;
+    }
+
     const audit_log = await this.createPaymentAuditLog(user_id, 'SESSION_SAVE');
     const result: CreateSessionResponse = await this.handleRequest(() =>
       create_session({
         reference_id: audit_log.id,
-        customer_id: user_row.xenditCustomerId!,
+        customer_id: xenditCustomerId,
         session_type: 'SAVE',
         amount: 0,
         currency: 'PHP',
