@@ -132,6 +132,7 @@ export const createStyles = (colors: ThemeColors) =>
       marginTop: spacing.m,
       marginHorizontal: spacing.pageHorizontal,
       gap: spacing.s,
+      flexGrow: 1,
     },
     idleChecklistItem: {
       flexDirection: 'row',

@@ -143,41 +143,41 @@ export function RequestListScreen() {
 
   return (
     <ScreenContainer padding="none" useSafeArea={false} style={styles.centeredContainer}>
-      <View style={styles.idleHero}>
-        <View style={styles.idleBadge}>
-          <Radio size={16} color={colors.home.chipText} />
-          <Typography variant="caption" color={colors.home.chipText}>
-            currently offline
+        <View style={styles.idleHero}>
+          <View style={styles.idleBadge}>
+            <Radio size={16} color={colors.home.chipText} />
+            <Typography variant="caption" color={colors.home.chipText}>
+              currently offline
+            </Typography>
+          </View>
+          <Typography variant="h3" color="textInverse" style={styles.idleTitle}>
+            Ready to start accepting jobs?
+          </Typography>
+          <Typography variant="body2" color="textInverse" style={styles.idleSubtitle}>
+            Go live and receive nearby service requests from seekers that match your enabled offerings.
           </Typography>
         </View>
-        <Typography variant="h3" color="textInverse" style={styles.idleTitle}>
-          Ready to start accepting jobs?
-        </Typography>
-        <Typography variant="body2" color="textInverse" style={styles.idleSubtitle}>
-          Go live and receive nearby service requests from seekers that match your enabled offerings.
-        </Typography>
-      </View>
 
-      <View style={styles.idleChecklist}>
-        <View style={styles.idleChecklistItem}>
-          <Sparkles size={16} color={colors.actionPrimary} />
-          <Typography variant="body2" color="textSecondary">
-            Requests appear here in real time.
-          </Typography>
+        <View style={styles.idleChecklist}>
+          <View style={styles.idleChecklistItem}>
+            <Sparkles size={16} color={colors.actionPrimary} />
+            <Typography variant="body2" color="textSecondary">
+              Requests appear here in real time.
+            </Typography>
+          </View>
+          <View style={styles.idleChecklistItem}>
+            <MapPin size={16} color={colors.actionPrimary} />
+            <Typography variant="body2" color="textSecondary">
+              Review address and seeker notes before accepting.
+            </Typography>
+          </View>
+          <View style={styles.idleChecklistItem}>
+            <Clock3 size={16} color={colors.actionPrimary} />
+            <Typography variant="body2" color="textSecondary">
+              Pause anytime when you need a break.
+            </Typography>
+          </View>
         </View>
-        <View style={styles.idleChecklistItem}>
-          <MapPin size={16} color={colors.actionPrimary} />
-          <Typography variant="body2" color="textSecondary">
-            Review address and seeker notes before accepting.
-          </Typography>
-        </View>
-        <View style={styles.idleChecklistItem}>
-          <Clock3 size={16} color={colors.actionPrimary} />
-          <Typography variant="body2" color="textSecondary">
-            Pause anytime when you need a break.
-          </Typography>
-        </View>
-      </View>
 
       <BottomActionBar style={styles.bottomBar}>
         <Button title="Start Receiving Requests" onPress={enableRequests} isLoading={isConnecting} />

@@ -25,7 +25,6 @@ export const createStyles = (colors: ThemeColors) =>
     },
     sectionTitle: {
       marginBottom: spacing.m,
-      color: colors.textSecondary,
     },
     sectionTitleRow: {
       flexDirection: 'row',
