@@ -1,0 +1,15 @@
+FROM node:22-alpine AS runner
+
+RUN corepack enable && corepack prepare pnpm@10.17.1 --activate
+
+WORKDIR /app
+
+# Workspace scaffolding (cached layer)
+COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
+
+# Workspace dependencies the database needs
+COPY packages/database/package.json packages/database/
+
+RUN pnpm install --prod --filter @repo/database --frozen-lockfile
+
+COPY packages/database/ packages/database/
