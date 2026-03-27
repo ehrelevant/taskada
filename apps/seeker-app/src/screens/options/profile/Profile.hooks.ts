@@ -179,7 +179,6 @@ export function useProfile() {
         middleName: profileData.middleName,
         lastName: profileData.lastName,
         phoneNumber: profileData.phoneNumber,
-        avatarUrl: profileData.avatarUrl,
       };
 
       await seekerClient.apiFetch('/users/profile', 'PUT', {

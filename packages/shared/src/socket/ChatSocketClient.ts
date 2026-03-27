@@ -62,6 +62,7 @@ export class ChatSocketClient {
   private proposalAcceptedHandlers: ((data: ProposalAcceptedData) => void)[] = [];
   private providerArrivedHandlers: ((data: { bookingId: string }) => void)[] = [];
   private bookingCompletedHandlers: ((data: { bookingId: string }) => void)[] = [];
+  private bookingCancelledHandlers: ((data: { bookingId: string }) => void)[] = [];
 
   async connect(baseUrl: string, cookie: string, userId: string, userRole: 'seeker' | 'provider'): Promise<void> {
     if (this.socket?.connected) {
@@ -126,6 +127,10 @@ export class ChatSocketClient {
       this.bookingCompletedHandlers.forEach(handler => handler(data));
     });
 
+    this.socket.on('booking_cancelled', (data: { bookingId: string }) => {
+      this.bookingCancelledHandlers.forEach(handler => handler(data));
+    });
+
     this.socket.on('error', (error: { message: string }) => {
       console.error('Chat socket error:', error);
     });
@@ -174,6 +179,10 @@ export class ChatSocketClient {
     this.socket?.emit('booking_completed', { bookingId });
   }
 
+  cancelBooking(bookingId: string) {
+    this.socket?.emit('cancel_booking', { bookingId });
+  }
+
   onNewMessage(handler: (message: Message) => void) {
     this.messageHandlers.push(handler);
   }
@@ -214,6 +223,10 @@ export class ChatSocketClient {
     this.bookingCompletedHandlers.push(handler);
   }
 
+  onBookingCancelled(handler: (data: { bookingId: string }) => void) {
+    this.bookingCancelledHandlers.push(handler);
+  }
+
   removeAllListeners() {
     this.messageHandlers = [];
     this.typingHandlers = [];
@@ -225,6 +238,7 @@ export class ChatSocketClient {
     this.proposalAcceptedHandlers = [];
     this.providerArrivedHandlers = [];
     this.bookingCompletedHandlers = [];
+    this.bookingCancelledHandlers = [];
   }
 }
 

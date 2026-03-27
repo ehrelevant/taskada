@@ -179,7 +179,6 @@ export function useProfileScreen({ navigation }: ProfileScreenProps) {
         middleName: profileData.middleName,
         lastName: profileData.lastName,
         phoneNumber: profileData.phoneNumber,
-        avatarUrl: profileData.avatarUrl,
       };
 
       await providerClient.apiFetch('/users/profile', 'PUT', {

@@ -10,7 +10,6 @@ export interface UpdateUserProfileData {
   middleName?: string;
   lastName: string;
   phoneNumber: string;
-  avatarUrl?: string;
 }
 
 @Injectable()
@@ -42,7 +41,10 @@ export class UsersService {
     }
 
     if (foundUser.avatarUrl) {
-      const signedUrl = await this.s3Service.getSignedUrl(foundUser.avatarUrl);
+      const key = foundUser.avatarUrl.startsWith('http')
+        ? new URL(foundUser.avatarUrl).pathname.slice(1)
+        : foundUser.avatarUrl;
+      const signedUrl = await this.s3Service.getSignedUrl(key);
       return { ...foundUser, avatarUrl: signedUrl };
     }
 
@@ -58,7 +60,6 @@ export class UsersService {
           middleName: updateData.middleName,
           lastName: updateData.lastName,
           phoneNumber: updateData.phoneNumber,
-          avatarUrl: updateData.avatarUrl,
           updatedAt: new Date(),
         })
         .where(eq(user.id, userId))

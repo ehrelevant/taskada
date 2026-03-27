@@ -160,6 +160,10 @@ export abstract class BaseClient {
     this.chat.notifyBookingCompleted(bookingId);
   }
 
+  cancelBooking(bookingId: string): void {
+    this.chat.cancelBooking(bookingId);
+  }
+
   onNewMessage(handler: (message: Message) => void): void {
     this.chat.onNewMessage(handler);
   }
@@ -198,6 +202,10 @@ export abstract class BaseClient {
 
   onBookingCompleted(handler: (data: { bookingId: string }) => void): void {
     this.chat.onBookingCompleted(handler);
+  }
+
+  onBookingCancelled(handler: (data: { bookingId: string }) => void): void {
+    this.chat.onBookingCancelled(handler);
   }
 
   removeAllListeners(): void {
