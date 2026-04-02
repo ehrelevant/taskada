@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, ScrollView, StyleSheet, TouchableOpacity, View, Image } from 'react-native';
+import { Alert, Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Card, Typography } from '@repo/components';
 import { colors, spacing } from '@repo/theme';
 import { CreditCard, Plus, Trash2 } from 'lucide-react-native';
