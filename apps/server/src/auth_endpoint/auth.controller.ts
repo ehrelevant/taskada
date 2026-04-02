@@ -1,8 +1,8 @@
-import { _statusCode } from 'better-call';
 import { AllowAnonymous } from '@thallesp/nestjs-better-auth';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Controller, HttpCode, Post, Req, Res } from '@nestjs/common';
 import type { Request, Response } from 'express';
+import { statusCodes } from 'better-call';
 
 import { auth } from '../auth';
 
@@ -18,7 +18,7 @@ const getStatusFromError = (err: unknown): number => {
     const e = err as Record<string, unknown>;
     if (typeof e.statusCode === 'number') return e.statusCode;
     if (typeof e.status === 'number') return e.status;
-    if (typeof e.status === 'string') return (_statusCode as Record<string, number>)[e.status] ?? 400;
+    if (typeof e.status === 'string') return (statusCodes as Record<string, number>)[e.status] ?? 400;
   }
   return 400;
 };
