@@ -50,6 +50,8 @@ RUN pnpm install --prod --frozen-lockfile
 COPY --from=build /app/packages/database/dist/ packages/database/dist/
 COPY --from=build /app/packages/types/src/ packages/types/src/
 COPY --from=build /app/packages/shared/src/ packages/shared/src/
-COPY --from=build /app/apps/moderation/dist/ apps/moderation/dist/
+COPY --from=build /app/apps/moderation/.output/ apps/moderation/.output/
 
-CMD ["pnpm", "start"]
+ENV PORT=3300
+
+CMD ["node", "apps/moderation/.output/server/index.mjs"]
