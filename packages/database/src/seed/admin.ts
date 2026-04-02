@@ -5,7 +5,7 @@ import type { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import * as schema from '../schema';
 import { account } from '../schema/auth';
 import { SEED_ADMIN_EMAIL, SEED_ADMIN_PASSWORD, SEED_ADMIN_PHONE } from '../env';
-import { user, userRole } from '../schema/app';
+import { user, userRole } from '../schema/user';
 
 export async function seedAdmin(db: NodePgDatabase<typeof schema>): Promise<void> {
   const email = SEED_ADMIN_EMAIL;
