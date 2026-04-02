@@ -18,6 +18,7 @@
     "seed": "tsx src/seed/index.ts"
   },
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "drizzle-kit": "^0.31.5",
     "drizzle-orm": "^0.44.5",
     "drizzle-zod": "^0.8.2",
@@ -29,7 +30,6 @@
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
     "@types/pg": "^8.15.5",
-    "bcrypt": "^6.0.0",
     "tsup": "^8.5.0"
   }
 }
