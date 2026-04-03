@@ -26,6 +26,7 @@ export default defineConfig([
   },
   {
     files: ['**/*.jsx', '**/*.tsx'],
+    ignores: ['apps/moderation/**/*'],
     plugins: {
       expo,
       react,
@@ -44,6 +45,35 @@ export default defineConfig([
       'expo/use-dom-exports': 'error',
       'expo/no-env-var-destructuring': 'error',
       'expo/no-dynamic-env-var': 'error',
+      'react/no-unknown-property': 'warn',
+      'react/react-in-jsx-scope': 'off',
+      'react/no-this-in-sfc': 'warn',
+    },
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
+  },
+  {
+    files: ['apps/moderation/**/*.{js,ts,jsx,tsx}'],
+    plugins: {
+      react,
+      'react-hooks': reactHooks,
+    },
+    languageOptions: {
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+      globals: {
+        ...globals.browser,
+      },
+    },
+    rules: {
+      ...react.configs.recommended.rules,
+      ...reactHooks.configs.recommended.rules,
       'react/no-unknown-property': 'warn',
       'react/react-in-jsx-scope': 'off',
       'react/no-this-in-sfc': 'warn',

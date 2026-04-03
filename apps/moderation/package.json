@@ -13,10 +13,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "start": "PORT=3300 node .output/server/index.mjs",
-    "test": "vitest run",
-    "lint": "eslint",
-    "format": "prettier --check .",
-    "check": "prettier --write . && eslint --fix"
+    "test": "vitest run"
   },
   "dependencies": {
     "@repo/shared": "workspace:*",
