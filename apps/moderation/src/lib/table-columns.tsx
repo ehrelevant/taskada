@@ -1,11 +1,11 @@
-import { createColumnHelper } from '@tanstack/react-table'
-import { ExternalLink } from 'lucide-react'
-import { formatDate } from '#/lib/format'
-import { Link } from '@tanstack/react-router'
-import type { ModerationReport } from '@repo/types'
-import { ModerationStatusBadge, StatusBadge } from '#/components/StatusBadge'
+import { createColumnHelper } from '@tanstack/react-table';
+import { ExternalLink } from 'lucide-react';
+import { formatDate } from '#/lib/format';
+import { Link } from '@tanstack/react-router';
+import type { ModerationReport } from '@repo/types';
+import { ModerationStatusBadge, StatusBadge } from '#/components/StatusBadge';
 
-const columnHelper = createColumnHelper<ModerationReport>()
+const columnHelper = createColumnHelper<ModerationReport>();
 
 export const reportColumns = [
   columnHelper.accessor('id', {
@@ -54,4 +54,4 @@ export const reportColumns = [
     ),
     size: 70,
   }),
-]
+];

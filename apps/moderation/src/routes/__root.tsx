@@ -1,13 +1,13 @@
-import Header from '#/components/Header'
-import Sidebar from '#/components/Sidebar'
-import { createRootRoute, HeadContent, Scripts } from '@tanstack/react-router'
-import { queryClient } from '@repo/shared/queryClient'
-import { QueryClientProvider } from '@tanstack/react-query'
-import { TanStackDevtools } from '@tanstack/react-devtools'
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-import { useSession } from '#/lib/auth-client'
+import Header from '#/components/Header';
+import Sidebar from '#/components/Sidebar';
+import { createRootRoute, HeadContent, Scripts } from '@tanstack/react-router';
+import { queryClient } from '@repo/shared/queryClient';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { TanStackDevtools } from '@tanstack/react-devtools';
+import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
+import { useSession } from '#/lib/auth-client';
 
-import appCss from '../styles.css?url'
+import appCss from '../styles.css?url';
 
 export const Route = createRootRoute({
   head: () => ({
@@ -31,10 +31,10 @@ export const Route = createRootRoute({
     ],
   }),
   shellComponent: RootDocument,
-})
+});
 
 function RootDocument({ children }: { children: React.ReactNode }) {
-  const { data: session } = useSession()
+  const { data: session } = useSession();
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -69,5 +69,5 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         </body>
       </html>
     </QueryClientProvider>
-  )
+  );
 }

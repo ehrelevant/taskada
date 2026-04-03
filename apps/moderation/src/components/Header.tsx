@@ -1,10 +1,10 @@
-import { ShieldAlert } from 'lucide-react'
+import { ShieldAlert } from 'lucide-react';
 
-import { useSession } from '#/lib/auth-client'
+import { useSession } from '#/lib/auth-client';
 
 export default function Header() {
-  const { data: session } = useSession()
-  const userName = session?.user?.name ?? 'Admin'
+  const { data: session } = useSession();
+  const userName = session?.user?.name ?? 'Admin';
 
   return (
     <header className="border-border bg-surface z-50 flex h-14 shrink-0 items-center justify-between border-b px-6">
@@ -14,5 +14,5 @@ export default function Header() {
       </div>
       <div className="text-muted text-xs">{userName}</div>
     </header>
-  )
+  );
 }

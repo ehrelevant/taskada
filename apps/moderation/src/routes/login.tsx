@@ -1,25 +1,25 @@
-import { API_URL } from '#/lib/env'
-import { authClient, signIn, signOut, useSession } from '#/lib/auth-client'
-import { checkAdminRole } from '@repo/shared/api/moderation'
-import { createFileRoute, useRouter } from '@tanstack/react-router'
-import { ShieldAlert } from 'lucide-react'
-import { useForm } from 'react-hook-form'
-import { useState } from 'react'
+import { API_URL } from '#/lib/env';
+import { authClient, signIn, signOut, useSession } from '#/lib/auth-client';
+import { checkAdminRole } from '@repo/shared/api/moderation';
+import { createFileRoute, useRouter } from '@tanstack/react-router';
+import { ShieldAlert } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { useState } from 'react';
 
 interface LoginFormValues {
-  email: string
-  password: string
+  email: string;
+  password: string;
 }
 
 export const Route = createFileRoute('/login')({
   component: LoginPage,
-})
+});
 
 function LoginPage() {
-  const router = useRouter()
-  const { data: session, isPending } = useSession()
-  const [error, setError] = useState<string | null>(null)
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const router = useRouter();
+  const { data: session, isPending } = useSession();
+  const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
     register,
@@ -27,48 +27,48 @@ function LoginPage() {
     formState: { errors },
   } = useForm<LoginFormValues>({
     defaultValues: { email: '', password: '' },
-  })
+  });
 
   if (isPending) {
-    return null
+    return null;
   }
 
   if (session) {
-    router.navigate({ to: '/' })
-    return null
+    router.navigate({ to: '/' });
+    return null;
   }
 
   const onSubmit = async (values: LoginFormValues) => {
-    setError(null)
-    setIsSubmitting(true)
+    setError(null);
+    setIsSubmitting(true);
 
     try {
       const result = await signIn.email({
         email: values.email,
         password: values.password,
-      })
+      });
 
       if (result.error) {
-        setError(result.error.message ?? 'Invalid email or password.')
-        setIsSubmitting(false)
-        return
+        setError(result.error.message ?? 'Invalid email or password.');
+        setIsSubmitting(false);
+        return;
       }
 
-      const isAdmin = await checkAdminRole(authClient as never, API_URL)
+      const isAdmin = await checkAdminRole(authClient as never, API_URL);
 
       if (!isAdmin) {
-        await signOut()
-        setError('Access denied. Admin role required.')
-        setIsSubmitting(false)
-        return
+        await signOut();
+        setError('Access denied. Admin role required.');
+        setIsSubmitting(false);
+        return;
       }
 
-      router.navigate({ to: '/' })
+      router.navigate({ to: '/' });
     } catch {
-      setError('An unexpected error occurred. Please try again.')
-      setIsSubmitting(false)
+      setError('An unexpected error occurred. Please try again.');
+      setIsSubmitting(false);
     }
-  }
+  };
 
   return (
     <div className="flex min-h-screen items-center justify-center">
@@ -134,5 +134,5 @@ function LoginPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

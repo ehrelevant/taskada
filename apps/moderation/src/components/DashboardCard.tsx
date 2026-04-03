@@ -1,11 +1,11 @@
-import type { LucideIcon } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react';
 
 interface DashboardCardProps {
-  title: string
-  value: number | string
-  icon: LucideIcon
-  iconBgClass: string
-  iconTextClass: string
+  title: string;
+  value: number | string;
+  icon: LucideIcon;
+  iconBgClass: string;
+  iconTextClass: string;
 }
 
 export function DashboardCard({ title, value, icon: Icon, iconBgClass, iconTextClass }: DashboardCardProps) {
@@ -19,5 +19,5 @@ export function DashboardCard({ title, value, icon: Icon, iconBgClass, iconTextC
         <div className="text-muted text-xs font-medium uppercase tracking-wider">{title}</div>
       </div>
     </div>
-  )
+  );
 }

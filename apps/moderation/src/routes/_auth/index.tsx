@@ -1,27 +1,27 @@
-import { AlertTriangle, Clock, Eye, Flag, Users } from 'lucide-react'
-import { API_URL } from '#/lib/env'
-import { authClient } from '#/lib/auth-client'
-import { createFileRoute, Link } from '@tanstack/react-router'
-import { DashboardCard } from '#/components/DashboardCard'
-import { formatDate } from '#/lib/format'
-import { getDashboardStats, getReports } from '@repo/shared/api/moderation'
-import { ModerationStatusBadge, StatusBadge } from '#/components/StatusBadge'
-import { useQuery } from '@tanstack/react-query'
+import { AlertTriangle, Clock, Eye, Flag, Users } from 'lucide-react';
+import { API_URL } from '#/lib/env';
+import { authClient } from '#/lib/auth-client';
+import { createFileRoute, Link } from '@tanstack/react-router';
+import { DashboardCard } from '#/components/DashboardCard';
+import { formatDate } from '#/lib/format';
+import { getDashboardStats, getReports } from '@repo/shared/api/moderation';
+import { ModerationStatusBadge, StatusBadge } from '#/components/StatusBadge';
+import { useQuery } from '@tanstack/react-query';
 
-export const Route = createFileRoute('/_auth/')({ component: Dashboard })
+export const Route = createFileRoute('/_auth/')({ component: Dashboard });
 
 function Dashboard() {
   const { data: stats } = useQuery({
     queryKey: ['dashboard-stats'],
     queryFn: () => getDashboardStats(authClient as never, API_URL),
-  })
+  });
 
   const { data: recentData } = useQuery({
     queryKey: ['reports', { limit: 5 }],
     queryFn: () => getReports(authClient as never, API_URL, { limit: 5 }),
-  })
+  });
 
-  const recentReports = recentData?.data ?? []
+  const recentReports = recentData?.data ?? [];
 
   return (
     <div>
@@ -92,5 +92,5 @@ function Dashboard() {
         </div>
       </div>
     </div>
-  )
+  );
 }

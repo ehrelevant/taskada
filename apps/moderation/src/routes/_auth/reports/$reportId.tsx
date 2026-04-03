@@ -1,63 +1,63 @@
-import { API_URL } from '#/lib/env'
-import { ArrowLeft, Clock, ExternalLink, FileText, Image, ScrollText, User } from 'lucide-react'
-import { AuditTimeline } from '#/components/AuditTimeline'
-import { authClient } from '#/lib/auth-client'
-import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
-import { formatDateTime } from '#/lib/format'
+import { API_URL } from '#/lib/env';
+import { ArrowLeft, Clock, ExternalLink, FileText, Image, ScrollText, User } from 'lucide-react';
+import { AuditTimeline } from '#/components/AuditTimeline';
+import { authClient } from '#/lib/auth-client';
+import { createFileRoute, Link, useRouter } from '@tanstack/react-router';
+import { formatDateTime } from '#/lib/format';
 import {
   getAuditLog as getReportAudit,
   getReportById,
   getReportNotes,
   updateReportStatus,
-} from '@repo/shared/api/moderation'
-import { ImageLightbox } from '#/components/ImageLightbox'
-import { ModerationStatusBadge, StatusBadge } from '#/components/StatusBadge'
-import { NotesThread } from '#/components/NotesThread'
-import type { ReportStatus } from '@repo/types'
-import { useForm } from 'react-hook-form'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { UserHistory } from '#/components/UserHistory'
-import { useState } from 'react'
+} from '@repo/shared/api/moderation';
+import { ImageLightbox } from '#/components/ImageLightbox';
+import { ModerationStatusBadge, StatusBadge } from '#/components/StatusBadge';
+import { NotesThread } from '#/components/NotesThread';
+import type { ReportStatus } from '@repo/types';
+import { useForm } from 'react-hook-form';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { UserHistory } from '#/components/UserHistory';
+import { useState } from 'react';
 
 interface ResolutionFormValues {
-  action: ReportStatus
-  notes: string
+  action: ReportStatus;
+  notes: string;
 }
 
 export const Route = createFileRoute('/_auth/reports/$reportId')({
   component: ReportDetail,
-})
+});
 
 function ReportDetail() {
-  const { reportId } = Route.useParams()
-  const router = useRouter()
-  const queryClient = useQueryClient()
-  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
+  const { reportId } = Route.useParams();
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   const { data: report, isLoading } = useQuery({
     queryKey: ['report', reportId],
     queryFn: () => getReportById(authClient as never, API_URL, reportId),
-  })
+  });
 
   const { data: notes = [] } = useQuery({
     queryKey: ['report-notes', reportId],
     queryFn: () => getReportNotes(authClient as never, API_URL, reportId),
-  })
+  });
 
   const { data: auditData } = useQuery({
     queryKey: ['report-audit', reportId],
     queryFn: () => getReportAudit(authClient as never, API_URL, { reportId }),
-  })
+  });
 
   const resolveMutation = useMutation({
     mutationFn: (values: { status: string; notes?: string }) =>
       updateReportStatus(authClient as never, API_URL, reportId, values.status, values.notes),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['report', reportId] })
-      queryClient.invalidateQueries({ queryKey: ['report-audit', reportId] })
-      queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] })
+      queryClient.invalidateQueries({ queryKey: ['report', reportId] });
+      queryClient.invalidateQueries({ queryKey: ['report-audit', reportId] });
+      queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] });
     },
-  })
+  });
 
   const {
     register,
@@ -68,10 +68,10 @@ function ReportDetail() {
       action: 'resolved',
       notes: '',
     },
-  })
+  });
 
   if (isLoading) {
-    return <div className="text-muted py-16 text-center text-sm">Loading...</div>
+    return <div className="text-muted py-16 text-center text-sm">Loading...</div>;
   }
 
   if (!report) {
@@ -82,15 +82,15 @@ function ReportDetail() {
           Back to Reports
         </Link>
       </div>
-    )
+    );
   }
 
-  const auditEntries = auditData?.data ?? []
-  const images = report.images ?? []
+  const auditEntries = auditData?.data ?? [];
+  const images = report.images ?? [];
 
   const onSubmit = (values: ResolutionFormValues) => {
-    resolveMutation.mutate({ status: values.action, notes: values.notes })
-  }
+    resolveMutation.mutate({ status: values.action, notes: values.notes });
+  };
 
   return (
     <div>
@@ -169,9 +169,9 @@ function ReportDetail() {
                   {...register('notes', {
                     validate: (v, formValues) => {
                       if (formValues.action === 'resolved' && !v.trim()) {
-                        return 'Notes are required when resolving a report.'
+                        return 'Notes are required when resolving a report.';
                       }
-                      return true
+                      return true;
                     },
                   })}
                   rows={4}
@@ -261,7 +261,7 @@ function ReportDetail() {
         />
       )}
     </div>
-  )
+  );
 }
 
 function InfoCard({
@@ -270,10 +270,10 @@ function InfoCard({
   subtitle,
   icon: Icon,
 }: {
-  title: string
-  user: string
-  subtitle: string
-  icon: typeof User
+  title: string;
+  user: string;
+  subtitle: string;
+  icon: typeof User;
 }) {
   return (
     <div className="border-border bg-surface rounded-xl border">
@@ -288,7 +288,7 @@ function InfoCard({
         {subtitle && <p className="text-muted mt-0.5 text-xs">{subtitle}</p>}
       </div>
     </div>
-  )
+  );
 }
 
 function DetailRow({ label, value }: { label: string; value: string }) {
@@ -297,5 +297,5 @@ function DetailRow({ label, value }: { label: string; value: string }) {
       <span className="text-muted">{label}</span>
       <span className="text-secondary font-medium capitalize">{value}</span>
     </div>
-  )
+  );
 }

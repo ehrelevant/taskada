@@ -1,20 +1,20 @@
-import { API_URL } from '#/lib/env'
-import { authClient } from '#/lib/auth-client'
-import { createFileRoute } from '@tanstack/react-router'
-import { getReports } from '@repo/shared/api/moderation'
-import { reportColumns } from '#/lib/table-columns'
-import { ReportsTable } from '#/components/ReportsTable'
-import { useQuery } from '@tanstack/react-query'
+import { API_URL } from '#/lib/env';
+import { authClient } from '#/lib/auth-client';
+import { createFileRoute } from '@tanstack/react-router';
+import { getReports } from '@repo/shared/api/moderation';
+import { reportColumns } from '#/lib/table-columns';
+import { ReportsTable } from '#/components/ReportsTable';
+import { useQuery } from '@tanstack/react-query';
 
 export const Route = createFileRoute('/_auth/reports/')({
   component: ReportsList,
-})
+});
 
 function ReportsList() {
   const { data } = useQuery({
     queryKey: ['reports', { limit: 100 }],
     queryFn: () => getReports(authClient as never, API_URL, { limit: 100 }),
-  })
+  });
 
   return (
     <div>
@@ -25,5 +25,5 @@ function ReportsList() {
 
       <ReportsTable data={data?.data ?? []} columns={reportColumns} />
     </div>
-  )
+  );
 }

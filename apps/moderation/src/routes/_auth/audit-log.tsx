@@ -1,8 +1,8 @@
-import { API_URL } from '#/lib/env'
-import { auditColumns } from '#/lib/audit-table-columns'
-import { authClient } from '#/lib/auth-client'
-import { ChevronLeft, ChevronRight, ScrollText, Search } from 'lucide-react'
-import { createFileRoute } from '@tanstack/react-router'
+import { API_URL } from '#/lib/env';
+import { auditColumns } from '#/lib/audit-table-columns';
+import { authClient } from '#/lib/auth-client';
+import { ChevronLeft, ChevronRight, ScrollText, Search } from 'lucide-react';
+import { createFileRoute } from '@tanstack/react-router';
 import {
   flexRender,
   getCoreRowModel,
@@ -10,24 +10,24 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from '@tanstack/react-table'
-import { getAuditLog } from '@repo/shared/api/moderation'
-import { useQuery } from '@tanstack/react-query'
-import { useState } from 'react'
+} from '@tanstack/react-table';
+import { getAuditLog } from '@repo/shared/api/moderation';
+import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 
 export const Route = createFileRoute('/_auth/audit-log')({
   component: AuditLogPage,
-})
+});
 
 function AuditLogPage() {
-  const [globalFilter, setGlobalFilter] = useState('')
+  const [globalFilter, setGlobalFilter] = useState('');
 
   const { data } = useQuery({
     queryKey: ['audit-log', { limit: 100 }],
     queryFn: () => getAuditLog(authClient as never, API_URL, { limit: 100 }),
-  })
+  });
 
-  const entries = data?.data ?? []
+  const entries = data?.data ?? [];
 
   const table = useReactTable({
     data: entries,
@@ -40,16 +40,16 @@ function AuditLogPage() {
     getPaginationRowModel: getPaginationRowModel(),
     initialState: { pagination: { pageSize: 15 } },
     globalFilterFn: (row, _columnId, filterValue) => {
-      const search = filterValue.toLowerCase()
-      const entry = row.original
+      const search = filterValue.toLowerCase();
+      const entry = row.original;
       return (
         entry.id.toLowerCase().includes(search) ||
         entry.reportId.toLowerCase().includes(search) ||
         entry.action.toLowerCase().includes(search) ||
         (entry.details ?? '').toLowerCase().includes(search)
-      )
+      );
     },
-  })
+  });
 
   return (
     <div>
@@ -141,5 +141,5 @@ function AuditLogPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

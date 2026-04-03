@@ -1,24 +1,24 @@
-import { API_URL } from '#/lib/env'
-import { authClient } from '#/lib/auth-client'
-import { formatDate } from '#/lib/format'
-import { getUserReports } from '@repo/shared/api/moderation'
-import { History } from 'lucide-react'
-import { Link } from '@tanstack/react-router'
-import { ModerationStatusBadge, StatusBadge } from '#/components/StatusBadge'
-import { useQuery } from '@tanstack/react-query'
+import { API_URL } from '#/lib/env';
+import { authClient } from '#/lib/auth-client';
+import { formatDate } from '#/lib/format';
+import { getUserReports } from '@repo/shared/api/moderation';
+import { History } from 'lucide-react';
+import { Link } from '@tanstack/react-router';
+import { ModerationStatusBadge, StatusBadge } from '#/components/StatusBadge';
+import { useQuery } from '@tanstack/react-query';
 
 interface UserHistoryProps {
-  userId: string
-  excludeReportId: string
+  userId: string;
+  excludeReportId: string;
 }
 
 export function UserHistory({ userId, excludeReportId }: UserHistoryProps) {
   const { data: reports = [] } = useQuery({
     queryKey: ['user-reports', userId],
     queryFn: () => getUserReports(authClient as never, API_URL, userId),
-  })
+  });
 
-  const otherReports = reports.filter(r => r.id !== excludeReportId)
+  const otherReports = reports.filter(r => r.id !== excludeReportId);
 
   return (
     <div className="border-border bg-surface rounded-xl border">
@@ -55,5 +55,5 @@ export function UserHistory({ userId, excludeReportId }: UserHistoryProps) {
         )}
       </div>
     </div>
-  )
+  );
 }

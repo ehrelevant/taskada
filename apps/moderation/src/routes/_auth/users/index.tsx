@@ -1,7 +1,7 @@
-import { API_URL } from '#/lib/env'
-import { authClient } from '#/lib/auth-client'
-import { ChevronLeft, ChevronRight, Search, Users } from 'lucide-react'
-import { createFileRoute } from '@tanstack/react-router'
+import { API_URL } from '#/lib/env';
+import { authClient } from '#/lib/auth-client';
+import { ChevronLeft, ChevronRight, Search, Users } from 'lucide-react';
+import { createFileRoute } from '@tanstack/react-router';
 import {
   flexRender,
   getCoreRowModel,
@@ -9,25 +9,25 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from '@tanstack/react-table'
-import { getUsers } from '@repo/shared/api/moderation'
-import { useQuery } from '@tanstack/react-query'
-import { userColumns } from '#/lib/user-table-columns'
-import { useState } from 'react'
+} from '@tanstack/react-table';
+import { getUsers } from '@repo/shared/api/moderation';
+import { useQuery } from '@tanstack/react-query';
+import { userColumns } from '#/lib/user-table-columns';
+import { useState } from 'react';
 
 export const Route = createFileRoute('/_auth/users/')({
   component: UsersPage,
-})
+});
 
 function UsersPage() {
-  const [globalFilter, setGlobalFilter] = useState('')
+  const [globalFilter, setGlobalFilter] = useState('');
 
   const { data } = useQuery({
     queryKey: ['users', { limit: 100 }],
     queryFn: () => getUsers(authClient as never, API_URL, { limit: 100 }),
-  })
+  });
 
-  const users = data?.data ?? []
+  const users = data?.data ?? [];
 
   const table = useReactTable({
     data: users,
@@ -40,12 +40,12 @@ function UsersPage() {
     getPaginationRowModel: getPaginationRowModel(),
     initialState: { pagination: { pageSize: 10 } },
     globalFilterFn: (row, _columnId, filterValue) => {
-      const search = filterValue.toLowerCase()
-      const u = row.original
-      const name = [u.firstName, u.middleName, u.lastName].filter(Boolean).join(' ').toLowerCase()
-      return u.id.toLowerCase().includes(search) || name.includes(search) || u.email.toLowerCase().includes(search)
+      const search = filterValue.toLowerCase();
+      const u = row.original;
+      const name = [u.firstName, u.middleName, u.lastName].filter(Boolean).join(' ').toLowerCase();
+      return u.id.toLowerCase().includes(search) || name.includes(search) || u.email.toLowerCase().includes(search);
     },
-  })
+  });
 
   return (
     <div>
@@ -137,5 +137,5 @@ function UsersPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

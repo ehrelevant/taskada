@@ -1,6 +1,6 @@
-import { API_URL } from '#/lib/env'
-import { createAuthClient } from 'better-auth/react'
-import { inferAdditionalFields } from 'better-auth/client/plugins'
+import { API_URL } from '#/lib/env';
+import { createAuthClient } from 'better-auth/react';
+import { inferAdditionalFields } from 'better-auth/client/plugins';
 
 export const authClient = createAuthClient({
   baseURL: API_URL,
@@ -13,6 +13,6 @@ export const authClient = createAuthClient({
       },
     }),
   ],
-})
+});
 
-export const { signIn, signOut, useSession } = authClient
+export const { signIn, signOut, useSession } = authClient;

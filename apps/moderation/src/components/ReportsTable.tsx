@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, Search } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import {
   flexRender,
   getCoreRowModel,
@@ -6,9 +6,9 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from '@tanstack/react-table'
-import type { ModerationReport, ReportStatus } from '@repo/types'
-import { useMemo, useState } from 'react'
+} from '@tanstack/react-table';
+import type { ModerationReport, ReportStatus } from '@repo/types';
+import { useMemo, useState } from 'react';
 
 const STATUS_OPTIONS: { value: ReportStatus | 'all'; label: string }[] = [
   { value: 'all', label: 'All' },
@@ -16,21 +16,21 @@ const STATUS_OPTIONS: { value: ReportStatus | 'all'; label: string }[] = [
   { value: 'under_review', label: 'Review' },
   { value: 'resolved', label: 'Resolved' },
   { value: 'dismissed', label: 'Dismissed' },
-]
+];
 
 interface ReportsTableProps {
-  data: ModerationReport[]
-  columns: Parameters<typeof useReactTable<ModerationReport>>[0]['columns']
+  data: ModerationReport[];
+  columns: Parameters<typeof useReactTable<ModerationReport>>[0]['columns'];
 }
 
 export function ReportsTable({ data, columns }: ReportsTableProps) {
-  const [globalFilter, setGlobalFilter] = useState('')
-  const [statusFilter, setStatusFilter] = useState<ReportStatus | 'all'>('all')
+  const [globalFilter, setGlobalFilter] = useState('');
+  const [statusFilter, setStatusFilter] = useState<ReportStatus | 'all'>('all');
 
   const filteredData = useMemo(() => {
-    if (statusFilter === 'all') return data
-    return data.filter(r => r.status === statusFilter)
-  }, [data, statusFilter])
+    if (statusFilter === 'all') return data;
+    return data.filter(r => r.status === statusFilter);
+  }, [data, statusFilter]);
 
   const table = useReactTable({
     data: filteredData,
@@ -45,15 +45,15 @@ export function ReportsTable({ data, columns }: ReportsTableProps) {
       pagination: { pageSize: 10 },
     },
     globalFilterFn: (row, _columnId, filterValue) => {
-      const search = filterValue.toLowerCase()
-      const report = row.original
+      const search = filterValue.toLowerCase();
+      const report = row.original;
       return (
         report.id.toLowerCase().includes(search) ||
         report.reason.toLowerCase().includes(search) ||
         (report.description ?? '').toLowerCase().includes(search)
-      )
+      );
     },
-  })
+  });
 
   return (
     <div>
@@ -150,5 +150,5 @@ export function ReportsTable({ data, columns }: ReportsTableProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }

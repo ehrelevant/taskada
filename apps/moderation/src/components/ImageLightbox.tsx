@@ -1,43 +1,43 @@
-import { ChevronLeft, ChevronRight, X } from 'lucide-react'
-import { useCallback, useEffect } from 'react'
+import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { useCallback, useEffect } from 'react';
 
 interface LightboxImage {
-  id: string
-  image: string
-  url: string | null
+  id: string;
+  image: string;
+  url: string | null;
 }
 
 interface ImageLightboxProps {
-  images: LightboxImage[]
-  currentIndex: number
-  onClose: () => void
-  onNavigate: (index: number) => void
+  images: LightboxImage[];
+  currentIndex: number;
+  onClose: () => void;
+  onNavigate: (index: number) => void;
 }
 
-const COLORS = ['bg-accent-subtle', 'bg-danger-subtle', 'bg-warning-subtle', 'bg-success-subtle', 'bg-info-subtle']
+const COLORS = ['bg-accent-subtle', 'bg-danger-subtle', 'bg-warning-subtle', 'bg-success-subtle', 'bg-info-subtle'];
 
 export function ImageLightbox({ images, currentIndex, onClose, onNavigate }: ImageLightboxProps) {
-  const current = images[currentIndex]
-  const hasPrev = currentIndex > 0
-  const hasNext = currentIndex < images.length - 1
+  const current = images[currentIndex];
+  const hasPrev = currentIndex > 0;
+  const hasNext = currentIndex < images.length - 1;
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose()
-      if (e.key === 'ArrowLeft' && hasPrev) onNavigate(currentIndex - 1)
-      if (e.key === 'ArrowRight' && hasNext) onNavigate(currentIndex + 1)
+      if (e.key === 'Escape') onClose();
+      if (e.key === 'ArrowLeft' && hasPrev) onNavigate(currentIndex - 1);
+      if (e.key === 'ArrowRight' && hasNext) onNavigate(currentIndex + 1);
     },
     [currentIndex, hasPrev, hasNext, onClose, onNavigate],
-  )
+  );
 
   useEffect(() => {
-    document.addEventListener('keydown', handleKeyDown)
-    document.body.style.overflow = 'hidden'
+    document.addEventListener('keydown', handleKeyDown);
+    document.body.style.overflow = 'hidden';
     return () => {
-      document.removeEventListener('keydown', handleKeyDown)
-      document.body.style.overflow = ''
-    }
-  }, [handleKeyDown])
+      document.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = '';
+    };
+  }, [handleKeyDown]);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -88,5 +88,5 @@ export function ImageLightbox({ images, currentIndex, onClose, onNavigate }: Ima
         </div>
       </div>
     </div>
-  )
+  );
 }

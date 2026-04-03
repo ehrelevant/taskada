@@ -1,4 +1,4 @@
-import type { ReportReason } from '@repo/types'
+import type { ReportReason } from '@repo/types';
 
 const REASON_CONFIG: Record<ReportReason, { label: string; classes: string }> = {
   harassment: {
@@ -29,20 +29,20 @@ const REASON_CONFIG: Record<ReportReason, { label: string; classes: string }> = 
     label: 'Other',
     classes: 'bg-accent-subtle text-accent',
   },
-}
+};
 
 interface StatusBadgeProps {
-  reason: ReportReason
+  reason: ReportReason;
 }
 
 export function StatusBadge({ reason }: StatusBadgeProps) {
-  const config = REASON_CONFIG[reason]
+  const config = REASON_CONFIG[reason];
 
   return (
     <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${config.classes}`}>
       {config.label}
     </span>
-  )
+  );
 }
 
 const MODERATION_STATUS_CONFIG: Record<string, { label: string; classes: string }> = {
@@ -62,18 +62,18 @@ const MODERATION_STATUS_CONFIG: Record<string, { label: string; classes: string 
     label: 'Dismissed',
     classes: 'bg-accent-subtle text-accent',
   },
-}
+};
 
 interface ModerationStatusBadgeProps {
-  status: string
+  status: string;
 }
 
 export function ModerationStatusBadge({ status }: ModerationStatusBadgeProps) {
-  const config = MODERATION_STATUS_CONFIG[status] ?? MODERATION_STATUS_CONFIG.open
+  const config = MODERATION_STATUS_CONFIG[status] ?? MODERATION_STATUS_CONFIG.open;
 
   return (
     <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${config.classes}`}>
       {config.label}
     </span>
-  )
+  );
 }

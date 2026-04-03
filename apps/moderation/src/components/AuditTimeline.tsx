@@ -1,7 +1,7 @@
-import { ArrowRightLeft, Check, Eye, MessageSquare, Plus, UserPlus, X } from 'lucide-react'
-import type { AuditAction, AuditLogEntry } from '@repo/types'
+import { ArrowRightLeft, Check, Eye, MessageSquare, Plus, UserPlus, X } from 'lucide-react';
+import type { AuditAction, AuditLogEntry } from '@repo/types';
 
-import { formatDateTime } from '#/lib/format'
+import { formatDateTime } from '#/lib/format';
 
 const ACTION_ICONS: Record<AuditAction, typeof Plus> = {
   created: Plus,
@@ -11,7 +11,7 @@ const ACTION_ICONS: Record<AuditAction, typeof Plus> = {
   resolved: Check,
   dismissed: X,
   evidence_reviewed: Eye,
-}
+};
 
 const ACTION_LABELS: Record<AuditAction, string> = {
   created: 'Created',
@@ -21,21 +21,21 @@ const ACTION_LABELS: Record<AuditAction, string> = {
   resolved: 'Resolved',
   dismissed: 'Dismissed',
   evidence_reviewed: 'Evidence Reviewed',
-}
+};
 
 interface AuditTimelineProps {
-  entries: AuditLogEntry[]
+  entries: AuditLogEntry[];
 }
 
 export function AuditTimeline({ entries }: AuditTimelineProps) {
   if (entries.length === 0) {
-    return <p className="text-muted text-sm">No audit entries.</p>
+    return <p className="text-muted text-sm">No audit entries.</p>;
   }
 
   return (
     <div className="border-border border-l-2 pl-4">
       {entries.map(entry => {
-        const Icon = ACTION_ICONS[entry.action]
+        const Icon = ACTION_ICONS[entry.action];
         return (
           <div key={entry.id} className="relative mb-4 last:mb-0">
             <div className="bg-surface-raised ring-border -left-5.25 absolute flex h-4 w-4 items-center justify-center rounded-full ring-2">
@@ -45,8 +45,8 @@ export function AuditTimeline({ entries }: AuditTimelineProps) {
             <p className="text-secondary text-xs">{entry.details}</p>
             <p className="text-muted mt-0.5 text-[10px]">{formatDateTime(entry.createdAt)}</p>
           </div>
-        )
+        );
       })}
     </div>
-  )
+  );
 }

@@ -1,6 +1,6 @@
-import type { AuditAction, AuditLogEntry } from '@repo/types'
-import { createColumnHelper } from '@tanstack/react-table'
-import { formatDateTime } from '#/lib/format'
+import type { AuditAction, AuditLogEntry } from '@repo/types';
+import { createColumnHelper } from '@tanstack/react-table';
+import { formatDateTime } from '#/lib/format';
 
 const ACTION_LABELS: Record<AuditAction, string> = {
   created: 'Created',
@@ -10,9 +10,9 @@ const ACTION_LABELS: Record<AuditAction, string> = {
   resolved: 'Resolved',
   dismissed: 'Dismissed',
   evidence_reviewed: 'Evidence Reviewed',
-}
+};
 
-const columnHelper = createColumnHelper<AuditLogEntry>()
+const columnHelper = createColumnHelper<AuditLogEntry>();
 
 export const auditColumns = [
   columnHelper.accessor('id', {
@@ -40,4 +40,4 @@ export const auditColumns = [
     cell: info => <span className="text-muted text-xs">{formatDateTime(info.getValue())}</span>,
     size: 160,
   }),
-]
+];

@@ -1,45 +1,45 @@
-import { API_URL } from '#/lib/env'
-import { authClient } from '#/lib/auth-client'
-import { createReportNote } from '@repo/shared/api/moderation'
-import { formatDateTime } from '#/lib/format'
-import { MessageSquare, Plus } from 'lucide-react'
-import type { ModerationNote } from '@repo/types'
-import { useForm } from 'react-hook-form'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useState } from 'react'
+import { API_URL } from '#/lib/env';
+import { authClient } from '#/lib/auth-client';
+import { createReportNote } from '@repo/shared/api/moderation';
+import { formatDateTime } from '#/lib/format';
+import { MessageSquare, Plus } from 'lucide-react';
+import type { ModerationNote } from '@repo/types';
+import { useForm } from 'react-hook-form';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
 
 interface NoteFormValues {
-  content: string
+  content: string;
 }
 
 interface NotesThreadProps {
-  reportId: string
-  initialNotes: ModerationNote[]
+  reportId: string;
+  initialNotes: ModerationNote[];
 }
 
 export function NotesThread({ reportId, initialNotes }: NotesThreadProps) {
-  const [isFormOpen, setIsFormOpen] = useState(false)
-  const queryClient = useQueryClient()
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const queryClient = useQueryClient();
 
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<NoteFormValues>({ defaultValues: { content: '' } })
+  } = useForm<NoteFormValues>({ defaultValues: { content: '' } });
 
   const createNoteMutation = useMutation({
     mutationFn: (content: string) => createReportNote(authClient as never, API_URL, reportId, content),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['report-notes', reportId] })
-      reset()
-      setIsFormOpen(false)
+      queryClient.invalidateQueries({ queryKey: ['report-notes', reportId] });
+      reset();
+      setIsFormOpen(false);
     },
-  })
+  });
 
   const onSubmit = (values: NoteFormValues) => {
-    createNoteMutation.mutate(values.content)
-  }
+    createNoteMutation.mutate(values.content);
+  };
 
   return (
     <div className="border-border bg-surface rounded-xl border">
@@ -77,8 +77,8 @@ export function NotesThread({ reportId, initialNotes }: NotesThreadProps) {
             <button
               type="button"
               onClick={() => {
-                setIsFormOpen(false)
-                reset()
+                setIsFormOpen(false);
+                reset();
               }}
               className="border-border text-secondary hover:bg-surface-hover rounded-lg border px-4 py-2 text-sm font-medium transition-colors"
             >
@@ -104,5 +104,5 @@ export function NotesThread({ reportId, initialNotes }: NotesThreadProps) {
         )}
       </div>
     </div>
-  )
+  );
 }

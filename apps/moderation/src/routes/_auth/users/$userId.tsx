@@ -1,41 +1,41 @@
-import { API_URL } from '#/lib/env'
-import { ArrowLeft, Ban, Mail, Phone, Shield, User as UserIcon } from 'lucide-react'
-import { authClient } from '#/lib/auth-client'
-import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
-import { formatDate, getUserFullName } from '#/lib/format'
-import { getUserById, getUserReports, moderateUser } from '@repo/shared/api/moderation'
-import { ModerationStatusBadge, StatusBadge } from '#/components/StatusBadge'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { API_URL } from '#/lib/env';
+import { ArrowLeft, Ban, Mail, Phone, Shield, User as UserIcon } from 'lucide-react';
+import { authClient } from '#/lib/auth-client';
+import { createFileRoute, Link, useRouter } from '@tanstack/react-router';
+import { formatDate, getUserFullName } from '#/lib/format';
+import { getUserById, getUserReports, moderateUser } from '@repo/shared/api/moderation';
+import { ModerationStatusBadge, StatusBadge } from '#/components/StatusBadge';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 export const Route = createFileRoute('/_auth/users/$userId')({
   component: UserDetail,
-})
+});
 
 function UserDetail() {
-  const { userId } = Route.useParams()
-  const router = useRouter()
-  const queryClient = useQueryClient()
+  const { userId } = Route.useParams();
+  const router = useRouter();
+  const queryClient = useQueryClient();
 
   const { data: adminUser, isLoading } = useQuery({
     queryKey: ['user', userId],
     queryFn: () => getUserById(authClient as never, API_URL, userId),
-  })
+  });
 
   const { data: reports = [] } = useQuery({
     queryKey: ['user-reports', userId],
     queryFn: () => getUserReports(authClient as never, API_URL, userId),
-  })
+  });
 
   const moderateMutation = useMutation({
     mutationFn: (params: { action: string; durationDays?: number; message?: string }) =>
       moderateUser(authClient as never, API_URL, userId, params.action, params.durationDays, params.message),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['user', userId] })
+      queryClient.invalidateQueries({ queryKey: ['user', userId] });
     },
-  })
+  });
 
   if (isLoading) {
-    return <div className="text-muted py-16 text-center text-sm">Loading...</div>
+    return <div className="text-muted py-16 text-center text-sm">Loading...</div>;
   }
 
   if (!adminUser) {
@@ -46,33 +46,33 @@ function UserDetail() {
           Back to Users
         </Link>
       </div>
-    )
+    );
   }
 
-  const fullName = getUserFullName(adminUser)
+  const fullName = getUserFullName(adminUser);
 
   const handleBan = () => {
     if (window.confirm(`Ban ${fullName}? This cannot be undone.`)) {
-      moderateMutation.mutate({ action: 'ban' })
+      moderateMutation.mutate({ action: 'ban' });
     }
-  }
+  };
 
   const handleSuspend = () => {
-    const duration = window.prompt('Suspension duration in days:', '7')
+    const duration = window.prompt('Suspension duration in days:', '7');
     if (duration) {
       moderateMutation.mutate({
         action: 'suspend',
         durationDays: parseInt(duration),
-      })
+      });
     }
-  }
+  };
 
   const handleWarn = () => {
-    const message = window.prompt('Warning message:', '')
+    const message = window.prompt('Warning message:', '');
     if (message) {
-      moderateMutation.mutate({ action: 'warn', message })
+      moderateMutation.mutate({ action: 'warn', message });
     }
-  }
+  };
 
   return (
     <div>
@@ -152,7 +152,7 @@ function UserDetail() {
             ) : (
               <div className="divide-border-subtle divide-y">
                 {reports.map(r => {
-                  const isReporter = r.reporterUserId === userId
+                  const isReporter = r.reporterUserId === userId;
                   return (
                     <Link
                       key={r.id}
@@ -167,7 +167,7 @@ function UserDetail() {
                       </div>
                       <span className="text-muted shrink-0 text-xs">{formatDate(r.createdAt)}</span>
                     </Link>
-                  )
+                  );
                 })}
               </div>
             )}
@@ -175,7 +175,7 @@ function UserDetail() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 function DetailRow({ label, value, icon: Icon }: { label: string; value: string; icon?: typeof UserIcon }) {
@@ -187,5 +187,5 @@ function DetailRow({ label, value, icon: Icon }: { label: string; value: string;
       </span>
       <span className="text-secondary font-medium capitalize">{value}</span>
     </div>
-  )
+  );
 }
