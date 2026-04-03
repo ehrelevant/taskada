@@ -1,6 +1,6 @@
-# Service App (Name Pending)
+# Taskada
 
-This repository contains the main project files used for the implementation of a digital platform for connecting service seekers with local service providers.
+This repository contains the main project files used for the implementation of Taskada: a digital platform for connecting service seekers with local service providers.
 
 ## Environment Variables
 
@@ -140,7 +140,7 @@ Use the production compose stack to deploy only long-running services (`database
 
 ### Required Environment Files
 
-- `.env.production` (database container env)
+- `.env.production`
 - `apps/server/.env.production`
 - `apps/moderation/.env.production`
 - `packages/database/.env.production`
