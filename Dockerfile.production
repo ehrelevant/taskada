@@ -1,0 +1,30 @@
+FROM node:24-alpine AS base
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable && corepack prepare pnpm@10.17.1 --activate
+
+FROM base AS build
+COPY . /app
+WORKDIR /app
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
+    pnpm install --frozen-lockfile
+RUN pnpm run -r build
+RUN pnpm deploy --filter=server --prod /prod/server
+RUN pnpm deploy --filter=moderation --prod /prod/moderation
+RUN pnpm deploy --filter=database --prod /prod/database
+
+FROM base AS server-app
+COPY --from=build /prod/server /prod/server
+WORKDIR /prod/server
+EXPOSE 3000
+CMD ["pnpm", "start:prod"]
+
+FROM base AS moderation-app
+COPY --from=build /prod/moderation /prod/moderation
+WORKDIR /prod/moderation
+EXPOSE 3300
+CMD ["pnpm", "start"]
+
+FROM base AS database-tools
+COPY --from=build /prod/database /prod/database
+WORKDIR /prod/database

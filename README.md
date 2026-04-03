@@ -133,3 +133,43 @@ This requires:
 - `scripts/.env.build` with signing credentials (see [Build Scripts](#build-scripts-scriptsenvbuild))
 
 The APKs are output to the `releases/` directory as `taskada-seeker.apk` and `taskada-provider.apk`.
+
+## Production Docker
+
+Use the production compose stack to deploy only long-running services (`database`, `server`, `moderation`) and run DB operations (`migrate`, `seed`) on demand.
+
+### Required Environment Files
+
+- `.env.production` (database container env)
+- `apps/server/.env.production`
+- `apps/moderation/.env.production`
+- `packages/database/.env.production`
+- `packages/xendit-payment-engine/.env.production`
+
+### Build and Start
+
+```bash
+# Build production images
+pnpm docker:prod:build
+
+# Start long-running services
+pnpm docker:prod
+```
+
+### Run Migrations / Seed On Demand
+
+```bash
+# Run migrations once
+pnpm docker:prod:migrate
+
+# Run seed once
+pnpm docker:prod:seed
+```
+
+These jobs are configured as operational profile services, so they do not start during normal deployment.
+
+### Stop the Stack
+
+```bash
+pnpm docker:prod:down
+```

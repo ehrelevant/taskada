@@ -11,6 +11,7 @@ releases/
 !.gitignore
 !.prettierrc.json
 !.prettierignore
+!.dockerignore
 !.env.example
 !.github
 **/coverage

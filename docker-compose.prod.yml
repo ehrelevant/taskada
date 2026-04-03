@@ -2,6 +2,7 @@ services:
   database:
     image: postgis/postgis:18-3.6-alpine
     restart: always
+    init: true
     env_file:
       - ./.env.production
     volumes:
@@ -13,10 +14,14 @@ services:
       retries: 5
 
   migrate:
+    profiles:
+      - ops
     build:
       context: .
-      dockerfile: docker/Dockerfile.database
-    command: pnpm --filter @repo/database migrate
+      dockerfile: Dockerfile.production
+      target: database-tools
+    command: pnpm migrate
+    restart: 'no'
     env_file:
       - packages/database/.env.production
     depends_on:
@@ -24,10 +29,14 @@ services:
         condition: service_healthy
 
   seed:
+    profiles:
+      - ops
     build:
       context: .
-      dockerfile: docker/Dockerfile.database
-    command: pnpm --filter @repo/database seed
+      dockerfile: Dockerfile.production
+      target: database-tools
+    command: pnpm seed
+    restart: 'no'
     env_file:
       - packages/database/.env.production
     depends_on:
@@ -37,9 +46,12 @@ services:
   server:
     build:
       context: .
-      dockerfile: docker/Dockerfile.server
+      dockerfile: Dockerfile.production
+      target: server-app
     ports:
       - '3000:3000'
+    restart: unless-stopped
+    init: true
     env_file:
       - apps/server/.env.production
       - packages/xendit-payment-engine/.env.production
@@ -50,13 +62,17 @@ services:
   moderation:
     build:
       context: .
-      dockerfile: docker/Dockerfile.moderation
+      dockerfile: Dockerfile.production
+      target: moderation-app
     ports:
       - '3300:3300'
+    restart: unless-stopped
+    init: true
     env_file:
       - apps/moderation/.env.production
     depends_on:
-      - server
+      server:
+        condition: service_started
 
 volumes:
   postgres:
