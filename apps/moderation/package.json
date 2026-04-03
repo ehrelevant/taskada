@@ -5,6 +5,9 @@
   "imports": {
     "#/*": "./src/*"
   },
+  "files": [
+    ".output"
+  ],
   "scripts": {
     "dev": "vite dev --port 3300",
     "build": "vite build",
