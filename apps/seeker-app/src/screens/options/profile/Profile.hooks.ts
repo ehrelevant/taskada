@@ -84,13 +84,13 @@ export function useProfile() {
   useEffect(() => {
     const changed = Boolean(
       profileData.firstName !== originalProfileData.firstName ||
-        profileData.middleName !== originalProfileData.middleName ||
-        profileData.lastName !== originalProfileData.lastName ||
-        profileData.phoneNumber !== originalProfileData.phoneNumber ||
-        profileData.avatarUrl !== originalProfileData.avatarUrl ||
-        passwordData.oldPassword ||
-        passwordData.newPassword ||
-        passwordData.confirmPassword,
+      profileData.middleName !== originalProfileData.middleName ||
+      profileData.lastName !== originalProfileData.lastName ||
+      profileData.phoneNumber !== originalProfileData.phoneNumber ||
+      profileData.avatarUrl !== originalProfileData.avatarUrl ||
+      passwordData.oldPassword ||
+      passwordData.newPassword ||
+      passwordData.confirmPassword,
     );
     setHasChanges(changed);
   }, [profileData, passwordData, originalProfileData]);

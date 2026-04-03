@@ -18,9 +18,8 @@ import {
 //   },
 // }));
 
-const { create_payout, get_payout, get_payout_by_reference_id, cancel_payout, get_payment_channels } = await import(
-  './index'
-);
+const { create_payout, get_payout, get_payout_by_reference_id, cancel_payout, get_payment_channels } =
+  await import('./index');
 
 const CreatePayoutRequestExample = {
   reference_id: 'myref-1482928194',

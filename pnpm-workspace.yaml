@@ -2,6 +2,6 @@ packages:
   - apps/*
   - packages/*
 syncInjectedDepsAfterScripts:
-- build
+  - build
 nodeLinker: hoisted
 injectWorkspacePackages: true
