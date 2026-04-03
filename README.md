@@ -18,18 +18,19 @@ Each app/package requires its own `.env` file. Copy the corresponding `.env.exam
 
 ### Server (`apps/server/.env`)
 
-| Variable                | Description                       | Example                                                |
-| ----------------------- | --------------------------------- | ------------------------------------------------------ |
-| `DATABASE_URL`          | PostgreSQL connection string      | `postgres://postgres:password@localhost:5432/postgres` |
-| `BETTER_AUTH_URL`       | Base URL for the auth service     | `http://localhost:3000`                                |
-| `BETTER_AUTH_SECRET`    | Secret key for auth token signing |                                                        |
-| `XENDIT_SECRET_KEY`     | Xendit payment gateway secret key | `xnd_development_...`                                  |
-| `GOOGLE_MAPS_API_KEY`   | Server-side Google Maps API key   | `AIzaSy...`                                            |
-| `AWS_REGION`            | AWS S3 region                     | `ap-southeast-1`                                       |
-| `AWS_ACCESS_KEY_ID`     | AWS access key ID                 |                                                        |
-| `AWS_SECRET_ACCESS_KEY` | AWS secret access key             |                                                        |
-| `S3_BUCKET_NAME`        | S3 bucket name for file uploads   | `taskada-bucket`                                       |
-| `S3_PUBLIC_URL`         | Public URL for S3 assets          | `https://taskada-bucket.s3.amazonaws.com`              |
+| Variable                | Description                                            | Example                                                |
+| ----------------------- | ------------------------------------------------------ | ------------------------------------------------------ |
+| `DATABASE_URL`          | PostgreSQL connection string                           | `postgres://postgres:password@localhost:5432/postgres` |
+| `BETTER_AUTH_URL`       | Base URL for the auth service                          | `http://localhost:3000`                                |
+| `BETTER_AUTH_SECRET`    | Secret key for auth token signing                     |                                                        |
+| `XENDIT_SECRET_KEY`     | Xendit payment gateway secret key                     | `xnd_development_...`                                  |
+| `GOOGLE_MAPS_API_KEY`   | Server-side Google Maps API key                        | `AIzaSy...`                                            |
+| `AWS_REGION`            | AWS S3 region                                          | `ap-southeast-1`                                       |
+| `AWS_ACCESS_KEY_ID`     | AWS access key ID                                      |                                                        |
+| `AWS_SECRET_ACCESS_KEY` | AWS secret access key                                  |                                                        |
+| `S3_BUCKET_NAME`        | S3 bucket name for file uploads                        | `taskada-bucket`                                       |
+| `S3_PUBLIC_URL`         | Public URL for S3 assets                               | `https://taskada-bucket.s3.amazonaws.com`              |
+| `CORS_ORIGINS`          | Comma-separated list of allowed CORS origins           | `https://yourdomain.com,seeker-app://,provider-app://` |
 
 ### Seeker App (`apps/seeker-app/.env`)
 
@@ -47,9 +48,26 @@ Each app/package requires its own `.env` file. Copy the corresponding `.env.exam
 
 ### Database Package (`packages/database/.env`)
 
-| Variable       | Description                  | Example                                                |
-| -------------- | ---------------------------- | ------------------------------------------------------ |
-| `DATABASE_URL` | PostgreSQL connection string | `postgres://postgres:password@localhost:5432/postgres` |
+| Variable              | Description                  | Example                                                |
+| --------------------- | ---------------------------- | ------------------------------------------------------ |
+| `DATABASE_URL`        | PostgreSQL connection string | `postgres://postgres:password@localhost:5432/postgres` |
+| `SEED_ADMIN_EMAIL`    | Admin email for seeding      | `admin@example.com`                                    |
+| `SEED_ADMIN_PHONE`    | Admin phone for seeding      | `09171234567`                                          |
+| `SEED_ADMIN_PASSWORD` | Admin password for seeding  | `password`                                             |
+
+### Moderation App (`apps/moderation/.env`)
+
+| Variable  | Description                  | Example                 |
+| --------- | ---------------------------- | ----------------------- |
+| `API_URL` | Base URL for the API server  | `http://localhost:3000` |
+
+### Xendit Package (`packages/xendit-payment-engine/.env`)
+
+| Variable               | Description                    | Example                       |
+| ---------------------- | ------------------------------ | ----------------------------- |
+| `XENDIT_CLIENT_ID`     | Xendit client ID               | `xnd_public_development_...` |
+| `XENDIT_CLIENT_SECRET` | Xendit client secret           | `xnd_development_...`         |
+| `XENDIT_API_URL`       | Xendit API base URL            | `https://api.xendit.co`      |
 
 ### Build Scripts (`scripts/.env.build`)
 
