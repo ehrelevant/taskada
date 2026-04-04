@@ -11,6 +11,7 @@ const config: Config = {
     '^@payouts/(.*)$': '<rootDir>/src/payouts/$1',
     '^@src/(.*)$': '<rootDir>/src/$1',
     '^@standard/(.*)$': '<rootDir>/src/standard/$1',
+    '^@logger$': '<rootDir>/src/logger.ts',
   },
   ...createDefaultEsmPreset({
     useEsm: true,
