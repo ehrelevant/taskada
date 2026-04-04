@@ -2,16 +2,16 @@
 process.env.XENDIT_API_URL = 'https://api.example.com';
 process.env.XENDIT_CLIENT_SECRET = 'mock_secret';
 
-import { mockPost, partial_mockKyResponse } from '@src/tests';
+import { MockHTTPError, mockPost, partial_mockKyResponse } from '@src/tests/utils';
 
-import { CreateRefundResponseSchema } from './schema';
+import { CreateRefundResponseSchema } from '../../payments/refund/schema';
 
-const { refund_payment } = await import('.');
+const { refund_payment } = await import('../../payments/refund');
 
 const payment_request_sample = {
   reference_id: '90392f42-d98a-49ef-a7f3-abcezas123',
   payment_request_id: 'pr-90392f42-d98a-49ef-a7f3-abcezas123',
-  currency: 'IDR' as const,
+  currency: 'PHP' as const,
   amount: 10000,
   reason: 'REQUESTED_BY_CUSTOMER' as const,
 };
@@ -48,8 +48,6 @@ describe('refund_payment', () => {
         json: async () => ({ error_code: 'INVALID_REQUEST', message: 'Bad request', errors: [] }),
       }),
     );
-    await expect(refund_payment(payment_request_sample)).rejects.toThrow(
-      'An error occurred while processing the session due to INVALID_REQUEST',
-    );
+    await expect(refund_payment(payment_request_sample)).rejects.toThrow(MockHTTPError);
   });
 });

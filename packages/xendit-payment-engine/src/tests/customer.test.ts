@@ -2,17 +2,12 @@
 process.env.XENDIT_API_URL = 'https://api.example.com';
 process.env.XENDIT_CLIENT_SECRET = 'mock_secret';
 
+import { CustomerSchema, GetCustomerListResponseSchema } from '@src/customer/schema';
 import { jest } from '@jest/globals';
-import { mockGet, mockPost, partial_mockKyResponse } from '@src/tests';
+import { mock_ky_client, mockGet, mockPatch, mockPost, partial_mockKyResponse } from '@src/tests/utils';
+jest.unstable_mockModule('@src/client', mock_ky_client);
 
-import { CustomerSchema, GetCustomerListResponseSchema } from './schema/index';
-jest.unstable_mockModule('@src/client', () => ({
-  default: {
-    create: () => ({ post: mockPost, get: mockGet }),
-  },
-}));
-
-const { get_customer, get_customer_list, create_customer } = await import('.');
+const { get_customer, get_customer_list, create_customer } = await import('@src/customer');
 
 describe('get_customer', () => {
   it('should return parsed customer', async () => {
@@ -73,9 +68,7 @@ describe('get_customer', () => {
         json: async () => ({ error_code: 'INVALID_REQUEST', message: 'Bad request', errors: [] }),
       }),
     );
-    await expect(get_customer({ customer_id: 'cust-123' })).rejects.toThrow(
-      'Failed to retrieve customer detail due to INVALID_REQUEST',
-    );
+    await expect(get_customer({ customer_id: 'cust-123' })).rejects.toThrow('Bad Request');
   });
 });
 
@@ -142,15 +135,14 @@ describe('get_customer_list', () => {
         json: async () => ({ error_code: 'UNAUTHORIZED', message: 'Not authorized', errors: [] }),
       }),
     );
-    await expect(get_customer_list({ reference_id: '69a2bab89b9e1c193978c114' })).rejects.toThrow(
-      'Failed to retrieve customer list due to UNAUTHORIZED',
-    );
+    await expect(get_customer_list({ reference_id: '69a2bab89b9e1c193978c114' })).rejects.toThrow('Unauthorized');
   });
 });
 
 describe('create_customer', () => {
   it('should create and return parsed customer', async () => {
     const createRequest = {
+      reference_id: 'ref-12312312321321321',
       individual_detail: {
         given_names: 'Task',
         surname: null,
@@ -239,9 +231,10 @@ describe('create_customer', () => {
       }),
     );
     const minimalRequest = {
+      reference_id: 'ref-123131231231231232112321',
       individual_detail: {
-        given_names: 'Task',
-        surname: null,
+        given_names: 'First',
+        surname: 'Last',
         nationality: null,
         place_of_birth: null,
         date_of_birth: null,
@@ -274,15 +267,18 @@ describe('create_customer', () => {
       date_of_registration: null,
       domicile_of_registration: 'PH',
       metadata: null,
+      created: '2026-04-03T08:04:48.173Z',
+      updated: '2026-04-03T08:04:48.173Z',
     };
 
-    await expect(create_customer(minimalRequest)).rejects.toThrow('Failed to create customer due to INVALID_REQUEST');
+    await expect(create_customer(minimalRequest)).rejects.toThrow('Bad Request');
   });
 });
 
 describe('update_customer', () => {
   it('should update and return parsed customer', async () => {
     const updateRequest = {
+      customer_id: 'cust-1231232132132131232112',
       individual_detail: {
         given_names: 'Task',
         surname: null,
@@ -357,14 +353,14 @@ describe('update_customer', () => {
       description: null,
     };
 
-    mockPost.mockResolvedValueOnce(partial_mockKyResponse({ status: 200, json: async () => updatedCustomer }));
+    mockPatch.mockResolvedValueOnce(partial_mockKyResponse({ status: 200, json: async () => updatedCustomer }));
 
-    const result = await (await import('.')).update_customer(updateRequest);
+    const result = await (await import('@src/customer')).update_customer(updateRequest);
     expect(result).toEqual(CustomerSchema.parse(updatedCustomer));
   });
 
   it('should throw with API error when update response is not ok', async () => {
-    mockPost.mockResolvedValueOnce(
+    mockPatch.mockResolvedValueOnce(
       partial_mockKyResponse({
         status: 400,
         json: async () => ({ error_code: 'INVALID_REQUEST', message: 'Bad request', errors: [] }),
@@ -372,6 +368,7 @@ describe('update_customer', () => {
     );
 
     const minimalUpdate = {
+      customer_id: 'cust-12312321321312321312321',
       individual_detail: {
         given_names: 'Task',
         surname: null,
@@ -409,8 +406,6 @@ describe('update_customer', () => {
       metadata: null,
     };
 
-    await expect((await import('.')).update_customer(minimalUpdate)).rejects.toThrow(
-      'Failed to update customer due to INVALID_REQUEST',
-    );
+    await expect((await import('@src/customer')).update_customer(minimalUpdate)).rejects.toThrow('Bad Request');
   });
 });

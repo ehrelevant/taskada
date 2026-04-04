@@ -2,11 +2,15 @@
 process.env.XENDIT_API_URL = 'https://api.example.com';
 process.env.XENDIT_CLIENT_SECRET = 'mock_secret';
 
-import { mockGet, mockPost, partial_mockKyResponse } from '@src/tests';
+import { mockGet, mockPost, partial_mockKyResponse } from '@src/tests/utils';
 
-import { CancelSessionResponseSchema, CreateSessionResponseSchema, GetSessionStatusResponseSchema } from './schema';
+import {
+  CancelSessionResponseSchema,
+  CreateSessionResponseSchema,
+  GetSessionStatusResponseSchema,
+} from '../../payments/session/schema';
 
-const { create_session, get_session_status, cancel_session } = await import('.');
+const { create_session, get_session_status, cancel_session } = await import('../../payments/session');
 
 const CUST_ID = 'a'.repeat(41);
 
@@ -110,7 +114,7 @@ describe('payment session', () => {
         metadata: null,
         items: null,
       }),
-    ).rejects.toThrow('An error occurred while processing the session due to INVALID_REQUEST');
+    ).rejects.toThrow('Bad Request');
   });
 
   it('get_session_status - success', async () => {
@@ -126,9 +130,7 @@ describe('payment session', () => {
         json: async () => ({ error_code: 'NOT_FOUND', message: 'Not found', errors: [] }),
       }),
     );
-    await expect(get_session_status({ session_id: 'ps-661f87c614802d6c402cd82d' })).rejects.toThrow(
-      'An error occurred while processing the session due to NOT_FOUND',
-    );
+    await expect(get_session_status({ session_id: 'ps-661f87c614802d6c402cd82d' })).rejects.toThrow('Not Found');
   });
 
   it('cancel_session - success', async () => {
@@ -144,8 +146,6 @@ describe('payment session', () => {
         json: async () => ({ error_code: 'FORBIDDEN', message: 'Forbidden', errors: [] }),
       }),
     );
-    await expect(cancel_session({ session_id: 'ps-661f87c614802d6c402cd82d' })).rejects.toThrow(
-      'An error occurred while processing the session due to FORBIDDEN',
-    );
+    await expect(cancel_session({ session_id: 'ps-661f87c614802d6c402cd82d' })).rejects.toThrow('Forbidden');
   });
 });

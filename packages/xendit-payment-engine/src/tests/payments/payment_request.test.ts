@@ -3,30 +3,22 @@ process.env.XENDIT_API_URL = 'http://test.local';
 process.env.XENDIT_CLIENT_SECRET = 'test_secret';
 
 import { jest } from '@jest/globals';
-import { mockGet, mockPost, partial_mockKyResponse } from '@src/tests';
+import { mock_ky_client, mockGet, mockPost, partial_mockKyResponse } from '@src/tests/utils';
 
 import type {
   cancel_payment_request as cancel_payment_request_fn,
   get_payment_request_status as get_payment_request_status_fn,
   simulate_payment as simulate_payment_fn,
-} from './index';
+} from '../../payments/payment_request/index';
 
 let get_payment_request_status: typeof get_payment_request_status_fn;
 let cancel_payment_request: typeof cancel_payment_request_fn;
 let simulate_payment: typeof simulate_payment_fn;
 
-jest.unstable_mockModule('@src/client', () => ({
-  __esModule: true,
-  default: {
-    create: () => ({
-      get: mockGet,
-      post: mockPost,
-    }),
-  },
-}));
+jest.unstable_mockModule('@src/client', mock_ky_client);
 
 beforeAll(async () => {
-  const mod = await import('./index');
+  const mod = await import('../../payments/payment_request/index');
   get_payment_request_status = mod.get_payment_request_status;
   cancel_payment_request = mod.cancel_payment_request;
   simulate_payment = mod.simulate_payment;
@@ -79,7 +71,7 @@ describe('payment_request index', () => {
       partial_mockKyResponse({ status: 400, json: async () => ({ error_code: 'ERR_X', message: 'boom', errors: [] }) }),
     );
 
-    await expect(get_payment_request_status({ payment_request_id: validId })).rejects.toThrow(/ERR_X/);
+    await expect(get_payment_request_status({ payment_request_id: validId })).rejects.toThrow('Bad Request');
   });
 
   test('cancel_payment_request - success', async () => {
@@ -99,7 +91,7 @@ describe('payment_request index', () => {
       }),
     );
 
-    await expect(cancel_payment_request({ payment_request_id: validId })).rejects.toThrow(/ERR_CANCEL/);
+    await expect(cancel_payment_request({ payment_request_id: validId })).rejects.toThrow('Bad Request');
   });
 
   test('simulate_payment - success and body check', async () => {
@@ -123,6 +115,6 @@ describe('payment_request index', () => {
       }),
     );
 
-    await expect(simulate_payment({ payment_request_id: validId, amount: 1000 })).rejects.toThrow(/ERR_SIM/);
+    await expect(simulate_payment({ payment_request_id: validId, amount: 1000 })).rejects.toThrow('Bad Request');
   });
 });

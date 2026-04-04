@@ -2,24 +2,12 @@
 process.env.XENDIT_API_URL = 'https://api.example.com';
 process.env.XENDIT_CLIENT_SECRET = 'mock_secret';
 
-import { mockGet, mockPost, partial_mockKyResponse } from '@src/tests';
+import { CancelPayoutResponseSchema, CreatePayoutResponseSchema, GetPaymentChannelsResponseSchema, GetPayoutResponseSchema, ListPayoutsResponseSchema } from '@payouts/schema';
+import { mockGet, mockPost, partial_mockKyResponse } from '@src/tests/utils';
 
-import {
-  CancelPayoutResponseSchema,
-  CreatePayoutResponseSchema,
-  GetPaymentChannelsResponseSchema,
-  GetPayoutResponseSchema,
-  ListPayoutsResponseSchema,
-} from './schema';
-
-// jest.unstable_mockModule("@src/client", () => ({
-//   default: {
-//     create: () => ({ post: mockPost, get: mockGet }),
-//   },
-// }));
-
-const { create_payout, get_payout, get_payout_by_reference_id, cancel_payout, get_payment_channels } =
-  await import('./index');
+const { create_payout, get_payout, get_payout_by_reference_id, cancel_payout, get_payment_channels } = await import(
+  '@payouts/index'
+);
 
 const CreatePayoutRequestExample = {
   reference_id: 'myref-1482928194',
@@ -134,7 +122,7 @@ describe('payouts/index', () => {
 
     expect(mockGet).toHaveBeenCalledWith('v2/payouts/channels', {
       searchParams: {
-        channel_name: req.channel_name,
+        currency: 'PHP',
         channel_category: req.channel_category,
         channel_code: req.channel_code,
       },
@@ -150,7 +138,7 @@ describe('payouts/index', () => {
     await get_payment_channels(req);
 
     expect(mockGet).toHaveBeenCalledWith('v2/payouts/channels', {
-      searchParams: { channel_code: req.channel_code },
+      searchParams: { channel_code: req.channel_code, currency: 'PHP' },
     });
   });
 

@@ -3,17 +3,21 @@ process.env.XENDIT_API_URL = 'https://api.example.com';
 process.env.XENDIT_CLIENT_SECRET = 'mock_secret';
 
 import { jest } from '@jest/globals';
-import { mockGet, mockPost, partial_mockKyResponse } from '@src/tests';
+import { mockGet, mockPost, partial_mockKyResponse } from '@src/tests/utils';
 
-import { CancelPaymentResponseSchema, CapturePaymentResponseSchema, GetPaymentStatusResponseSchema } from './schema';
+import {
+  CancelPaymentResponseSchema,
+  CapturePaymentResponseSchema,
+  GetPaymentStatusResponseSchema,
+} from '../../payments/payment/schema';
 
 jest.unstable_mockModule('@src/client', () => ({
   default: {
-    create: () => ({ post: mockPost, get: mockGet }),
+    extend: () => ({ post: mockPost, get: mockGet }),
   },
 }));
 
-const { capture_payment, cancel_payment, get_payment_status } = await import('./index');
+const { capture_payment, cancel_payment, get_payment_status } = await import('../../payments/payment/index');
 
 describe('payments/payment', () => {
   it('capture_payment - success', async () => {
