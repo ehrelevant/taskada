@@ -1,7 +1,9 @@
 import * as z from 'zod';
 import ky from 'ky';
+import logger from '@logger';
 import { Buffer } from 'buffer';
 import { handle_error } from '@standard/index';
+import type { KyResponseWithRequest } from '@src/types';
 
 const API_URL = z.string('Environment variable `XENDIT_API_URL` is missing.').parse(process.env.XENDIT_API_URL);
 const secret_key = z
@@ -18,6 +20,14 @@ const client = ky.create({
   },
   credentials: 'same-origin',
   hooks: {
+    afterResponse: [
+      (request, _options, response): KyResponseWithRequest => {
+        const r = response as KyResponseWithRequest;
+        r.request = request;
+        logger.debug({ kyResponse: r });
+        return r;
+      },
+    ],
     beforeError: [handle_error],
   },
 });

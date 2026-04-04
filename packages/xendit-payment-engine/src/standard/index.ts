@@ -1,3 +1,4 @@
+import logger from '@logger';
 import { HTTPError } from 'ky';
 
 import { ErrorResponseSchema } from './schema';
@@ -8,7 +9,7 @@ export async function handle_error(error: HTTPError): Promise<HTTPError> {
   if (response.url.includes('xendit')) {
     const error_message = ErrorResponseSchema.parse(await response.json());
     error.name = 'XenditError';
-    console.error(error_message);
+    logger.error({ kyResponse: response, xenditError: error_message }, 'Xendit API error');
   }
 
   return error;
