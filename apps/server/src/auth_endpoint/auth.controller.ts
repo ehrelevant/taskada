@@ -1,8 +1,8 @@
+import { _statusCode } from 'better-call';
 import { AllowAnonymous } from '@thallesp/nestjs-better-auth';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Controller, HttpCode, Post, Req, Res } from '@nestjs/common';
 import type { Request, Response } from 'express';
-import { _statusCode } from 'better-call';
 
 import { auth } from '../auth';
 

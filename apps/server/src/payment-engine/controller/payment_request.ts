@@ -47,7 +47,6 @@ export class PaymentRequestController {
     @Param('payment_request_id') payment_request_id: string,
     @Body() body: SimulatePaymentRequestDto,
   ): Promise<SimulatePaymentResponseDto> {
-    // combine path param and body to form the request expected by the service
     const request = { payment_request_id: payment_request_id, amount: body.amount };
     return this.paymentEngineService.simulatePayment(request);
   }
