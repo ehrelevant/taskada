@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
-import { parseSearchQuery } from 'src/utils/parse';
+import { parseSearchQuery } from '@src/utils/parse';
 import { Session, UserSession } from '@thallesp/nestjs-better-auth';
 
 import { ServicesService } from './services.service';

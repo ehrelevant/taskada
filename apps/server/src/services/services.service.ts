@@ -1,7 +1,7 @@
 import { and, desc, eq, ilike, or, sql } from 'drizzle-orm';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { provider, review, service, serviceType, user } from '@repo/database';
-import { S3Service } from 'src/s3/s3.service';
+import { S3Service } from '@src/s3/s3.service';
 
 import { DatabaseService } from '../database/database.service';
 
