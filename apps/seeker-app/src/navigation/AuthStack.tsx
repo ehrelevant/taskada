@@ -30,6 +30,7 @@ export function AuthStack() {
         component={SignInScreen}
         options={{
           title: 'Sign In',
+          headerShown: false,
           animation: 'slide_from_left',
         }}
       />
@@ -38,6 +39,7 @@ export function AuthStack() {
         component={SignUpScreen}
         options={{
           title: 'Sign Up',
+          headerShown: false,
           animation: 'slide_from_right',
         }}
       />
