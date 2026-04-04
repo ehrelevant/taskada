@@ -43,14 +43,13 @@
     "moduleDetection": "force",
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
-    "baseUrl": ".",
     "paths": {
-      "@customer/*": ["src/customer/*"],
-      "@payment/*": ["src/payments/*"],
-      "@payouts/*": ["src/payouts/*"],
-      "@standard/*": ["src/standard/*"],
-      "@logger": ["src/logger.ts"],
-      "@src/*": ["src/*"]
+      "@customer/*": ["./src/customer/*"],
+      "@payment/*": ["./src/payments/*"],
+      "@payouts/*": ["./src/payouts/*"],
+      "@standard/*": ["./src/standard/*"],
+      "@logger": ["./src/logger.ts"],
+      "@src/*": ["./src/*"]
     }
   },
   "include": ["./jest.config.ts", "./src/"]
