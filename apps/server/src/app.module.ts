@@ -1,6 +1,7 @@
 import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { AuthModule } from '@thallesp/nestjs-better-auth';
 import { Module } from '@nestjs/common';
+import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { ZodSerializerInterceptor, ZodValidationPipe } from 'nestjs-zod';
 
 import { auth } from './auth';
@@ -11,6 +12,7 @@ import { ChatModule } from './chat/chat.module';
 import { DatabaseModule } from './database/database.module';
 import { MatchingModule } from './matching/matching.module';
 import { MessagesModule } from './messages/messages.module';
+import { MetricsController } from './metrics/metrics.controller';
 import { ModerationModule } from './moderation/moderation.module';
 import { PaymentEngineModule } from './payment-engine/payment-engine.module';
 import { PaymentMethodModule } from './payment_method/payment_method.module';
@@ -48,6 +50,10 @@ import { UsersModule } from './users/users.module';
     ReportsModule,
     ReviewsModule,
     ModerationModule,
+    PrometheusModule.register({
+      path: '/metrics',
+      controller: MetricsController,
+    }),
   ],
   providers: [
     {
