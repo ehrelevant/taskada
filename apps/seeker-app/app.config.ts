@@ -60,6 +60,5 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         isIosBackgroundLocationEnabled: true,
       },
     ],
-    'expo-web-browser',
   ],
 });
