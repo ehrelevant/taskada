@@ -60,5 +60,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         isIosBackgroundLocationEnabled: true,
       },
     ],
+    'react-native-maps',
   ],
 });
