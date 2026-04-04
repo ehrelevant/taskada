@@ -49,6 +49,7 @@
       "@payment/*": ["src/payments/*"],
       "@payouts/*": ["src/payouts/*"],
       "@standard/*": ["src/standard/*"],
+      "@logger": ["src/logger.ts"],
       "@src/*": ["src/*"]
     }
   },
