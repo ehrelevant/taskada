@@ -27,11 +27,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     edgeToEdgeEnabled: true,
     predictiveBackGestureEnabled: false,
     package: 'com.taskada.seeker',
-    config: {
-      googleMaps: {
-        apiKey: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY || '',
-      },
-    },
     permissions: [
       'android.permission.RECORD_AUDIO',
       'android.permission.ACCESS_COARSE_LOCATION',
@@ -60,6 +55,11 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         isIosBackgroundLocationEnabled: true,
       },
     ],
-    'react-native-maps',
+    [
+      'react-native-maps',
+      {
+        androidGoogleMapsApiKey: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY || '',
+      }
+    ]
   ],
 });
