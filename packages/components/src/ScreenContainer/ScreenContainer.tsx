@@ -1,3 +1,4 @@
+import { KeyboardAwareScrollView, KeyboardAwareScrollViewProps } from 'react-native-keyboard-controller';
 import { ReactNode } from 'react';
 import { RefreshControlProps, ScrollView, StyleSheet, View, ViewProps } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -9,12 +10,15 @@ export interface ScreenContainerProps extends ViewProps {
   children: ReactNode;
   scrollable?: boolean;
   useSafeArea?: boolean;
+  keyboardAware?: boolean;
   edges?: ('top' | 'bottom' | 'left' | 'right')[];
   padding?: PaddingSize;
-  verticalPadding?: PaddingSize;
+  contentPadding?: PaddingSize;
   stickyFooter?: ReactNode;
+  bottomOffset?: KeyboardAwareScrollViewProps['bottomOffset'];
   refreshControl?: React.ReactElement<RefreshControlProps>;
   keyboardShouldPersistTaps?: 'always' | 'handled' | 'never';
+  contentStyle?: ViewProps['style'];
 }
 
 const PADDING_MAP: Record<PaddingSize, number> = {
@@ -28,31 +32,56 @@ export function ScreenContainer({
   children,
   scrollable = false,
   useSafeArea = true,
+  keyboardAware = false,
   edges,
-  padding = 'm',
-  verticalPadding,
+  padding = 'none',
+  contentPadding = 'none',
   stickyFooter,
+  bottomOffset = 50,
   refreshControl,
   keyboardShouldPersistTaps = 'handled',
   style,
+  contentStyle,
   ...rest
 }: ScreenContainerProps) {
   const { colors } = useTheme();
-  const horizontalPadding = PADDING_MAP[padding];
-  const vertical = verticalPadding !== undefined ? PADDING_MAP[verticalPadding] : horizontalPadding;
 
   const containerStyles = [
     styles.container,
-    { backgroundColor: colors.background, paddingHorizontal: horizontalPadding, paddingVertical: vertical },
+    { backgroundColor: colors.background, padding: PADDING_MAP[padding] },
     style,
   ];
 
+  const contentStyles = [
+    styles.content,
+    { padding: PADDING_MAP[contentPadding] },
+    contentStyle,
+  ];
+
   const renderContent = () => {
+    if (keyboardAware) {
+      return (
+        <KeyboardAwareScrollView
+          style={styles.scrollView}
+          contentContainerStyle={[
+            { padding: PADDING_MAP[contentPadding] },
+            contentStyle,
+          ]}
+          showsVerticalScrollIndicator={false}
+          bottomOffset={bottomOffset}
+          refreshControl={refreshControl}
+          keyboardShouldPersistTaps={keyboardShouldPersistTaps}
+        >
+          {children}
+        </KeyboardAwareScrollView>
+      );
+    }
+
     if (scrollable) {
       return (
         <ScrollView
           style={styles.scrollView}
-          contentContainerStyle={styles.scrollContent}
+          contentContainerStyle={contentStyles}
           showsVerticalScrollIndicator={false}
           refreshControl={refreshControl}
           keyboardShouldPersistTaps={keyboardShouldPersistTaps}
@@ -62,7 +91,7 @@ export function ScreenContainer({
       );
     }
 
-    return <View style={styles.content}>{children}</View>;
+    return <View style={contentStyles}>{children}</View>;
   };
 
   const renderBody = () => {
@@ -84,6 +113,7 @@ export function ScreenContainer({
 
     return renderContent();
   };
+
 
   if (useSafeArea) {
     return (
