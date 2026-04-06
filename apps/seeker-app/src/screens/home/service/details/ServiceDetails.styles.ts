@@ -3,10 +3,8 @@ import { StyleSheet } from 'react-native';
 
 export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
-    heroShell: {
-      paddingTop: spacing.pageTop,
-      paddingHorizontal: spacing.pageHorizontal,
-      paddingBottom: spacing.s,
+    content: {
+      gap: spacing.m,
     },
     heroCard: {
       borderRadius: 28,
@@ -24,22 +22,8 @@ export const createStyles = (colors: ThemeColors) =>
       flex: 1,
       minWidth: 0,
     },
-    verifiedPill: {
-      alignSelf: 'flex-start',
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: spacing.xs,
-      borderRadius: 999,
-      backgroundColor: colors.home.chipBg,
-      paddingHorizontal: spacing.s,
-      paddingVertical: spacing.xs,
-      marginBottom: spacing.s,
-    },
     providerName: {
       marginBottom: spacing.xs,
-    },
-    serviceType: {
-      opacity: 0.96,
     },
     heroHint: {
       marginTop: spacing.s,
@@ -49,8 +33,6 @@ export const createStyles = (colors: ThemeColors) =>
       marginTop: spacing.m,
     },
     priceCard: {
-      marginTop: spacing.s,
-      marginHorizontal: spacing.pageHorizontal,
       borderRadius: 20,
       borderWidth: 1,
       borderColor: colors.card.stroke,
@@ -70,9 +52,6 @@ export const createStyles = (colors: ThemeColors) =>
       marginTop: spacing.m,
     },
     reviewsSection: {
-      marginTop: spacing.sectionGap,
-      paddingHorizontal: spacing.pageHorizontal,
-      paddingBottom: spacing.xxxl,
       borderRadius: 20,
     },
     reviewHeadingRow: {
@@ -85,7 +64,7 @@ export const createStyles = (colors: ThemeColors) =>
     reviewHintPill: {
       flexDirection: 'row',
       alignItems: 'center',
-      gap: spacing.xxs,
+      gap: spacing.xs,
       borderRadius: 999,
       backgroundColor: colors.card.muted,
       borderWidth: 1,

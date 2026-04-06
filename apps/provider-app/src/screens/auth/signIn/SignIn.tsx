@@ -3,21 +3,21 @@ import { Pressable, Text, View } from 'react-native';
 import { useTheme } from '@repo/theme';
 
 import { createStyles } from './SignIn.styles';
-import { useSignInScreen } from './SignIn.hooks';
+import { useSignIn } from './SignIn.hooks';
 
 export function SignInScreen() {
   const { colors } = useTheme();
   const styles = createStyles(colors);
 
-  const { email, setEmail, password, setPassword, errorMessage, handleSignIn, navigation } = useSignInScreen();
+  const { email, setEmail, password, setPassword, errorMessage, handleSignIn, navigation } = useSignIn();
 
   return (
-    <ScreenContainer scrollable padding="l" style={styles.container}>
+    <ScreenContainer keyboardAware contentPadding="m">
       <View style={styles.heroCard}>
-        <Typography variant="h3" weight="bold" color="textInverse" style={styles.title}>
+        <Typography variant="h3" color="textInverse">
           Welcome Back Service Provider
         </Typography>
-        <Typography variant="body1" color="textInverse" style={styles.subtitle}>
+        <Typography variant="body1" color="textInverse">
           Sign in to serve your clients.
         </Typography>
       </View>
@@ -47,7 +47,7 @@ export function SignInScreen() {
           </Typography>
         )}
 
-        <Button title="Sign In" onPress={handleSignIn} style={styles.button} />
+        <Button title="Sign In" onPress={handleSignIn} />
       </View>
 
       <Pressable onPress={() => navigation.replace('SignUp')} style={styles.footer}>

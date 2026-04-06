@@ -8,9 +8,6 @@ export const createStyles = (colors: ThemeColors) =>
       backgroundColor: colors.canvas.base,
     },
     liveHeader: {
-      marginHorizontal: spacing.pageHorizontal,
-      marginTop: spacing.pageTop,
-      marginBottom: spacing.s,
       padding: spacing.heroInset,
       borderRadius: 28,
       borderWidth: 1,
@@ -45,9 +42,6 @@ export const createStyles = (colors: ThemeColors) =>
       backgroundColor: colors.home.chipBg,
     },
     requestListContent: {
-      paddingHorizontal: spacing.pageHorizontal,
-      paddingTop: spacing.s,
-      paddingBottom: spacing.xl,
       gap: spacing.s,
     },
     requestCard: {
@@ -98,16 +92,11 @@ export const createStyles = (colors: ThemeColors) =>
       justifyContent: 'space-between',
       alignItems: 'center',
     },
-    outerContainer: {
+    content: {
       flex: 1,
-    },
-    centeredContainer: {
-      flex: 1,
-      backgroundColor: colors.canvas.base,
+      gap: spacing.m,
     },
     idleHero: {
-      marginTop: spacing.pageTop,
-      marginHorizontal: spacing.pageHorizontal,
       borderRadius: 28,
       borderWidth: 1,
       borderColor: colors.home.heroAccent,
@@ -128,12 +117,7 @@ export const createStyles = (colors: ThemeColors) =>
     idleTitle: {
       marginTop: spacing.xs,
     },
-    idleSubtitle: {
-      opacity: 0.92,
-    },
     idleChecklist: {
-      marginTop: spacing.m,
-      marginHorizontal: spacing.pageHorizontal,
       gap: spacing.s,
       flexGrow: 1,
     },
@@ -145,8 +129,7 @@ export const createStyles = (colors: ThemeColors) =>
       borderColor: colors.card.stroke,
       borderRadius: 16,
       backgroundColor: colors.card.base,
-      paddingHorizontal: spacing.m,
-      paddingVertical: spacing.s,
+      padding: spacing.m,
     },
     bottomBar: {
       backgroundColor: colors.canvas.base,

@@ -19,9 +19,7 @@ export const createStyles = (colors: ThemeColors) =>
       marginTop: spacing.m,
     },
     messagesList: {
-      paddingHorizontal: spacing.pageHorizontal,
-      paddingTop: spacing.pageTop,
-      paddingBottom: spacing.xxxl,
+      padding: spacing.m,
     },
     messageContainer: {
       flexDirection: 'row',

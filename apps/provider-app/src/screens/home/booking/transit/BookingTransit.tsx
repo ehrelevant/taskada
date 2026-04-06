@@ -1,7 +1,6 @@
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import { BadgeCheck, Flag, MapPin } from 'lucide-react-native';
-import { Button, Header, Typography } from '@repo/components';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Button, Header, ScreenContainer, Typography } from '@repo/components';
+import { Flag, MapPin } from 'lucide-react-native';
 import { ScrollView, TouchableOpacity, View } from 'react-native';
 import { useTheme } from '@repo/theme';
 
@@ -14,7 +13,6 @@ export function BookingTransitScreen() {
 
   const {
     providerLocation,
-    locationError,
     isArriving,
     seekerLatitude,
     seekerLongitude,
@@ -26,7 +24,7 @@ export function BookingTransitScreen() {
   } = useBookingTransit();
 
   return (
-    <SafeAreaView style={styles.container}>
+    <ScreenContainer>
       <Header
         title="Navigate to Seeker"
         size="small"
@@ -41,16 +39,10 @@ export function BookingTransitScreen() {
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.heroCard}>
-          <View style={styles.heroPill}>
-            <BadgeCheck size={14} color={colors.home.chipText} />
-            <Typography variant="caption" color={colors.home.chipText}>
-              live route active
-            </Typography>
-          </View>
           <Typography variant="h3" color="textInverse">
             Navigate to seeker location
           </Typography>
-          <Typography variant="body2" color="textInverse" style={styles.heroSubtitle}>
+          <Typography variant="body2" color="textInverse">
             Keep this screen open for map guidance and update the booking once you arrive.
           </Typography>
         </View>
@@ -101,24 +93,8 @@ export function BookingTransitScreen() {
           </Typography>
         </View>
 
-        {locationError && (
-          <View style={styles.errorSection}>
-            <Typography variant="body2" style={styles.errorText}>
-              {locationError}
-            </Typography>
-          </View>
-        )}
+        <Button title="Mark as Arrived" onPress={handleArrived} isLoading={isArriving} disabled={isArriving} />
       </ScrollView>
-
-      <View style={styles.buttonContainer}>
-        <Button
-          title="Mark as Arrived"
-          onPress={handleArrived}
-          isLoading={isArriving}
-          disabled={isArriving}
-          style={styles.arriveButton}
-        />
-      </View>
-    </SafeAreaView>
+    </ScreenContainer>
   );
 }

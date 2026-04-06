@@ -1,7 +1,6 @@
 import { ActivityIndicator, ScrollView, TouchableOpacity, View } from 'react-native';
-import { BadgeCheck, CircleDollarSign, Flag, Sparkles } from 'lucide-react-native';
-import { Header, Typography } from '@repo/components';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { CircleDollarSign, Flag, Sparkles } from 'lucide-react-native';
+import { Header, ScreenContainer, Typography } from '@repo/components';
 import { useTheme } from '@repo/theme';
 
 import { createStyles } from './BookingServing.styles';
@@ -16,19 +15,19 @@ export function BookingServingScreen() {
 
   if (isLoading) {
     return (
-      <SafeAreaView style={styles.container}>
+      <ScreenContainer>
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={colors.actionPrimary} />
           <Typography variant="body1" style={styles.loadingText}>
             Loading...
           </Typography>
         </View>
-      </SafeAreaView>
+      </ScreenContainer>
     );
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <ScreenContainer>
       <Header
         rightContent={
           <TouchableOpacity onPress={handleReport} style={styles.iconButton}>
@@ -40,12 +39,6 @@ export function BookingServingScreen() {
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.centeredContent}>
           <View style={styles.header}>
-            <View style={styles.heroPill}>
-              <BadgeCheck size={14} color={colors.home.chipText} />
-              <Typography variant="caption" color={colors.home.chipText}>
-                service currently active
-              </Typography>
-            </View>
             <Typography variant="h3" style={styles.headerTitle}>
               Currently Serving!
             </Typography>
@@ -70,7 +63,7 @@ export function BookingServingScreen() {
               {isUpdatingStatus ? (
                 <ActivityIndicator size="large" color={colors.textInverse} />
               ) : (
-                <Typography variant="h5" style={styles.buttonText}>
+                <Typography variant="h2" style={styles.buttonText}>
                   {isPaid ? 'DONE' : 'PAID'}
                 </Typography>
               )}
@@ -109,6 +102,6 @@ export function BookingServingScreen() {
           </TouchableOpacity>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </ScreenContainer>
   );
 }

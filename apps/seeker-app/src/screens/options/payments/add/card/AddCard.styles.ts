@@ -4,15 +4,8 @@ import { StyleSheet } from 'react-native';
 export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
     scrollContent: {
-      paddingHorizontal: spacing.pageHorizontal,
-      paddingTop: spacing.pageTop,
-      paddingBottom: spacing.xxxl,
       gap: spacing.m,
-    },
-    footerButton: {
-      paddingHorizontal: spacing.pageHorizontal,
-      paddingTop: spacing.m,
-      paddingBottom: spacing.xl,
+      padding: spacing.m,
     },
     heroCard: {
       borderRadius: radius.xxl,
@@ -20,20 +13,7 @@ export const createStyles = (colors: ThemeColors) =>
       borderColor: colors.home.heroAccent,
       backgroundColor: colors.home.heroStart,
       padding: spacing.heroInset,
-      gap: spacing.xs,
-    },
-    heroPill: {
-      alignSelf: 'flex-start',
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: spacing.xs,
-      borderRadius: radius.round,
-      backgroundColor: colors.home.chipBg,
-      paddingHorizontal: spacing.s,
-      paddingVertical: spacing.xs,
-    },
-    heroSubtitle: {
-      opacity: 0.94,
+      gap: spacing.s,
     },
     header: {
       backgroundColor: colors.card.base,

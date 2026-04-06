@@ -41,7 +41,6 @@ const styles = StyleSheet.create({
     marginBottom: spacing.m,
   },
   card: {
-    marginBottom: spacing.m,
     padding: spacing.m,
     borderRadius: radius.m,
     borderWidth: 1,

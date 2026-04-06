@@ -52,21 +52,14 @@ export function ScreenContainer({
     style,
   ];
 
-  const contentStyles = [
-    styles.content,
-    { padding: PADDING_MAP[contentPadding] },
-    contentStyle,
-  ];
+  const contentStyles = [styles.content, { padding: PADDING_MAP[contentPadding] }, contentStyle];
 
   const renderContent = () => {
     if (keyboardAware) {
       return (
         <KeyboardAwareScrollView
           style={styles.scrollView}
-          contentContainerStyle={[
-            { padding: PADDING_MAP[contentPadding] },
-            contentStyle,
-          ]}
+          contentContainerStyle={[{ padding: PADDING_MAP[contentPadding] }, contentStyle]}
           showsVerticalScrollIndicator={false}
           bottomOffset={bottomOffset}
           refreshControl={refreshControl}
@@ -81,7 +74,7 @@ export function ScreenContainer({
       return (
         <ScrollView
           style={styles.scrollView}
-          contentContainerStyle={contentStyles}
+          contentContainerStyle={[{ padding: PADDING_MAP[contentPadding] }, contentStyle]}
           showsVerticalScrollIndicator={false}
           refreshControl={refreshControl}
           keyboardShouldPersistTaps={keyboardShouldPersistTaps}
@@ -113,7 +106,6 @@ export function ScreenContainer({
 
     return renderContent();
   };
-
 
   if (useSafeArea) {
     return (

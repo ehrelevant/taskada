@@ -76,6 +76,7 @@ export function useRequestList() {
 
         if (pendingResponse.ok) {
           const pendingRequests = (await pendingResponse.json()) as IncomingRequest[];
+          console.log(pendingRequests);
           setRequests(pendingRequests);
         }
       }

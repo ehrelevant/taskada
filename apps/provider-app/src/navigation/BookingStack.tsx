@@ -6,6 +6,7 @@ import { BookingServingScreen } from '@screens/home/booking/serving/BookingServi
 import { BookingTransitScreen } from '@screens/home/booking/transit/BookingTransit';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ReportScreen } from '@screens/report/Report';
+import { StackHeader } from '@repo/components';
 
 export type BookingStackParamList = {
   BookingChat: {
@@ -77,6 +78,13 @@ export function BookingStack() {
       initialRouteName="BookingChat"
       screenOptions={{
         animationDuration: 400,
+        header: ({ navigation, options, route, back }) => (
+          <StackHeader
+            title={typeof options.title === 'string' ? options.title : route.name}
+            canGoBack={Boolean(back)}
+            onBack={() => navigation.goBack()}
+          />
+        ),
       }}
     >
       <Stack.Screen
@@ -123,6 +131,7 @@ export function BookingStack() {
         name="BookingDetails"
         component={BookingDetailsScreen}
         options={{
+          title: 'Booking Details',
           headerShown: false,
         }}
       />

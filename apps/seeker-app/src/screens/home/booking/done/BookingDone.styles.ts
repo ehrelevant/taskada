@@ -6,14 +6,9 @@ export const createStyles = (colors: ThemeColors) =>
     iconButton: {
       padding: spacing.xs,
     },
-    keyboardView: {
-      flex: 1,
-    },
     scrollContent: {
       flexGrow: 1,
-      paddingHorizontal: spacing.pageHorizontal,
-      paddingTop: spacing.pageTop,
-      paddingBottom: spacing.xl,
+      padding: spacing.m,
       gap: spacing.m,
     },
     heroSection: {
@@ -28,25 +23,6 @@ export const createStyles = (colors: ThemeColors) =>
     },
     title: {
       fontWeight: '700',
-    },
-    heroSubtitle: {
-      opacity: 0.94,
-    },
-    heroBadgeRow: {
-      flexDirection: 'row',
-      gap: spacing.s,
-      flexWrap: 'wrap',
-      justifyContent: 'center',
-      marginTop: spacing.s,
-    },
-    heroBadge: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: spacing.xs,
-      borderRadius: radius.round,
-      backgroundColor: colors.home.chipBg,
-      paddingHorizontal: spacing.s,
-      paddingVertical: spacing.xs,
     },
     providerCardShell: {
       flexDirection: 'row',

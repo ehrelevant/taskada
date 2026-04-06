@@ -3,51 +3,40 @@ import { StyleSheet } from 'react-native';
 
 export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: colors.canvas.base,
-    },
-    iconButton: {
-      padding: spacing.xs,
-    },
     header: {
-      padding: spacing.pageHorizontal,
+      padding: spacing.m,
     },
-    headerContent: {
+    headerCenter: {
       flexDirection: 'row',
       alignItems: 'center',
+      flex: 1,
+      minWidth: 0,
     },
-    headerMeta: {
+    headerCenterText: {
       marginLeft: spacing.s,
-    },
-    introBanner: {
-      marginHorizontal: spacing.pageHorizontal,
-      marginTop: spacing.s,
-      marginBottom: spacing.s,
-      borderRadius: radius.l,
-      borderWidth: 1,
-      borderColor: colors.home.heroAccent,
-      backgroundColor: colors.home.heroStart,
-      paddingHorizontal: spacing.m,
-      paddingVertical: spacing.s,
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: spacing.xs,
+      flex: 1,
+      minWidth: 0,
     },
     messagesList: {
-      paddingHorizontal: spacing.pageHorizontal,
-      paddingBottom: spacing.m,
+      padding: spacing.m,
+      gap: spacing.s,
+    },
+    emptyStateCard: {
+      borderWidth: 1,
+      borderColor: colors.card.stroke,
+      borderRadius: radius.m,
+      backgroundColor: colors.card.muted,
+      padding: spacing.m,
     },
     messageContainer: {
       flexDirection: 'row',
-      marginBottom: spacing.m,
       alignItems: 'flex-end',
     },
     ownMessage: {
-      justifyContent: 'flex-start',
+      justifyContent: 'flex-end',
     },
     otherMessage: {
-      justifyContent: 'flex-end',
+      justifyContent: 'flex-start',
     },
     messageAvatar: {
       width: 32,
@@ -64,12 +53,12 @@ export const createStyles = (colors: ThemeColors) =>
     ownBubble: {
       backgroundColor: colors.actionPrimary,
       borderColor: colors.interactive.primaryBg,
-      borderBottomLeftRadius: radius.xs,
+      borderBottomRightRadius: radius.xs,
     },
     otherBubble: {
       backgroundColor: colors.card.base,
       borderColor: colors.card.stroke,
-      borderBottomRightRadius: radius.xs,
+      borderBottomLeftRadius: radius.xs,
     },
     messageTime: {
       marginTop: spacing.xs,
@@ -82,12 +71,10 @@ export const createStyles = (colors: ThemeColors) =>
       width: 100,
       height: 100,
       borderRadius: radius.s,
-      marginRight: spacing.xs,
     },
     selectedImagesContainer: {
       flexDirection: 'row',
-      paddingHorizontal: spacing.pageHorizontal,
-      paddingVertical: spacing.s,
+      padding: spacing.s,
       backgroundColor: colors.card.muted,
       borderTopWidth: 1,
       borderTopColor: colors.card.stroke,
@@ -119,24 +106,16 @@ export const createStyles = (colors: ThemeColors) =>
     },
     actionButtonsContainer: {
       flexDirection: 'row',
-      paddingHorizontal: spacing.pageHorizontal,
-      paddingVertical: spacing.m,
+      paddingHorizontal: spacing.m,
       gap: spacing.s,
-      borderTopWidth: 1,
-      borderTopColor: colors.card.stroke,
-      backgroundColor: colors.canvas.base,
     },
-    declineButton: {
+    actionButton: {
       flex: 1,
-    },
-    finalizeButton: {
-      flex: 2,
     },
     inputContainer: {
       flexDirection: 'row',
       alignItems: 'center',
-      paddingHorizontal: spacing.pageHorizontal,
-      paddingVertical: spacing.m,
+      padding: spacing.m,
       backgroundColor: colors.canvas.base,
       borderTopWidth: 1,
       borderTopColor: colors.card.stroke,

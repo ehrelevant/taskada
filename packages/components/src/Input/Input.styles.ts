@@ -28,6 +28,7 @@ export function createStyles(colors: ThemeColors, error?: string, isFocused?: bo
       flex: 1,
       fontFamily: fontFamily.regular,
       fontSize: fontSize.m,
+      textAlignVertical: 'top',
       color: colors.textPrimary,
     },
     leftIcon: {

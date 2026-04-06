@@ -4,10 +4,8 @@ import { StyleSheet } from 'react-native';
 export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
     content: {
-      paddingHorizontal: spacing.pageHorizontal,
-      paddingTop: spacing.pageTop,
-      paddingBottom: spacing.xxxl,
-      gap: spacing.m,
+      gap: spacing.s,
+      padding: spacing.m,
     },
     card: {
       marginBottom: 0,
@@ -44,8 +42,6 @@ export const createStyles = (colors: ThemeColors) =>
       borderRadius: radius.s,
     },
     footerButton: {
-      paddingHorizontal: spacing.pageHorizontal,
-      paddingTop: spacing.m,
-      paddingBottom: spacing.xl,
+      marginTop: spacing.s,
     },
   });

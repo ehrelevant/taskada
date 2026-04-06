@@ -1,7 +1,6 @@
 import { ActivityIndicator, ScrollView, TouchableOpacity, View } from 'react-native';
-import { BadgeCheck, CircleDollarSign, Flag, Sparkles } from 'lucide-react-native';
-import { Header, Typography } from '@repo/components';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { CircleDollarSign, Flag, Sparkles } from 'lucide-react-native';
+import { Header, ScreenContainer, Typography } from '@repo/components';
 import { useTheme } from '@repo/theme';
 
 import { createStyles } from './BookingDone.styles';
@@ -15,19 +14,19 @@ export function BookingDoneScreen() {
 
   if (isLoading) {
     return (
-      <SafeAreaView style={styles.container}>
+      <ScreenContainer edges={['left', 'right', 'bottom']}>
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={colors.actionPrimary} />
           <Typography variant="body1" style={styles.loadingText}>
             Loading...
           </Typography>
         </View>
-      </SafeAreaView>
+      </ScreenContainer>
     );
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <ScreenContainer edges={['left', 'right', 'bottom']}>
       <Header
         rightContent={
           <TouchableOpacity onPress={handleReport} style={styles.iconButton}>
@@ -37,21 +36,12 @@ export function BookingDoneScreen() {
       />
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        <View style={styles.centeredContent}>
+        <View style={styles.heroContent}>
           <View style={styles.header}>
-            <View style={styles.heroPill}>
-              <BadgeCheck size={14} color={colors.home.chipText} />
-              <Typography variant="caption" color={colors.home.chipText}>
-                booking completed
-              </Typography>
-            </View>
-            <Typography variant="h4" style={styles.headerTitle}>
+            <Typography variant="h3" color="textInverse" align="center">
               Well Done, Provider!
             </Typography>
-          </View>
-
-          <View style={styles.messageContainer}>
-            <Typography variant="body1" style={styles.messageText}>
+            <Typography variant="body1" color="textInverse" align="center">
               You successfully completed this service. You may go back to the requests list.
             </Typography>
           </View>
@@ -96,6 +86,6 @@ export function BookingDoneScreen() {
           </TouchableOpacity>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </ScreenContainer>
   );
 }

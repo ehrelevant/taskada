@@ -3,15 +3,8 @@ import { StyleSheet } from 'react-native';
 
 export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
-    scrollContent: {
-      flexGrow: 1,
-      backgroundColor: colors.canvas.base,
-    },
     container: {
       flex: 1,
-      paddingHorizontal: spacing.pageHorizontal,
-      paddingTop: spacing.pageTop,
-      paddingBottom: spacing.xxxl,
       gap: spacing.m,
     },
     heroCard: {
@@ -20,38 +13,6 @@ export const createStyles = (colors: ThemeColors) =>
       borderColor: colors.home.heroAccent,
       backgroundColor: colors.home.heroStart,
       padding: spacing.heroInset,
-    },
-    heroPill: {
-      alignSelf: 'flex-start',
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: spacing.xs,
-      borderRadius: radius.round,
-      backgroundColor: colors.home.chipBg,
-      paddingHorizontal: spacing.s,
-      paddingVertical: spacing.xs,
-      marginBottom: spacing.s,
-    },
-    heroTitle: {
-      marginBottom: spacing.xs,
-    },
-    heroSubtitle: {
-      opacity: 0.94,
-    },
-    heroBadgeRow: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      gap: spacing.s,
-      marginTop: spacing.m,
-    },
-    heroBadge: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: spacing.xs,
-      borderRadius: radius.round,
-      backgroundColor: colors.home.chipBg,
-      paddingHorizontal: spacing.s,
-      paddingVertical: spacing.xs,
     },
     sectionCard: {
       borderRadius: radius.l,
@@ -67,37 +28,17 @@ export const createStyles = (colors: ThemeColors) =>
       alignItems: 'center',
       gap: spacing.s,
     },
-    sectionHintPill: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: spacing.xxs,
-      borderRadius: radius.round,
-      backgroundColor: colors.card.muted,
-      borderWidth: 1,
-      borderColor: colors.card.stroke,
-      paddingHorizontal: spacing.s,
-      paddingVertical: spacing.xs,
-    },
     mapContainer: {
       borderRadius: radius.m,
       borderWidth: 1,
       borderColor: colors.card.stroke,
       overflow: 'hidden',
-      marginBottom: spacing.xs,
-    },
-    input: {
-      marginBottom: spacing.xs,
-    },
-    imageSection: {
-      marginTop: spacing.xs,
     },
     imageList: {
       gap: spacing.s,
-      paddingRight: spacing.m,
     },
     imageContainer: {
       position: 'relative',
-      marginRight: spacing.s,
     },
     image: {
       width: 84,
@@ -125,15 +66,8 @@ export const createStyles = (colors: ThemeColors) =>
       alignItems: 'center',
       backgroundColor: colors.interactive.secondaryBg,
     },
-    addImageLabel: {
-      marginTop: spacing.xxs,
-    },
-    submitButton: {
-      marginTop: spacing.s,
-    },
-    footerNote: {
-      marginTop: spacing.xxs,
-      paddingHorizontal: spacing.s,
+    submitSection: {
+      gap: spacing.s,
     },
     modalContainer: {
       flex: 1,

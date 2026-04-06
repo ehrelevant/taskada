@@ -1,5 +1,5 @@
 import { Avatar, Card, EmptyState, ScreenContainer, StatusBadge, Typography } from '@repo/components';
-import { BadgeCheck, CalendarClock, CircleDollarSign } from 'lucide-react-native';
+import { CalendarClock, CircleDollarSign } from 'lucide-react-native';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { useTheme } from '@repo/theme';
 
@@ -32,7 +32,7 @@ export function HistoryScreen() {
 
   if (isLoading) {
     return (
-      <ScreenContainer>
+      <ScreenContainer edges={['top', 'left', 'right']}>
         <EmptyState loading loadingMessage="Loading transaction history..." />
       </ScreenContainer>
     );
@@ -40,28 +40,22 @@ export function HistoryScreen() {
 
   if (error) {
     return (
-      <ScreenContainer>
+      <ScreenContainer edges={['top', 'left', 'right']}>
         <EmptyState message={error} />
       </ScreenContainer>
     );
   }
 
   return (
-    <ScreenContainer padding="none">
+    <ScreenContainer edges={['top', 'left', 'right']}>
       <FlatList
         data={bookings}
         ListHeaderComponent={
           <View style={styles.heroCard}>
-            <View style={styles.heroPill}>
-              <BadgeCheck size={14} color={colors.home.chipText} />
-              <Typography variant="caption" color={colors.home.chipText}>
-                booking history
-              </Typography>
-            </View>
             <Typography variant="h3" color="textInverse">
               Completed and cancelled jobs
             </Typography>
-            <Typography variant="body2" color="textInverse" style={styles.heroSubtitle}>
+            <Typography variant="body2" color="textInverse">
               Review your past services, costs, and booking outcomes.
             </Typography>
           </View>
@@ -112,7 +106,7 @@ export function HistoryScreen() {
         keyExtractor={item => item.id}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
-        ListEmptyComponent={<EmptyState message="No completed or cancelled bookings yet" />}
+        ListEmptyComponent={<EmptyState message="No completed bookings yet." />}
       />
     </ScreenContainer>
   );

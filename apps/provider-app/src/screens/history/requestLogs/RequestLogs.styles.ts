@@ -3,24 +3,9 @@ import { StyleSheet } from 'react-native';
 
 export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: colors.canvas.base,
-    },
-    loadingContainer: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: spacing.l,
-    },
-    loadingText: {
-      marginTop: spacing.m,
-    },
-    scrollContent: {
-      paddingHorizontal: spacing.pageHorizontal,
-      paddingTop: spacing.pageTop,
-      paddingBottom: spacing.xxxl,
-      gap: spacing.m,
+    content: {
+      gap: spacing.s,
+      padding: spacing.m,
     },
     section: {
       marginBottom: 0,
@@ -64,15 +49,7 @@ export const createStyles = (colors: ThemeColors) =>
       height: 100,
       borderRadius: radius.s,
     },
-    buttonContainer: {
-      paddingHorizontal: spacing.pageHorizontal,
-      paddingTop: spacing.m,
-      paddingBottom: spacing.xl,
-      borderTopWidth: 1,
-      borderTopColor: colors.card.stroke,
-      backgroundColor: colors.canvas.base,
-    },
     button: {
-      marginTop: spacing.m,
+      marginTop: spacing.s,
     },
   });

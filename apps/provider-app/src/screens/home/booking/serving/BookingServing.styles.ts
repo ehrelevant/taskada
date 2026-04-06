@@ -3,10 +3,6 @@ import { StyleSheet } from 'react-native';
 
 export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: colors.canvas.base,
-    },
     iconButton: {
       padding: spacing.xs,
     },
@@ -20,9 +16,7 @@ export const createStyles = (colors: ThemeColors) =>
     },
     scrollContent: {
       flexGrow: 1,
-      paddingHorizontal: spacing.pageHorizontal,
-      paddingTop: spacing.pageTop,
-      paddingBottom: spacing.xl,
+      padding: spacing.m,
       gap: spacing.m,
     },
     centeredContent: {
@@ -34,16 +28,6 @@ export const createStyles = (colors: ThemeColors) =>
     },
     header: {
       alignItems: 'flex-start',
-      marginBottom: spacing.s,
-    },
-    heroPill: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: spacing.xs,
-      borderRadius: radius.round,
-      backgroundColor: colors.home.chipBg,
-      paddingHorizontal: spacing.s,
-      paddingVertical: spacing.xs,
       marginBottom: spacing.s,
     },
     headerTitle: {
@@ -64,7 +48,7 @@ export const createStyles = (colors: ThemeColors) =>
       width: 140,
       height: 140,
       borderRadius: 70,
-      backgroundColor: colors.actionPrimary,
+      backgroundColor: colors.success.base,
       justifyContent: 'center',
       alignItems: 'center',
       shadowColor: colors.black,
@@ -95,12 +79,12 @@ export const createStyles = (colors: ThemeColors) =>
       borderWidth: 1,
       borderColor: colors.card.stroke,
       padding: spacing.m,
+      gap: spacing.s,
     },
     infoRow: {
       flexDirection: 'row',
       justifyContent: 'space-between',
-      marginBottom: spacing.l,
-      gap: spacing.m,
+      gap: spacing.s,
     },
     infoItem: {
       flex: 1,

@@ -18,9 +18,7 @@ export function RootNavigator() {
   return (
     <>
       <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
-      <NavigationContainer>
-        {session ? <DashboardTabs /> : <AuthStack />}
-      </NavigationContainer>
+      <NavigationContainer>{session ? <DashboardTabs /> : <AuthStack />}</NavigationContainer>
     </>
   );
 }

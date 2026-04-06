@@ -1,12 +1,13 @@
 import * as ImagePicker from 'expo-image-picker';
 import { authClient } from '@lib/authClient';
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { OptionsStackParamList } from '@navigation/OptionsStack';
 import { providerClient } from '@lib/providerClient';
 import { useEffect, useState } from 'react';
 import { useLoading } from '@repo/shared';
+import { useNavigation } from '@react-navigation/native';
 
-type ProfileScreenProps = NativeStackScreenProps<OptionsStackParamList, 'Profile'>;
+type ProfileNavProp = NativeStackNavigationProp<OptionsStackParamList, 'Profile'>;
 
 interface ProfileData {
   firstName: string;
@@ -23,7 +24,8 @@ interface PasswordData {
   confirmPassword: string;
 }
 
-export function useProfileScreen({ navigation }: ProfileScreenProps) {
+export function useProfile() {
+  const navigation = useNavigation<ProfileNavProp>();
   const { setLoading } = useLoading();
   const { data: userSession, refetch } = authClient.useSession();
 

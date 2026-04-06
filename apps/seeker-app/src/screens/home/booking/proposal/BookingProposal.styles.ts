@@ -3,13 +3,7 @@ import { StyleSheet } from 'react-native';
 
 export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
-    reportButton: {
-      padding: spacing.xs,
-    },
     content: {
-      paddingHorizontal: spacing.pageHorizontal,
-      paddingTop: spacing.pageTop,
-      paddingBottom: spacing.xxxl,
       gap: spacing.m,
     },
     heroCard: {
@@ -19,22 +13,9 @@ export const createStyles = (colors: ThemeColors) =>
       backgroundColor: colors.home.heroStart,
       padding: spacing.heroInset,
     },
-    heroPill: {
-      alignSelf: 'flex-start',
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: spacing.xs,
-      borderRadius: radius.round,
-      backgroundColor: colors.home.chipBg,
-      paddingHorizontal: spacing.s,
-      paddingVertical: spacing.xs,
-      marginBottom: spacing.s,
-    },
-    heroTitle: {
-      marginBottom: spacing.xs,
-    },
-    heroSubtitle: {
-      opacity: 0.95,
+    scrollContent: {
+      padding: spacing.m,
+      gap: spacing.m,
     },
     mapContainer: {
       height: 200,
@@ -78,20 +59,11 @@ export const createStyles = (colors: ThemeColors) =>
       alignItems: 'center',
       gap: spacing.xs,
     },
-    rowValue: {
-      marginTop: spacing.xxs,
-    },
     specificationsCard: {
       padding: spacing.m,
-    },
-    specLabelRow: {
-      flexDirection: 'row',
-      alignItems: 'center',
       gap: spacing.xs,
-      marginBottom: spacing.s,
     },
     buttonContainer: {
       gap: spacing.s,
-      backgroundColor: colors.canvas.base,
     },
   });

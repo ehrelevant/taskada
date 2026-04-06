@@ -3,9 +3,8 @@ import { StyleSheet } from 'react-native';
 
 export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
-    container: {
-      backgroundColor: colors.canvas.base,
-      justifyContent: 'center',
+    content: {
+      padding: spacing.m,
     },
     heroCard: {
       borderRadius: radius.xxl,
@@ -14,14 +13,6 @@ export const createStyles = (colors: ThemeColors) =>
       backgroundColor: colors.home.heroStart,
       padding: spacing.heroInset,
       marginBottom: spacing.m,
-    },
-    title: {
-      textAlign: 'left',
-    },
-    subtitle: {
-      marginTop: spacing.xs,
-      textAlign: 'left',
-      opacity: 0.94,
     },
     formCard: {
       borderRadius: radius.l,
@@ -36,9 +27,6 @@ export const createStyles = (colors: ThemeColors) =>
     error: {
       marginBottom: spacing.m,
       textAlign: 'center',
-    },
-    button: {
-      marginTop: spacing.xs,
     },
     footer: {
       marginTop: spacing.xl,

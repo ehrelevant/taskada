@@ -8,9 +8,6 @@ export const createStyles = (colors: ThemeColors) =>
       backgroundColor: colors.canvas.base,
     },
     content: {
-      paddingHorizontal: spacing.pageHorizontal,
-      paddingTop: spacing.pageTop,
-      paddingBottom: spacing.xxxl,
       gap: spacing.m,
     },
     profileSection: {
@@ -21,17 +18,6 @@ export const createStyles = (colors: ThemeColors) =>
       alignItems: 'center',
       paddingVertical: spacing.heroInset,
       paddingHorizontal: spacing.m,
-    },
-    profilePill: {
-      alignSelf: 'flex-start',
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: spacing.xs,
-      borderRadius: radius.round,
-      backgroundColor: colors.home.chipBg,
-      paddingHorizontal: spacing.s,
-      paddingVertical: spacing.xs,
-      marginBottom: spacing.m,
     },
     userName: {
       marginTop: spacing.m,
@@ -47,12 +33,11 @@ export const createStyles = (colors: ThemeColors) =>
       backgroundColor: colors.card.base,
       padding: spacing.m,
     },
-    sectionTitle: {
+    sectionHeader: {
       marginTop: spacing.m,
       marginBottom: spacing.s,
-      color: colors.textSecondary,
     },
-    firstSectionTitle: {
+    firstSectionHeader: {
       marginTop: 0,
     },
     menuButton: {
@@ -71,8 +56,5 @@ export const createStyles = (colors: ThemeColors) =>
     footerCaption: {
       marginTop: spacing.xxs,
       marginBottom: spacing.s,
-    },
-    signOutButton: {
-      borderRadius: radius.m,
     },
   });

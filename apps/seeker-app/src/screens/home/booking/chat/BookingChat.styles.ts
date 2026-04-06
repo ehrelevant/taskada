@@ -3,6 +3,9 @@ import { StyleSheet } from 'react-native';
 
 export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
+    header: {
+      padding: spacing.m,
+    },
     headerCenter: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -14,27 +17,9 @@ export const createStyles = (colors: ThemeColors) =>
       flex: 1,
       minWidth: 0,
     },
-    sessionBanner: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      gap: spacing.s,
-      paddingHorizontal: spacing.m,
-      paddingBottom: spacing.s,
-    },
-    sessionBadge: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: spacing.xs,
-      borderRadius: radius.round,
-      backgroundColor: colors.home.chipBg,
-      borderWidth: 1,
-      borderColor: colors.home.heroAccent,
-      paddingHorizontal: spacing.s,
-      paddingVertical: spacing.xs,
-    },
     messagesList: {
       padding: spacing.m,
-      paddingBottom: spacing.l,
+      gap: spacing.s,
     },
     emptyStateCard: {
       borderWidth: 1,
@@ -42,11 +27,9 @@ export const createStyles = (colors: ThemeColors) =>
       borderRadius: radius.m,
       backgroundColor: colors.card.muted,
       padding: spacing.m,
-      marginTop: spacing.m,
     },
     messageContainer: {
       flexDirection: 'row',
-      marginBottom: spacing.m,
       alignItems: 'flex-end',
     },
     ownMessage: {
@@ -80,14 +63,18 @@ export const createStyles = (colors: ThemeColors) =>
       marginTop: spacing.xs,
       opacity: 0.9,
     },
-    imageContainer: {
-      marginBottom: spacing.xs,
+    actionButtonsContainer: {
+      flexDirection: 'row',
+      paddingHorizontal: spacing.m,
+      gap: spacing.s,
+    },
+    actionButton: {
+      flex: 1,
     },
     messageImage: {
       width: 100,
       height: 100,
       borderRadius: radius.s,
-      marginRight: spacing.xs,
     },
     selectedImagesContainer: {
       flexDirection: 'row',
@@ -129,16 +116,6 @@ export const createStyles = (colors: ThemeColors) =>
       backgroundColor: colors.canvas.base,
       borderTopWidth: 1,
       borderTopColor: colors.card.stroke,
-    },
-    actionButtonsContainer: {
-      paddingHorizontal: spacing.pageHorizontal,
-      paddingVertical: spacing.m,
-      borderTopWidth: 1,
-      borderTopColor: colors.card.stroke,
-      backgroundColor: colors.canvas.base,
-    },
-    cancelButton: {
-      flex: 1,
     },
     textInput: {
       flex: 1,

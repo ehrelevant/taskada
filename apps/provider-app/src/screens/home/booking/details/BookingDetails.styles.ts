@@ -3,10 +3,6 @@ import { StyleSheet } from 'react-native';
 
 export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: colors.canvas.base,
-    },
     loadingContainer: {
       flex: 1,
       justifyContent: 'center',
@@ -15,11 +11,9 @@ export const createStyles = (colors: ThemeColors) =>
     loadingText: {
       marginTop: spacing.m,
     },
-    scrollContent: {
-      paddingHorizontal: spacing.pageHorizontal,
-      paddingTop: spacing.pageTop,
-      paddingBottom: spacing.xxxl,
-      gap: spacing.m,
+    content: {
+      gap: spacing.s,
+      padding: spacing.m,
     },
     heroCard: {
       borderRadius: radius.xxl,
@@ -27,20 +21,7 @@ export const createStyles = (colors: ThemeColors) =>
       borderColor: colors.home.heroAccent,
       backgroundColor: colors.home.heroStart,
       padding: spacing.heroInset,
-      gap: spacing.xs,
-    },
-    heroPill: {
-      alignSelf: 'flex-start',
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: spacing.xs,
-      borderRadius: radius.round,
-      backgroundColor: colors.home.chipBg,
-      paddingHorizontal: spacing.s,
-      paddingVertical: spacing.xs,
-    },
-    heroSubtitle: {
-      opacity: 0.94,
+      gap: spacing.s,
     },
     mapSection: {
       backgroundColor: colors.card.base,
@@ -114,9 +95,7 @@ export const createStyles = (colors: ThemeColors) =>
       lineHeight: 22,
     },
     buttonContainer: {
-      paddingHorizontal: spacing.pageHorizontal,
-      paddingTop: spacing.m,
-      paddingBottom: spacing.xl,
+      padding: spacing.m,
       borderTopWidth: 1,
       borderTopColor: colors.card.stroke,
       backgroundColor: colors.canvas.base,

@@ -3,53 +3,25 @@ import { StyleSheet } from 'react-native';
 
 export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
-    overlay: {
-      flex: 1,
-      backgroundColor: 'rgba(0,0,0,0.5)',
-      justifyContent: 'flex-end',
-    },
-    container: {
+    overlayContent: {
       backgroundColor: colors.card.base,
       borderTopLeftRadius: radius.xl,
       borderTopRightRadius: radius.xl,
-      padding: spacing.l,
-      maxHeight: '85%',
-      borderTopWidth: 1,
-      borderLeftWidth: 1,
-      borderRightWidth: 1,
-      borderColor: colors.card.stroke,
+      padding: spacing.m,
+      gap: spacing.m,
     },
     titleWrap: {
       alignItems: 'center',
-      marginBottom: spacing.l,
-    },
-    titlePill: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: spacing.xs,
-      borderRadius: radius.round,
-      backgroundColor: colors.home.chipBg,
-      paddingHorizontal: spacing.s,
-      paddingVertical: spacing.xs,
-      marginBottom: spacing.s,
     },
     title: {
       textAlign: 'center',
     },
-    scrollContent: {
-      paddingBottom: spacing.m,
-    },
     fieldContainer: {
-      marginBottom: spacing.m,
       borderRadius: radius.l,
       borderWidth: 1,
       borderColor: colors.card.stroke,
       backgroundColor: colors.card.muted,
       padding: spacing.m,
-    },
-    label: {
-      color: colors.textSecondary,
-      marginBottom: spacing.xs,
     },
     typeList: {
       flexDirection: 'row',
@@ -74,11 +46,10 @@ export const createStyles = (colors: ThemeColors) =>
       opacity: 0.5,
     },
     actions: {
+      flex: 1,
+      flexGrow: 0,
       flexDirection: 'row',
-      gap: spacing.m,
-      paddingTop: spacing.m,
-      borderTopWidth: 1,
-      borderTopColor: colors.card.stroke,
+      gap: spacing.s,
     },
     button: {
       flex: 1,

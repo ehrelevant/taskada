@@ -1,5 +1,5 @@
-import { BadgeCheck, CircleDollarSign, Pencil, Plus, Trash2, Wrench } from 'lucide-react-native';
 import { Card, ScreenContainer, Typography } from '@repo/components';
+import { CircleDollarSign, Pencil, Plus, Trash2, Wrench } from 'lucide-react-native';
 import { FlatList, Switch, TouchableOpacity, View } from 'react-native';
 import type { ProviderService } from '@repo/types';
 import { useTheme } from '@repo/theme';
@@ -67,26 +67,20 @@ export function ServicesScreen() {
   );
 
   return (
-    <ScreenContainer padding="none" style={styles.container}>
+    <ScreenContainer edges={['top', 'left', 'right']}>
       <FlatList
         data={services}
         renderItem={renderItem}
         keyExtractor={item => item.id}
-        contentContainerStyle={styles.listContent}
         refreshing={isRefreshing}
         onRefresh={fetchServices}
+        contentContainerStyle={styles.listContent}
         ListHeaderComponent={
           <View style={styles.heroCard}>
-            <View style={styles.heroPill}>
-              <BadgeCheck size={14} color={colors.home.chipText} />
-              <Typography variant="caption" color={colors.home.chipText}>
-                provider services
-              </Typography>
-            </View>
             <Typography variant="h3" color="textInverse">
               Manage what you offer
             </Typography>
-            <Typography variant="body2" color="textInverse" style={styles.heroSubtitle}>
+            <Typography variant="body2" color="textInverse">
               Keep pricing and availability updated so seekers can discover you faster.
             </Typography>
           </View>

@@ -3,39 +3,19 @@ import { StyleSheet } from 'react-native';
 
 export const createStyles = (colors: ThemeColors, shadows: ThemeShadows) =>
   StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: colors.canvas.base,
-    },
-    listContent: {
-      paddingHorizontal: spacing.pageHorizontal,
-      paddingTop: spacing.pageTop,
-      paddingBottom: 120,
-    },
     heroCard: {
       borderRadius: radius.xxl,
       borderWidth: 1,
       borderColor: colors.home.heroAccent,
       backgroundColor: colors.home.heroStart,
       padding: spacing.heroInset,
-      marginBottom: spacing.m,
       gap: spacing.xs,
     },
-    heroPill: {
-      alignSelf: 'flex-start',
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: spacing.xs,
-      borderRadius: radius.round,
-      backgroundColor: colors.home.chipBg,
-      paddingHorizontal: spacing.s,
-      paddingVertical: spacing.xs,
-    },
-    heroSubtitle: {
-      opacity: 0.94,
+    listContent: {
+      gap: spacing.s,
+      padding: spacing.m,
     },
     card: {
-      marginBottom: spacing.m,
       borderRadius: radius.l,
       borderWidth: 1,
       borderColor: colors.card.stroke,
@@ -79,7 +59,6 @@ export const createStyles = (colors: ThemeColors, shadows: ThemeShadows) =>
     },
     emptyState: {
       alignItems: 'center',
-      marginTop: spacing.sectionGap,
       borderRadius: radius.l,
       borderWidth: 1,
       borderColor: colors.card.stroke,

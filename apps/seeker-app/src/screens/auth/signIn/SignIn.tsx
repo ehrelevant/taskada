@@ -11,12 +11,12 @@ export function SignInScreen() {
   const { email, setEmail, password, setPassword, errorMessage, handleSignIn, navigation } = useSignIn();
 
   return (
-    <ScreenContainer scrollable padding="l" style={styles.container}>
+    <ScreenContainer keyboardAware contentPadding="m">
       <View style={styles.heroCard}>
-        <Typography variant="h3" weight="bold" color="textInverse" style={styles.title}>
+        <Typography variant="h3" color="textInverse">
           Welcome back
         </Typography>
-        <Typography variant="body1" color="textInverse" style={styles.subtitle}>
+        <Typography variant="body1" color="textInverse">
           Sign in to discover and book trusted services.
         </Typography>
       </View>
@@ -46,7 +46,7 @@ export function SignInScreen() {
           </Typography>
         )}
 
-        <Button title="Sign In" onPress={handleSignIn} style={styles.button} />
+        <Button title="Sign In" onPress={handleSignIn} />
       </View>
 
       <Pressable onPress={() => navigation.replace('SignUp')} style={styles.footer}>

@@ -20,12 +20,10 @@ export const createStyles = (colors: ThemeColors) =>
     },
     scrollContent: {
       flexGrow: 1,
-      paddingHorizontal: spacing.pageHorizontal,
-      paddingTop: spacing.pageTop,
-      paddingBottom: spacing.xl,
       gap: spacing.m,
+      padding: spacing.m,
     },
-    centeredContent: {
+    heroContent: {
       backgroundColor: colors.home.heroStart,
       borderRadius: radius.xxl,
       borderWidth: 1,
@@ -33,34 +31,8 @@ export const createStyles = (colors: ThemeColors) =>
       padding: spacing.heroInset,
     },
     header: {
-      alignItems: 'center',
-      marginBottom: spacing.s,
-    },
-    heroPill: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: spacing.xs,
-      borderRadius: radius.round,
-      backgroundColor: colors.home.chipBg,
-      paddingHorizontal: spacing.s,
-      paddingVertical: spacing.xs,
-      marginBottom: spacing.s,
-    },
-    headerTitle: {
-      textAlign: 'center',
-      color: colors.textInverse,
-      fontWeight: '700',
-    },
-    messageContainer: {
-      alignItems: 'center',
-      marginBottom: spacing.xl,
       paddingHorizontal: spacing.m,
-    },
-    messageText: {
-      textAlign: 'center',
-      lineHeight: 24,
-      color: colors.textInverse,
-      opacity: 0.94,
+      gap: spacing.s,
     },
     buttonContainer: {
       alignItems: 'center',
@@ -92,12 +64,12 @@ export const createStyles = (colors: ThemeColors) =>
       borderWidth: 1,
       borderColor: colors.card.stroke,
       padding: spacing.m,
+      gap: spacing.s,
     },
     infoRow: {
       flexDirection: 'row',
       justifyContent: 'space-between',
-      marginBottom: spacing.l,
-      gap: spacing.m,
+      gap: spacing.s,
     },
     infoItem: {
       flex: 1,

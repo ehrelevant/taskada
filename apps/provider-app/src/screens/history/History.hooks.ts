@@ -70,10 +70,6 @@ export function useHistory() {
     });
   }, []);
 
-  const getStatusColor = useCallback((status: string) => {
-    return status === 'completed' ? '#4CAF50' : '#F44336';
-  }, []);
-
   const handleViewDetails = useCallback(
     (bookingId: string) => {
       navigation.navigate('BookingLogs', { bookingId });
@@ -86,7 +82,6 @@ export function useHistory() {
     isLoading,
     error,
     formatDateTime,
-    getStatusColor,
     handleViewDetails,
     loadBookingHistory,
   };

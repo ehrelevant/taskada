@@ -1,10 +1,9 @@
-import { Button, Input, Typography } from '@repo/components';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
+import { Button, Input, ScreenContainer, Typography } from '@repo/components';
 import { Pressable, Text, View } from 'react-native';
 import { useTheme } from '@repo/theme';
 
 import { createStyles } from './SignUp.styles';
-import { useSignUpScreen } from './SignUp.hooks';
+import { useSignUp } from './SignUp.hooks';
 
 export function SignUpScreen() {
   const { colors } = useTheme();
@@ -26,15 +25,15 @@ export function SignUpScreen() {
     errorMessage,
     handleSignUp,
     navigation,
-  } = useSignUpScreen();
+  } = useSignUp();
 
   return (
-    <KeyboardAwareScrollView contentContainerStyle={styles.scrollContainer} bottomOffset={50}>
+    <ScreenContainer keyboardAware contentPadding="m" contentStyle={styles.content}>
       <View style={styles.heroCard}>
         <Typography variant="h3" color="textInverse">
           Create your account
         </Typography>
-        <Typography variant="body1" color="textInverse" style={styles.heroSubtitle}>
+        <Typography variant="body1" color="textInverse">
           Join the platform and start receiving service requests.
         </Typography>
       </View>
@@ -83,9 +82,9 @@ export function SignUpScreen() {
 
       <Pressable onPress={() => navigation.replace('SignIn')} style={styles.footer}>
         <Typography variant="body1" color="textSecondary">
-          Already have an account? <Text style={styles.link}>Sign In</Text>
+          Already have an account? <Text style={styles.signInLink}>Sign In</Text>
         </Typography>
       </Pressable>
-    </KeyboardAwareScrollView>
+    </ScreenContainer>
   );
 }

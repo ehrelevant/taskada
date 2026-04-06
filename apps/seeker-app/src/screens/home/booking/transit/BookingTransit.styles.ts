@@ -1,4 +1,4 @@
-import { spacing, ThemeColors } from '@repo/theme';
+import { radius, spacing, ThemeColors } from '@repo/theme';
 import { StyleSheet } from 'react-native';
 
 export const createStyles = (colors: ThemeColors) =>
@@ -7,64 +7,21 @@ export const createStyles = (colors: ThemeColors) =>
       padding: spacing.xs,
     },
     content: {
-      paddingHorizontal: spacing.pageHorizontal,
-      paddingTop: spacing.pageTop,
-      paddingBottom: spacing.xxxl,
       gap: spacing.m,
+      padding: spacing.m,
     },
     heroCard: {
-      borderRadius: 28,
+      borderRadius: radius.xxl,
       borderWidth: 1,
       borderColor: colors.home.heroAccent,
       backgroundColor: colors.home.heroStart,
       padding: spacing.heroInset,
       gap: spacing.s,
     },
-    heroPill: {
-      alignSelf: 'flex-start',
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: spacing.xs,
-      borderRadius: 999,
-      backgroundColor: colors.home.chipBg,
-      paddingHorizontal: spacing.s,
-      paddingVertical: spacing.xs,
-    },
-    heroBadgeRow: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      gap: spacing.s,
-    },
-    heroBadge: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: spacing.xs,
-      borderRadius: 999,
-      backgroundColor: colors.home.chipBg,
-      paddingHorizontal: spacing.s,
-      paddingVertical: spacing.xs,
-    },
-    statusTitle: {
-      marginTop: spacing.s,
-    },
-    statusSubtitle: {
-      opacity: 0.94,
-    },
     providerCardShell: {
       flexDirection: 'row',
       alignItems: 'center',
-      borderRadius: 16,
-      borderWidth: 1,
-      borderColor: colors.card.stroke,
-      backgroundColor: colors.card.base,
-      padding: spacing.m,
-    },
-    providerInfo: {
-      flex: 1,
-      marginLeft: spacing.m,
-    },
-    providerName: {
-      marginBottom: spacing.xs,
+      gap: spacing.s,
     },
     detailRow: {
       flexDirection: 'row',
@@ -75,7 +32,6 @@ export const createStyles = (colors: ThemeColors) =>
     divider: {
       height: 1,
       backgroundColor: colors.border,
-      marginVertical: spacing.xs,
     },
     specificationsCard: {
       padding: spacing.m,

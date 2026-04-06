@@ -59,8 +59,7 @@ export const createStyles = (colors: ThemeColors) =>
       paddingVertical: spacing.xs,
     },
     searchContainer: {
-      paddingHorizontal: spacing.pageHorizontal,
-      paddingVertical: spacing.m,
+      padding: spacing.m,
     },
     searchBar: {
       borderRadius: radius.l,
@@ -121,16 +120,14 @@ export const createStyles = (colors: ThemeColors) =>
       flex: 1,
     },
     scrollContent: {
-      paddingHorizontal: spacing.pageHorizontal,
-      paddingBottom: spacing.xxxl,
+      padding: spacing.m,
       gap: spacing.s,
     },
     sectionRow: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      marginBottom: spacing.s,
-      marginTop: spacing.s,
+      marginTop: spacing.m,
     },
     sectionAction: {
       flexDirection: 'row',
@@ -142,7 +139,6 @@ export const createStyles = (colors: ThemeColors) =>
     quickActionGrid: {
       flexDirection: 'row',
       gap: spacing.gridGap,
-      marginBottom: spacing.m,
     },
     quickActionCardPrimary: {
       flex: 1,
@@ -178,7 +174,6 @@ export const createStyles = (colors: ThemeColors) =>
       flexWrap: 'wrap',
       justifyContent: 'space-between',
       gap: spacing.gridGap,
-      marginBottom: spacing.s,
     },
     serviceTypeTile: {
       width: '48.5%',
@@ -211,7 +206,6 @@ export const createStyles = (colors: ThemeColors) =>
     },
     featuredList: {
       width: '100%',
-      paddingTop: spacing.xs,
       paddingRight: 0,
       gap: spacing.s,
     },

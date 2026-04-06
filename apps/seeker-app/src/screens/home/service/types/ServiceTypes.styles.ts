@@ -3,10 +3,8 @@ import { StyleSheet } from 'react-native';
 
 export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
-    heroShell: {
-      paddingTop: spacing.pageTop,
-      paddingHorizontal: spacing.pageHorizontal,
-      paddingBottom: spacing.s,
+    content: {
+      gap: spacing.m,
     },
     heroCard: {
       borderRadius: radius.xxl,
@@ -29,25 +27,16 @@ export const createStyles = (colors: ThemeColors) =>
     heroTitle: {
       marginBottom: spacing.xs,
     },
-    heroSubtitle: {
-      opacity: 0.94,
-    },
     listHeaderRow: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      paddingHorizontal: spacing.pageHorizontal,
-      marginTop: spacing.m,
-      marginBottom: spacing.s,
     },
     listHint: {
       flexDirection: 'row',
       alignItems: 'center',
-      gap: spacing.xxs,
     },
     listContent: {
-      paddingHorizontal: spacing.pageHorizontal,
-      paddingBottom: spacing.xxxl,
       gap: spacing.gridGap,
     },
     columnWrapper: {

@@ -1,8 +1,8 @@
 import { ActivityIndicator, FlatList, Image, Modal, TouchableOpacity, View } from 'react-native';
-import { Button, ImageViewer, Input, Rating, Typography } from '@repo/components';
+import { Button, ImageViewer, Input, Rating, ScreenContainer, Typography } from '@repo/components';
 import { Controller, FormProvider } from 'react-hook-form';
-import { ImagePlus, LocateFixed, Search, ShieldCheck, Sparkles, X } from 'lucide-react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
+import { ImagePlus, X } from 'lucide-react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '@repo/theme';
 
 import { createStyles } from './RequestForm.styles';
@@ -52,36 +52,16 @@ export function RequestFormScreen() {
   } = useRequestForm();
 
   return (
-    <KeyboardAwareScrollView contentContainerStyle={styles.scrollContent}>
+    <ScreenContainer keyboardAware edges={['left', 'right']} contentPadding="m">
       <FormProvider {...methods}>
         <View style={styles.container}>
           <View style={styles.heroCard}>
-            <View style={styles.heroPill}>
-              <Sparkles size={14} color={colors.home.chipText} />
-              <Typography variant="caption" color={colors.home.chipText}>
-                smart request flow
-              </Typography>
-            </View>
-            <Typography variant="h3" color="textInverse" style={styles.heroTitle}>
+            <Typography variant="h3" color="textInverse">
               Tell us what you need
             </Typography>
-            <Typography variant="body2" color="textInverse" style={styles.heroSubtitle}>
+            <Typography variant="body2" color="textInverse">
               Share location, choose a service, and add details so providers can respond faster.
             </Typography>
-            <View style={styles.heroBadgeRow}>
-              <View style={styles.heroBadge}>
-                <ShieldCheck size={14} color={colors.home.chipText} />
-                <Typography variant="caption" color={colors.home.chipText}>
-                  verified providers
-                </Typography>
-              </View>
-              <View style={styles.heroBadge}>
-                <LocateFixed size={14} color={colors.home.chipText} />
-                <Typography variant="caption" color={colors.home.chipText}>
-                  precise location pin
-                </Typography>
-              </View>
-            </View>
           </View>
 
           <View style={styles.sectionCard}>
@@ -106,11 +86,9 @@ export function RequestFormScreen() {
                   onChangeText={handleAddressChange}
                   error={errors.addressLabel?.message}
                   placeholder="Enter your address"
-                  containerStyle={styles.input}
                   multiline
-                  numberOfLines={3}
-                  inputContainerStyle={{ alignItems: 'flex-start', minHeight: 90 }}
-                  style={{ textAlignVertical: 'top' }}
+                  numberOfLines={5}
+                  style={{ minHeight: 80 }}
                 />
               )}
             />
@@ -119,13 +97,9 @@ export function RequestFormScreen() {
           <View style={styles.sectionCard}>
             <View style={styles.sectionHeadingRow}>
               <Typography variant="h5">Service Details</Typography>
-              <View style={styles.sectionHintPill}>
-                <Search size={12} color={colors.textSecondary} />
-                <Typography variant="caption" color="textSecondary">
-                  optional provider selection
-                </Typography>
-              </View>
             </View>
+
+            {/* TODO: Add service type selection */}
 
             <ServiceSelection
               onOpenSearch={() => setShowServiceSearch(true)}
@@ -146,10 +120,10 @@ export function RequestFormScreen() {
                   value={value}
                   onChangeText={onChange}
                   error={errors.description?.message}
-                  placeholder="Describe what you need done, preferred timing, and important notes"
+                  placeholder="Describe what you need done, preferred timing, and important notes."
                   multiline
                   numberOfLines={5}
-                  containerStyle={styles.input}
+                  style={{ minHeight: 80 }}
                 />
               )}
             />
@@ -159,11 +133,11 @@ export function RequestFormScreen() {
             <View style={styles.sectionHeadingRow}>
               <Typography variant="h5">Attachments</Typography>
               <Typography variant="caption" color="textSecondary">
-                optional photos
+                Optional Photos
               </Typography>
             </View>
 
-            <View style={styles.imageSection}>
+            <View>
               <FlatList
                 horizontal
                 data={images}
@@ -181,7 +155,7 @@ export function RequestFormScreen() {
                 ListFooterComponent={
                   <TouchableOpacity style={styles.addImageButton} onPress={pickImages}>
                     <ImagePlus size={24} color={colors.actionPrimary} />
-                    <Typography variant="caption" color="actionPrimary" style={styles.addImageLabel}>
+                    <Typography variant="caption" color="actionPrimary">
                       Add
                     </Typography>
                   </TouchableOpacity>
@@ -191,28 +165,26 @@ export function RequestFormScreen() {
             </View>
           </View>
 
-          <Button
-            title="Request a Booking"
-            onPress={handleSubmit}
-            isLoading={loading || isSubmitting}
-            disabled={loading || isSubmitting}
-            style={styles.submitButton}
-          />
+          <View style={styles.submitSection}>
+            <Button
+              title="Request a Booking"
+              onPress={handleSubmit}
+              isLoading={loading || isSubmitting}
+              disabled={loading || isSubmitting}
+            />
 
-          <Typography variant="caption" color="textSecondary" align="center" style={styles.footerNote}>
-            Submitting will notify matching providers and move you to standby.
-          </Typography>
+            <Typography variant="caption" color="textSecondary" align="center">
+              Submitting will notify matching providers and move you to standby.
+            </Typography>
+          </View>
         </View>
       </FormProvider>
 
       <Modal animationType="slide" visible={showServiceSearch}>
-        <View style={styles.modalContainer}>
+        <SafeAreaView style={styles.modalContainer}>
           <View style={styles.modalHeader}>
             <View>
-              <Typography variant="h6">Select a Service</Typography>
-              <Typography variant="caption" color="textSecondary" style={styles.modalSubtext}>
-                Search by service type or provider
-              </Typography>
+              <Typography variant="h3">Select a Service</Typography>
             </View>
             <TouchableOpacity onPress={() => setShowServiceSearch(false)}>
               <X size={24} color={colors.textPrimary} />
@@ -268,7 +240,7 @@ export function RequestFormScreen() {
               />
             )}
           </View>
-        </View>
+        </SafeAreaView>
       </Modal>
 
       <ImageViewer
@@ -276,6 +248,6 @@ export function RequestFormScreen() {
         imageUri={selectedImage || ''}
         onClose={() => setSelectedImage(null)}
       />
-    </KeyboardAwareScrollView>
+    </ScreenContainer>
   );
 }

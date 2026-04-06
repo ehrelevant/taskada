@@ -23,7 +23,7 @@ export function BookingDetailsScreen() {
   }
 
   return (
-    <ScreenContainer scrollable padding="none">
+    <ScreenContainer scrollable edges={['left', 'right']} contentPadding="m">
       <Header title="Booking Details" size="small" onBack={handleGoBack} />
 
       <View style={styles.content}>

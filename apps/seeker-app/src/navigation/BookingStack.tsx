@@ -5,6 +5,7 @@ import { BookingTransitScreen } from '@screens/home/booking/transit/BookingTrans
 import { ChatScreen } from '@screens/home/booking/chat/BookingChat';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ReportScreen } from '@screens/report/Report';
+import { StackHeader } from '@repo/components';
 import { StandbyScreen } from '@screens/home/request/standby/Standby';
 
 export type BookingStackParamList = {
@@ -95,6 +96,13 @@ export function BookingStack() {
       initialRouteName="Standby"
       screenOptions={{
         animationDuration: 400,
+        header: ({ navigation, options, route, back }) => (
+          <StackHeader
+            title={typeof options.title === 'string' ? options.title : route.name}
+            canGoBack={Boolean(back)}
+            onBack={() => navigation.goBack()}
+          />
+        ),
       }}
     >
       <Stack.Screen
@@ -141,6 +149,7 @@ export function BookingStack() {
         name="BookingDetails"
         component={BookingDetailsScreen}
         options={{
+          title: 'Booking Details',
           headerShown: false,
         }}
       />
@@ -148,6 +157,7 @@ export function BookingStack() {
         name="Report"
         component={ReportScreen}
         options={{
+          title: 'Report User',
           headerShown: false,
         }}
       />

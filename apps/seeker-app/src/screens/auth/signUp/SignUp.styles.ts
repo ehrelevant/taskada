@@ -3,14 +3,8 @@ import { StyleSheet } from 'react-native';
 
 export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
-    scrollContainer: {
-      flexGrow: 1,
-      justifyContent: 'center',
-      backgroundColor: colors.canvas.base,
+    content: {
       gap: spacing.m,
-      paddingHorizontal: spacing.pageHorizontal,
-      paddingTop: spacing.pageTop,
-      paddingBottom: spacing.xxxl,
     },
     heroCard: {
       borderRadius: radius.xxl,
@@ -19,9 +13,6 @@ export const createStyles = (colors: ThemeColors) =>
       backgroundColor: colors.home.heroStart,
       padding: spacing.heroInset,
       gap: spacing.xs,
-    },
-    heroSubtitle: {
-      opacity: 0.94,
     },
     formCard: {
       borderRadius: radius.l,

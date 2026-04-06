@@ -1,13 +1,42 @@
 import { ActivityIndicator, FlatList, Image, ScrollView, TextInput, TouchableOpacity, View } from 'react-native';
-import { Avatar, Button, Header, ImageViewer, Typography } from '@repo/components';
-import { BadgeCheck, Flag, Image as ImageIcon, Send, Sparkles, X } from 'lucide-react-native';
+import { Avatar, Button, EmptyState, Header, ImageViewer, ScreenContainer, Typography } from '@repo/components';
+import { Flag, Image as ImageIcon, Send, X } from 'lucide-react-native';
 import { KeyboardStickyView } from 'react-native-keyboard-controller';
 import type { Message } from '@repo/shared';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '@repo/theme';
 
 import { createStyles } from './BookingChat.styles';
 import { useBookingChat } from './BookingChat.hooks';
+
+function ChatHeaderCenter({
+  avatarUrl,
+  firstName,
+  lastName,
+  isTyping,
+}: {
+  avatarUrl: string | null;
+  firstName: string;
+  lastName: string;
+  isTyping: boolean;
+}) {
+  const styles = createStyles(useTheme().colors);
+
+  return (
+    <View style={styles.headerCenter}>
+      <Avatar source={avatarUrl ? { uri: avatarUrl } : null} name={`${firstName} ${lastName}`} size={36} />
+      <View style={styles.headerCenterText}>
+        <Typography variant="h5" weight="bold" numberOfLines={1}>
+          {firstName} {lastName}
+        </Typography>
+        {isTyping && (
+          <Typography variant="caption" color="textSecondary">
+            Typing...
+          </Typography>
+        )}
+      </View>
+    </View>
+  );
+}
 
 export function BookingChatScreen() {
   const { colors } = useTheme();
@@ -70,41 +99,27 @@ export function BookingChatScreen() {
   };
 
   return (
-    <SafeAreaView edges={['top']} style={styles.container}>
+    <ScreenContainer>
       <Header
         centerContent={
-          <View style={styles.headerContent}>
-            <Avatar
-              source={otherUser.avatarUrl ? { uri: otherUser.avatarUrl } : null}
-              name={`${otherUser.firstName} ${otherUser.lastName}`}
-              size={36}
-            />
-            <View style={styles.headerMeta}>
-              <Typography variant="h5" weight="bold">
-                {otherUser.firstName} {otherUser.lastName}
-              </Typography>
-              {isTyping && (
-                <Typography variant="caption" color="textSecondary">
-                  Typing...
-                </Typography>
-              )}
-            </View>
-          </View>
+          <ChatHeaderCenter
+            avatarUrl={otherUser.avatarUrl}
+            firstName={otherUser.firstName}
+            lastName={otherUser.lastName}
+            isTyping={isTyping}
+          />
         }
         rightContent={
-          <TouchableOpacity onPress={handleReport} style={styles.iconButton}>
+          <TouchableOpacity onPress={handleReport}>
             <Flag size={20} color={colors.textSecondary} />
           </TouchableOpacity>
         }
         style={styles.header}
       />
 
-      <View style={styles.introBanner}>
-        <BadgeCheck size={14} color={colors.home.chipText} />
-        <Typography variant="caption" color={colors.home.chipText}>
-          finalize cost and details when you are ready
-        </Typography>
-        <Sparkles size={14} color={colors.home.chipText} />
+      <View style={styles.actionButtonsContainer}>
+        <Button title="Decline" variant="outline" onPress={handleDecline} style={styles.actionButton} />
+        <Button title="Finalize Cost & Details" onPress={handleFinalize} style={styles.actionButton} />
       </View>
 
       <FlatList
@@ -114,15 +129,17 @@ export function BookingChatScreen() {
         contentContainerStyle={styles.messagesList}
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0.5}
+        ListEmptyComponent={
+          isLoading ? null : (
+            <View style={styles.emptyStateCard}>
+              <EmptyState message="Start the conversation to align on service details." />
+            </View>
+          )
+        }
         ListFooterComponent={isLoading ? <ActivityIndicator color={colors.actionPrimary} /> : null}
       />
 
       <KeyboardStickyView>
-        <View style={styles.actionButtonsContainer}>
-          <Button title="Decline" variant="outline" onPress={handleDecline} style={styles.declineButton} />
-          <Button title="Finalize Cost & Details" onPress={handleFinalize} style={styles.finalizeButton} />
-        </View>
-
         {selectedImages.length > 0 && (
           <ScrollView horizontal style={styles.selectedImagesContainer} showsHorizontalScrollIndicator={false}>
             {selectedImages.map((uri, index) => (
@@ -135,7 +152,6 @@ export function BookingChatScreen() {
             ))}
           </ScrollView>
         )}
-
         <View style={styles.inputContainer}>
           <TouchableOpacity
             onPress={handlePickImage}
@@ -171,6 +187,6 @@ export function BookingChatScreen() {
         imageUri={selectedImage || ''}
         onClose={() => setSelectedImage(null)}
       />
-    </SafeAreaView>
+    </ScreenContainer>
   );
 }

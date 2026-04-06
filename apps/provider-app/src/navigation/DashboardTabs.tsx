@@ -2,6 +2,7 @@ import { BottomTabBarProps, createBottomTabNavigator } from '@react-navigation/b
 import { ClipboardList, HardHat, History, Menu } from 'lucide-react-native';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Typography } from '@repo/components';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '@repo/theme';
 
 import { BookingStack } from './BookingStack';
@@ -22,10 +23,23 @@ const Tab = createBottomTabNavigator<DashboardTabsParamList>();
 
 function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
   const { colors } = useTheme();
+  const { bottom: bottomInset } = useSafeAreaInsets();
+
+  if (state.routes[state.index]?.name === 'BookingStack') {
+    return null;
+  }
 
   return (
     <View
-      style={[styles.tabsContainer, { backgroundColor: colors.backgroundSecondary, borderTopColor: colors.border }]}
+      style={[
+        styles.tabsContainer,
+        {
+          backgroundColor: colors.backgroundSecondary,
+          borderTopColor: colors.border,
+          paddingBottom: bottomInset,
+          height: 64 + bottomInset,
+        },
+      ]}
     >
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
@@ -110,6 +124,7 @@ export function DashboardTabs() {
         name="BookingStack"
         component={BookingStack}
         options={{
+          title: 'Bookings',
           tabBarButton: () => null,
         }}
       />
@@ -120,8 +135,7 @@ export function DashboardTabs() {
 const styles = StyleSheet.create({
   tabsContainer: {
     flexDirection: 'row',
-    height: 64,
-    paddingTop: 8,
+    alignItems: 'center',
     borderTopWidth: 2,
   },
   tabButton: {

@@ -3,20 +3,11 @@ import { StyleSheet } from 'react-native';
 
 export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: colors.canvas.base,
-    },
     iconButton: {
       padding: spacing.xs,
     },
-    keyboardView: {
-      flex: 1,
-    },
     scrollContent: {
-      paddingHorizontal: spacing.pageHorizontal,
-      paddingTop: spacing.pageTop,
-      paddingBottom: spacing.xxxl,
+      padding: spacing.m,
       gap: spacing.m,
     },
     heroCard: {
@@ -25,20 +16,6 @@ export const createStyles = (colors: ThemeColors) =>
       borderColor: colors.home.heroAccent,
       backgroundColor: colors.home.heroStart,
       padding: spacing.heroInset,
-      gap: spacing.xs,
-    },
-    heroPill: {
-      alignSelf: 'flex-start',
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: spacing.xs,
-      borderRadius: radius.round,
-      backgroundColor: colors.home.chipBg,
-      paddingHorizontal: spacing.s,
-      paddingVertical: spacing.xs,
-    },
-    heroSubtitle: {
-      opacity: 0.94,
     },
     mapSection: {
       backgroundColor: colors.card.base,
@@ -121,14 +98,6 @@ export const createStyles = (colors: ThemeColors) =>
       minHeight: 120,
       color: colors.textPrimary,
       fontSize: 16,
-    },
-    submitContainer: {
-      paddingHorizontal: spacing.pageHorizontal,
-      paddingTop: spacing.m,
-      paddingBottom: spacing.xl,
-      borderTopWidth: 1,
-      borderTopColor: colors.card.stroke,
-      backgroundColor: colors.canvas.base,
     },
     modalOverlay: {
       flex: 1,

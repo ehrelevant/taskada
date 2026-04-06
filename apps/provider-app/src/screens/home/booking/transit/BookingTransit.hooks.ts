@@ -23,7 +23,6 @@ export function useBookingTransit() {
   const { bookingId, seekerLocation, address } = route.params;
 
   const [providerLocation, setProviderLocation] = useState<Location.LocationObjectCoords | null>(null);
-  const [locationError, setLocationError] = useState<string | null>(null);
   const [isArriving, setIsArriving] = useState(false);
   const [seekerUser, setSeekerUser] = useState<SeekerUser | null>(null);
 
@@ -47,21 +46,16 @@ export function useBookingTransit() {
   }, [bookingId]);
 
   const getCurrentLocation = useCallback(async () => {
-    try {
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        setLocationError('Location permission denied');
-        return;
-      }
-
-      const currentLocation = await Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.Highest,
-      });
-
-      setProviderLocation(currentLocation.coords);
-    } catch {
-      setLocationError('Failed to get location');
+    const { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== 'granted') {
+      return;
     }
+
+    const currentLocation = await Location.getCurrentPositionAsync({
+      accuracy: Location.Accuracy.Highest,
+    });
+
+    setProviderLocation(currentLocation.coords);
   }, []);
 
   useEffect(() => {
@@ -150,7 +144,6 @@ export function useBookingTransit() {
 
   return {
     providerLocation,
-    locationError,
     isArriving,
     seekerLatitude,
     seekerLongitude,

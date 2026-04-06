@@ -4,9 +4,6 @@ import { StyleSheet } from 'react-native';
 export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
     content: {
-      paddingHorizontal: spacing.pageHorizontal,
-      paddingTop: spacing.pageTop,
-      paddingBottom: spacing.xxxl,
       gap: spacing.m,
     },
     heroCard: {
@@ -15,23 +12,9 @@ export const createStyles = (colors: ThemeColors) =>
       borderColor: colors.home.heroAccent,
       backgroundColor: colors.home.heroStart,
       padding: spacing.heroInset,
-      gap: spacing.xs,
-    },
-    heroPill: {
-      alignSelf: 'flex-start',
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: spacing.xs,
-      borderRadius: radius.round,
-      backgroundColor: colors.home.chipBg,
-      paddingHorizontal: spacing.s,
-      paddingVertical: spacing.xs,
-    },
-    heroSubtitle: {
-      opacity: 0.94,
+      gap: spacing.s,
     },
     sectionTitle: {
-      marginBottom: spacing.m,
       color: colors.textSecondary,
     },
     savedMethodsContainer: {

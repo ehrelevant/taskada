@@ -1,6 +1,7 @@
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import { BadgeCheck, CircleDollarSign, FileText, Flag, MapPin } from 'lucide-react-native';
 import { Button, Header, ScreenContainer, Section, Typography } from '@repo/components';
+import { CircleDollarSign, Flag, MapPin } from 'lucide-react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { TouchableOpacity, View } from 'react-native';
 import { useTheme } from '@repo/theme';
 
@@ -35,39 +36,23 @@ export function BookingProposalScreen() {
   } = useBookingProposal();
 
   return (
-    <ScreenContainer
-      scrollable
-      padding="none"
-      stickyFooter={
-        <View style={styles.buttonContainer}>
-          <Button title="Accept Service Specifications" onPress={handleAccept} />
-          <Button title="Decline and Chat Again" variant="outline" onPress={handleDecline} />
-        </View>
-      }
-    >
+    <ScreenContainer edges={['left', 'right']}>
       <Header
         title="Service Proposal"
         size="small"
         rightContent={
-          <TouchableOpacity onPress={handleReport} style={styles.reportButton}>
+          <TouchableOpacity onPress={handleReport}>
             <Flag size={20} color={colors.textSecondary} />
           </TouchableOpacity>
         }
       />
 
-      <View style={styles.content}>
+      <KeyboardAwareScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.heroCard}>
-          <View style={styles.heroPill}>
-            <BadgeCheck size={14} color={colors.home.chipText} />
-            <Typography variant="caption" color={colors.home.chipText}>
-              proposal received
-            </Typography>
-          </View>
-
-          <Typography variant="h3" color="textInverse" style={styles.heroTitle}>
+          <Typography variant="h3" color="textInverse">
             Review the service proposal
           </Typography>
-          <Typography variant="body2" color="textInverse" style={styles.heroSubtitle}>
+          <Typography variant="body2" color="textInverse">
             Confirm the details below before accepting and moving to transit.
           </Typography>
         </View>
@@ -94,7 +79,7 @@ export function BookingProposalScreen() {
         <View style={styles.locationCard}>
           <View style={styles.locationLabelRow}>
             <MapPin size={16} color={colors.actionPrimary} />
-            <Typography variant="caption" color="textSecondary">
+            <Typography variant="body1" color="textSecondary">
               Service location
             </Typography>
           </View>
@@ -103,36 +88,35 @@ export function BookingProposalScreen() {
 
         <View style={styles.rowSection}>
           <View style={styles.rowItem}>
-            <Typography variant="caption" color="textSecondary">
+            <Typography variant="body1" color="textSecondary">
               Service type
             </Typography>
-            <Typography variant="body1" weight="medium" style={styles.rowValue}>
+            <Typography variant="h3" color="actionPrimary">
               {serviceTypeName}
             </Typography>
           </View>
           <View style={styles.rowItem}>
             <View style={styles.costLabelRow}>
-              <CircleDollarSign size={14} color={colors.actionPrimary} />
-              <Typography variant="caption" color="textSecondary">
+              <CircleDollarSign size={16} color={colors.actionPrimary} />
+              <Typography variant="body1" color="textSecondary">
                 Proposed cost
               </Typography>
             </View>
-            <Typography variant="h3" color="actionPrimary" style={styles.rowValue}>
+            <Typography variant="h3" color="actionPrimary">
               {formatCurrency(cost)}
             </Typography>
           </View>
         </View>
 
         <Section label="Service Specifications" variant="card" style={styles.specificationsCard}>
-          <View style={styles.specLabelRow}>
-            <FileText size={16} color={colors.textSecondary} />
-            <Typography variant="caption" color="textSecondary">
-              Scope details
-            </Typography>
-          </View>
           <Typography variant="body1">{specifications}</Typography>
         </Section>
-      </View>
+
+        <View style={styles.buttonContainer}>
+          <Button title="Accept Service Specifications" onPress={handleAccept} />
+          <Button title="Decline and Chat Again" variant="outline" onPress={handleDecline} />
+        </View>
+      </KeyboardAwareScrollView>
     </ScreenContainer>
   );
 }

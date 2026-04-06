@@ -1,9 +1,8 @@
 import { ActivityIndicator, FlatList, Image, ScrollView, TextInput, TouchableOpacity, View } from 'react-native';
-import { Avatar, Button, Header, ImageViewer, ScreenContainer, Typography } from '@repo/components';
-import { BadgeCheck, Flag, Image as ImageIcon, Radio, Send, X } from 'lucide-react-native';
+import { Avatar, Button, EmptyState, Header, ImageViewer, ScreenContainer, Typography } from '@repo/components';
+import { Flag, Image as ImageIcon, Send, X } from 'lucide-react-native';
 import { KeyboardStickyView } from 'react-native-keyboard-controller';
 import type { Message } from '@repo/shared';
-import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '@repo/theme';
 
 import { createStyles } from './BookingChat.styles';
@@ -42,7 +41,6 @@ function ChatHeaderCenter({
 export function ChatScreen() {
   const { colors } = useTheme();
   const styles = createStyles(colors);
-  const navigation = useNavigation();
   const {
     messages,
     inputText,
@@ -64,10 +62,6 @@ export function ChatScreen() {
     handleCancel,
   } = useBookingChat();
 
-  const handleGoBack = () => {
-    navigation.goBack();
-  };
-
   const renderMessage = ({ item }: { item: Message }) => {
     const isOwnMessage = item.userId === currentUserId;
 
@@ -78,7 +72,7 @@ export function ChatScreen() {
         )}
         <View style={[styles.messageBubble, isOwnMessage ? styles.ownBubble : styles.otherBubble]}>
           {item.imageUrls && item.imageUrls.length > 0 && (
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.imageContainer}>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
               {item.imageUrls.map((imageUrl, index) => (
                 <TouchableOpacity key={index} onPress={() => setSelectedImage(imageUrl)}>
                   <Image source={{ uri: imageUrl }} style={styles.messageImage} />
@@ -104,9 +98,9 @@ export function ChatScreen() {
   };
 
   return (
-    <ScreenContainer useSafeArea={false} padding="none">
+    <ScreenContainer edges={['top', 'left', 'right']}>
       <Header
-        onBack={handleGoBack}
+        style={styles.header}
         centerContent={
           <ChatHeaderCenter
             avatarUrl={providerInfo.avatarUrl}
@@ -122,19 +116,8 @@ export function ChatScreen() {
         }
       />
 
-      <View style={styles.sessionBanner}>
-        <View style={styles.sessionBadge}>
-          <BadgeCheck size={13} color={colors.home.chipText} />
-          <Typography variant="caption" color={colors.home.chipText}>
-            active booking chat
-          </Typography>
-        </View>
-        <View style={styles.sessionBadge}>
-          <Radio size={13} color={colors.home.chipText} />
-          <Typography variant="caption" color={colors.home.chipText}>
-            real-time updates
-          </Typography>
-        </View>
+      <View style={styles.actionButtonsContainer}>
+        <Button title="Cancel Booking" variant="outline" onPress={handleCancel} style={styles.actionButton} />
       </View>
 
       <FlatList
@@ -148,9 +131,7 @@ export function ChatScreen() {
         ListEmptyComponent={
           isLoading ? null : (
             <View style={styles.emptyStateCard}>
-              <Typography variant="body2" color="textSecondary" align="center">
-                Start the conversation to align on service details.
-              </Typography>
+              <EmptyState message="Start the conversation to align on service details." />
             </View>
           )
         }
@@ -158,10 +139,6 @@ export function ChatScreen() {
       />
 
       <KeyboardStickyView>
-        <View style={styles.actionButtonsContainer}>
-          <Button title="Cancel Booking" variant="outline" onPress={handleCancel} style={styles.cancelButton} />
-        </View>
-
         {selectedImages.length > 0 && (
           <ScrollView horizontal style={styles.selectedImagesContainer} showsHorizontalScrollIndicator={false}>
             {selectedImages.map((uri, index) => (

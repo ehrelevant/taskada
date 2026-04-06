@@ -1,4 +1,5 @@
 import { spacing, useTheme } from '@repo/theme';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { View } from 'react-native';
 
 import { Header } from './Header';
@@ -11,6 +12,7 @@ export interface StackHeaderProps {
 
 export function StackHeader({ title, canGoBack, onBack }: StackHeaderProps) {
   const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
 
   return (
     <View
@@ -19,7 +21,7 @@ export function StackHeader({ title, canGoBack, onBack }: StackHeaderProps) {
         borderBottomWidth: 1,
         borderBottomColor: colors.card.stroke,
         paddingHorizontal: spacing.pageHorizontal,
-        paddingTop: spacing.s,
+        paddingTop: insets.top + spacing.s,
         paddingBottom: spacing.s,
       }}
     >

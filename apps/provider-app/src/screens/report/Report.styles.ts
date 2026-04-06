@@ -3,10 +3,6 @@ import { StyleSheet } from 'react-native';
 
 export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: colors.canvas.base,
-    },
     iconButton: {
       padding: spacing.xs,
     },
@@ -14,10 +10,8 @@ export const createStyles = (colors: ThemeColors) =>
       flex: 1,
     },
     scrollContent: {
-      paddingHorizontal: spacing.pageHorizontal,
-      paddingTop: spacing.pageTop,
-      paddingBottom: spacing.xxxl,
       gap: spacing.m,
+      padding: spacing.m,
     },
     heroCard: {
       borderRadius: radius.xxl,
@@ -26,19 +20,6 @@ export const createStyles = (colors: ThemeColors) =>
       backgroundColor: colors.home.heroStart,
       padding: spacing.heroInset,
       gap: spacing.xs,
-    },
-    heroPill: {
-      alignSelf: 'flex-start',
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: spacing.xs,
-      borderRadius: radius.round,
-      backgroundColor: colors.home.chipBg,
-      paddingHorizontal: spacing.s,
-      paddingVertical: spacing.xs,
-    },
-    heroSubtitle: {
-      opacity: 0.94,
     },
     userCard: {
       flexDirection: 'row',
@@ -130,14 +111,6 @@ export const createStyles = (colors: ThemeColors) =>
       height: 24,
       alignItems: 'center',
       justifyContent: 'center',
-    },
-    submitContainer: {
-      paddingHorizontal: spacing.pageHorizontal,
-      paddingTop: spacing.m,
-      paddingBottom: spacing.xl,
-      borderTopWidth: 1,
-      borderTopColor: colors.card.stroke,
-      backgroundColor: colors.canvas.base,
     },
     errorText: {
       marginTop: spacing.s,

@@ -1,5 +1,5 @@
 import { Avatar, Button, EmptyState, Rating, ScreenContainer, SearchBar, Typography } from '@repo/components';
-import { ChevronRight, Compass, ShieldCheck, Sparkles } from 'lucide-react-native';
+import { ChevronRight, Compass, Sparkles } from 'lucide-react-native';
 import type { FeaturedService, SearchResult, ServiceType } from '@repo/types';
 import { FlatList, ScrollView, TouchableOpacity, View } from 'react-native';
 import { SERVICE_TYPE_ICONS, useTheme } from '@repo/theme';
@@ -183,14 +183,14 @@ export function HomeScreen() {
 
   if (loading) {
     return (
-      <ScreenContainer useSafeArea={false} padding="none">
+      <ScreenContainer edges={['top', 'left', 'right']}>
         <EmptyState loading />
       </ScreenContainer>
     );
   }
 
   return (
-    <ScreenContainer padding="none">
+    <ScreenContainer edges={['top', 'left', 'right']}>
       <View style={styles.searchContainer}>
         <SearchBar
           value={searchQuery}
@@ -225,11 +225,7 @@ export function HomeScreen() {
         )}
       </View>
 
-      <ScrollView
-        style={styles.scrollArea}
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-      >
+      <ScrollView style={styles.scrollArea} contentContainerStyle={styles.scrollContent}>
         <View>
           <View style={styles.heroCard}>
             <View style={styles.profileRow}>
@@ -267,12 +263,6 @@ export function HomeScreen() {
                 <Sparkles size={14} color={colors.home.chipText} />
                 <Typography variant="caption" color={colors.home.chipText}>
                   {serviceTypes.length} categories
-                </Typography>
-              </View>
-              <View style={styles.heroBadge}>
-                <ShieldCheck size={14} color={colors.home.chipText} />
-                <Typography variant="caption" color={colors.home.chipText}>
-                  Trusted providers
                 </Typography>
               </View>
             </View>

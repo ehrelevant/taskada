@@ -1,5 +1,5 @@
 import { Avatar, Button, Card, Input, ScreenContainer, Typography } from '@repo/components';
-import { BadgeCheck, Camera, Eye, EyeOff, X } from 'lucide-react-native';
+import { Camera, Eye, EyeOff, X } from 'lucide-react-native';
 import { TouchableOpacity, View } from 'react-native';
 import { useTheme } from '@repo/theme';
 
@@ -30,14 +30,8 @@ export function ProfileScreen() {
   }
 
   return (
-    <ScreenContainer scrollable padding="m" verticalPadding="none">
+    <ScreenContainer keyboardAware scrollable edges={['left', 'right']} contentPadding="m">
       <View style={styles.avatarSection}>
-        <View style={styles.profilePill}>
-          <BadgeCheck size={14} color={colors.home.chipText} />
-          <Typography variant="caption" color={colors.home.chipText}>
-            seeker profile
-          </Typography>
-        </View>
         <View style={styles.avatarContainer}>
           <Avatar source={profileData?.avatarUrl ? { uri: profileData.avatarUrl } : null} size={100} />
           <TouchableOpacity style={styles.cameraButton} onPress={pickImage}>
@@ -55,9 +49,7 @@ export function ProfileScreen() {
       </View>
 
       <Card elevation="xs" padding="m" style={styles.sectionCard}>
-        <Typography variant="h4" style={styles.sectionTitle}>
-          Personal Information
-        </Typography>
+        <Typography variant="h4">Personal Information</Typography>
         <Input
           label="First Name"
           value={profileData.firstName}
@@ -84,16 +76,12 @@ export function ProfileScreen() {
       </Card>
 
       <Card elevation="xs" padding="m" style={styles.sectionCard}>
-        <Typography variant="h4" style={styles.sectionTitle}>
-          Account Information
-        </Typography>
+        <Typography variant="h4">Account Information</Typography>
         <Input label="Email" value={profileData.email} editable={false} inputContainerStyle={styles.readonlyInput} />
       </Card>
 
       <Card elevation="xs" padding="m" style={styles.sectionCard}>
-        <Typography variant="h4" style={styles.sectionTitle}>
-          Change Password
-        </Typography>
+        <Typography variant="h4">Change Password</Typography>
         <Input
           label="Current Password"
           value={passwordData.oldPassword}
@@ -149,14 +137,8 @@ export function ProfileScreen() {
       {errors.submit && <Typography style={styles.errorText}>{errors.submit}</Typography>}
 
       <View style={styles.buttonContainer}>
-        <Button
-          title="Save Changes"
-          variant="primary"
-          onPress={handleSave}
-          disabled={!hasChanges}
-          style={styles.saveButton}
-        />
-        <Button title="Cancel" variant="outline" onPress={handleCancel} style={styles.cancelButton} />
+        <Button title="Save Changes" variant="primary" onPress={handleSave} disabled={!hasChanges} />
+        <Button title="Cancel" variant="outline" onPress={handleCancel} />
       </View>
     </ScreenContainer>
   );

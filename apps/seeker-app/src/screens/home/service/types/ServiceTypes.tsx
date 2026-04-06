@@ -50,22 +50,20 @@ export function ServiceTypesListScreen() {
   }
 
   return (
-    <ScreenContainer padding="none">
-      <View style={styles.heroShell}>
-        <View style={styles.heroCard}>
-          <View style={styles.heroBadge}>
-            <Compass size={14} color={colors.home.chipText} />
-            <Typography variant="caption" color={colors.home.chipText}>
-              {serviceTypes.length} service categories
-            </Typography>
-          </View>
-          <Typography variant="h3" color="textInverse" style={styles.heroTitle}>
-            Choose the service you need
-          </Typography>
-          <Typography variant="body2" color="textInverse" style={styles.heroSubtitle}>
-            Pick a category to open a request and connect with nearby verified providers.
+    <ScreenContainer edges={['left', 'right']} contentPadding="m" contentStyle={styles.content}>
+      <View style={styles.heroCard}>
+        <View style={styles.heroBadge}>
+          <Compass size={14} color={colors.home.chipText} />
+          <Typography variant="caption" color={colors.home.chipText}>
+            {serviceTypes.length} service categories
           </Typography>
         </View>
+        <Typography variant="h3" color="textInverse" style={styles.heroTitle}>
+          Choose the service you need
+        </Typography>
+        <Typography variant="body2" color="textInverse">
+          Pick a category to open a request and connect with nearby verified providers.
+        </Typography>
       </View>
 
       <View style={styles.listHeaderRow}>

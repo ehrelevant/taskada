@@ -1,8 +1,7 @@
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import { ActivityIndicator, ScrollView, TouchableOpacity, View } from 'react-native';
-import { BadgeCheck, CalendarClock, ChevronLeft, CircleDollarSign, FileText, Flag, MapPin } from 'lucide-react-native';
-import { Button, Header, Typography } from '@repo/components';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Button, EmptyState, Header, ScreenContainer, Typography } from '@repo/components';
+import { CalendarClock, ChevronLeft, CircleDollarSign, FileText, Flag, MapPin } from 'lucide-react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { useTheme } from '@repo/theme';
 
 import { createStyles } from './BookingLogs.styles';
@@ -26,19 +25,28 @@ export function BookingLogsScreen() {
 
   if (isLoading) {
     return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={colors.actionPrimary} />
-          <Typography variant="body1" style={styles.loadingText}>
-            Loading...
-          </Typography>
-        </View>
-      </SafeAreaView>
+      <ScreenContainer>
+        <EmptyState loading loadingMessage="Loading..." />
+      </ScreenContainer>
     );
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <ScreenContainer
+      scrollable
+      padding="none"
+      stickyFooter={
+        <View style={styles.footerButtons}>
+          <Button title="View Request Details" onPress={handleViewRequestDetails} />
+          <Button
+            title="View Chat Logs"
+            variant="outline"
+            onPress={handleViewChatLogs}
+            style={styles.secondaryButton}
+          />
+        </View>
+      }
+    >
       <Header
         title="Booking Details"
         size="small"
@@ -54,18 +62,12 @@ export function BookingLogsScreen() {
         }
       />
 
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+      <View style={styles.content}>
         <View style={styles.heroCard}>
-          <View style={styles.heroPill}>
-            <BadgeCheck size={14} color={colors.home.chipText} />
-            <Typography variant="caption" color={colors.home.chipText}>
-              booking record
-            </Typography>
-          </View>
           <Typography variant="h3" color="textInverse">
             Job summary
           </Typography>
-          <Typography variant="body2" color="textInverse" style={styles.heroSubtitle}>
+          <Typography variant="body2" color="textInverse">
             View finalized details, related request info, and conversation logs.
           </Typography>
         </View>
@@ -152,12 +154,7 @@ export function BookingLogsScreen() {
             </Typography>
           </View>
         </View>
-      </ScrollView>
-
-      <View style={styles.buttonContainer}>
-        <Button title="View Request Details" onPress={handleViewRequestDetails} />
-        <Button title="View Chat Logs" variant="outline" onPress={handleViewChatLogs} style={styles.secondaryButton} />
       </View>
-    </SafeAreaView>
+    </ScreenContainer>
   );
 }

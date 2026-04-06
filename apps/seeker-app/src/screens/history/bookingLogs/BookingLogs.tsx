@@ -12,7 +12,7 @@ import {
   StatusBadge,
   Typography,
 } from '@repo/components';
-import { BadgeCheck, Flag } from 'lucide-react-native';
+import { Flag } from 'lucide-react-native';
 import { TextInput, TouchableOpacity, View } from 'react-native';
 import { useTheme } from '@repo/theme';
 
@@ -81,16 +81,10 @@ export function BookingLogsScreen() {
 
       <View style={styles.content}>
         <View style={styles.heroCard}>
-          <View style={styles.heroPill}>
-            <BadgeCheck size={14} color={colors.home.chipText} />
-            <Typography variant="caption" color={colors.home.chipText}>
-              transaction record
-            </Typography>
-          </View>
           <Typography variant="h3" color="textInverse">
             Booking summary
           </Typography>
-          <Typography variant="body2" color="textInverse" style={styles.heroSubtitle}>
+          <Typography variant="body2" color="textInverse">
             Review booking details, chat history, and service outcome.
           </Typography>
         </View>

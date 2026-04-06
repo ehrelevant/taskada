@@ -1,5 +1,5 @@
 import { Avatar, Button, EmptyState, Rating, ReviewCard, ScreenContainer, Typography } from '@repo/components';
-import { BadgeCheck, CircleDollarSign, MessageSquareText } from 'lucide-react-native';
+import { CircleDollarSign, MessageSquareText } from 'lucide-react-native';
 import { useTheme } from '@repo/theme';
 import { View } from 'react-native';
 
@@ -40,45 +40,34 @@ export function ServiceDetailsScreen() {
   }
 
   return (
-    <ScreenContainer scrollable padding="none">
-      <View style={styles.heroShell}>
-        <View style={styles.heroCard}>
-          <View style={styles.heroTopRow}>
-            <Avatar
-              source={details.providerAvatar ? { uri: details.providerAvatar } : null}
-              size={92}
-              name={details.providerName}
-              borderColor={colors.home.heroAccent}
-              borderWidth={3}
-            />
-            <View style={styles.heroSummary}>
-              <View style={styles.verifiedPill}>
-                <BadgeCheck size={14} color={colors.home.chipText} />
-                <Typography variant="caption" color={colors.home.chipText}>
-                  verified provider
-                </Typography>
-              </View>
-              <Typography variant="h3" color="textInverse" numberOfLines={2} style={styles.providerName}>
-                {details.providerName}
-              </Typography>
-              <Typography variant="overline" color={colors.home.chipText} style={styles.serviceType}>
-                {details.serviceTypeName}
-              </Typography>
-              <Typography variant="caption" color="textInverse" style={styles.heroHint}>
-                Available for booking and live chat.
-              </Typography>
-            </View>
+    <ScreenContainer scrollable edges={['left', 'right']} contentPadding="m" contentStyle={styles.content}>
+      <View style={styles.heroCard}>
+        <View style={styles.heroTopRow}>
+          <Avatar
+            source={details.providerAvatar ? { uri: details.providerAvatar } : null}
+            size={92}
+            name={details.providerName}
+            borderColor={colors.home.heroAccent}
+            borderWidth={3}
+          />
+          <View style={styles.heroSummary}>
+            <Typography variant="h3" color="textInverse" numberOfLines={2} style={styles.providerName}>
+              {details.providerName}
+            </Typography>
+            <Typography variant="overline" color="textInverse">
+              {details.serviceTypeName}
+            </Typography>
           </View>
+        </View>
 
-          <View style={styles.ratingRow}>
-            <Rating
-              value={details.avgRating}
-              reviewCount={details.reviewCount}
-              size={16}
-              valueColor="textInverse"
-              reviewCountColor={colors.home.chipText}
-            />
-          </View>
+        <View style={styles.ratingRow}>
+          <Rating
+            value={details.avgRating}
+            reviewCount={details.reviewCount}
+            size={16}
+            valueColor="textInverse"
+            reviewCountColor={colors.home.chipText}
+          />
         </View>
       </View>
 
@@ -109,7 +98,7 @@ export function ServiceDetailsScreen() {
           <View style={styles.reviewHintPill}>
             <MessageSquareText size={13} color={colors.textSecondary} />
             <Typography variant="caption" color="textSecondary">
-              community feedback
+              Community Feedback
             </Typography>
           </View>
         </View>

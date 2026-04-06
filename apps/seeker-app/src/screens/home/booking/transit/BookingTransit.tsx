@@ -1,5 +1,5 @@
-import { Avatar, Header, ScreenContainer, Section, StatusBadge, Typography } from '@repo/components';
-import { BadgeCheck, CircleDollarSign, Flag, Sparkles, Truck } from 'lucide-react-native';
+import { Avatar, Header, ScreenContainer, Section, Typography } from '@repo/components';
+import { Flag } from 'lucide-react-native';
 import { TouchableOpacity, View } from 'react-native';
 import { useTheme } from '@repo/theme';
 
@@ -25,7 +25,7 @@ export function BookingTransitScreen() {
     useBookingTransit();
 
   return (
-    <ScreenContainer scrollable padding="none">
+    <ScreenContainer scrollable edges={['top', 'left', 'right']}>
       <Header
         title={hasProviderArrived ? 'Provider Arrived' : 'Provider En Route'}
         size="small"
@@ -38,53 +38,27 @@ export function BookingTransitScreen() {
 
       <View style={styles.content}>
         <View style={styles.heroCard}>
-          <View style={styles.heroPill}>
-            <BadgeCheck size={14} color={colors.home.chipText} />
-            <Typography variant="caption" color={colors.home.chipText}>
-              booking in progress
-            </Typography>
-          </View>
-
-          {hasProviderArrived && <StatusBadge status="success" label="Provider has arrived" />}
-
-          <Typography variant="h3" color="textInverse" align="center" style={styles.statusTitle}>
+          <Typography variant="h3" color="textInverse">
             {hasProviderArrived
               ? 'Your service provider has arrived and is currently serving!'
               : 'Your service provider is on their way'}
           </Typography>
-          <Typography variant="body2" color="textInverse" align="center" style={styles.statusSubtitle}>
+          <Typography variant="body2" color="textInverse">
             {hasProviderArrived
               ? 'The provider is ready to serve you. Please prepare for the service.'
               : 'Please wait while your provider arrives at your location'}
           </Typography>
-
-          <View style={styles.heroBadgeRow}>
-            <View style={styles.heroBadge}>
-              <Truck size={14} color={colors.home.chipText} />
-              <Typography variant="caption" color={colors.home.chipText}>
-                live transit updates
-              </Typography>
-            </View>
-            <View style={styles.heroBadge}>
-              <Sparkles size={14} color={colors.home.chipText} />
-              <Typography variant="caption" color={colors.home.chipText}>
-                auto-completes on finish
-              </Typography>
-            </View>
-          </View>
         </View>
 
-        <Section label="Service Provider">
+        <Section label="Service Provider" variant="card">
           <View style={styles.providerCardShell}>
             <Avatar
               source={providerInfo.avatarUrl ? { uri: providerInfo.avatarUrl } : null}
               size={80}
               name={providerName}
             />
-            <View style={styles.providerInfo}>
-              <Typography variant="h6" style={styles.providerName}>
-                {providerName}
-              </Typography>
+            <View>
+              <Typography variant="h3">{providerName}</Typography>
               <Typography variant="overline" color="textSecondary">
                 {serviceTypeName}
               </Typography>
@@ -107,7 +81,6 @@ export function BookingTransitScreen() {
               Cost
             </Typography>
             <View style={styles.costRow}>
-              <CircleDollarSign size={14} color={colors.actionPrimary} />
               <Typography variant="h4" color="actionPrimary">
                 {formatCurrency(cost)}
               </Typography>

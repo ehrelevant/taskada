@@ -29,7 +29,7 @@ export function ChatLogsScreen() {
   }
 
   return (
-    <ScreenContainer padding="none" useSafeArea={false}>
+    <ScreenContainer padding="none">
       <Header
         title={`${otherUser.firstName} ${otherUser.lastName}`}
         subtitle="Chat History"
