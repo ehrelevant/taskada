@@ -3,86 +3,40 @@ import { StyleSheet } from 'react-native';
 
 export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: colors.canvas.base,
-    },
     iconButton: {
       padding: spacing.xs,
-    },
-    loadingContainer: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    loadingText: {
-      marginTop: spacing.m,
     },
     scrollContent: {
       flexGrow: 1,
       gap: spacing.m,
       padding: spacing.m,
     },
-    heroContent: {
+    heroCard: {
       backgroundColor: colors.home.heroStart,
       borderRadius: radius.xxl,
       borderWidth: 1,
       borderColor: colors.home.heroAccent,
       padding: spacing.heroInset,
-    },
-    header: {
-      paddingHorizontal: spacing.m,
       gap: spacing.s,
     },
-    buttonContainer: {
-      alignItems: 'center',
-      marginTop: spacing.l,
-    },
-    circularButton: {
-      width: 140,
-      height: 140,
-      borderRadius: 70,
-      backgroundColor: colors.success.base,
-      justifyContent: 'center',
-      alignItems: 'center',
-      shadowColor: colors.black,
-      shadowOffset: {
-        width: 0,
-        height: 4,
-      },
-      shadowOpacity: 0.3,
-      shadowRadius: 8,
-      elevation: 8,
-    },
-    buttonText: {
-      color: colors.textInverse,
-      fontWeight: '700',
-    },
-    bottomSection: {
+    summaryCard: {
       backgroundColor: colors.card.base,
       borderRadius: radius.l,
       borderWidth: 1,
       borderColor: colors.card.stroke,
-      padding: spacing.m,
       gap: spacing.s,
     },
-    infoRow: {
+    summaryHeader: {
       flexDirection: 'row',
-      justifyContent: 'space-between',
-      gap: spacing.s,
+      alignItems: 'center',
+      gap: spacing.m,
     },
-    infoItem: {
+    summaryUserInfo: {
       flex: 1,
-      backgroundColor: colors.card.muted,
-      padding: spacing.m,
-      borderRadius: radius.m,
-      borderWidth: 1,
-      borderColor: colors.card.stroke,
     },
     costValue: {
       color: colors.actionPrimary,
       fontWeight: '700',
-      marginTop: spacing.xs,
     },
     costRow: {
       flexDirection: 'row',
@@ -90,19 +44,7 @@ export const createStyles = (colors: ThemeColors) =>
       gap: spacing.xs,
       marginTop: spacing.xs,
     },
-    detailsButton: {
-      flexDirection: 'row',
-      justifyContent: 'center',
-      alignItems: 'center',
-      gap: spacing.xs,
-      padding: spacing.m,
-      backgroundColor: colors.card.base,
-      borderRadius: radius.m,
-      borderWidth: 1,
-      borderColor: colors.card.stroke,
-    },
-    detailsButtonText: {
-      color: colors.actionPrimary,
-      fontWeight: '600',
+    actionButtonsContainer: {
+      gap: spacing.s,
     },
   });

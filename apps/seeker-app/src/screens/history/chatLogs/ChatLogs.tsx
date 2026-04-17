@@ -29,7 +29,7 @@ export function ChatLogsScreen() {
   }
 
   return (
-    <ScreenContainer padding="none">
+    <ScreenContainer edges={['left', 'right']} padding="none">
       <Header
         title={`${otherUser.firstName} ${otherUser.lastName}`}
         subtitle="Chat History"
@@ -48,7 +48,7 @@ export function ChatLogsScreen() {
           const isOtherUser = item.userId === otherUser.id;
 
           return (
-            <View style={[styles.messageContainer, isOtherUser ? styles.otherMessage : styles.ownMessage]}>
+            <View style={[styles.messageRow, isOtherUser ? styles.rowStart : styles.rowEnd]}>
               {isOtherUser && item.sender.avatarUrl && (
                 <Image source={{ uri: item.sender.avatarUrl }} style={styles.messageAvatar} />
               )}
@@ -81,6 +81,16 @@ export function ChatLogsScreen() {
         keyExtractor={item => item.id}
         contentContainerStyle={styles.messagesList}
         showsVerticalScrollIndicator={false}
+        ListHeaderComponent={
+          <View style={styles.heroCard}>
+            <Typography variant="h3" color="textInverse">
+              Conversation log
+            </Typography>
+            <Typography variant="body2" color="textInverse">
+              Review the full chat timeline and any shared image evidence.
+            </Typography>
+          </View>
+        }
         ListEmptyComponent={<EmptyState message="No messages in this conversation" />}
       />
 

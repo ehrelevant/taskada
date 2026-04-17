@@ -3,17 +3,8 @@ import { StyleSheet } from 'react-native';
 
 export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
-    loadingContainer: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    loadingText: {
-      marginTop: spacing.m,
-    },
     content: {
       gap: spacing.s,
-      padding: spacing.m,
     },
     heroCard: {
       borderRadius: radius.xxl,
@@ -23,12 +14,11 @@ export const createStyles = (colors: ThemeColors) =>
       padding: spacing.heroInset,
       gap: spacing.s,
     },
-    mapSection: {
+    sectionCard: {
       backgroundColor: colors.card.base,
       borderRadius: radius.l,
       borderWidth: 1,
       borderColor: colors.card.stroke,
-      padding: spacing.m,
     },
     mapContainer: {
       height: 200,
@@ -51,13 +41,6 @@ export const createStyles = (colors: ThemeColors) =>
     addressText: {
       lineHeight: 22,
     },
-    section: {
-      backgroundColor: colors.card.base,
-      borderRadius: radius.l,
-      borderWidth: 1,
-      borderColor: colors.card.stroke,
-      padding: spacing.m,
-    },
     sectionLabelRow: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -66,18 +49,6 @@ export const createStyles = (colors: ThemeColors) =>
     },
     sectionLabel: {
       color: colors.textSecondary,
-    },
-    statusBadge: {
-      backgroundColor: colors.card.muted,
-      padding: spacing.m,
-      borderRadius: radius.s,
-      borderWidth: 1,
-      borderColor: colors.card.stroke,
-      alignSelf: 'flex-start',
-    },
-    statusText: {
-      fontWeight: '600',
-      color: colors.actionPrimary,
     },
     costValue: {
       color: colors.actionPrimary,
@@ -93,11 +64,5 @@ export const createStyles = (colors: ThemeColors) =>
     },
     specificationsText: {
       lineHeight: 22,
-    },
-    buttonContainer: {
-      padding: spacing.m,
-      borderTopWidth: 1,
-      borderTopColor: colors.card.stroke,
-      backgroundColor: colors.canvas.base,
     },
   });

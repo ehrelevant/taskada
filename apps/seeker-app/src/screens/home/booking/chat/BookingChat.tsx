@@ -81,13 +81,13 @@ export function ChatScreen() {
             </ScrollView>
           )}
           {item.message && (
-            <Typography variant="body2" color={isOwnMessage ? colors.textInverse : colors.textPrimary}>
+            <Typography variant="body2" color={isOwnMessage ? 'textInverse' : 'textPrimary'}>
               {item.message}
             </Typography>
           )}
           <Typography
             variant="caption"
-            color={isOwnMessage ? colors.textInverse : colors.textPrimary}
+            color={isOwnMessage ? 'textInverse' : 'textSecondary'}
             style={styles.messageTime}
           >
             {new Date(item.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -126,6 +126,16 @@ export function ChatScreen() {
         renderItem={renderMessage}
         keyExtractor={item => item.id}
         contentContainerStyle={styles.messagesList}
+        ListHeaderComponent={
+          <View style={styles.heroCard}>
+            <Typography variant="h3" color="textInverse">
+              Service chat
+            </Typography>
+            <Typography variant="body2" color="textInverse">
+              Confirm details, share photos, and keep the booking aligned end-to-end.
+            </Typography>
+          </View>
+        }
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0.5}
         ListEmptyComponent={

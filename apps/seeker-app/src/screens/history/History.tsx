@@ -1,6 +1,6 @@
 import { Avatar, Card, EmptyState, ScreenContainer, StatusBadge, Typography } from '@repo/components';
-import { CalendarClock, CircleDollarSign } from 'lucide-react-native';
-import { FlatList, TouchableOpacity, View } from 'react-native';
+import { CalendarClock } from 'lucide-react-native';
+import { FlatList, View } from 'react-native';
 import { useTheme } from '@repo/theme';
 
 import { createStyles } from './History.styles';
@@ -53,7 +53,7 @@ export function HistoryScreen() {
         ListHeaderComponent={
           <View style={styles.heroCard}>
             <Typography variant="h3" color="textInverse">
-              Completed and cancelled jobs
+              History
             </Typography>
             <Typography variant="body2" color="textInverse">
               Review your past services, costs, and booking outcomes.
@@ -66,8 +66,8 @@ export function HistoryScreen() {
             : 'Unknown Provider';
 
           return (
-            <TouchableOpacity activeOpacity={0.7} onPress={() => handleViewDetails(item.id)}>
-              <Card elevation="s" padding="m" style={styles.card}>
+            <Card elevation="s" padding="m" style={styles.card} onPress={() => handleViewDetails(item.id)}>
+              <View style={styles.cardContent}>
                 <View style={styles.providerHeader}>
                   <Avatar
                     source={item.provider?.avatarUrl ? { uri: item.provider.avatarUrl } : null}
@@ -86,7 +86,6 @@ export function HistoryScreen() {
                   <StatusBadge status={STATUS_MAP[item.status] || 'default'} label={item.status.toUpperCase()} />
                   <View style={styles.costDate}>
                     <View style={styles.metaRow}>
-                      <CircleDollarSign size={14} color={colors.actionPrimary} />
                       <Typography variant="h5" color={colors.actionPrimary}>
                         {formatCurrency(item.cost || 0)}
                       </Typography>
@@ -99,8 +98,8 @@ export function HistoryScreen() {
                     </View>
                   </View>
                 </View>
-              </Card>
-            </TouchableOpacity>
+              </View>
+            </Card>
           );
         }}
         keyExtractor={item => item.id}

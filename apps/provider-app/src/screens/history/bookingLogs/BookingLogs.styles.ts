@@ -25,6 +25,12 @@ export const createStyles = (colors: ThemeColors) =>
       borderColor: colors.card.stroke,
       padding: spacing.m,
     },
+    sectionCard: {
+      borderRadius: radius.l,
+      borderWidth: 1,
+      borderColor: colors.card.stroke,
+      backgroundColor: colors.card.base,
+    },
     mapContainer: {
       height: 200,
       borderRadius: radius.m,
@@ -46,13 +52,6 @@ export const createStyles = (colors: ThemeColors) =>
     addressText: {
       lineHeight: 22,
     },
-    section: {
-      backgroundColor: colors.card.base,
-      borderRadius: radius.l,
-      borderWidth: 1,
-      borderColor: colors.card.stroke,
-      padding: spacing.m,
-    },
     sectionLabel: {
       color: colors.textSecondary,
     },
@@ -61,18 +60,6 @@ export const createStyles = (colors: ThemeColors) =>
       alignItems: 'center',
       gap: spacing.xs,
       marginBottom: spacing.s,
-    },
-    statusBadge: {
-      backgroundColor: colors.card.muted,
-      padding: spacing.m,
-      borderRadius: radius.s,
-      borderWidth: 1,
-      borderColor: colors.card.stroke,
-      alignSelf: 'flex-start',
-    },
-    statusText: {
-      fontWeight: '600',
-      color: colors.actionPrimary,
     },
     costValue: {
       color: colors.actionPrimary,
@@ -91,12 +78,8 @@ export const createStyles = (colors: ThemeColors) =>
     },
     footerButtons: {
       gap: spacing.s,
-      padding: spacing.m,
       borderTopWidth: 1,
       borderTopColor: colors.card.stroke,
-      backgroundColor: colors.canvas.base,
-    },
-    secondaryButton: {
-      marginTop: spacing.s,
+      padding: spacing.m,
     },
   });

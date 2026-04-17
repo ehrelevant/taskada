@@ -1,4 +1,4 @@
-import { Avatar, Header, ScreenContainer, Section, Typography } from '@repo/components';
+import { Avatar, Card, Header, ScreenContainer, Typography } from '@repo/components';
 import { Flag } from 'lucide-react-native';
 import { TouchableOpacity, View } from 'react-native';
 import { useTheme } from '@repo/theme';
@@ -50,7 +50,10 @@ export function BookingTransitScreen() {
           </Typography>
         </View>
 
-        <Section label="Service Provider" variant="card">
+        <Card elevation="s" padding="m" style={styles.sectionCard}>
+          <Typography variant="subtitle2" color="textSecondary" style={styles.sectionHeading}>
+            Service Provider
+          </Typography>
           <View style={styles.providerCardShell}>
             <Avatar
               source={providerInfo.avatarUrl ? { uri: providerInfo.avatarUrl } : null}
@@ -64,9 +67,12 @@ export function BookingTransitScreen() {
               </Typography>
             </View>
           </View>
-        </Section>
+        </Card>
 
-        <Section label="Service Details" variant="card">
+        <Card elevation="s" padding="m" style={styles.sectionCard}>
+          <Typography variant="subtitle2" color="textSecondary" style={styles.sectionHeading}>
+            Service Details
+          </Typography>
           <View style={styles.detailRow}>
             <Typography variant="body1" color="textSecondary">
               Service Type
@@ -86,11 +92,14 @@ export function BookingTransitScreen() {
               </Typography>
             </View>
           </View>
-        </Section>
+        </Card>
 
-        <Section label="Service Specifications" variant="card" style={styles.specificationsCard}>
+        <Card elevation="s" padding="m" style={styles.sectionCard}>
+          <Typography variant="subtitle2" color="textSecondary" style={styles.sectionHeading}>
+            Service Specifications
+          </Typography>
           <Typography variant="body1">{specifications}</Typography>
-        </Section>
+        </Card>
       </View>
     </ScreenContainer>
   );

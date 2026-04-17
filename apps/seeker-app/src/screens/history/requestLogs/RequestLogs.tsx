@@ -13,7 +13,7 @@ export function RequestLogsScreen() {
 
   if (isLoading) {
     return (
-      <ScreenContainer>
+      <ScreenContainer edges={['left', 'right']}>
         <EmptyState loading loadingMessage="Loading request details..." />
       </ScreenContainer>
     );
@@ -21,7 +21,7 @@ export function RequestLogsScreen() {
 
   if (error || !request) {
     return (
-      <ScreenContainer>
+      <ScreenContainer edges={['left', 'right']}>
         <EmptyState message={error || 'Request not found'} action={<Button title="Go Back" onPress={handleGoBack} />} />
       </ScreenContainer>
     );
@@ -29,12 +29,21 @@ export function RequestLogsScreen() {
 
   return (
     <ScreenContainer scrollable edges={['left', 'right']} contentPadding="m" contentStyle={styles.content}>
-      <Header title="Request Details" size="small" />
+      <Header title="Request Details" size="small" onBack={handleGoBack} />
+
+      <View style={styles.heroCard}>
+        <Typography variant="h3" color="textInverse">
+          Original request details
+        </Typography>
+        <Typography variant="body2" color="textInverse">
+          Review the request context that led to this booking.
+        </Typography>
+      </View>
 
       <Card elevation="s" padding="m" style={styles.card}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 8 }}>
+        <View style={styles.sectionLabelRow}>
           <Wrench size={15} color={colors.textSecondary} />
-          <Typography variant="subtitle2" color="textSecondary" style={styles.cardLabel}>
+          <Typography variant="subtitle2" color="textSecondary">
             Service Type
           </Typography>
         </View>
@@ -45,9 +54,9 @@ export function RequestLogsScreen() {
       </Card>
 
       <Card elevation="s" padding="m" style={styles.card}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 8 }}>
+        <View style={styles.sectionLabelRow}>
           <MapPin size={15} color={colors.textSecondary} />
-          <Typography variant="subtitle2" color="textSecondary" style={styles.cardLabel}>
+          <Typography variant="subtitle2" color="textSecondary">
             Location
           </Typography>
         </View>
@@ -56,9 +65,9 @@ export function RequestLogsScreen() {
 
       {request.description && (
         <Card elevation="s" padding="m" style={styles.card}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 8 }}>
+          <View style={styles.sectionLabelRow}>
             <FileText size={15} color={colors.textSecondary} />
-            <Typography variant="subtitle2" color="textSecondary" style={styles.cardLabel}>
+            <Typography variant="subtitle2" color="textSecondary">
               Description
             </Typography>
           </View>
@@ -70,9 +79,9 @@ export function RequestLogsScreen() {
 
       {request.images && request.images.length > 0 && (
         <Card elevation="s" padding="m" style={styles.card}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 8 }}>
+          <View style={styles.sectionLabelRow}>
             <Sparkles size={15} color={colors.textSecondary} />
-            <Typography variant="subtitle2" color="textSecondary" style={styles.cardLabel}>
+            <Typography variant="subtitle2" color="textSecondary">
               Photos ({request.images.length})
             </Typography>
           </View>
@@ -84,7 +93,7 @@ export function RequestLogsScreen() {
         </Card>
       )}
 
-      <Button title="Go Back" onPress={handleGoBack} />
+      <Button title="Go Back" onPress={handleGoBack} style={styles.footerButton} />
     </ScreenContainer>
   );
 }

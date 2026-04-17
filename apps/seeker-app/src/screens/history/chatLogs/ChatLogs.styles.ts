@@ -6,18 +6,28 @@ export const createStyles = (colors: ThemeColors) =>
     iconButton: {
       padding: spacing.xs,
     },
+    heroCard: {
+      borderRadius: radius.xxl,
+      borderWidth: 1,
+      borderColor: colors.home.heroAccent,
+      backgroundColor: colors.home.heroStart,
+      padding: spacing.heroInset,
+      gap: spacing.s,
+      marginBottom: spacing.s,
+    },
     messagesList: {
       padding: spacing.m,
+      gap: spacing.s,
+      paddingBottom: spacing.xl,
     },
-    messageContainer: {
+    messageRow: {
       flexDirection: 'row',
-      marginBottom: spacing.m,
       alignItems: 'flex-end',
     },
-    ownMessage: {
+    rowEnd: {
       justifyContent: 'flex-end',
     },
-    otherMessage: {
+    rowStart: {
       justifyContent: 'flex-start',
     },
     messageAvatar: {
@@ -27,31 +37,31 @@ export const createStyles = (colors: ThemeColors) =>
       marginRight: spacing.s,
     },
     messageBubble: {
-      maxWidth: '70%',
+      maxWidth: '78%',
       padding: spacing.m,
       borderRadius: radius.m,
       borderWidth: 1,
+      gap: spacing.xs,
     },
     ownBubble: {
-      backgroundColor: colors.actionPrimary,
-      borderColor: colors.interactive.primaryBg,
-      borderBottomLeftRadius: radius.xs,
+      backgroundColor: colors.interactive.primaryBg,
+      borderColor: colors.actionPrimary,
+      borderBottomRightRadius: radius.xs,
     },
     otherBubble: {
       backgroundColor: colors.card.base,
       borderColor: colors.card.stroke,
-      borderBottomRightRadius: radius.xs,
+      borderBottomLeftRadius: radius.xs,
     },
     messageTime: {
-      marginTop: spacing.xs,
       opacity: 0.75,
     },
     imageContainer: {
       marginBottom: spacing.xs,
     },
     messageImage: {
-      width: 100,
-      height: 100,
+      width: 96,
+      height: 96,
       borderRadius: radius.s,
       marginRight: spacing.xs,
     },

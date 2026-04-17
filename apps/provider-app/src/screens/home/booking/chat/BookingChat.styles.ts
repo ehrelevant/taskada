@@ -21,6 +21,15 @@ export const createStyles = (colors: ThemeColors) =>
       padding: spacing.m,
       gap: spacing.s,
     },
+    heroCard: {
+      borderRadius: radius.xxl,
+      borderWidth: 1,
+      borderColor: colors.home.heroAccent,
+      backgroundColor: colors.home.heroStart,
+      padding: spacing.heroInset,
+      gap: spacing.s,
+      marginBottom: spacing.s,
+    },
     emptyStateCard: {
       borderWidth: 1,
       borderColor: colors.card.stroke,
@@ -45,14 +54,15 @@ export const createStyles = (colors: ThemeColors) =>
       marginRight: spacing.s,
     },
     messageBubble: {
-      maxWidth: '70%',
+      maxWidth: '78%',
       padding: spacing.m,
       borderRadius: radius.m,
       borderWidth: 1,
+      gap: spacing.xs,
     },
     ownBubble: {
-      backgroundColor: colors.actionPrimary,
-      borderColor: colors.interactive.primaryBg,
+      backgroundColor: colors.interactive.primaryBg,
+      borderColor: colors.actionPrimary,
       borderBottomRightRadius: radius.xs,
     },
     otherBubble: {
@@ -61,7 +71,6 @@ export const createStyles = (colors: ThemeColors) =>
       borderBottomLeftRadius: radius.xs,
     },
     messageTime: {
-      marginTop: spacing.xs,
       opacity: 0.75,
     },
     imageContainer: {

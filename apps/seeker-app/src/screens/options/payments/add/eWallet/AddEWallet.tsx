@@ -1,8 +1,8 @@
 import { Button, Card, Input, ScreenContainer, Typography } from '@repo/components';
 import { Check } from 'lucide-react-native';
 import { Controller } from 'react-hook-form';
-import { TouchableOpacity, View } from 'react-native';
 import { useTheme } from '@repo/theme';
+import { View } from 'react-native';
 
 import { createStyles } from './AddEWallet.styles';
 import { useAddEWallet } from './AddEWallet.hooks';
@@ -37,27 +37,25 @@ export function AddEWalletScreen() {
           {WALLETS.map(wallet => {
             const isSelected = selectedChannel === wallet.id;
             return (
-              <TouchableOpacity
+              <Card
                 key={wallet.id}
                 onPress={() => setValue('channelCode', wallet.id)}
-                activeOpacity={0.9}
-                style={styles.walletTouch}
+                style={[styles.walletTouch, styles.walletCard, isSelected && styles.walletCardSelected]}
+                padding="m"
               >
-                <Card style={[styles.walletCard, isSelected && styles.walletCardSelected]} padding="m">
-                  <View style={[styles.placeholderLogo, { backgroundColor: wallet.color }]}>
-                    <Typography variant="caption" color="white" weight="bold">
-                      {wallet.name[0]}
-                    </Typography>
-                  </View>
-                  <Typography weight={isSelected ? 'bold' : 'regular'}>{wallet.name}</Typography>
+                <View style={[styles.placeholderLogo, { backgroundColor: wallet.color }]}> 
+                  <Typography variant="caption" color="white" weight="bold">
+                    {wallet.name[0]}
+                  </Typography>
+                </View>
+                <Typography weight={isSelected ? 'bold' : 'regular'}>{wallet.name}</Typography>
 
-                  {isSelected && (
-                    <View style={styles.checkIcon}>
-                      <Check size={16} color={colors.white} />
-                    </View>
-                  )}
-                </Card>
-              </TouchableOpacity>
+                {isSelected && (
+                  <View style={styles.checkIcon}>
+                    <Check size={16} color={colors.white} />
+                  </View>
+                )}
+              </Card>
             );
           })}
         </View>

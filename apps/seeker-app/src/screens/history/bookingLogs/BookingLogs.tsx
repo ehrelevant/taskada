@@ -7,17 +7,23 @@ import {
   Rating,
   ReviewCard,
   ScreenContainer,
-  Section,
   StarRatingInput,
   StatusBadge,
   Typography,
 } from '@repo/components';
-import { Flag } from 'lucide-react-native';
+import { CalendarClock, CircleDollarSign, FileText, Flag } from 'lucide-react-native';
 import { TextInput, TouchableOpacity, View } from 'react-native';
 import { useTheme } from '@repo/theme';
 
 import { createStyles } from './BookingLogs.styles';
 import { useBookingLogs } from './BookingLogs.hooks';
+
+const STATUS_MAP: Record<string, 'success' | 'error' | 'warning' | 'info' | 'pending' | 'default'> = {
+  completed: 'success',
+  cancelled: 'error',
+  in_progress: 'info',
+  pending: 'pending',
+};
 
 export function BookingLogsScreen() {
   const { colors } = useTheme();
@@ -60,7 +66,7 @@ export function BookingLogsScreen() {
   return (
     <ScreenContainer
       scrollable
-      padding="none"
+      edges={['top', 'left', 'right']}
       stickyFooter={
         <View style={styles.footerButtons}>
           <Button title="View Request Details" onPress={handleViewRequestDetails} />
@@ -69,7 +75,7 @@ export function BookingLogsScreen() {
       }
     >
       <Header
-        title="Transaction Details"
+        title="Booking Details"
         size="small"
         onBack={handleGoBack}
         rightContent={
@@ -85,65 +91,90 @@ export function BookingLogsScreen() {
             Booking summary
           </Typography>
           <Typography variant="body2" color="textInverse">
-            Review booking details, chat history, and service outcome.
+            Review finalized details, related request info, and conversation logs.
           </Typography>
         </View>
 
-        <TouchableOpacity onPress={handleViewServiceDetails} activeOpacity={0.8}>
-          <Card elevation="m" padding="l" style={styles.serviceCard}>
-            <View style={styles.providerSection}>
-              <Avatar
-                source={transaction?.provider?.avatarUrl ? { uri: transaction.provider.avatarUrl } : null}
-                size={80}
-                name={providerName}
-              />
-              <Typography variant="h6" style={styles.providerName}>
-                {providerName}
+        <Card elevation="m" padding="l" style={styles.serviceCard} onPress={handleViewServiceDetails}>
+          <View style={styles.providerSection}>
+            <Avatar
+              source={transaction?.provider?.avatarUrl ? { uri: transaction.provider.avatarUrl } : null}
+              size={80}
+              name={providerName}
+            />
+            <Typography variant="h6" style={styles.providerName}>
+              {providerName}
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              {transaction?.serviceType?.name}
+            </Typography>
+            {transaction?.serviceRating && (
+              <View style={styles.ratingRow}>
+                <Rating
+                  value={transaction.serviceRating.avgRating}
+                  reviewCount={transaction.serviceRating.reviewCount}
+                />
+              </View>
+            )}
+          </View>
+          <Typography variant="caption" color="actionPrimary" align="center" style={styles.tapHint}>
+            Tap to view service details
+          </Typography>
+        </Card>
+
+        <Card elevation="s" padding="m" style={styles.sectionCard}>
+          <View style={styles.sectionLabelRow}>
+            <CircleDollarSign size={15} color={colors.textSecondary} />
+            <Typography variant="subtitle2" style={styles.sectionLabel}>
+              Service Cost
+            </Typography>
+          </View>
+          <Typography variant="h5" color="actionPrimary">
+            ₱{transaction?.cost?.toFixed(2) || '0.00'}
+          </Typography>
+        </Card>
+
+        {transaction?.specifications && (
+          <Card elevation="s" padding="m" style={styles.sectionCard}>
+            <View style={styles.sectionLabelRow}>
+              <FileText size={15} color={colors.textSecondary} />
+              <Typography variant="subtitle2" style={styles.sectionLabel}>
+                Specifications
               </Typography>
-              <Typography variant="body2" color="textSecondary">
-                {transaction?.serviceType?.name}
-              </Typography>
-              {transaction?.serviceRating && (
-                <View style={styles.ratingRow}>
-                  <Rating
-                    value={transaction.serviceRating.avgRating}
-                    reviewCount={transaction.serviceRating.reviewCount}
-                  />
-                </View>
-              )}
             </View>
-            <Typography variant="caption" color="actionPrimary" align="center" style={styles.tapHint}>
-              Tap to view service details
-            </Typography>
+            <View style={styles.specificationsBox}>
+              <Typography variant="body1" style={styles.specificationsText}>
+                {transaction.specifications}
+              </Typography>
+            </View>
           </Card>
-        </TouchableOpacity>
+        )}
 
-        <Section label="Booking Details">
-          <Section label="Service Cost">
-            <Typography variant="h5" color="actionPrimary">
-              ${transaction?.cost?.toFixed(2) || '0.00'}
+        <Card elevation="s" padding="m" style={styles.sectionCard}>
+          <View style={styles.sectionLabelRow}>
+            <CalendarClock size={15} color={colors.textSecondary} />
+            <Typography variant="subtitle2" style={styles.sectionLabel}>
+              Booking Date and Time
             </Typography>
-          </Section>
+          </View>
+          <Typography variant="body1">{transaction?.createdAt ? formatDateTime(transaction.createdAt) : 'N/A'}</Typography>
+        </Card>
 
-          {transaction?.specifications && (
-            <Section label="Specifications" variant="card">
-              <Typography variant="body1">{transaction.specifications}</Typography>
-            </Section>
-          )}
-
-          <Section label="Booking Date and Time">
-            <Typography variant="body1">
-              {transaction?.createdAt ? formatDateTime(transaction.createdAt) : 'N/A'}
-            </Typography>
-          </Section>
-
-          <Section label="Status">
-            <StatusBadge status="info" label={transaction?.status?.toUpperCase() || 'UNKNOWN'} />
-          </Section>
-        </Section>
+        <Card elevation="s" padding="m" style={styles.sectionCard}>
+          <Typography variant="subtitle2" style={styles.sectionHeading}>
+            Status
+          </Typography>
+          <StatusBadge
+            status={STATUS_MAP[transaction?.status || ''] || 'default'}
+            label={transaction?.status?.toUpperCase() || 'UNKNOWN'}
+          />
+        </Card>
 
         {isCompleted && (
-          <Section label={hasReviewed ? 'Your Review' : 'Leave a Review'}>
+          <Card elevation="s" padding="m" style={styles.sectionCard}>
+            <Typography variant="subtitle2" style={styles.sectionHeading}>
+              {hasReviewed ? 'Your Review' : 'Leave a Review'}
+            </Typography>
             {hasReviewed && userReview ? (
               <ReviewCard
                 reviewerName={userReview.reviewerName}
@@ -183,7 +214,7 @@ export function BookingLogsScreen() {
                 />
               </Card>
             )}
-          </Section>
+          </Card>
         )}
       </View>
     </ScreenContainer>

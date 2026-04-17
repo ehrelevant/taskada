@@ -1,5 +1,5 @@
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import { Button, Header, ScreenContainer, Section, Typography } from '@repo/components';
+import { Button, Card, Header, ScreenContainer, Typography } from '@repo/components';
 import { CircleDollarSign, Flag, MapPin } from 'lucide-react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { TouchableOpacity, View } from 'react-native';
@@ -57,60 +57,71 @@ export function BookingProposalScreen() {
           </Typography>
         </View>
 
-        <View style={styles.mapContainer}>
-          <MapView
-            provider={PROVIDER_GOOGLE}
-            style={styles.map}
-            initialRegion={{
-              latitude,
-              longitude,
-              latitudeDelta: 0.01,
-              longitudeDelta: 0.01,
-            }}
-            scrollEnabled={false}
-            zoomEnabled={false}
-            pitchEnabled={false}
-            rotateEnabled={false}
-          >
-            <Marker coordinate={{ latitude, longitude }} />
-          </MapView>
-        </View>
-
-        <View style={styles.locationCard}>
-          <View style={styles.locationLabelRow}>
-            <MapPin size={16} color={colors.actionPrimary} />
-            <Typography variant="body1" color="textSecondary">
+        <Card elevation="s" padding="m" style={styles.sectionCard}>
+          <View style={styles.sectionLabelRow}>
+            <MapPin size={15} color={colors.textSecondary} />
+            <Typography variant="subtitle2" color="textSecondary">
               Service location
             </Typography>
           </View>
-          <Typography variant="body1">{address?.label || 'Location not specified'}</Typography>
-        </View>
+          <View style={styles.mapContainer}>
+            <MapView
+              provider={PROVIDER_GOOGLE}
+              style={styles.map}
+              initialRegion={{
+                latitude,
+                longitude,
+                latitudeDelta: 0.01,
+                longitudeDelta: 0.01,
+              }}
+              scrollEnabled={false}
+              zoomEnabled={false}
+              pitchEnabled={false}
+              rotateEnabled={false}
+            >
+              <Marker coordinate={{ latitude, longitude }} />
+            </MapView>
+          </View>
+
+          <View style={styles.locationCard}>
+            <Typography variant="body2" color="textSecondary">
+              Service location address
+            </Typography>
+            <Typography variant="body1">{address?.label || 'Location not specified'}</Typography>
+          </View>
+        </Card>
 
         <View style={styles.rowSection}>
-          <View style={styles.rowItem}>
-            <Typography variant="body1" color="textSecondary">
+          <Card elevation="s" padding="m" style={styles.rowItemCard}>
+            <Typography variant="body2" color="textSecondary">
               Service type
             </Typography>
-            <Typography variant="h3" color="actionPrimary">
+            <Typography variant="h6" color="actionPrimary">
               {serviceTypeName}
             </Typography>
-          </View>
-          <View style={styles.rowItem}>
+          </Card>
+
+          <Card elevation="s" padding="m" style={styles.rowItemCard}>
             <View style={styles.costLabelRow}>
               <CircleDollarSign size={16} color={colors.actionPrimary} />
-              <Typography variant="body1" color="textSecondary">
+              <Typography variant="body2" color="textSecondary">
                 Proposed cost
               </Typography>
             </View>
-            <Typography variant="h3" color="actionPrimary">
+            <Typography variant="h6" color="actionPrimary">
               {formatCurrency(cost)}
             </Typography>
-          </View>
+          </Card>
         </View>
 
-        <Section label="Service Specifications" variant="card" style={styles.specificationsCard}>
+        <Card elevation="s" padding="m" style={styles.sectionCard}>
+          <View style={styles.sectionLabelRow}>
+            <Typography variant="subtitle2" color="textSecondary">
+              Service specifications
+            </Typography>
+          </View>
           <Typography variant="body1">{specifications}</Typography>
-        </Section>
+        </Card>
 
         <View style={styles.buttonContainer}>
           <Button title="Accept Service Specifications" onPress={handleAccept} />

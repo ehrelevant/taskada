@@ -25,6 +25,26 @@ export const createStyles = (colors: ThemeColors) =>
       borderColor: colors.card.stroke,
       backgroundColor: colors.card.base,
     },
+    sectionCard: {
+      marginBottom: 0,
+      borderRadius: radius.l,
+      borderWidth: 1,
+      borderColor: colors.card.stroke,
+      backgroundColor: colors.card.base,
+    },
+    sectionLabelRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.xs,
+      marginBottom: spacing.s,
+    },
+    sectionLabel: {
+      color: colors.textSecondary,
+    },
+    sectionHeading: {
+      color: colors.textSecondary,
+      marginBottom: spacing.s,
+    },
     providerSection: {
       alignItems: 'center',
     },
@@ -46,7 +66,7 @@ export const createStyles = (colors: ThemeColors) =>
       marginTop: spacing.m,
     },
     ratingContainer: {
-      alignItems: 'flex-start',
+      alignItems: 'center',
     },
     commentInput: {
       backgroundColor: colors.card.muted,
@@ -59,14 +79,24 @@ export const createStyles = (colors: ThemeColors) =>
       fontSize: 14,
       lineHeight: 20,
     },
+    specificationsBox: {
+      backgroundColor: colors.card.muted,
+      padding: spacing.m,
+      borderRadius: radius.m,
+      borderWidth: 1,
+      borderColor: colors.card.stroke,
+      minHeight: 120,
+    },
+    specificationsText: {
+      lineHeight: 22,
+    },
     submitButton: {
       marginTop: spacing.m,
     },
     footerButtons: {
       gap: spacing.s,
-      padding: spacing.m,
       borderTopWidth: 1,
       borderTopColor: colors.card.stroke,
-      backgroundColor: colors.canvas.base,
+      padding: spacing.m,
     },
   });

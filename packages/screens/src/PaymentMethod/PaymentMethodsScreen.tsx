@@ -129,17 +129,15 @@ export function PaymentMethodsScreen({ apiFetch, navigation }: Props) {
         </Typography>
 
         <View style={styles.actionsContainer}>
-          <TouchableOpacity onPress={() => navigation.navigate('PaymentMethodLinking')}>
-            <Card style={styles.actionCard} padding="m">
-              <View style={[styles.actionIcon, { backgroundColor: '#E3F2FD' }]}>
-                <CreditCard color={colors.actionPrimary} size={24} />
-              </View>
-              <View>
-                <Typography variant="subtitle2">Add new Payment Method</Typography>
-              </View>
-              <Plus color={colors.textSecondary} size={20} style={{ marginLeft: 'auto' }} />
-            </Card>
-          </TouchableOpacity>
+          <Card style={styles.actionCard} padding="m" onPress={() => navigation.navigate('PaymentMethodLinking')}>
+            <View style={[styles.actionIcon, { backgroundColor: '#E3F2FD' }]}>
+              <CreditCard color={colors.actionPrimary} size={24} />
+            </View>
+            <View>
+              <Typography variant="subtitle2">Add new Payment Method</Typography>
+            </View>
+            <Plus color={colors.textSecondary} size={20} style={{ marginLeft: 'auto' }} />
+          </Card>
         </View>
       </ScrollView>
     </View>

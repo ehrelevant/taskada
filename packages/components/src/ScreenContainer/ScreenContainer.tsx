@@ -92,14 +92,7 @@ export function ScreenContainer({
       return (
         <>
           <View style={styles.mainContent}>{renderContent()}</View>
-          <View
-            style={[
-              styles.stickyFooter,
-              { backgroundColor: colors.backgroundSecondary, borderTopColor: colors.border },
-            ]}
-          >
-            {stickyFooter}
-          </View>
+          {stickyFooter}
         </>
       );
     }
@@ -137,9 +130,5 @@ const styles = StyleSheet.create({
   },
   mainContent: {
     flex: 1,
-  },
-  stickyFooter: {
-    padding: spacing.m,
-    borderTopWidth: 1,
   },
 });

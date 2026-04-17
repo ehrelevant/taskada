@@ -4,7 +4,7 @@ import { StyleSheet } from 'react-native';
 export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
     listContent: {
-      gap: spacing.s,
+      gap: spacing.m,
       padding: spacing.m,
     },
     heroCard: {
@@ -13,13 +13,16 @@ export const createStyles = (colors: ThemeColors) =>
       borderColor: colors.home.heroAccent,
       backgroundColor: colors.home.heroStart,
       padding: spacing.heroInset,
-      marginBottom: spacing.m,
+      gap: spacing.s,
     },
     card: {
       borderRadius: radius.l,
       borderWidth: 1,
       borderColor: colors.card.stroke,
       backgroundColor: colors.card.base,
+    },
+    cardContent: {
+      gap: spacing.m,
     },
     providerHeader: {
       flexDirection: 'row',
@@ -40,5 +43,6 @@ export const createStyles = (colors: ThemeColors) =>
     metaRow: {
       flexDirection: 'row',
       alignItems: 'center',
+      gap: spacing.xs,
     },
   });

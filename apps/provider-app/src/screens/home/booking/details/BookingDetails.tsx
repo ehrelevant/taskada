@@ -1,11 +1,18 @@
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import { ActivityIndicator, View } from 'react-native';
-import { Button, ScreenContainer, Typography } from '@repo/components';
 import { CalendarClock, CircleDollarSign, FileText, MapPin } from 'lucide-react-native';
+import { Card, EmptyState, Header, ScreenContainer, StatusBadge, Typography } from '@repo/components';
 import { useTheme } from '@repo/theme';
+import { View } from 'react-native';
 
 import { createStyles } from './BookingDetails.styles';
 import { useBookingDetails } from './BookingDetails.hooks';
+
+const STATUS_MAP: Record<string, 'success' | 'error' | 'warning' | 'info' | 'pending' | 'default'> = {
+  completed: 'success',
+  cancelled: 'error',
+  in_progress: 'info',
+  pending: 'pending',
+};
 
 export function BookingDetailsScreen() {
   const { colors } = useTheme();
@@ -15,20 +22,15 @@ export function BookingDetailsScreen() {
 
   if (isLoading) {
     return (
-      <ScreenContainer>
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={colors.actionPrimary} />
-          <Typography variant="body1" style={styles.loadingText}>
-            Loading...
-          </Typography>
-        </View>
+      <ScreenContainer edges={['left', 'right']}>
+        <EmptyState loading loadingMessage="Loading booking details..." />
       </ScreenContainer>
     );
   }
 
   return (
-    <ScreenContainer scrollable edges={['left', 'right', 'bottom']} contentPadding="m" contentStyle={styles.content}>
-      {/* TODO: Add a header to this */}
+    <ScreenContainer scrollable edges={['left', 'right']} contentPadding="m" contentStyle={styles.content}>
+      <Header title="Booking Details" size="small" onBack={handleGoBack} />
 
       <View style={styles.heroCard}>
         <Typography variant="h3" color="textInverse">
@@ -40,7 +42,7 @@ export function BookingDetailsScreen() {
       </View>
 
       {booking?.address && (
-        <View style={styles.mapSection}>
+        <Card elevation="s" padding="m" style={styles.sectionCard}>
           <View style={styles.sectionLabelRow}>
             <MapPin size={15} color={colors.textSecondary} />
             <Typography variant="subtitle2" style={styles.sectionLabel}>
@@ -70,10 +72,10 @@ export function BookingDetailsScreen() {
               {booking.address.label || 'Location not specified'}
             </Typography>
           </View>
-        </View>
+        </Card>
       )}
 
-      <View style={styles.section}>
+      <Card elevation="s" padding="m" style={styles.sectionCard}>
         <View style={styles.sectionLabelRow}>
           <CircleDollarSign size={15} color={colors.textSecondary} />
           <Typography variant="subtitle2" style={styles.sectionLabel}>
@@ -83,10 +85,10 @@ export function BookingDetailsScreen() {
         <Typography variant="h5" style={styles.costValue}>
           ₱{booking?.cost?.toFixed(2) || '0.00'}
         </Typography>
-      </View>
+      </Card>
 
       {booking?.specifications && (
-        <View style={styles.section}>
+        <Card elevation="s" padding="m" style={styles.sectionCard}>
           <View style={styles.sectionLabelRow}>
             <FileText size={15} color={colors.textSecondary} />
             <Typography variant="subtitle2" style={styles.sectionLabel}>
@@ -98,10 +100,10 @@ export function BookingDetailsScreen() {
               {booking.specifications}
             </Typography>
           </View>
-        </View>
+        </Card>
       )}
 
-      <View style={styles.section}>
+      <Card elevation="s" padding="m" style={styles.sectionCard}>
         <View style={styles.sectionLabelRow}>
           <CalendarClock size={15} color={colors.textSecondary} />
           <Typography variant="subtitle2" style={styles.sectionLabel}>
@@ -109,9 +111,17 @@ export function BookingDetailsScreen() {
           </Typography>
         </View>
         <Typography variant="body1">{booking?.createdAt ? formatDateTime(booking.createdAt) : 'N/A'}</Typography>
-      </View>
+      </Card>
 
-      <Button title="Go Back" onPress={handleGoBack} />
+      <Card elevation="s" padding="m" style={styles.sectionCard}>
+        <Typography variant="subtitle2" style={styles.sectionLabel}>
+          Status
+        </Typography>
+        <StatusBadge
+          status={STATUS_MAP[booking?.status || ''] || 'default'}
+          label={booking?.status?.toUpperCase() || 'UNKNOWN'}
+        />
+      </Card>
     </ScreenContainer>
   );
 }

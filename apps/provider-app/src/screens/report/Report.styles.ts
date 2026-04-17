@@ -3,9 +3,6 @@ import { StyleSheet } from 'react-native';
 
 export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
-    iconButton: {
-      padding: spacing.xs,
-    },
     keyboardView: {
       flex: 1,
     },
@@ -38,6 +35,11 @@ export const createStyles = (colors: ThemeColors) =>
       marginBottom: spacing.s,
       color: colors.textSecondary,
     },
+    sectionLabelRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.xs,
+    },
     sectionCard: {
       backgroundColor: colors.card.base,
       borderRadius: radius.l,
@@ -60,7 +62,7 @@ export const createStyles = (colors: ThemeColors) =>
     },
     reasonChipSelected: {
       borderColor: colors.actionPrimary,
-      backgroundColor: 'rgba(27, 51, 79, 0.06)',
+      backgroundColor: colors.interactive.primaryBg,
     },
     reasonChipText: {
       flex: 1,
@@ -75,9 +77,6 @@ export const createStyles = (colors: ThemeColors) =>
       fontSize: 15,
       color: colors.textPrimary,
       lineHeight: 22,
-    },
-    imageSection: {
-      marginTop: spacing.l,
     },
     imagePickerButton: {
       flexDirection: 'row',
@@ -124,7 +123,7 @@ export const createStyles = (colors: ThemeColors) =>
     alreadyReportedTitle: {
       marginTop: spacing.m,
     },
-    alreadyReportedMessage: {
+    alreadyReportedSubtitle: {
       marginTop: spacing.s,
       textAlign: 'center',
     },

@@ -18,10 +18,11 @@ export const createStyles = (colors: ThemeColors) =>
     },
     sectionCard: {
       backgroundColor: colors.card.base,
-      borderRadius: 16,
+      borderRadius: radius.l,
       borderWidth: 1,
       borderColor: colors.card.stroke,
       padding: spacing.m,
+      gap: spacing.s,
     },
     walletGrid: {
       flexDirection: 'row',
@@ -36,6 +37,7 @@ export const createStyles = (colors: ThemeColors) =>
       justifyContent: 'center',
       borderWidth: 2,
       borderColor: 'transparent',
+      borderRadius: radius.m,
       gap: spacing.s,
       height: 100,
     },

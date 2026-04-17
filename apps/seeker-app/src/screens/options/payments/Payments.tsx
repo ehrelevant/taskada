@@ -64,35 +64,36 @@ export function PaymentMethodsScreen() {
       </Typography>
 
       <View style={styles.actionsContainer}>
-        <TouchableOpacity onPress={() => navigation.navigate('AddCard')}>
-          <Card elevation="xs" padding="m" style={styles.actionCard}>
-            <View style={[styles.actionIcon, styles.cardIconBg]}>
-              <CreditCard color={colors.secondary.base} size={24} />
-            </View>
-            <View>
-              <Typography variant="subtitle2">Credit / Debit Card</Typography>
-              <Typography variant="caption" color={colors.textSecondary}>
-                Visa, Mastercard, JCB
-              </Typography>
-            </View>
-            <Plus color={colors.actionSecondary} size={20} style={styles.plusIcon} />
-          </Card>
-        </TouchableOpacity>
+        <Card elevation="xs" padding="m" style={styles.actionCard} onPress={() => navigation.navigate('AddCard')}>
+          <View style={[styles.actionIcon, styles.cardIconBg]}>
+            <CreditCard color={colors.secondary.base} size={24} />
+          </View>
+          <View>
+            <Typography variant="subtitle2">Credit / Debit Card</Typography>
+            <Typography variant="caption" color={colors.textSecondary}>
+              Visa, Mastercard, JCB
+            </Typography>
+          </View>
+          <Plus color={colors.actionSecondary} size={20} style={styles.plusIcon} />
+        </Card>
 
-        <TouchableOpacity onPress={() => navigation.navigate('AddEWallet')}>
-          <Card elevation="xs" padding="m" style={styles.actionCard}>
-            <View style={[styles.actionIcon, styles.walletIconBg]}>
-              <Wallet color={colors.secondary.base} size={24} />
-            </View>
-            <View>
-              <Typography variant="subtitle2">E-Wallet</Typography>
-              <Typography variant="caption" color={colors.textSecondary}>
-                GCash, Maya
-              </Typography>
-            </View>
-            <Plus color={colors.actionSecondary} size={20} style={styles.plusIcon} />
-          </Card>
-        </TouchableOpacity>
+        <Card
+          elevation="xs"
+          padding="m"
+          style={styles.actionCard}
+          onPress={() => navigation.navigate('AddEWallet')}
+        >
+          <View style={[styles.actionIcon, styles.walletIconBg]}>
+            <Wallet color={colors.secondary.base} size={24} />
+          </View>
+          <View>
+            <Typography variant="subtitle2">E-Wallet</Typography>
+            <Typography variant="caption" color={colors.textSecondary}>
+              GCash, Maya
+            </Typography>
+          </View>
+          <Plus color={colors.actionSecondary} size={20} style={styles.plusIcon} />
+        </Card>
       </View>
     </ScreenContainer>
   );

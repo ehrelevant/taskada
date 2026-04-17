@@ -5,7 +5,14 @@ export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
     content: {
       gap: spacing.s,
-      padding: spacing.m,
+    },
+    heroCard: {
+      borderRadius: radius.xxl,
+      borderWidth: 1,
+      borderColor: colors.home.heroAccent,
+      backgroundColor: colors.home.heroStart,
+      padding: spacing.heroInset,
+      gap: spacing.s,
     },
     card: {
       marginBottom: 0,
@@ -14,9 +21,11 @@ export const createStyles = (colors: ThemeColors) =>
       borderColor: colors.card.stroke,
       backgroundColor: colors.card.base,
     },
-    cardLabel: {
+    sectionLabelRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.xs,
       marginBottom: spacing.s,
-      color: colors.textSecondary,
     },
     serviceTypeRow: {
       flexDirection: 'row',

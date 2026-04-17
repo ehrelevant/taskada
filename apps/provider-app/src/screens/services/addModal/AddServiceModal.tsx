@@ -2,7 +2,7 @@ import { ActivityIndicator, Modal, TouchableOpacity, View } from 'react-native';
 import { Button, Input, ScreenContainer, Typography } from '@repo/components';
 import { Controller } from 'react-hook-form';
 import type { ProviderService } from '@repo/types';
-import { useTheme } from '@repo/theme';
+import { spacing, useTheme } from '@repo/theme';
 
 import { createStyles } from './AddServiceModal.styles';
 import { useAddServiceModal } from './AddServiceModal.hooks';
@@ -33,9 +33,12 @@ export function AddServiceModal({ visible, serviceToEdit, onClose, onSuccess }: 
   return (
     <Modal visible={visible} animationType="slide" transparent onRequestClose={onClose}>
       <ScreenContainer keyboardAware contentStyle={styles.overlayContent}>
-        <View style={styles.titleWrap}>
-          <Typography variant="h3" style={styles.title}>
+        <View style={styles.heroCard}>
+          <Typography variant="h3" color="textInverse" style={styles.title}>
             {isEditing ? 'Edit Service' : 'Add Service'}
+          </Typography>
+          <Typography variant="body2" color="textInverse">
+            {isEditing ? 'Update your pricing and details.' : 'Add a new service offering to your profile.'}
           </Typography>
         </View>
 
@@ -78,7 +81,7 @@ export function AddServiceModal({ visible, serviceToEdit, onClose, onSuccess }: 
             />
           )}
           {errors.serviceTypeId && (
-            <Typography variant="caption" color={colors.error.base} style={{ marginTop: 4 }}>
+            <Typography variant="caption" color={colors.error.base} style={{ marginTop: spacing.xs }}>
               {errors.serviceTypeId.message}
             </Typography>
           )}

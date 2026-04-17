@@ -18,6 +18,15 @@ export const createStyles = (colors: ThemeColors) =>
       padding: spacing.heroInset,
       gap: spacing.s,
     },
+    sectionCard: {
+      borderRadius: radius.l,
+      borderWidth: 1,
+      borderColor: colors.card.stroke,
+      backgroundColor: colors.card.base,
+    },
+    sectionHeading: {
+      marginBottom: spacing.s,
+    },
     providerCardShell: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -32,9 +41,6 @@ export const createStyles = (colors: ThemeColors) =>
     divider: {
       height: 1,
       backgroundColor: colors.border,
-    },
-    specificationsCard: {
-      padding: spacing.m,
     },
     costRow: {
       flexDirection: 'row',

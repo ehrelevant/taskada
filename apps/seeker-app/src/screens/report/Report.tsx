@@ -3,8 +3,8 @@ import { Avatar, Button, EmptyState, Header, ScreenContainer, Typography } from 
 import { Controller } from 'react-hook-form';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { ScrollView, TextInput, TouchableOpacity, View } from 'react-native';
-import { spacing, useTheme } from '@repo/theme';
 import { useEffect } from 'react';
+import { useTheme } from '@repo/theme';
 
 import { createStyles } from './Report.styles';
 import { REPORT_REASONS, useReport } from './Report.hooks';
@@ -124,7 +124,7 @@ export function ReportScreen() {
         </View>
 
         <View style={styles.sectionCard}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}>
+          <View style={styles.sectionLabelRow}>
             <ShieldAlert size={15} color={colors.textSecondary} />
             <Typography variant="subtitle2" style={styles.sectionLabel}>
               Description {selectedReason === 'other' ? '*' : '(Optional)'}
@@ -155,7 +155,7 @@ export function ReportScreen() {
         </View>
 
         <View style={styles.sectionCard}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}>
+          <View style={styles.sectionLabelRow}>
             <AlertTriangle size={15} color={colors.textSecondary} />
             <Typography variant="subtitle2" style={styles.sectionLabel}>
               Evidence (Optional)

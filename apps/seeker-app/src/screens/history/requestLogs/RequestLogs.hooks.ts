@@ -2,7 +2,7 @@ import { HistoryStackParamList } from '@navigation/HistoryStack';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RouteProp } from '@react-navigation/native';
 import { seekerClient } from '@lib/seekerClient';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 type RequestDetailsRouteProp = RouteProp<HistoryStackParamList, 'RequestLogs'>;
@@ -38,11 +38,7 @@ export function useRequestLogs() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    loadRequestDetails();
-  }, [bookingId]);
-
-  const loadRequestDetails = async () => {
+  const loadRequestDetails = useCallback(async () => {
     try {
       setIsLoading(true);
       const response = await seekerClient.apiFetch(`/bookings/${bookingId}/request-details`, 'GET');
@@ -59,16 +55,21 @@ export function useRequestLogs() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [bookingId]);
 
-  const handleGoBack = () => {
+  useEffect(() => {
+    loadRequestDetails();
+  }, [loadRequestDetails]);
+
+  const handleGoBack = useCallback(() => {
     navigation.goBack();
-  };
+  }, [navigation]);
 
   return {
     request,
     isLoading,
     error,
     handleGoBack,
+    loadRequestDetails,
   };
 }

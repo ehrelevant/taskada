@@ -39,6 +39,11 @@ export const createStyles = (colors: ThemeColors) =>
       marginBottom: spacing.s,
       color: colors.textSecondary,
     },
+    sectionLabelRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.xs,
+    },
     sectionCard: {
       backgroundColor: colors.card.base,
       borderRadius: radius.l,
@@ -61,7 +66,7 @@ export const createStyles = (colors: ThemeColors) =>
     },
     reasonChipSelected: {
       borderColor: colors.actionPrimary,
-      backgroundColor: 'rgba(27, 51, 79, 0.06)',
+      backgroundColor: colors.interactive.primaryBg,
     },
     reasonChipText: {
       flex: 1,

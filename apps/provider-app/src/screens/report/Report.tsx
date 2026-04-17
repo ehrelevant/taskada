@@ -1,10 +1,10 @@
-import { ActivityIndicator, ScrollView, TextInput, TouchableOpacity, View } from 'react-native';
-import { AlertTriangle, CheckCircle2, ChevronLeft, ImagePlus, ShieldAlert, X } from 'lucide-react-native';
-import { Avatar, Button, Header, ScreenContainer, Typography } from '@repo/components';
+import { AlertTriangle, CheckCircle2, ImagePlus, ShieldAlert, X } from 'lucide-react-native';
+import { Avatar, Button, EmptyState, Header, ScreenContainer, Typography } from '@repo/components';
 import { Controller } from 'react-hook-form';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
-import { spacing, useTheme } from '@repo/theme';
+import { ScrollView, TextInput, TouchableOpacity, View } from 'react-native';
 import { useEffect } from 'react';
+import { useTheme } from '@repo/theme';
 
 import { createStyles } from './Report.styles';
 import { REPORT_REASONS, useReport } from './Report.hooks';
@@ -35,41 +35,23 @@ export function ReportScreen() {
 
   if (isChecking) {
     return (
-      <ScreenContainer>
-        <Header
-          title="Report User"
-          size="small"
-          leftContent={
-            <TouchableOpacity onPress={handleGoBack} style={styles.iconButton}>
-              <ChevronLeft size={24} color={colors.textPrimary} />
-            </TouchableOpacity>
-          }
-        />
-        <View style={styles.alreadyReportedContainer}>
-          <ActivityIndicator size="large" color={colors.actionPrimary} />
-        </View>
+      <ScreenContainer edges={['left', 'right']}>
+        <Header title="Report User" size="small" onBack={handleGoBack} />
+        <EmptyState loading loadingMessage="Checking..." />
       </ScreenContainer>
     );
   }
 
   if (hasAlreadyReported) {
     return (
-      <ScreenContainer>
-        <Header
-          title="Report User"
-          size="small"
-          leftContent={
-            <TouchableOpacity onPress={handleGoBack} style={styles.iconButton}>
-              <ChevronLeft size={24} color={colors.textPrimary} />
-            </TouchableOpacity>
-          }
-        />
+      <ScreenContainer edges={['left', 'right']}>
+        <Header title="Report User" size="small" onBack={handleGoBack} />
         <View style={styles.alreadyReportedContainer}>
           <CheckCircle2 size={48} color={colors.success.base} />
           <Typography variant="h6" style={styles.alreadyReportedTitle}>
             Report Already Submitted
           </Typography>
-          <Typography variant="body1" color="textSecondary" style={styles.alreadyReportedMessage}>
+          <Typography variant="body1" color="textSecondary" style={styles.alreadyReportedSubtitle}>
             You have already submitted a report for this booking. Our team will review it.
           </Typography>
         </View>
@@ -84,11 +66,7 @@ export function ReportScreen() {
       <Header
         title="Report User"
         size="small"
-        leftContent={
-          <TouchableOpacity onPress={handleGoBack} style={styles.iconButton}>
-            <ChevronLeft size={24} color={colors.textPrimary} />
-          </TouchableOpacity>
-        }
+        onBack={handleGoBack}
       />
 
       <KeyboardAwareScrollView
@@ -144,14 +122,14 @@ export function ReportScreen() {
             )}
           />
           {errors.reason && (
-            <Typography variant="caption" color="error" style={{ marginTop: spacing.xs }}>
+            <Typography variant="caption" color="error" style={styles.errorText}>
               {errors.reason.message}
             </Typography>
           )}
         </View>
 
         <View style={styles.sectionCard}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}>
+          <View style={styles.sectionLabelRow}>
             <ShieldAlert size={15} color={colors.textSecondary} />
             <Typography variant="subtitle2" style={styles.sectionLabel}>
               Description {selectedReason === 'other' ? '*' : '(Optional)'}
@@ -175,14 +153,14 @@ export function ReportScreen() {
             )}
           />
           {errors.description && (
-            <Typography variant="caption" color="error" style={{ marginTop: spacing.xs }}>
+            <Typography variant="caption" color="error" style={styles.errorText}>
               {errors.description.message}
             </Typography>
           )}
         </View>
 
         <View style={styles.sectionCard}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}>
+          <View style={styles.sectionLabelRow}>
             <AlertTriangle size={15} color={colors.textSecondary} />
             <Typography variant="subtitle2" style={styles.sectionLabel}>
               Evidence (Optional)

@@ -1,7 +1,6 @@
-import { ActivityIndicator, FlatList, Image, ScrollView, TouchableOpacity, View } from 'react-native';
-import { ChevronLeft, Flag } from 'lucide-react-native';
-import { Header, ImageViewer, Typography } from '@repo/components';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { EmptyState, Header, ImageViewer, ScreenContainer, Typography } from '@repo/components';
+import { Flag } from 'lucide-react-native';
+import { FlatList, Image, ScrollView, TouchableOpacity, View } from 'react-native';
 import { useTheme } from '@repo/theme';
 
 import { createStyles } from './ChatLogs.styles';
@@ -18,7 +17,7 @@ export function ChatLogsScreen() {
     const isOtherUser = item.userId === otherUser.id;
 
     return (
-      <View style={[styles.messageContainer, isOtherUser ? styles.otherMessage : styles.ownMessage]}>
+      <View style={[styles.messageRow, isOtherUser ? styles.rowStart : styles.rowEnd]}>
         {isOtherUser && item.sender.avatarUrl && (
           <Image source={{ uri: item.sender.avatarUrl }} style={styles.messageAvatar} />
         )}
@@ -33,7 +32,7 @@ export function ChatLogsScreen() {
             </ScrollView>
           )}
           {item.message && (
-            <Typography variant="body2" color={isOtherUser ? colors.textPrimary : colors.textInverse}>
+            <Typography variant="body2" color={isOtherUser ? 'textPrimary' : 'textInverse'}>
               {item.message}
             </Typography>
           )}
@@ -51,40 +50,27 @@ export function ChatLogsScreen() {
 
   if (isLoading) {
     return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={colors.actionPrimary} />
-          <Typography variant="body1" style={styles.loadingText}>
-            Loading chat history...
-          </Typography>
-        </View>
-      </SafeAreaView>
+      <ScreenContainer edges={['left', 'right']}>
+        <EmptyState loading loadingMessage="Loading chat history..." />
+      </ScreenContainer>
     );
   }
 
   if (error) {
     return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.loadingContainer}>
-          <Typography variant="body1" color="error">
-            {error}
-          </Typography>
-        </View>
-      </SafeAreaView>
+      <ScreenContainer edges={['left', 'right']}>
+        <EmptyState message={error} />
+      </ScreenContainer>
     );
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <ScreenContainer edges={['left', 'right']} padding="none">
       <Header
         title={`${otherUser.firstName} ${otherUser.lastName}`}
         subtitle="Chat History"
         size="small"
-        leftContent={
-          <TouchableOpacity onPress={handleGoBack} style={styles.iconButton}>
-            <ChevronLeft size={24} color={colors.textPrimary} />
-          </TouchableOpacity>
-        }
+        onBack={handleGoBack}
         rightContent={
           <TouchableOpacity onPress={handleReport} style={styles.iconButton}>
             <Flag size={20} color={colors.textSecondary} />
@@ -98,12 +84,18 @@ export function ChatLogsScreen() {
         keyExtractor={item => item.id}
         contentContainerStyle={styles.messagesList}
         showsVerticalScrollIndicator={false}
-        ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <Typography variant="body1" color="textSecondary">
-              No messages in this conversation
+        ListHeaderComponent={
+          <View style={styles.heroCard}>
+            <Typography variant="h3" color="textInverse">
+              Conversation log
+            </Typography>
+            <Typography variant="body2" color="textInverse">
+              Review the full chat timeline and any shared image evidence.
             </Typography>
           </View>
+        }
+        ListEmptyComponent={
+          <EmptyState message="No messages in this conversation" />
         }
       />
 
@@ -112,6 +104,6 @@ export function ChatLogsScreen() {
         imageUri={selectedImage || ''}
         onClose={() => setSelectedImage(null)}
       />
-    </SafeAreaView>
+    </ScreenContainer>
   );
 }

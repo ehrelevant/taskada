@@ -1,10 +1,10 @@
 import {
   Avatar,
   Button,
+  Card,
   Header,
   Rating,
   ScreenContainer,
-  Section,
   StarRatingInput,
   Typography,
 } from '@repo/components';
@@ -53,6 +53,8 @@ export function BookingDoneScreen() {
   return (
     <ScreenContainer edges={['left', 'right']}>
       <Header
+        title="Booking Complete"
+        size="small"
         leftContent={
           <TouchableOpacity onPress={handleGoHome} style={styles.iconButton}>
             <X size={24} color={colors.textPrimary} />
@@ -76,7 +78,10 @@ export function BookingDoneScreen() {
           </Typography>
         </View>
 
-        <Section label="Service Provider" variant="card">
+        <Card elevation="s" padding="m" style={styles.sectionCard}>
+          <Typography variant="subtitle2" color="textSecondary" style={styles.sectionHeading}>
+            Service Provider
+          </Typography>
           <View style={styles.providerCardShell}>
             <Avatar
               source={providerInfo.avatarUrl ? { uri: providerInfo.avatarUrl } : null}
@@ -115,16 +120,12 @@ export function BookingDoneScreen() {
               {formatCurrency(cost)}
             </Typography>
           </View>
-        </Section>
+        </Card>
 
-        <TouchableOpacity onPress={handleViewDetails} style={styles.detailsButton}>
-          <Typography variant="body1" color="actionPrimary" weight="medium">
-            View Booking Details
-          </Typography>
-        </TouchableOpacity>
+        <Button title="View Booking Details" variant="outline" onPress={handleViewDetails} />
 
-        <View style={styles.reviewFormContainer}>
-          <Typography variant="subtitle1" align="center" style={styles.reviewFormTitle}>
+        <Card elevation="s" padding="m" style={styles.reviewFormContainer}>
+          <Typography variant="subtitle1" align="center" style={styles.sectionHeading}>
             Rate Your Experience
           </Typography>
 
@@ -148,7 +149,7 @@ export function BookingDoneScreen() {
             onPress={handleSubmitReview}
             disabled={isSubmitting || rating === 0}
           />
-        </View>
+        </Card>
       </KeyboardAwareScrollView>
     </ScreenContainer>
   );

@@ -73,16 +73,27 @@ export const createStyles = (colors: ThemeColors) =>
       flex: 1,
       backgroundColor: colors.canvas.base,
     },
-    modalHeader: {
+    modalHeroCard: {
+      borderRadius: radius.xl,
+      borderWidth: 1,
+      borderColor: colors.home.heroAccent,
+      backgroundColor: colors.home.heroStart,
+      padding: spacing.m,
+      gap: spacing.xs,
+      margin: spacing.m,
+      marginBottom: spacing.xs,
+    },
+    modalHeaderTopRow: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
+    },
+    modalHeader: {
+      flexDirection: 'row',
+      justifyContent: 'flex-end',
+      alignItems: 'center',
       paddingHorizontal: spacing.m,
-      paddingTop: spacing.l,
-      paddingBottom: spacing.m,
-      borderBottomWidth: 1,
-      borderBottomColor: colors.card.stroke,
-      backgroundColor: colors.card.base,
+      paddingBottom: spacing.s,
     },
     modalSubtext: {
       marginTop: spacing.xxs,

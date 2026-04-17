@@ -18,11 +18,21 @@ export const createStyles = (colors: ThemeColors) =>
       backgroundColor: colors.home.heroStart,
       borderWidth: 1,
       borderColor: colors.home.heroAccent,
-      borderRadius: 28,
+      borderRadius: radius.xxl,
       gap: spacing.s,
     },
     title: {
       fontWeight: '700',
+    },
+    sectionCard: {
+      borderRadius: radius.l,
+      borderWidth: 1,
+      borderColor: colors.card.stroke,
+      backgroundColor: colors.card.base,
+      gap: spacing.s,
+    },
+    sectionHeading: {
+      marginBottom: spacing.xs,
     },
     providerCardShell: {
       flexDirection: 'row',
@@ -59,25 +69,12 @@ export const createStyles = (colors: ThemeColors) =>
     costValue: {
       marginLeft: spacing.xxs,
     },
-    detailsButton: {
-      alignItems: 'center',
-      padding: spacing.m,
-      backgroundColor: colors.card.base,
-      borderRadius: radius.m,
+    reviewFormContainer: {
+      borderRadius: radius.l,
       borderWidth: 1,
       borderColor: colors.card.stroke,
-    },
-    reviewFormContainer: {
       backgroundColor: colors.card.base,
-      borderTopLeftRadius: 16,
-      borderTopRightRadius: 16,
-      padding: spacing.l,
       paddingBottom: Platform.OS === 'ios' ? spacing.xl : spacing.l,
-      borderTopWidth: 1,
-      borderTopColor: colors.card.stroke,
-    },
-    reviewFormTitle: {
-      marginBottom: spacing.m,
     },
     ratingInputContainer: {
       alignItems: 'center',

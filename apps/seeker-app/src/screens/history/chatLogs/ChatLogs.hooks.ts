@@ -32,11 +32,7 @@ export function useChatLogs() {
   const [error, setError] = useState<string | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
-  useEffect(() => {
-    loadChatLogs();
-  }, [bookingId]);
-
-  const loadChatLogs = async () => {
+  const loadChatLogs = useCallback(async () => {
     try {
       setIsLoading(true);
       const response = await seekerClient.apiFetch(`/bookings/${bookingId}/chat-logs`, 'GET');
@@ -53,7 +49,11 @@ export function useChatLogs() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [bookingId]);
+
+  useEffect(() => {
+    loadChatLogs();
+  }, [loadChatLogs]);
 
   const handleGoBack = useCallback(() => {
     navigation.goBack();
@@ -75,5 +75,6 @@ export function useChatLogs() {
     setSelectedImage,
     handleGoBack,
     handleReport,
+    loadChatLogs,
   };
 }

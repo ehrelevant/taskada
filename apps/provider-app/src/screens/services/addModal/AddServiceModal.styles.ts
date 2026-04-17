@@ -10,11 +10,16 @@ export const createStyles = (colors: ThemeColors) =>
       padding: spacing.m,
       gap: spacing.m,
     },
-    titleWrap: {
-      alignItems: 'center',
+    heroCard: {
+      borderRadius: radius.l,
+      borderWidth: 1,
+      borderColor: colors.home.heroAccent,
+      backgroundColor: colors.home.heroStart,
+      padding: spacing.m,
+      gap: spacing.xs,
     },
     title: {
-      textAlign: 'center',
+      textAlign: 'left',
     },
     fieldContainer: {
       borderRadius: radius.l,
@@ -30,7 +35,7 @@ export const createStyles = (colors: ThemeColors) =>
     },
     chip: {
       paddingHorizontal: spacing.m,
-      paddingVertical: 8,
+      paddingVertical: spacing.s,
       borderRadius: radius.round,
       borderWidth: 1,
       borderColor: colors.card.stroke,

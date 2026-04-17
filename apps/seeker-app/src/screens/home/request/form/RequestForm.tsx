@@ -182,12 +182,25 @@ export function RequestFormScreen() {
 
       <Modal animationType="slide" visible={showServiceSearch}>
         <SafeAreaView style={styles.modalContainer}>
-          <View style={styles.modalHeader}>
-            <View>
-              <Typography variant="h3">Select a Service</Typography>
+          <View style={styles.modalHeroCard}>
+            <View style={styles.modalHeaderTopRow}>
+              <Typography variant="h3" color="textInverse">
+                Select a Service
+              </Typography>
+              <TouchableOpacity onPress={() => setShowServiceSearch(false)}>
+                <X size={24} color={colors.textInverse} />
+              </TouchableOpacity>
             </View>
+            <Typography variant="body2" color="textInverse">
+              Search by service type and choose the best provider for your request.
+            </Typography>
+          </View>
+
+          <View style={styles.modalHeader}>
             <TouchableOpacity onPress={() => setShowServiceSearch(false)}>
-              <X size={24} color={colors.textPrimary} />
+              <Typography variant="body2" color="actionPrimary">
+                Close
+              </Typography>
             </TouchableOpacity>
           </View>
 
