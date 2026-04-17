@@ -1,6 +1,6 @@
 import { address, booking, message, request, requestImage, review, service, serviceType, user } from '@repo/database';
 import { alias } from 'drizzle-orm/pg-core';
-import { and, desc, eq, or, sql } from 'drizzle-orm';
+import { and, desc, eq, lte, or, sql } from 'drizzle-orm';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 
 import { ChatGateway } from '../chat/chat.gateway';
@@ -143,7 +143,7 @@ export class BookingsService {
       .limit(1);
 
     // Get seeker's address
-    const seekerAddress = await this.getSeekerAddress(bookingRecord.seekerUserId, bookingId);
+    const seekerAddress = await this.getSeekerAddress(bookingRecord.seekerUserId, bookingRecord.createdAt);
 
     // Notify seeker about proposal via WebSocket
     await this.chatGateway.broadcastProposalSubmitted(bookingId, bookingRecord.seekerUserId, providerInfo, {
@@ -156,8 +156,36 @@ export class BookingsService {
     return updated;
   }
 
-  private async getSeekerAddress(seekerUserId: string, bookingId: string) {
-    // Get the request associated with this booking to find the address
+  private async getRequestIdForBooking(seekerUserId: string, bookingCreatedAt: Date) {
+    const [requestRecord] = await this.dbService.db
+      .select({ id: request.id })
+      .from(request)
+      .where(and(eq(request.seekerUserId, seekerUserId), lte(request.createdAt, bookingCreatedAt)))
+      .orderBy(desc(request.createdAt))
+      .limit(1);
+
+    if (requestRecord) {
+      return requestRecord.id;
+    }
+
+    // Fallback for historical data where timestamps may not line up exactly.
+    const [latestRequestRecord] = await this.dbService.db
+      .select({ id: request.id })
+      .from(request)
+      .where(eq(request.seekerUserId, seekerUserId))
+      .orderBy(desc(request.createdAt))
+      .limit(1);
+
+    return latestRequestRecord?.id;
+  }
+
+  private async getSeekerAddress(seekerUserId: string, bookingCreatedAt: Date) {
+    const requestId = await this.getRequestIdForBooking(seekerUserId, bookingCreatedAt);
+
+    if (!requestId) {
+      return undefined;
+    }
+
     const [addressRecord] = await this.dbService.db
       .select({
         label: address.label,
@@ -165,9 +193,7 @@ export class BookingsService {
       })
       .from(request)
       .innerJoin(address, eq(request.addressId, address.id))
-      .innerJoin(booking, eq(request.seekerUserId, booking.seekerUserId))
-      .where(eq(booking.id, bookingId))
-      .orderBy(request.createdAt)
+      .where(eq(request.id, requestId))
       .limit(1);
 
     return addressRecord;
@@ -208,7 +234,7 @@ export class BookingsService {
     }
 
     // Get the address for this booking
-    const addressData = await this.getSeekerAddress(bookingRecord.seekerUserId, bookingId);
+    const addressData = await this.getSeekerAddress(bookingRecord.seekerUserId, bookingRecord.createdAt);
 
     // Get service rating info
     const [serviceRating] = await this.dbService.db
@@ -392,6 +418,7 @@ export class BookingsService {
         providerUserId: booking.providerUserId,
         seekerUserId: booking.seekerUserId,
         status: booking.status,
+        createdAt: booking.createdAt,
       })
       .from(booking)
       .where(eq(booking.id, bookingId))
@@ -405,7 +432,12 @@ export class BookingsService {
       throw new BadRequestException('You are not authorized to access this booking');
     }
 
-    // Get the most recent request associated with this seeker (the one that led to this booking)
+    const requestId = await this.getRequestIdForBooking(bookingRecord.seekerUserId, bookingRecord.createdAt);
+
+    if (!requestId) {
+      throw new NotFoundException('Request details not found');
+    }
+
     const [requestRecord] = await this.dbService.db
       .select({
         id: request.id,
@@ -417,8 +449,7 @@ export class BookingsService {
       })
       .from(request)
       .innerJoin(serviceType, eq(request.serviceTypeId, serviceType.id))
-      .where(eq(request.seekerUserId, bookingRecord.seekerUserId))
-      .orderBy(desc(request.createdAt))
+      .where(eq(request.id, requestId))
       .limit(1);
 
     if (!requestRecord) {
