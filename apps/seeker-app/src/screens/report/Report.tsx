@@ -1,8 +1,8 @@
 import { AlertTriangle, CheckCircle2, ImagePlus, ShieldAlert, X } from 'lucide-react-native';
 import { Avatar, Button, EmptyState, Header, ScreenContainer, Typography } from '@repo/components';
 import { Controller } from 'react-hook-form';
+import { Image, ScrollView, TextInput, TouchableOpacity, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
-import { ScrollView, TextInput, TouchableOpacity, View } from 'react-native';
 import { useEffect } from 'react';
 import { useTheme } from '@repo/theme';
 
@@ -106,7 +106,7 @@ export function ReportScreen() {
                     <Typography
                       variant="body1"
                       style={styles.reasonChipText}
-                      color={value === reason.value ? 'actionPrimary' : 'textPrimary'}
+                      color={value === reason.value ? 'textInverse' : 'textPrimary'}
                     >
                       {reason.label}
                     </Typography>
@@ -175,7 +175,7 @@ export function ReportScreen() {
             <ScrollView horizontal style={styles.selectedImagesContainer} showsHorizontalScrollIndicator={false}>
               {selectedImages.map((uri, index) => (
                 <View key={index} style={styles.selectedImageWrapper}>
-                  <Avatar source={{ uri }} size={80} name="" />
+                  <Image source={{ uri }} width={80} height={80}/>
                   <TouchableOpacity style={styles.removeImageButton} onPress={() => handleRemoveImage(index)}>
                     <X size={14} color={colors.textInverse} />
                   </TouchableOpacity>

@@ -131,16 +131,17 @@ function ReportDetail() {
                     Evidence ({images.length})
                   </h3>
                   <div className="flex flex-wrap gap-3">
-                    {images.map((img, idx) => (
-                      <button
-                        key={img.id}
-                        onClick={() => setLightboxIndex(idx)}
-                        className="border-border bg-surface-raised hover:bg-surface-hover flex h-24 w-32 cursor-pointer flex-col items-center justify-center rounded-lg border text-center transition-colors"
-                      >
-                        <Image size={20} className="text-muted" />
-                        <span className="text-muted mt-1 px-1 text-[10px]">{img.image ?? 'Image'}</span>
-                      </button>
-                    ))}
+                    {images.map((img, idx) => 
+                      img.url ? (
+                        <button
+                          key={img.id}
+                          onClick={() => setLightboxIndex(idx)}
+                          className="border-border bg-surface-raised hover:bg-surface-hover flex max-h-32 max-w-32 p-2 cursor-pointer flex-col items-center justify-center rounded-lg border text-center transition-colors"
+                        >
+                          <img src={img.url} alt={img.image} className="rounded-md" />
+                        </button>
+                      ) : null
+                    )}
                   </div>
                 </div>
               )}
