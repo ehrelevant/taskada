@@ -202,7 +202,11 @@ export function useRequestForm() {
 
       setValue('serviceTypeId', serviceTypeId);
       setSelectedService(null);
-      setValue('serviceId', undefined);
+      setValue('serviceId', undefined, {
+        shouldDirty: true,
+        shouldTouch: true,
+        shouldValidate: true,
+      });
       setServiceSearchResults([]);
       setServiceSearchQuery('');
     },
@@ -243,7 +247,11 @@ export function useRequestForm() {
   const handleServiceSelect = useCallback(
     (service: SearchResult) => {
       setSelectedService(service);
-      setValue('serviceId', service.serviceId);
+      setValue('serviceId', service.serviceId, {
+        shouldDirty: true,
+        shouldTouch: true,
+        shouldValidate: true,
+      });
       closeServiceSearch();
       clearServiceSearchResults();
     },
@@ -252,7 +260,11 @@ export function useRequestForm() {
 
   const handleClearSelection = useCallback(() => {
     setSelectedService(null);
-    setValue('serviceId', undefined);
+    setValue('serviceId', undefined, {
+      shouldDirty: true,
+      shouldTouch: true,
+      shouldValidate: true,
+    });
   }, [setValue]);
 
   const pickImages = useCallback(async () => {
