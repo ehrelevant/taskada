@@ -185,14 +185,21 @@ export class BookingsService {
         specifications: booking.specifications,
         createdAt: booking.createdAt,
         provider: {
-          id: user.id,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          avatarUrl: user.avatarUrl,
+          id: providerUser.id,
+          firstName: providerUser.firstName,
+          lastName: providerUser.lastName,
+          avatarUrl: providerUser.avatarUrl,
+        },
+        seeker: {
+          id: seekerUser.id,
+          firstName: seekerUser.firstName,
+          lastName: seekerUser.lastName,
+          avatarUrl: seekerUser.avatarUrl,
         },
       })
       .from(booking)
-      .leftJoin(user, eq(booking.providerUserId, user.id))
+      .leftJoin(providerUser, eq(booking.providerUserId, providerUser.id))
+      .leftJoin(seekerUser, eq(booking.seekerUserId, seekerUser.id))
       .where(eq(booking.id, bookingId))
       .limit(1);
 

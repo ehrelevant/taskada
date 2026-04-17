@@ -81,17 +81,19 @@ export function useBookingLogs() {
   }, [bookingId, navigation]);
 
   const handleViewChatLogs = useCallback(() => {
-    if (booking?.seeker) {
-      navigation.navigate('ChatLogs', {
-        bookingId,
-        otherUser: {
-          id: booking.seeker.id,
-          firstName: booking.seeker.firstName,
-          lastName: booking.seeker.lastName,
-          avatarUrl: booking.seeker.avatarUrl,
-        },
-      });
+    if (!booking?.seekerUserId) {
+      return;
     }
+
+    navigation.navigate('ChatLogs', {
+      bookingId,
+      otherUser: {
+        id: booking.seeker?.id ?? booking.seekerUserId,
+        firstName: booking.seeker?.firstName ?? 'Unknown',
+        lastName: booking.seeker?.lastName ?? 'User',
+        avatarUrl: booking.seeker?.avatarUrl ?? null,
+      },
+    });
   }, [booking, bookingId, navigation]);
 
   const handleReport = useCallback(() => {
