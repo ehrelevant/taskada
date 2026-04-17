@@ -22,17 +22,17 @@ export function BookingDetailsScreen() {
 
   if (isLoading) {
     return (
-      <ScreenContainer edges={['left', 'right']}>
+      <ScreenContainer edges={['left', 'right', 'bottom']}>
         <EmptyState loading loadingMessage="Loading booking details..." />
       </ScreenContainer>
     );
   }
 
   return (
-    <ScreenContainer scrollable edges={['left', 'right']} contentPadding="m" contentStyle={styles.content}>
+    <ScreenContainer scrollable edges={['left', 'right', 'bottom']} contentPadding="m" contentStyle={styles.content}>
       <View style={styles.heroCard}>
         <Typography variant="h3" color="textInverse">
-          Full service details
+          Booking Summary
         </Typography>
         <Typography variant="body2" color="textInverse">
           Review location, price, and scope before closing out this booking.
@@ -66,7 +66,7 @@ export function BookingDetailsScreen() {
             </MapView>
           </View>
           <View style={styles.addressContainer}>
-            <Typography variant="body2" style={styles.addressText}>
+            <Typography variant="body2">
               {booking.address.label || 'Location not specified'}
             </Typography>
           </View>
@@ -80,7 +80,7 @@ export function BookingDetailsScreen() {
             Service Cost
           </Typography>
         </View>
-        <Typography variant="h5" style={styles.costValue}>
+        <Typography variant="h4">
           ₱{booking?.cost?.toFixed(2) || '0.00'}
         </Typography>
       </Card>

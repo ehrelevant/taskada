@@ -50,7 +50,7 @@ export function RequestLogsScreen() {
         </View>
         <View style={styles.serviceTypeRow}>
           {request.serviceTypeIcon && <Image source={{ uri: request.serviceTypeIcon }} style={styles.serviceIcon} />}
-          <Typography variant="h6">{request.serviceTypeName}</Typography>
+          <Typography variant="h4">{request.serviceTypeName}</Typography>
         </View>
       </Card>
 

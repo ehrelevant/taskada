@@ -1,6 +1,5 @@
 import { ActivityIndicator, View } from 'react-native';
 import { Button, EmptyState, ScreenContainer, Typography } from '@repo/components';
-import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '@repo/theme';
 
 import { createStyles } from './Standby.styles';
@@ -9,8 +8,7 @@ import { useStandby } from './Standby.hooks';
 export function StandbyScreen() {
   const { colors } = useTheme();
   const styles = createStyles(colors);
-  const { isConnecting, isCancelling, error, handleCancelRequest } = useStandby();
-  const navigation = useNavigation();
+  const { isConnecting, isCancelling, error, handleCancelRequest, handleGoHome } = useStandby();
 
   if (isConnecting) {
     return (
@@ -26,7 +24,7 @@ export function StandbyScreen() {
         <EmptyState
           title="Error"
           message={error}
-          action={<Button title="Go Back" onPress={() => navigation.goBack()} />}
+          action={<Button title="Go Home" onPress={handleGoHome} />}
         />
       </ScreenContainer>
     );

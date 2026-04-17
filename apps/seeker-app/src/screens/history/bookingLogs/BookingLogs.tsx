@@ -88,7 +88,7 @@ export function BookingLogsScreen() {
       <View style={styles.content}>
         <View style={styles.heroCard}>
           <Typography variant="h3" color="textInverse">
-            Booking summary
+            Booking ummary
           </Typography>
           <Typography variant="body2" color="textInverse">
             Review finalized details, related request info, and conversation logs.

@@ -35,7 +35,6 @@ export function StackHeader({ title, canGoBack, onBack, rightContent }: StackHea
         sideSlotWidth={44}
         onBack={canGoBack && onBack ? onBack : undefined}
         rightContent={rightContent}
-        style={{ paddingVertical: spacing.xs }}
       />
     </View>
   );

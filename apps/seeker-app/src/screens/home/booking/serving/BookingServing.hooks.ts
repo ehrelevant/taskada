@@ -9,16 +9,15 @@ import { seekerClient } from '@lib/seekerClient';
 import { useCallback, useEffect } from 'react';
 import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
 
-type BookingTransitRouteProp = RouteProp<BookingStackParamList, 'BookingTransit'>;
-type BookingTransitNavigationProp = NativeStackNavigationProp<BookingStackParamList, 'BookingTransit'>;
+type BookingServingRouteProp = RouteProp<BookingStackParamList, 'BookingServing'>;
+type BookingServingNavigationProp = NativeStackNavigationProp<BookingStackParamList, 'BookingServing'>;
 
-export function useBookingTransit() {
-  const route = useRoute<BookingTransitRouteProp>();
-  const navigation = useNavigation<BookingTransitNavigationProp>();
+export function useBookingServing() {
+  const route = useRoute<BookingServingRouteProp>();
+  const navigation = useNavigation<BookingServingNavigationProp>();
   const { otherUser, proposal, bookingId, requestId } = route.params;
 
   const { cost, specifications, serviceTypeName } = proposal;
-
   const providerName = `${otherUser.firstName} ${otherUser.lastName}`;
 
   const navigateToHome = useCallback(() => {
@@ -50,12 +49,13 @@ export function useBookingTransit() {
       await seekerClient.connectChat(authClient.getCookie(), userId, 'seeker');
       seekerClient.joinBooking(bookingId);
 
-      seekerClient.onProviderArrived(data => {
+      seekerClient.onBookingCompleted(data => {
         if (data.bookingId === bookingId) {
-          navigation.replace('BookingServing', {
+          navigation.replace('BookingDone', {
             bookingId,
             otherUser,
-            proposal,
+            serviceTypeName,
+            cost,
             requestId,
           });
         }
@@ -71,7 +71,7 @@ export function useBookingTransit() {
         seekerClient.disconnectChat();
       }
     };
-  }, [bookingId, navigation, proposal, otherUser, requestId]);
+  }, [bookingId, cost, navigation, otherUser, requestId, serviceTypeName]);
 
   return {
     providerName,

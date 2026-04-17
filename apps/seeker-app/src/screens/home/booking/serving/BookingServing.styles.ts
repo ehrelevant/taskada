@@ -3,45 +3,41 @@ import { StyleSheet } from 'react-native';
 
 export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
-    iconButton: {
-      padding: spacing.xs,
-    },
     scrollContent: {
       flexGrow: 1,
-      gap: spacing.m,
       padding: spacing.m,
+      gap: spacing.m,
     },
     heroCard: {
-      backgroundColor: colors.home.heroStart,
       borderRadius: radius.xxl,
       borderWidth: 1,
       borderColor: colors.home.heroAccent,
+      backgroundColor: colors.home.heroStart,
       padding: spacing.heroInset,
       gap: spacing.s,
     },
-    summaryCard: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: spacing.m,
-      backgroundColor: colors.card.base,
+    sectionCard: {
       borderRadius: radius.l,
       borderWidth: 1,
       borderColor: colors.card.stroke,
+      backgroundColor: colors.card.base,
     },
-    summaryUserInfo: {
-      flex: 1,
+    sectionHeading: {
+      marginBottom: spacing.s,
     },
-    costValue: {
-      color: colors.actionPrimary,
-      fontWeight: '700',
-    },
-    costRow: {
+    providerCardShell: {
       flexDirection: 'row',
       alignItems: 'center',
-      gap: spacing.xs,
-      marginTop: spacing.xs,
-    },
-    actionButtonsContainer: {
       gap: spacing.s,
+    },
+    detailRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      paddingVertical: spacing.s,
+    },
+    divider: {
+      height: 1,
+      backgroundColor: colors.border,
     },
   });

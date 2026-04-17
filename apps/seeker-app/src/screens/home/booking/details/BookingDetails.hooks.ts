@@ -1,13 +1,11 @@
 import { Alert } from 'react-native';
 import { BookingStackParamList } from '@navigation/BookingStack';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RouteProp } from '@react-navigation/native';
 import { seekerClient } from '@lib/seekerClient';
-import { useEffect, useState } from 'react';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useCallback, useEffect, useState } from 'react';
+import { useRoute } from '@react-navigation/native';
 
 type BookingDetailsRouteProp = RouteProp<BookingStackParamList, 'BookingDetails'>;
-type BookingDetailsNavigationProp = NativeStackNavigationProp<BookingStackParamList, 'BookingDetails'>;
 
 interface BookingData {
   id: string;
@@ -34,36 +32,34 @@ interface BookingData {
 
 export function useBookingDetails() {
   const route = useRoute<BookingDetailsRouteProp>();
-  const navigation = useNavigation<BookingDetailsNavigationProp>();
   const { bookingId } = route.params;
 
   const [booking, setBooking] = useState<BookingData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchBooking = async () => {
-      try {
-        const response = await seekerClient.apiFetch(`/bookings/${bookingId}`, 'GET');
-        if (response.ok) {
-          const data = await response.json();
-          setBooking(data);
-        } else {
-          throw new Error('Failed to fetch booking');
-        }
-      } catch (error) {
-        console.error('Error fetching booking:', error);
-        Alert.alert('Error', 'Failed to load booking details');
-      } finally {
-        setIsLoading(false);
+  const fetchBooking = useCallback(async () => {
+    try {
+      const response = await seekerClient.apiFetch(`/bookings/${bookingId}`, 'GET');
+      if (response.ok) {
+        const data = await response.json();
+        setBooking(data);
+      } else {
+        throw new Error('Failed to fetch booking');
       }
-    };
-
-    fetchBooking();
+    } catch (error) {
+      console.error('Error fetching booking:', error);
+      Alert.alert('Error', 'Failed to load booking details');
+    } finally {
+      setIsLoading(false);
+    }
   }, [bookingId]);
 
-  const handleGoBack = () => {
-    navigation.goBack();
-  };
+  useEffect(() => {
+    fetchBooking();
+  }, [fetchBooking]);
+
+  const coordinates = booking?.address?.coordinates;
+  const [longitude, latitude] = coordinates || [0, 0];
 
   const formatDateTime = (dateString: string) => {
     const date = new Date(dateString);
@@ -79,7 +75,8 @@ export function useBookingDetails() {
   return {
     booking,
     isLoading,
-    handleGoBack,
+    latitude,
+    longitude,
     formatDateTime,
   };
 }

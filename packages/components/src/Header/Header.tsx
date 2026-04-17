@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: spacing.m,
+    paddingVertical: spacing.xs,
   },
   leftContent: {
     marginRight: spacing.s,

@@ -1,20 +1,25 @@
 import { BottomTabBarProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { History, Home, Menu } from 'lucide-react-native';
+import { NavigatorScreenParams } from '@react-navigation/native';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Typography } from '@repo/components';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '@repo/theme';
 
 import { BookingStack } from './BookingStack';
+import { BookingStackParamList } from './BookingStack';
 import { HistoryStack } from './HistoryStack';
+import { HistoryStackParamList } from './HistoryStack';
 import { HomeStack } from './HomeStack';
+import { HomeStackParamList } from './HomeStack';
 import { OptionsStack } from './OptionsStack';
+import { OptionsStackParamList } from './OptionsStack';
 
 export type DashboardTabsParamList = {
-  HomeStack: undefined;
-  HistoryStack: undefined;
-  OptionsStack: undefined;
-  BookingStack: undefined;
+  HomeStack: NavigatorScreenParams<HomeStackParamList> | undefined;
+  HistoryStack: NavigatorScreenParams<HistoryStackParamList> | undefined;
+  OptionsStack: NavigatorScreenParams<OptionsStackParamList> | undefined;
+  BookingStack: NavigatorScreenParams<BookingStackParamList> | undefined;
 };
 
 const Tab = createBottomTabNavigator<DashboardTabsParamList>();
@@ -22,6 +27,10 @@ const Tab = createBottomTabNavigator<DashboardTabsParamList>();
 function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
   const { colors } = useTheme();
   const { bottom: bottomInset } = useSafeAreaInsets();
+
+  if (state.routes[state.index]?.name === 'BookingStack') {
+    return null;
+  }
 
   return (
     <View

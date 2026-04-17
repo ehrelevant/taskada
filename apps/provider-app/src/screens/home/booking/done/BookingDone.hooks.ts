@@ -103,17 +103,6 @@ export function useBookingDone() {
     navigateToHistoryRoot();
   }, [navigateToHistoryRoot]);
 
-  const handleViewBookingLogs = useCallback(() => {
-    const tabsNavigation = navigation.getParent<BottomTabNavigationProp<DashboardTabsParamList>>();
-    tabsNavigation?.navigate('HistoryStack', {
-      screen: 'BookingLogs',
-      params: {
-        bookingId,
-        forceHistoryBack: true,
-      },
-    });
-  }, [bookingId, navigation]);
-
   const handleViewDetails = useCallback(() => {
     navigation.navigate('BookingDetails', {
       bookingId,
@@ -126,7 +115,6 @@ export function useBookingDone() {
     isLoading,
     handleReturn,
     handleViewHistory,
-    handleViewBookingLogs,
     handleViewDetails,
   };
 }

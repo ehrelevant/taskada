@@ -38,9 +38,6 @@ export const createStyles = (colors: ThemeColors) =>
       borderWidth: 1,
       borderColor: colors.card.stroke,
     },
-    addressText: {
-      lineHeight: 22,
-    },
     sectionLabelRow: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -49,10 +46,6 @@ export const createStyles = (colors: ThemeColors) =>
     },
     sectionLabel: {
       color: colors.textSecondary,
-    },
-    costValue: {
-      color: colors.actionPrimary,
-      fontWeight: '700',
     },
     specificationsBox: {
       backgroundColor: colors.card.muted,

@@ -1,6 +1,8 @@
 import { Alert } from 'react-native';
 import { authClient } from '@lib/authClient';
 import { BookingStackParamList } from '@navigation/BookingStack';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import { DashboardTabsParamList } from '@navigation/DashboardTabs';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RouteProp } from '@react-navigation/native';
 import { seekerClient } from '@lib/seekerClient';
@@ -18,6 +20,13 @@ export function useStandby() {
   const [isConnecting, setIsConnecting] = useState(true);
   const [isCancelling, setIsCancelling] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const navigateToHome = useCallback(() => {
+    const tabsNavigation = navigation.getParent<BottomTabNavigationProp<DashboardTabsParamList>>();
+    tabsNavigation?.navigate('HomeStack', {
+      screen: 'Home',
+    });
+  }, [navigation]);
 
   useEffect(() => {
     let isMounted = true;
@@ -43,7 +52,7 @@ export function useStandby() {
         const handleRequestCancelled = (data: { requestId: string }) => {
           if (data.requestId === requestId) {
             Alert.alert('Request Cancelled', 'Your request has been cancelled.', [
-              { text: 'OK', onPress: () => navigation.getParent()?.goBack() },
+              { text: 'OK', onPress: navigateToHome },
             ]);
           }
         };
@@ -54,9 +63,9 @@ export function useStandby() {
           provider: { id: string; firstName: string; lastName: string; avatarUrl: string | null };
         }) => {
           if (data.requestId === requestId) {
-            navigation.replace('Chat', {
+            navigation.replace('BookingChat', {
               bookingId: data.bookingId,
-              providerInfo: {
+              otherUser: {
                 id: data.provider.id,
                 firstName: data.provider.firstName,
                 lastName: data.provider.lastName,
@@ -100,7 +109,7 @@ export function useStandby() {
       unregisterHandlers?.();
       seekerClient.unwatchRequest(requestId);
     };
-  }, [requestId, navigation]);
+  }, [navigateToHome, requestId, navigation]);
 
   const handleCancelRequest = useCallback(async () => {
     Alert.alert('Cancel Request', 'Are you sure you want to cancel this request?', [
@@ -121,7 +130,7 @@ export function useStandby() {
             }
 
             Alert.alert('Cancelled', 'Your request has been cancelled.', [
-              { text: 'OK', onPress: () => navigation.getParent()?.goBack() },
+              { text: 'OK', onPress: navigateToHome },
             ]);
           } catch (err) {
             console.error('Failed to cancel request:', err);
@@ -132,12 +141,13 @@ export function useStandby() {
         },
       },
     ]);
-  }, [navigation, requestId]);
+  }, [navigateToHome, requestId]);
 
   return {
     isConnecting,
     isCancelling,
     error,
     handleCancelRequest,
+    handleGoHome: navigateToHome,
   };
 }

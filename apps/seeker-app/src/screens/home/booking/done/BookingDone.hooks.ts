@@ -1,10 +1,12 @@
-import { Alert } from 'react-native';
+import { Alert, BackHandler } from 'react-native';
 import { BookingStackParamList } from '@navigation/BookingStack';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import { DashboardTabsParamList } from '@navigation/DashboardTabs';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RouteProp } from '@react-navigation/native';
 import { seekerClient } from '@lib/seekerClient';
 import { useCallback, useEffect, useState } from 'react';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
 
 type BookingCompleteRouteProp = RouteProp<BookingStackParamList, 'BookingDone'>;
 type BookingCompleteNavigationProp = NativeStackNavigationProp<BookingStackParamList, 'BookingDone'>;
@@ -21,13 +23,33 @@ interface BookingData {
 export function useBookingDone() {
   const route = useRoute<BookingCompleteRouteProp>();
   const navigation = useNavigation<BookingCompleteNavigationProp>();
-  const { bookingId, providerInfo, serviceTypeName, cost } = route.params;
+  const { bookingId, otherUser, serviceTypeName, cost } = route.params;
 
   const [rating, setRating] = useState(0);
   const [reviewText, setReviewText] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [bookingData, setBookingData] = useState<BookingData | null>(null);
   const [isLoadingRating, setIsLoadingRating] = useState(true);
+
+  const navigateToHome = useCallback(() => {
+    const tabsNavigation = navigation.getParent<BottomTabNavigationProp<DashboardTabsParamList>>();
+    tabsNavigation?.navigate('HomeStack', {
+      screen: 'Home',
+    });
+  }, [navigation]);
+
+  useFocusEffect(
+    useCallback(() => {
+      const subscription = BackHandler.addEventListener('hardwareBackPress', () => {
+        navigateToHome();
+        return true;
+      });
+
+      return () => {
+        subscription.remove();
+      };
+    }, [navigateToHome]),
+  );
 
   useEffect(() => {
     const fetchBookingDetails = async () => {
@@ -48,12 +70,8 @@ export function useBookingDone() {
   }, [bookingId]);
 
   const handleGoHome = useCallback(() => {
-    navigation.getParent()?.goBack();
-  }, [navigation]);
-
-  const handleViewDetails = useCallback(() => {
-    navigation.navigate('BookingDetails', { bookingId });
-  }, [navigation, bookingId]);
+    navigateToHome();
+  }, [navigateToHome]);
 
   const handleSubmitReview = useCallback(async () => {
     if (rating === 0) {
@@ -86,7 +104,7 @@ export function useBookingDone() {
       }
 
       Alert.alert('Success', 'Thank you for your review!', [
-        { text: 'OK', onPress: () => navigation.getParent()?.goBack() },
+        { text: 'OK', onPress: navigateToHome },
       ]);
     } catch (error) {
       console.error('Error submitting review:', error);
@@ -94,17 +112,10 @@ export function useBookingDone() {
     } finally {
       setIsSubmitting(false);
     }
-  }, [bookingData, bookingId, navigation, rating, reviewText]);
-
-  const handleReport = useCallback(() => {
-    navigation.navigate('Report', {
-      bookingId,
-      reportedUser: providerInfo,
-    });
-  }, [bookingId, navigation, providerInfo]);
+  }, [bookingData, bookingId, navigateToHome, rating, reviewText]);
 
   return {
-    providerInfo,
+    otherUser,
     serviceTypeName,
     cost,
     rating,
@@ -115,8 +126,6 @@ export function useBookingDone() {
     bookingData,
     isLoadingRating,
     handleGoHome,
-    handleViewDetails,
     handleSubmitReview,
-    handleReport,
   };
 }

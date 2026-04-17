@@ -9,11 +9,11 @@ export function BookingDoneScreen() {
   const { colors } = useTheme();
   const styles = createStyles(colors);
 
-  const { bookingDetails, serviceTypeName, isLoading, handleReturn, handleViewBookingLogs } = useBookingDone();
+  const { bookingDetails, serviceTypeName, isLoading, handleReturn } = useBookingDone();
 
   if (isLoading) {
     return (
-      <ScreenContainer edges={['left', 'right']}>
+      <ScreenContainer edges={['left', 'right', 'bottom']}>
         <EmptyState loading loadingMessage="Loading completion details..." />
       </ScreenContainer>
     );
@@ -24,7 +24,7 @@ export function BookingDoneScreen() {
     : 'Seeker';
 
   return (
-    <ScreenContainer edges={['left', 'right']}>
+    <ScreenContainer edges={['left', 'right', 'bottom']}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.heroCard}>
           <Typography variant="h3" color="textInverse" align="center">
@@ -36,24 +36,21 @@ export function BookingDoneScreen() {
         </View>
 
         <Card elevation="s" padding="m" style={styles.summaryCard}>
-          <View style={styles.summaryHeader}>
-            <Avatar
-              source={bookingDetails?.seeker?.avatarUrl ? { uri: bookingDetails.seeker.avatarUrl } : null}
-              name={seekerName}
-              size={56}
-            />
-            <View style={styles.summaryUserInfo}>
-              <Typography variant="h3">{seekerName}</Typography>
-              <Typography variant="overline" color="textSecondary">
-                {serviceTypeName}
-              </Typography>
-            </View>
+          <Avatar
+            source={bookingDetails?.seeker?.avatarUrl ? { uri: bookingDetails.seeker.avatarUrl } : null}
+            name={seekerName}
+            size={80}
+          />
+          <View style={styles.summaryUserInfo}>
+            <Typography variant="h3">{seekerName}</Typography>
+            <Typography variant="overline" color="textSecondary">
+              {serviceTypeName}
+            </Typography>
           </View>
         </Card>
 
         <View style={styles.actionButtonsContainer}>
           <Button title="Return to Requests" onPress={handleReturn} />
-          <Button title="Open Booking Logs" variant="outline" onPress={handleViewBookingLogs} />
         </View>
       </ScrollView>
     </ScreenContainer>

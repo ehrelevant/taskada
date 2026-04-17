@@ -1,20 +1,22 @@
 import * as ImagePicker from 'expo-image-picker';
-import { Alert, AppState, FlatList } from 'react-native';
+import { Alert, AppState, BackHandler, FlatList } from 'react-native';
 import { authClient } from '@lib/authClient';
 import { BookingStackParamList } from '@navigation/BookingStack';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import { DashboardTabsParamList } from '@navigation/DashboardTabs';
 import type { Message } from '@repo/shared';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RouteProp } from '@react-navigation/native';
 import { seekerClient } from '@lib/seekerClient';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
 
-type ChatRouteProp = RouteProp<BookingStackParamList, 'Chat'>;
-type ChatNavigationProp = NativeStackNavigationProp<BookingStackParamList, 'Chat'>;
+type ChatRouteProp = RouteProp<BookingStackParamList, 'BookingChat'>;
+type ChatNavigationProp = NativeStackNavigationProp<BookingStackParamList, 'BookingChat'>;
 
 interface ChatScreenParams {
   bookingId: string;
-  providerInfo: {
+  otherUser: {
     id: string;
     firstName: string;
     lastName: string;
@@ -26,7 +28,7 @@ interface ChatScreenParams {
 export function useBookingChat() {
   const route = useRoute<ChatRouteProp>();
   const navigation = useNavigation<ChatNavigationProp>();
-  const { bookingId, providerInfo, requestId } = route.params as ChatScreenParams;
+  const { bookingId, otherUser, requestId } = route.params as ChatScreenParams;
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState('');
@@ -41,6 +43,26 @@ export function useBookingChat() {
   const flatListRef = useRef<FlatList>(null);
   const session = authClient.useSession();
   const currentUserId = session.data?.user?.id;
+
+  const navigateToHome = useCallback(() => {
+    const tabsNavigation = navigation.getParent<BottomTabNavigationProp<DashboardTabsParamList>>();
+    tabsNavigation?.navigate('HomeStack', {
+      screen: 'Home',
+    });
+  }, [navigation]);
+
+  useFocusEffect(
+    useCallback(() => {
+      const subscription = BackHandler.addEventListener('hardwareBackPress', () => {
+        navigateToHome();
+        return true;
+      });
+
+      return () => {
+        subscription.remove();
+      };
+    }, [navigateToHome]),
+  );
 
   const mergeMessages = useCallback((existing: Message[], incoming: Message[]): Message[] => {
     const messageMap = new Map(existing.map(message => [message.id, message]));
@@ -147,7 +169,7 @@ export function useBookingChat() {
         if (data.bookingId === bookingId) {
           seekerClient.unwatchRequest(requestId);
           Alert.alert('Booking Declined', 'The provider has declined the booking.', [
-            { text: 'OK', onPress: () => navigation.getParent()?.goBack() },
+            { text: 'OK', onPress: navigateToHome },
           ]);
         }
       };
@@ -155,7 +177,7 @@ export function useBookingChat() {
       const handleBookingCancelled = (data: { bookingId: string }) => {
         if (data.bookingId === bookingId) {
           Alert.alert('Booking Cancelled', 'The booking has been cancelled.', [
-            { text: 'OK', onPress: () => navigation.getParent()?.goBack() },
+            { text: 'OK', onPress: navigateToHome },
           ]);
         }
       };
@@ -177,7 +199,7 @@ export function useBookingChat() {
         if (data.bookingId === bookingId) {
           navigation.navigate('BookingProposal', {
             bookingId,
-            providerInfo,
+            otherUser,
             proposal: data.proposal,
             requestId,
           });
@@ -211,7 +233,7 @@ export function useBookingChat() {
       unregisterHandlers?.();
       seekerClient.leaveBooking(bookingId);
     };
-  }, [bookingId, currentUserId, mergeMessages, navigation, providerInfo, requestId, session.data]);
+  }, [bookingId, currentUserId, mergeMessages, navigateToHome, navigation, otherUser, requestId, session.data]);
 
   const handleSendMessage = useCallback(async () => {
     if ((!inputText.trim() && selectedImages.length === 0) || isSending) return;
@@ -266,13 +288,6 @@ export function useBookingChat() {
     setSelectedImages(prev => prev.filter((_, i) => i !== index));
   }, []);
 
-  const handleReport = useCallback(() => {
-    navigation.navigate('Report', {
-      bookingId,
-      reportedUser: providerInfo,
-    });
-  }, [bookingId, navigation, providerInfo]);
-
   const handleCancel = useCallback(async () => {
     Alert.alert('Cancel Booking', 'Are you sure you want to cancel this booking?', [
       { text: 'No', style: 'cancel' },
@@ -288,7 +303,7 @@ export function useBookingChat() {
             if (response.ok) {
               seekerClient.cancelBooking(bookingId);
               Alert.alert('Cancelled', 'The booking has been cancelled.', [
-                { text: 'OK', onPress: () => navigation.getParent()?.goBack() },
+                { text: 'OK', onPress: navigateToHome },
               ]);
             }
           } catch (error) {
@@ -298,7 +313,7 @@ export function useBookingChat() {
         },
       },
     ]);
-  }, [bookingId, navigation, requestId]);
+  }, [bookingId, navigateToHome, requestId]);
 
   return {
     messages,
@@ -311,13 +326,11 @@ export function useBookingChat() {
     selectedImage,
     setSelectedImage,
     currentUserId,
-    providerInfo,
     flatListRef,
     handleSendMessage,
     handleLoadMore,
     handlePickImage,
     handleRemoveImage,
-    handleReport,
     handleCancel,
   };
 }

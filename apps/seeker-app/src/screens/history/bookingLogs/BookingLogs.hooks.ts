@@ -1,5 +1,6 @@
 import { Alert } from 'react-native';
 import { authClient } from '@lib/authClient';
+import { BookingStackParamList } from '@navigation/BookingStack';
 import { HistoryStackParamList } from '@navigation/HistoryStack';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RouteProp } from '@react-navigation/native';
@@ -7,8 +8,8 @@ import { seekerClient } from '@lib/seekerClient';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-type TransactionDetailsRouteProp = RouteProp<HistoryStackParamList, 'BookingLogs'>;
-type TransactionDetailsNavigationProp = NativeStackNavigationProp<HistoryStackParamList, 'BookingLogs'>;
+type TransactionDetailsRouteProp = RouteProp<HistoryStackParamList & BookingStackParamList, 'BookingLogs'>;
+type TransactionDetailsNavigationProp = NativeStackNavigationProp<HistoryStackParamList & BookingStackParamList, 'BookingLogs'>;
 
 interface TransactionData {
   id: string;

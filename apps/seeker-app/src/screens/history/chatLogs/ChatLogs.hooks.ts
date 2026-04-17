@@ -1,3 +1,4 @@
+import { BookingStackParamList } from '@navigation/BookingStack';
 import { HistoryStackParamList } from '@navigation/HistoryStack';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RouteProp } from '@react-navigation/native';
@@ -5,8 +6,8 @@ import { seekerClient } from '@lib/seekerClient';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-type ChatLogsRouteProp = RouteProp<HistoryStackParamList, 'ChatLogs'>;
-type ChatLogsNavigationProp = NativeStackNavigationProp<HistoryStackParamList, 'ChatLogs'>;
+type ChatLogsRouteProp = RouteProp<HistoryStackParamList & BookingStackParamList, 'ChatLogs'>;
+type ChatLogsNavigationProp = NativeStackNavigationProp<HistoryStackParamList & BookingStackParamList, 'ChatLogs'>;
 
 interface Message {
   id: string;

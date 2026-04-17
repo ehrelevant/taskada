@@ -1,6 +1,6 @@
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { CalendarClock, CircleDollarSign, FileText, MapPin } from 'lucide-react-native';
-import { Card, EmptyState, Header, ScreenContainer, StatusBadge, Typography } from '@repo/components';
+import { Card, EmptyState, ScreenContainer, StatusBadge, Typography } from '@repo/components';
 import { useTheme } from '@repo/theme';
 import { View } from 'react-native';
 
@@ -17,26 +17,21 @@ const STATUS_MAP: Record<string, 'success' | 'error' | 'warning' | 'info' | 'pen
 export function BookingDetailsScreen() {
   const { colors } = useTheme();
   const styles = createStyles(colors);
-  const { booking, isLoading, handleGoBack, formatDateTime } = useBookingDetails();
-
-  const coordinates = booking?.address?.coordinates;
-  const [longitude, latitude] = coordinates || [0, 0];
+  const { booking, isLoading, latitude, longitude, formatDateTime } = useBookingDetails();
 
   if (isLoading) {
     return (
-      <ScreenContainer edges={['left', 'right']}>
+      <ScreenContainer edges={['left', 'right', 'bottom']}>
         <EmptyState loading loadingMessage="Loading booking details..." />
       </ScreenContainer>
     );
   }
 
   return (
-    <ScreenContainer scrollable edges={['left', 'right']} contentPadding="m" contentStyle={styles.content}>
-      <Header title="Booking Details" size="small" onBack={handleGoBack} />
-
+    <ScreenContainer scrollable edges={['left', 'right', 'bottom']} contentPadding="m" contentStyle={styles.content}>
       <View style={styles.heroCard}>
         <Typography variant="h3" color="textInverse">
-          Booking summary
+          Booking Summary
         </Typography>
         <Typography variant="body2" color="textInverse">
           Review location, finalized cost, and completion details.
@@ -82,7 +77,7 @@ export function BookingDetailsScreen() {
             Service Cost
           </Typography>
         </View>
-        <Typography variant="h5" color="actionPrimary">
+        <Typography variant="h4">
           ₱{booking?.cost?.toFixed(2) || '0.00'}
         </Typography>
       </Card>

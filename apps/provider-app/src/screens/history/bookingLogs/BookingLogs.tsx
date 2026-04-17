@@ -67,7 +67,7 @@ export function BookingLogsScreen() {
       <View style={styles.content}>
         <View style={styles.heroCard}>
           <Typography variant="h3" color="textInverse">
-            Job summary
+            Booking Summary
           </Typography>
           <Typography variant="body2" color="textInverse">
             View finalized details, related request info, and conversation logs.

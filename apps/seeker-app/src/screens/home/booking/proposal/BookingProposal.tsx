@@ -1,9 +1,9 @@
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import { Button, Card, Header, ScreenContainer, Typography } from '@repo/components';
-import { CircleDollarSign, Flag, MapPin } from 'lucide-react-native';
+import { Button, Card, ScreenContainer, Typography } from '@repo/components';
+import { CircleDollarSign, MapPin } from 'lucide-react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
-import { TouchableOpacity, View } from 'react-native';
 import { useTheme } from '@repo/theme';
+import { View } from 'react-native';
 
 import { createStyles } from './BookingProposal.styles';
 import { useBookingProposal } from './BookingProposal.hooks';
@@ -32,21 +32,10 @@ export function BookingProposalScreen() {
     latitude,
     handleAccept,
     handleDecline,
-    handleReport,
   } = useBookingProposal();
 
   return (
-    <ScreenContainer edges={['left', 'right']}>
-      <Header
-        title="Service Proposal"
-        size="small"
-        rightContent={
-          <TouchableOpacity onPress={handleReport}>
-            <Flag size={20} color={colors.textSecondary} />
-          </TouchableOpacity>
-        }
-      />
-
+    <ScreenContainer edges={['left', 'right', 'bottom']}>
       <KeyboardAwareScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.heroCard}>
           <Typography variant="h3" color="textInverse">
@@ -96,7 +85,7 @@ export function BookingProposalScreen() {
             <Typography variant="body2" color="textSecondary">
               Service type
             </Typography>
-            <Typography variant="h6" color="actionPrimary">
+            <Typography variant="h4" color="actionPrimary">
               {serviceTypeName}
             </Typography>
           </Card>
@@ -108,7 +97,7 @@ export function BookingProposalScreen() {
                 Proposed cost
               </Typography>
             </View>
-            <Typography variant="h6" color="actionPrimary">
+            <Typography variant="h4" color="actionPrimary">
               {formatCurrency(cost)}
             </Typography>
           </Card>

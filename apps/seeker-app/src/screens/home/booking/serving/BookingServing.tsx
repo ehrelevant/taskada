@@ -1,9 +1,9 @@
 import { Avatar, Card, ScreenContainer, Typography } from '@repo/components';
+import { ScrollView, View } from 'react-native';
 import { useTheme } from '@repo/theme';
-import { View } from 'react-native';
 
-import { createStyles } from './BookingTransit.styles';
-import { useBookingTransit } from './BookingTransit.hooks';
+import { createStyles } from './BookingServing.styles';
+import { useBookingServing } from './BookingServing.hooks';
 
 function formatCurrency(amount: number): string {
   try {
@@ -17,20 +17,20 @@ function formatCurrency(amount: number): string {
   }
 }
 
-export function BookingTransitScreen() {
+export function BookingServingScreen() {
   const { colors } = useTheme();
   const styles = createStyles(colors);
-  const { providerName, otherUser, serviceTypeName, cost, specifications } = useBookingTransit();
+  const { providerName, otherUser, serviceTypeName, cost, specifications } = useBookingServing();
 
   return (
     <ScreenContainer scrollable edges={['left', 'right', 'bottom']}>
-      <View style={styles.content}>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.heroCard}>
           <Typography variant="h3" color="textInverse">
-            Your service provider is on their way
+            Provider is currently serving
           </Typography>
           <Typography variant="body2" color="textInverse">
-            Please wait while your provider arrives at your location.
+            Your provider has arrived and the service is currently in progress.
           </Typography>
         </View>
 
@@ -39,11 +39,7 @@ export function BookingTransitScreen() {
             Service Provider
           </Typography>
           <View style={styles.providerCardShell}>
-            <Avatar
-              source={otherUser.avatarUrl ? { uri: otherUser.avatarUrl } : null}
-              size={80}
-              name={providerName}
-            />
+            <Avatar source={otherUser.avatarUrl ? { uri: otherUser.avatarUrl } : null} size={72} name={providerName} />
             <View>
               <Typography variant="h3">{providerName}</Typography>
               <Typography variant="overline" color="textSecondary">
@@ -70,11 +66,9 @@ export function BookingTransitScreen() {
             <Typography variant="body1" color="textSecondary">
               Cost
             </Typography>
-            <View style={styles.costRow}>
-              <Typography variant="h4" color="actionPrimary">
-                {formatCurrency(cost)}
-              </Typography>
-            </View>
+            <Typography variant="h5" color="actionPrimary">
+              {formatCurrency(cost)}
+            </Typography>
           </View>
         </Card>
 
@@ -84,7 +78,7 @@ export function BookingTransitScreen() {
           </Typography>
           <Typography variant="body1">{specifications}</Typography>
         </Card>
-      </View>
+      </ScrollView>
     </ScreenContainer>
   );
 }

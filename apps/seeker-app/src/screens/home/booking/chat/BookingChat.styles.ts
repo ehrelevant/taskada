@@ -18,7 +18,8 @@ export const createStyles = (colors: ThemeColors) =>
       minWidth: 0,
     },
     messagesList: {
-      padding: spacing.m,
+      paddingHorizontal: spacing.m,
+      paddingBottom: spacing.m,
       gap: spacing.s,
     },
     heroCard: {
@@ -76,7 +77,7 @@ export const createStyles = (colors: ThemeColors) =>
     },
     actionButtonsContainer: {
       flexDirection: 'row',
-      paddingHorizontal: spacing.m,
+      padding: spacing.m,
       gap: spacing.s,
     },
     actionButton: {

@@ -2,39 +2,25 @@ import {
   Avatar,
   Button,
   Card,
-  Header,
   Rating,
   ScreenContainer,
   StarRatingInput,
   Typography,
 } from '@repo/components';
-import { CheckCircle, CircleDollarSign, Flag, X } from 'lucide-react-native';
+import { CheckCircle } from 'lucide-react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
-import { TextInput, TouchableOpacity, View } from 'react-native';
+import { TextInput, View } from 'react-native';
 import { useTheme } from '@repo/theme';
 
 import { createStyles } from './BookingDone.styles';
 import { useBookingDone } from './BookingDone.hooks';
 
-function formatCurrency(amount: number): string {
-  try {
-    return new Intl.NumberFormat('en-PH', {
-      style: 'currency',
-      currency: 'PHP',
-      maximumFractionDigits: 0,
-    }).format(amount);
-  } catch {
-    return `PHP ${amount.toLocaleString()}`;
-  }
-}
-
 export function BookingDoneScreen() {
   const { colors } = useTheme();
   const styles = createStyles(colors);
   const {
-    providerInfo,
+    otherUser,
     serviceTypeName,
-    cost,
     rating,
     setRating,
     reviewText,
@@ -43,30 +29,13 @@ export function BookingDoneScreen() {
     bookingData,
     isLoadingRating,
     handleGoHome,
-    handleViewDetails,
     handleSubmitReview,
-    handleReport,
   } = useBookingDone();
 
-  const providerName = `${providerInfo.firstName} ${providerInfo.lastName}`;
+  const providerName = `${otherUser.firstName} ${otherUser.lastName}`;
 
   return (
-    <ScreenContainer edges={['left', 'right']}>
-      <Header
-        title="Booking Complete"
-        size="small"
-        leftContent={
-          <TouchableOpacity onPress={handleGoHome} style={styles.iconButton}>
-            <X size={24} color={colors.textPrimary} />
-          </TouchableOpacity>
-        }
-        rightContent={
-          <TouchableOpacity onPress={handleReport} style={styles.iconButton}>
-            <Flag size={20} color={colors.textSecondary} />
-          </TouchableOpacity>
-        }
-      />
-
+    <ScreenContainer edges={['left', 'right', 'bottom']}>
       <KeyboardAwareScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
         <View style={styles.heroSection}>
           <CheckCircle size={48} color={colors.actionSecondary} />
@@ -78,51 +47,38 @@ export function BookingDoneScreen() {
           </Typography>
         </View>
 
-        <Card elevation="s" padding="m" style={styles.sectionCard}>
-          <Typography variant="subtitle2" color="textSecondary" style={styles.sectionHeading}>
-            Service Provider
-          </Typography>
-          <View style={styles.providerCardShell}>
-            <Avatar
-              source={providerInfo.avatarUrl ? { uri: providerInfo.avatarUrl } : null}
-              size={80}
-              name={providerName}
-            />
-            <View style={styles.providerInfo}>
-              <Typography variant="h6" style={styles.providerName}>
-                {providerName}
-              </Typography>
-              <Typography variant="overline" color="textSecondary">
-                {serviceTypeName}
-              </Typography>
-              <View style={styles.ratingContainer}>
-                {isLoadingRating ? (
-                  <Typography variant="caption" color="textDisabled">
-                    Loading...
-                  </Typography>
-                ) : (
-                  <Rating
-                    value={bookingData?.serviceRating?.avgRating ?? 0}
-                    reviewCount={bookingData?.serviceRating?.reviewCount ?? 0}
-                    size={16}
-                  />
-                )}
-              </View>
+        <Card elevation="s" padding="m" style={styles.summaryCard}>
+          <Avatar
+            source={otherUser.avatarUrl ? { uri: otherUser.avatarUrl } : null}
+            size={80}
+            name={providerName}
+          />
+          <View style={styles.providerInfo}>
+            <Typography variant="h3" style={styles.providerName}>
+              {providerName}
+            </Typography>
+            <Typography variant="overline" color="textSecondary">
+              {serviceTypeName}
+            </Typography>
+            <View style={styles.ratingContainer}>
+              {isLoadingRating ? (
+                <Typography variant="caption" color="textDisabled">
+                  Loading...
+                </Typography>
+              ) : (
+                <Rating
+                  value={bookingData?.serviceRating?.avgRating ?? 0}
+                  reviewCount={bookingData?.serviceRating?.reviewCount ?? 0}
+                  size={16}
+                />
+              )}
             </View>
-          </View>
-
-          <View style={styles.costPill}>
-            <CircleDollarSign size={14} color={colors.actionPrimary} />
-            <Typography variant="caption" color="textSecondary">
-              Final cost
-            </Typography>
-            <Typography variant="subtitle2" color="actionPrimary" style={styles.costValue}>
-              {formatCurrency(cost)}
-            </Typography>
           </View>
         </Card>
 
-        <Button title="View Booking Details" variant="outline" onPress={handleViewDetails} />
+        <View style={styles.actionButtonsContainer}>
+          <Button title="Go Home" onPress={handleGoHome} />
+        </View>
 
         <Card elevation="s" padding="m" style={styles.reviewFormContainer}>
           <Typography variant="subtitle1" align="center" style={styles.sectionHeading}>

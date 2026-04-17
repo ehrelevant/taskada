@@ -131,11 +131,11 @@ export function BookingFinalizeScreen() {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <ActivityIndicator size="large" color={colors.actionPrimary} style={styles.modalLoader} />
-            <Typography variant="h6" style={styles.modalTitle}>
+            <Typography variant="h4" color="actionPrimary" style={styles.modalTitle}>
               Waiting for Response
             </Typography>
             <Typography variant="body1" color={colors.textSecondary} style={styles.modalText}>
-              Waiting for the seeker to agree with the service cost and details submitted
+              Waiting for the seeker to agree with the service cost and details submitted.
             </Typography>
           </View>
         </View>

@@ -34,18 +34,17 @@ export const createStyles = (colors: ThemeColors) =>
     sectionHeading: {
       marginBottom: spacing.xs,
     },
-    providerCardShell: {
+    summaryCard: {
       flexDirection: 'row',
       alignItems: 'center',
+      gap: spacing.m,
+      backgroundColor: colors.card.base,
       borderRadius: radius.l,
       borderWidth: 1,
       borderColor: colors.card.stroke,
-      backgroundColor: colors.card.base,
-      padding: spacing.m,
     },
     providerInfo: {
       flex: 1,
-      marginLeft: spacing.m,
     },
     providerName: {
       marginBottom: spacing.xs,
@@ -53,21 +52,8 @@ export const createStyles = (colors: ThemeColors) =>
     ratingContainer: {
       marginTop: spacing.xs,
     },
-    costPill: {
-      marginTop: spacing.s,
-      alignSelf: 'flex-start',
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: spacing.xs,
-      borderRadius: radius.round,
-      backgroundColor: colors.card.muted,
-      borderWidth: 1,
-      borderColor: colors.card.stroke,
-      paddingHorizontal: spacing.s,
-      paddingVertical: spacing.xs,
-    },
-    costValue: {
-      marginLeft: spacing.xxs,
+    actionButtonsContainer: {
+      gap: spacing.s,
     },
     reviewFormContainer: {
       borderRadius: radius.l,
