@@ -1,6 +1,5 @@
 import { ActivityIndicator, ScrollView, TouchableOpacity, View } from 'react-native';
-import { CircleDollarSign, Flag, Sparkles } from 'lucide-react-native';
-import { Header, ScreenContainer, Typography } from '@repo/components';
+import { ScreenContainer, Typography } from '@repo/components';
 import { useTheme } from '@repo/theme';
 
 import { createStyles } from './BookingServing.styles';
@@ -10,8 +9,7 @@ export function BookingServingScreen() {
   const { colors } = useTheme();
   const styles = createStyles(colors);
 
-  const { bookingDetails, isLoading, isPaid, isUpdatingStatus, handlePaidPress, handleViewDetails, handleReport } =
-    useBookingServing();
+  const { bookingDetails, serviceTypeName, isLoading, isPaid, isUpdatingStatus, handlePaidPress } = useBookingServing();
 
   if (isLoading) {
     return (
@@ -27,15 +25,7 @@ export function BookingServingScreen() {
   }
 
   return (
-    <ScreenContainer>
-      <Header
-        rightContent={
-          <TouchableOpacity onPress={handleReport} style={styles.iconButton}>
-            <Flag size={20} color={colors.textSecondary} />
-          </TouchableOpacity>
-        }
-      />
-
+    <ScreenContainer edges={['left', 'right', 'bottom']}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.centeredContent}>
           <View style={styles.header}>
@@ -77,29 +67,19 @@ export function BookingServingScreen() {
               <Typography variant="subtitle2" color="textSecondary">
                 Service Type
               </Typography>
-              <Typography variant="body1" weight="medium">
-                {bookingDetails?.serviceType?.name || 'Service'}
+              <Typography variant="subtitle1" color="actionPrimary">
+                {serviceTypeName}
               </Typography>
             </View>
             <View style={styles.infoItem}>
               <Typography variant="subtitle2" color="textSecondary">
                 Service Cost
               </Typography>
-              <View style={styles.costRow}>
-                <CircleDollarSign size={15} color={colors.actionPrimary} />
-                <Typography variant="h6" style={styles.costValue}>
-                  ₱{bookingDetails?.cost?.toFixed(2) || '0.00'}
-                </Typography>
-              </View>
+              <Typography variant="subtitle1" color="actionPrimary">
+                ₱{bookingDetails?.cost?.toFixed(2) || '0.00'}
+              </Typography>
             </View>
           </View>
-
-          <TouchableOpacity onPress={handleViewDetails} style={styles.detailsButton}>
-            <Typography variant="body1" style={styles.detailsButtonText}>
-              View Booking Details
-            </Typography>
-            <Sparkles size={14} color={colors.actionPrimary} />
-          </TouchableOpacity>
         </View>
       </ScrollView>
     </ScreenContainer>

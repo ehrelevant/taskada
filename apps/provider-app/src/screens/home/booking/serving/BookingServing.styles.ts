@@ -94,11 +94,6 @@ export const createStyles = (colors: ThemeColors) =>
       borderWidth: 1,
       borderColor: colors.card.stroke,
     },
-    costValue: {
-      color: colors.actionPrimary,
-      fontWeight: '700',
-      marginTop: spacing.xs,
-    },
     costRow: {
       flexDirection: 'row',
       alignItems: 'center',

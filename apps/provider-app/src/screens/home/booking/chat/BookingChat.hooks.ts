@@ -2,6 +2,8 @@ import * as ImagePicker from 'expo-image-picker';
 import { Alert, AppState } from 'react-native';
 import { authClient } from '@lib/authClient';
 import { BookingStackParamList } from '@navigation/BookingStack';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import { DashboardTabsParamList } from '@navigation/DashboardTabs';
 import { FlatList } from 'react-native';
 import type { Message } from '@repo/shared';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -45,6 +47,13 @@ export function useBookingChat() {
   const flatListRef = useRef<FlatList>(null);
   const session = authClient.useSession();
   const currentUserId = session.data?.user?.id;
+
+  const navigateToRequestsList = useCallback(() => {
+    const tabsNavigation = navigation.getParent<BottomTabNavigationProp<DashboardTabsParamList>>();
+    tabsNavigation?.navigate('RequestsStack', {
+      screen: 'RequestList',
+    });
+  }, [navigation]);
 
   const mergeMessages = useCallback((existing: Message[], incoming: Message[]): Message[] => {
     const messageMap = new Map(existing.map(message => [message.id, message]));
@@ -150,7 +159,7 @@ export function useBookingChat() {
       const handleBookingDeclined = (data: { bookingId: string; requestId: string }) => {
         if (data.bookingId === bookingId) {
           Alert.alert('Booking Declined', 'The seeker has declined the booking.', [
-            { text: 'OK', onPress: () => navigation.getParent()?.goBack() },
+            { text: 'OK', onPress: navigateToRequestsList },
           ]);
         }
       };
@@ -158,7 +167,7 @@ export function useBookingChat() {
       const handleBookingCancelled = (data: { bookingId: string }) => {
         if (data.bookingId === bookingId) {
           Alert.alert('Booking Cancelled', 'The seeker has cancelled the booking.', [
-            { text: 'OK', onPress: () => navigation.getParent()?.goBack() },
+            { text: 'OK', onPress: navigateToRequestsList },
           ]);
         }
       };
@@ -188,7 +197,7 @@ export function useBookingChat() {
       unregisterHandlers?.();
       providerClient.leaveBooking(bookingId);
     };
-  }, [bookingId, currentUserId, mergeMessages, navigation, session.data]);
+  }, [bookingId, currentUserId, mergeMessages, navigateToRequestsList, session.data]);
 
   const handleSendMessage = useCallback(async () => {
     if ((!inputText.trim() && selectedImages.length === 0) || isSending) return;
@@ -228,7 +237,7 @@ export function useBookingChat() {
             if (response.ok) {
               providerClient.declineBooking(bookingId, requestId);
               Alert.alert('Declined', 'The booking has been declined.', [
-                { text: 'OK', onPress: () => navigation.getParent()?.goBack() },
+                { text: 'OK', onPress: navigateToRequestsList },
               ]);
             }
           } catch (error) {
@@ -238,7 +247,7 @@ export function useBookingChat() {
         },
       },
     ]);
-  }, [bookingId, navigation, requestId]);
+  }, [bookingId, navigateToRequestsList, requestId]);
 
   const handleFinalize = useCallback(() => {
     navigation.navigate('BookingFinalize', {

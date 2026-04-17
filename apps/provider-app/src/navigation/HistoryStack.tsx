@@ -7,7 +7,7 @@ import { RequestLogsScreen } from '@screens/history/requestLogs/RequestLogs';
 
 export type HistoryStackParamList = {
   History: undefined;
-  BookingLogs: { bookingId: string };
+  BookingLogs: { bookingId: string; forceHistoryBack?: boolean };
   RequestLogs: { bookingId: string };
   ChatLogs: {
     bookingId: string;

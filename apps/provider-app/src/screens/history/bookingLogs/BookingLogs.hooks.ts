@@ -1,12 +1,15 @@
 import { Alert } from 'react-native';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import { BookingStackParamList } from '@navigation/BookingStack';
+import { DashboardTabsParamList } from '@navigation/DashboardTabs';
 import { HistoryStackParamList } from '@navigation/HistoryStack';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { providerClient } from '@lib/providerClient';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useCallback, useEffect, useState } from 'react';
 
-type BookingDetailsRouteProp = RouteProp<HistoryStackParamList, 'BookingLogs'>;
-type BookingDetailsNavigationProp = NativeStackNavigationProp<HistoryStackParamList, 'BookingLogs'>;
+type BookingDetailsRouteProp = RouteProp<HistoryStackParamList & BookingStackParamList, 'BookingLogs'>;
+type BookingDetailsNavigationProp = NativeStackNavigationProp<HistoryStackParamList & BookingStackParamList, 'BookingLogs'>;
 
 export interface BookingData {
   id: string;
@@ -73,8 +76,34 @@ export function useBookingLogs() {
   }, [fetchBooking]);
 
   const handleGoBack = useCallback(() => {
-    navigation.goBack();
-  }, [navigation]);
+    if (route.params.forceHistoryBack) {
+      const tabsNavigation = navigation.getParent<BottomTabNavigationProp<DashboardTabsParamList>>();
+      if (tabsNavigation) {
+        tabsNavigation.navigate('HistoryStack', {
+          screen: 'History',
+        });
+        return;
+      }
+
+      navigation.navigate('History');
+      return;
+    }
+
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+      return;
+    }
+
+    const tabsNavigation = navigation.getParent<BottomTabNavigationProp<DashboardTabsParamList>>();
+    if (tabsNavigation) {
+      tabsNavigation.navigate('HistoryStack', {
+        screen: 'History',
+      });
+      return;
+    }
+
+    navigation.navigate('History');
+  }, [navigation, route.params.forceHistoryBack]);
 
   const handleViewRequestDetails = useCallback(() => {
     navigation.navigate('RequestLogs', { bookingId });

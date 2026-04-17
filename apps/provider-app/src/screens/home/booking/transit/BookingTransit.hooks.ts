@@ -1,32 +1,50 @@
 import * as Location from 'expo-location';
-import { Alert } from 'react-native';
+import { Alert, BackHandler } from 'react-native';
 import { authClient } from '@lib/authClient';
 import { BookingStackParamList } from '@navigation/BookingStack';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import { DashboardTabsParamList } from '@navigation/DashboardTabs';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { providerClient } from '@lib/providerClient';
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { RouteProp, useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
 import { useCallback, useEffect, useState } from 'react';
 
 type BookingTransitRouteProp = RouteProp<BookingStackParamList, 'BookingTransit'>;
 type BookingTransitNavigationProp = NativeStackNavigationProp<BookingStackParamList, 'BookingTransit'>;
 
-interface SeekerUser {
-  id: string;
-  firstName: string;
-  lastName: string;
-  avatarUrl: string | null;
-}
+type SeekerUser = BookingStackParamList['BookingTransit']['otherUser'];
 
 export function useBookingTransit() {
   const route = useRoute<BookingTransitRouteProp>();
   const navigation = useNavigation<BookingTransitNavigationProp>();
-  const { bookingId, seekerLocation, address } = route.params;
+  const { bookingId, seekerLocation, address, otherUser } = route.params;
 
   const [providerLocation, setProviderLocation] = useState<Location.LocationObjectCoords | null>(null);
   const [isArriving, setIsArriving] = useState(false);
   const [seekerUser, setSeekerUser] = useState<SeekerUser | null>(null);
+  const [serviceTypeName, setServiceTypeName] = useState<string>('Service');
 
   const [seekerLongitude, seekerLatitude] = seekerLocation.coordinates;
+
+  const navigateToRequestsList = useCallback(() => {
+    const tabsNavigation = navigation.getParent<BottomTabNavigationProp<DashboardTabsParamList>>();
+    tabsNavigation?.navigate('RequestsStack', {
+      screen: 'RequestList',
+    });
+  }, [navigation]);
+
+  useFocusEffect(
+    useCallback(() => {
+      const subscription = BackHandler.addEventListener('hardwareBackPress', () => {
+        navigateToRequestsList();
+        return true;
+      });
+
+      return () => {
+        subscription.remove();
+      };
+    }, [navigateToRequestsList]),
+  );
 
   useEffect(() => {
     const fetchSeekerInfo = async () => {
@@ -36,6 +54,20 @@ export function useBookingTransit() {
           const data = await response.json();
           if (data.seeker) {
             setSeekerUser(data.seeker);
+          }
+
+          let resolvedServiceTypeName = data.serviceType?.name ?? data.service?.serviceType?.name;
+
+          if ((!resolvedServiceTypeName || resolvedServiceTypeName.trim().length === 0) && data.serviceId) {
+            const serviceResponse = await providerClient.apiFetch(`/services/${data.serviceId}`, 'GET');
+            if (serviceResponse.ok) {
+              const serviceData = await serviceResponse.json();
+              resolvedServiceTypeName = serviceData.serviceTypeName;
+            }
+          }
+
+          if (typeof resolvedServiceTypeName === 'string' && resolvedServiceTypeName.trim().length > 0) {
+            setServiceTypeName(resolvedServiceTypeName);
           }
         }
       } catch (error) {
@@ -101,6 +133,7 @@ export function useBookingTransit() {
 
       navigation.replace('BookingServing', {
         bookingId,
+        otherUser: seekerUser ?? otherUser,
       });
     } catch (error) {
       console.error('Error handling arrival:', error);
@@ -108,7 +141,7 @@ export function useBookingTransit() {
     } finally {
       setIsArriving(false);
     }
-  }, [bookingId, isArriving, navigation]);
+  }, [bookingId, isArriving, navigation, otherUser, seekerUser]);
 
   const getInitialRegion = useCallback(() => {
     if (providerLocation) {
@@ -133,24 +166,15 @@ export function useBookingTransit() {
     };
   }, [providerLocation, seekerLatitude, seekerLongitude]);
 
-  const handleReport = useCallback(() => {
-    if (seekerUser) {
-      navigation.navigate('Report', {
-        bookingId,
-        reportedUser: seekerUser,
-      });
-    }
-  }, [bookingId, navigation, seekerUser]);
-
   return {
     providerLocation,
     isArriving,
     seekerLatitude,
     seekerLongitude,
     address,
+    serviceTypeName,
     seekerUser,
     getInitialRegion,
     handleArrived,
-    handleReport,
   };
 }

@@ -1,6 +1,6 @@
 import { ActivityIndicator, FlatList, Image, ScrollView, TextInput, TouchableOpacity, View } from 'react-native';
-import { Avatar, Button, EmptyState, Header, ImageViewer, ScreenContainer, Typography } from '@repo/components';
-import { Flag, Image as ImageIcon, Send, X } from 'lucide-react-native';
+import { Button, EmptyState, ImageViewer, ScreenContainer, Typography } from '@repo/components';
+import { Image as ImageIcon, Send, X } from 'lucide-react-native';
 import { KeyboardStickyView } from 'react-native-keyboard-controller';
 import type { Message } from '@repo/shared';
 import { useTheme } from '@repo/theme';
@@ -8,48 +8,16 @@ import { useTheme } from '@repo/theme';
 import { createStyles } from './BookingChat.styles';
 import { useBookingChat } from './BookingChat.hooks';
 
-function ChatHeaderCenter({
-  avatarUrl,
-  firstName,
-  lastName,
-  isTyping,
-}: {
-  avatarUrl: string | null;
-  firstName: string;
-  lastName: string;
-  isTyping: boolean;
-}) {
-  const styles = createStyles(useTheme().colors);
-
-  return (
-    <View style={styles.headerCenter}>
-      <Avatar source={avatarUrl ? { uri: avatarUrl } : null} name={`${firstName} ${lastName}`} size={36} />
-      <View style={styles.headerCenterText}>
-        <Typography variant="h5" weight="bold" numberOfLines={1}>
-          {firstName} {lastName}
-        </Typography>
-        {isTyping && (
-          <Typography variant="caption" color="textSecondary">
-            Typing...
-          </Typography>
-        )}
-      </View>
-    </View>
-  );
-}
-
 export function BookingChatScreen() {
   const { colors } = useTheme();
   const styles = createStyles(colors);
 
   const {
-    otherUser,
     messages,
     inputText,
     setInputText,
     isLoading,
     isSending,
-    isTyping,
     selectedImages,
     selectedImage,
     setSelectedImage,
@@ -60,7 +28,6 @@ export function BookingChatScreen() {
     handleLoadMore,
     handlePickImage,
     handleRemoveImage,
-    handleReport,
   } = useBookingChat();
 
   const renderMessage = ({ item }: { item: Message }) => {
@@ -99,24 +66,7 @@ export function BookingChatScreen() {
   };
 
   return (
-    <ScreenContainer>
-      <Header
-        centerContent={
-          <ChatHeaderCenter
-            avatarUrl={otherUser.avatarUrl}
-            firstName={otherUser.firstName}
-            lastName={otherUser.lastName}
-            isTyping={isTyping}
-          />
-        }
-        rightContent={
-          <TouchableOpacity onPress={handleReport}>
-            <Flag size={20} color={colors.textSecondary} />
-          </TouchableOpacity>
-        }
-        style={styles.header}
-      />
-
+    <ScreenContainer edges={['left', 'right', 'bottom']}>
       <View style={styles.actionButtonsContainer}>
         <Button title="Decline" variant="outline" onPress={handleDecline} style={styles.actionButton} />
         <Button title="Finalize Cost & Details" onPress={handleFinalize} style={styles.actionButton} />

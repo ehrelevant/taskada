@@ -1,6 +1,6 @@
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { CalendarClock, CircleDollarSign, FileText, MapPin } from 'lucide-react-native';
-import { Card, EmptyState, Header, ScreenContainer, StatusBadge, Typography } from '@repo/components';
+import { Card, EmptyState, ScreenContainer, StatusBadge, Typography } from '@repo/components';
 import { useTheme } from '@repo/theme';
 import { View } from 'react-native';
 
@@ -18,7 +18,7 @@ export function BookingDetailsScreen() {
   const { colors } = useTheme();
   const styles = createStyles(colors);
 
-  const { booking, isLoading, latitude, longitude, formatDateTime, handleGoBack } = useBookingDetails();
+  const { booking, isLoading, latitude, longitude, formatDateTime } = useBookingDetails();
 
   if (isLoading) {
     return (
@@ -30,8 +30,6 @@ export function BookingDetailsScreen() {
 
   return (
     <ScreenContainer scrollable edges={['left', 'right']} contentPadding="m" contentStyle={styles.content}>
-      <Header title="Booking Details" size="small" onBack={handleGoBack} />
-
       <View style={styles.heroCard}>
         <Typography variant="h3" color="textInverse">
           Full service details

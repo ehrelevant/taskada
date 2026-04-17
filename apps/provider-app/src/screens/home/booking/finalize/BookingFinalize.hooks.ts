@@ -1,9 +1,11 @@
-import { Alert } from 'react-native';
+import { Alert, BackHandler } from 'react-native';
 import { authClient } from '@lib/authClient';
 import { BookingStackParamList } from '@navigation/BookingStack';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import { DashboardTabsParamList } from '@navigation/DashboardTabs';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { providerClient } from '@lib/providerClient';
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { RouteProp, useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
 import { useCallback, useEffect, useState } from 'react';
 
 type FinalizeDetailsRouteProp = RouteProp<BookingStackParamList, 'BookingFinalize'>;
@@ -20,6 +22,26 @@ export function useBookingFinalize() {
   const [showWaitingModal, setShowWaitingModal] = useState(false);
 
   const [longitude, latitude] = seekerLocation.coordinates;
+
+  const navigateToRequestsList = useCallback(() => {
+    const tabsNavigation = navigation.getParent<BottomTabNavigationProp<DashboardTabsParamList>>();
+    tabsNavigation?.navigate('RequestsStack', {
+      screen: 'RequestList',
+    });
+  }, [navigation]);
+
+  useFocusEffect(
+    useCallback(() => {
+      const subscription = BackHandler.addEventListener('hardwareBackPress', () => {
+        navigateToRequestsList();
+        return true;
+      });
+
+      return () => {
+        subscription.remove();
+      };
+    }, [navigateToRequestsList]),
+  );
 
   useEffect(() => {
     if (!showWaitingModal) return;
@@ -60,6 +82,7 @@ export function useBookingFinalize() {
           setShowWaitingModal(false);
           navigation.replace('BookingTransit', {
             bookingId,
+            otherUser,
             seekerLocation: data.seekerLocation,
             address: seekerLocation,
           });
@@ -134,17 +157,6 @@ export function useBookingFinalize() {
     [formatCurrency],
   );
 
-  const handleGoBack = useCallback(() => {
-    navigation.goBack();
-  }, [navigation]);
-
-  const handleReport = useCallback(() => {
-    navigation.navigate('Report', {
-      bookingId,
-      reportedUser: otherUser,
-    });
-  }, [bookingId, navigation, otherUser]);
-
   return {
     serviceCost,
     setServiceCost,
@@ -157,7 +169,5 @@ export function useBookingFinalize() {
     seekerLocation,
     handleSubmit,
     handleCostChange,
-    handleGoBack,
-    handleReport,
   };
 }

@@ -1,12 +1,10 @@
 import { Alert } from 'react-native';
 import { BookingStackParamList } from '@navigation/BookingStack';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { providerClient } from '@lib/providerClient';
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { RouteProp, useRoute } from '@react-navigation/native';
 import { useCallback, useEffect, useState } from 'react';
 
 type BookingDetailsRouteProp = RouteProp<BookingStackParamList, 'BookingDetails'>;
-type BookingDetailsNavigationProp = NativeStackNavigationProp<BookingStackParamList, 'BookingDetails'>;
 
 interface BookingData {
   id: string;
@@ -28,7 +26,6 @@ interface BookingData {
 
 export function useBookingDetails() {
   const route = useRoute<BookingDetailsRouteProp>();
-  const navigation = useNavigation<BookingDetailsNavigationProp>();
   const { bookingId } = route.params;
 
   const [booking, setBooking] = useState<BookingData | null>(null);
@@ -55,10 +52,6 @@ export function useBookingDetails() {
     fetchBooking();
   }, [fetchBooking]);
 
-  const handleGoBack = useCallback(() => {
-    navigation.goBack();
-  }, [navigation]);
-
   const coordinates = booking?.address?.coordinates;
   const [longitude, latitude] = coordinates || [0, 0];
 
@@ -79,6 +72,5 @@ export function useBookingDetails() {
     latitude,
     longitude,
     formatDateTime,
-    handleGoBack,
   };
 }

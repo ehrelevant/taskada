@@ -1,7 +1,7 @@
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import { ActivityIndicator, Modal, TextInput, TouchableOpacity, View } from 'react-native';
-import { ArrowLeft, CircleDollarSign, FileText, Flag, MapPin } from 'lucide-react-native';
-import { Button, Header, ScreenContainer, Typography } from '@repo/components';
+import { ActivityIndicator, Modal, TextInput, View } from 'react-native';
+import { Button, ScreenContainer, Typography } from '@repo/components';
+import { CircleDollarSign, FileText, MapPin } from 'lucide-react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { useTheme } from '@repo/theme';
 
@@ -23,27 +23,10 @@ export function BookingFinalizeScreen() {
     seekerLocation,
     handleSubmit,
     handleCostChange,
-    handleGoBack,
-    handleReport,
   } = useBookingFinalize();
 
   return (
-    <ScreenContainer>
-      <Header
-        title="Finalize Service Details"
-        size="small"
-        leftContent={
-          <TouchableOpacity onPress={handleGoBack} style={styles.iconButton}>
-            <ArrowLeft size={24} color={colors.textPrimary} />
-          </TouchableOpacity>
-        }
-        rightContent={
-          <TouchableOpacity onPress={handleReport} style={styles.iconButton}>
-            <Flag size={20} color={colors.textSecondary} />
-          </TouchableOpacity>
-        }
-      />
-
+    <ScreenContainer edges={['left', 'right', 'bottom']}>
       <KeyboardAwareScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.heroCard}>
           <Typography variant="h3" color="textInverse">

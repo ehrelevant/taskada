@@ -1,7 +1,7 @@
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import { Button, Header, ScreenContainer, Typography } from '@repo/components';
-import { Flag, MapPin } from 'lucide-react-native';
-import { ScrollView, TouchableOpacity, View } from 'react-native';
+import { Button, ScreenContainer, Typography } from '@repo/components';
+import { MapPin } from 'lucide-react-native';
+import { ScrollView, View } from 'react-native';
 import { useTheme } from '@repo/theme';
 
 import { createStyles } from './BookingTransit.styles';
@@ -17,26 +17,13 @@ export function BookingTransitScreen() {
     seekerLatitude,
     seekerLongitude,
     address,
-    seekerUser,
+    serviceTypeName,
     getInitialRegion,
     handleArrived,
-    handleReport,
   } = useBookingTransit();
 
   return (
-    <ScreenContainer>
-      <Header
-        title="Navigate to Seeker"
-        size="small"
-        rightContent={
-          seekerUser ? (
-            <TouchableOpacity onPress={handleReport} style={styles.iconButton}>
-              <Flag size={20} color={colors.textSecondary} />
-            </TouchableOpacity>
-          ) : undefined
-        }
-      />
-
+    <ScreenContainer edges={['left', 'right', 'bottom']}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.heroCard}>
           <Typography variant="h3" color="textInverse">
@@ -65,7 +52,7 @@ export function BookingTransitScreen() {
                     longitude: providerLocation.longitude,
                   }}
                   title="Your Location"
-                  pinColor="blue"
+                  pinColor="lightblue"
                 />
               )}
 
@@ -90,6 +77,15 @@ export function BookingTransitScreen() {
           </View>
           <Typography variant="body1" style={styles.addressText}>
             {address?.label || 'Location not specified'}
+          </Typography>
+        </View>
+
+        <View style={styles.section}>
+          <Typography variant="subtitle2" style={styles.sectionLabel}>
+            Service Type
+          </Typography>
+          <Typography variant="body1" style={styles.addressText}>
+            {serviceTypeName}
           </Typography>
         </View>
 

@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import { spacing, useTheme } from '@repo/theme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { View } from 'react-native';
@@ -8,9 +9,10 @@ export interface StackHeaderProps {
   title: string;
   canGoBack: boolean;
   onBack?: () => void;
+  rightContent?: ReactNode;
 }
 
-export function StackHeader({ title, canGoBack, onBack }: StackHeaderProps) {
+export function StackHeader({ title, canGoBack, onBack, rightContent }: StackHeaderProps) {
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
 
@@ -32,6 +34,7 @@ export function StackHeader({ title, canGoBack, onBack }: StackHeaderProps) {
         balancedSides
         sideSlotWidth={44}
         onBack={canGoBack && onBack ? onBack : undefined}
+        rightContent={rightContent}
         style={{ paddingVertical: spacing.xs }}
       />
     </View>

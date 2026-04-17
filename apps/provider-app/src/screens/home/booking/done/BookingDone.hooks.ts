@@ -1,4 +1,6 @@
 import { BookingStackParamList } from '@navigation/BookingStack';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import { DashboardTabsParamList } from '@navigation/DashboardTabs';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { providerClient } from '@lib/providerClient';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
@@ -30,6 +32,11 @@ interface BookingDetails {
       name: string;
     } | null;
   } | null;
+  serviceType: {
+    id: string;
+    name: string;
+    iconUrl: string | null;
+  } | null;
 }
 
 export function useBookingDone() {
@@ -38,6 +45,7 @@ export function useBookingDone() {
   const { bookingId } = route.params;
 
   const [bookingDetails, setBookingDetails] = useState<BookingDetails | null>(null);
+  const [serviceTypeName, setServiceTypeName] = useState('Service');
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchBookingDetails = useCallback(async () => {
@@ -46,6 +54,19 @@ export function useBookingDone() {
       if (response.ok) {
         const data = await response.json();
         setBookingDetails(data);
+
+        let resolvedServiceTypeName = data.serviceType?.name ?? data.service?.serviceType?.name;
+        if ((!resolvedServiceTypeName || resolvedServiceTypeName.trim().length === 0) && data.serviceId) {
+          const serviceResponse = await providerClient.apiFetch(`/services/${data.serviceId}`, 'GET');
+          if (serviceResponse.ok) {
+            const serviceData = await serviceResponse.json();
+            resolvedServiceTypeName = serviceData.serviceTypeName;
+          }
+        }
+
+        if (typeof resolvedServiceTypeName === 'string' && resolvedServiceTypeName.trim().length > 0) {
+          setServiceTypeName(resolvedServiceTypeName);
+        }
       } else {
         throw new Error('Failed to fetch booking details');
       }
@@ -60,9 +81,38 @@ export function useBookingDone() {
     fetchBookingDetails();
   }, [fetchBookingDetails]);
 
-  const handleReturn = useCallback(() => {
-    navigation.getParent()?.goBack();
+  const navigateToRequestsList = useCallback(() => {
+    const tabsNavigation = navigation.getParent<BottomTabNavigationProp<DashboardTabsParamList>>();
+    tabsNavigation?.navigate('RequestsStack', {
+      screen: 'RequestList',
+    });
   }, [navigation]);
+
+  const navigateToHistoryRoot = useCallback(() => {
+    const tabsNavigation = navigation.getParent<BottomTabNavigationProp<DashboardTabsParamList>>();
+    tabsNavigation?.navigate('HistoryStack', {
+      screen: 'History',
+    });
+  }, [navigation]);
+
+  const handleReturn = useCallback(() => {
+    navigateToRequestsList();
+  }, [navigateToRequestsList]);
+
+  const handleViewHistory = useCallback(() => {
+    navigateToHistoryRoot();
+  }, [navigateToHistoryRoot]);
+
+  const handleViewBookingLogs = useCallback(() => {
+    const tabsNavigation = navigation.getParent<BottomTabNavigationProp<DashboardTabsParamList>>();
+    tabsNavigation?.navigate('HistoryStack', {
+      screen: 'BookingLogs',
+      params: {
+        bookingId,
+        forceHistoryBack: true,
+      },
+    });
+  }, [bookingId, navigation]);
 
   const handleViewDetails = useCallback(() => {
     navigation.navigate('BookingDetails', {
@@ -70,20 +120,13 @@ export function useBookingDone() {
     });
   }, [bookingId, navigation]);
 
-  const handleReport = useCallback(() => {
-    if (bookingDetails?.seeker) {
-      navigation.navigate('Report', {
-        bookingId,
-        reportedUser: bookingDetails.seeker,
-      });
-    }
-  }, [bookingId, navigation, bookingDetails?.seeker]);
-
   return {
     bookingDetails,
+    serviceTypeName,
     isLoading,
     handleReturn,
+    handleViewHistory,
+    handleViewBookingLogs,
     handleViewDetails,
-    handleReport,
   };
 }

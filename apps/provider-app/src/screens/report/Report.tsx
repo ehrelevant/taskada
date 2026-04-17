@@ -111,7 +111,7 @@ export function ReportScreen() {
                     <Typography
                       variant="body1"
                       style={styles.reasonChipText}
-                      color={value === reason.value ? 'actionPrimary' : 'textPrimary'}
+                      color={value === reason.value ? 'textInverse' : 'textPrimary'}
                     >
                       {reason.label}
                     </Typography>
