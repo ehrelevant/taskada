@@ -3,7 +3,7 @@ import { HomeStackParamList } from '@navigation/HomeStack';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { type RequestFormData, requestFormSchema } from '@repo/shared';
 import type { RouteProp } from '@react-navigation/native';
-import type { SearchResult } from '@repo/types';
+import type { SearchResult, ServiceType } from '@repo/types';
 import { seekerClient } from '@lib/seekerClient';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -18,6 +18,9 @@ export function useRequestForm() {
   const [showServiceSearch, setShowServiceSearch] = useState(false);
   const [images, setImages] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+  const [serviceTypes, setServiceTypes] = useState<ServiceType[]>([]);
+  const [serviceTypesLoading, setServiceTypesLoading] = useState(true);
+  const [serviceTypesError, setServiceTypesError] = useState<string | null>(null);
   const [selectedService, setSelectedService] = useState<SearchResult | null>(null);
   const [serviceSearchResults, setServiceSearchResults] = useState<SearchResult[]>([]);
   const [serviceSearchLoading, setServiceSearchLoading] = useState(false);
@@ -48,36 +51,87 @@ export function useRequestForm() {
   } = methods;
 
   const watchedServiceId = watch('serviceId');
+  const watchedServiceTypeId = watch('serviceTypeId');
+
+  const loadInitialService = useCallback(
+    async (serviceId: string, preferredServiceTypeId?: string) => {
+      try {
+        let effectiveServiceTypeId = preferredServiceTypeId?.trim() || '';
+
+        if (!effectiveServiceTypeId) {
+          const details = await seekerClient.getServiceDetails(serviceId);
+          effectiveServiceTypeId = details.serviceTypeId;
+
+          if (effectiveServiceTypeId) {
+            setValue('serviceTypeId', effectiveServiceTypeId, { shouldDirty: false });
+          }
+        }
+
+        if (!effectiveServiceTypeId) {
+          setSelectedService(null);
+          return;
+        }
+
+        const results = await seekerClient.searchServices('', effectiveServiceTypeId);
+        const found = results.find(s => s.serviceId === serviceId);
+
+        if (found) {
+          setSelectedService(found);
+          setValue('serviceId', found.serviceId, { shouldDirty: false });
+          return;
+        }
+
+        setSelectedService(null);
+      } catch (error) {
+        console.error('Failed to load initial service:', error);
+      }
+    },
+    [setValue],
+  );
+
+  useEffect(() => {
+    async function loadServiceTypes() {
+      try {
+        setServiceTypesLoading(true);
+        setServiceTypesError(null);
+        const types = await seekerClient.getServiceTypes();
+        setServiceTypes(types);
+      } catch {
+        setServiceTypesError('Failed to load service types');
+      } finally {
+        setServiceTypesLoading(false);
+      }
+    }
+
+    loadServiceTypes();
+  }, []);
 
   useEffect(() => {
     if (initialLoadAttempted.current) return;
     initialLoadAttempted.current = true;
 
     if (initialServiceId) {
-      loadInitialService(initialServiceId);
+      loadInitialService(initialServiceId, initialServiceTypeId);
     }
-  }, []);
-
-  const loadInitialService = async (serviceId: string) => {
-    try {
-      const results = await seekerClient.searchServices('', undefined);
-      const found = results.find(s => s.serviceId === serviceId);
-      if (found) {
-        setSelectedService(found);
-      }
-    } catch (error) {
-      console.error('Failed to load initial service:', error);
-    }
-  };
+  }, [initialServiceId, initialServiceTypeId, loadInitialService]);
 
   const watchedServiceLoadAttempted = useRef<string | null>(null);
 
   useEffect(() => {
-    if (watchedServiceId && watchedServiceId !== watchedServiceLoadAttempted.current) {
-      watchedServiceLoadAttempted.current = watchedServiceId;
-      loadInitialService(watchedServiceId);
+    if (!watchedServiceId) {
+      watchedServiceLoadAttempted.current = null;
+      setSelectedService(null);
+      return;
     }
-  }, [watchedServiceId]);
+
+    const loadKey = `${watchedServiceId}:${watchedServiceTypeId || ''}`;
+    if (loadKey === watchedServiceLoadAttempted.current) {
+      return;
+    }
+
+    watchedServiceLoadAttempted.current = loadKey;
+    loadInitialService(watchedServiceId, watchedServiceTypeId);
+  }, [loadInitialService, watchedServiceId, watchedServiceTypeId]);
 
   const handleLocationUpdate = useCallback(
     (lat: number, lng: number, address: string) => {
@@ -118,14 +172,18 @@ export function useRequestForm() {
   const searchServicesForSelection = useCallback(
     async (query: string) => {
       setServiceSearchQuery(query);
-      if (!query.trim()) {
+
+      const trimmedQuery = query.trim();
+      const activeServiceTypeId = watchedServiceTypeId?.trim();
+
+      if (!trimmedQuery && !activeServiceTypeId) {
         setServiceSearchResults([]);
         return;
       }
 
       setServiceSearchLoading(true);
       try {
-        const results = await seekerClient.searchServices(query, initialServiceTypeId);
+        const results = await seekerClient.searchServices(trimmedQuery, activeServiceTypeId);
         setServiceSearchResults(results);
       } catch (error) {
         console.error('Search failed:', error);
@@ -133,18 +191,63 @@ export function useRequestForm() {
         setServiceSearchLoading(false);
       }
     },
-    [initialServiceTypeId],
+    [watchedServiceTypeId],
   );
+
+  const handleServiceTypeSelect = useCallback(
+    (serviceTypeId: string) => {
+      if (serviceTypeId === watchedServiceTypeId) {
+        return;
+      }
+
+      setValue('serviceTypeId', serviceTypeId);
+      setSelectedService(null);
+      setValue('serviceId', undefined);
+      setServiceSearchResults([]);
+      setServiceSearchQuery('');
+    },
+    [setValue, watchedServiceTypeId],
+  );
+
+  const handleOpenServiceSearch = useCallback(() => {
+    setShowServiceSearch(true);
+    searchServicesForSelection('');
+  }, [searchServicesForSelection]);
+
+  const selectedServiceType = serviceTypes.find(type => type.id === watchedServiceTypeId);
+  const selectedServiceTypeName = selectedServiceType?.name || null;
+  const canSearchServices = Boolean(watchedServiceTypeId);
+
+  const closeServiceSearch = useCallback(() => {
+    setShowServiceSearch(false);
+  }, []);
+
+  const retryLoadServiceTypes = useCallback(async () => {
+    try {
+      setServiceTypesLoading(true);
+      setServiceTypesError(null);
+      const types = await seekerClient.getServiceTypes();
+      setServiceTypes(types);
+    } catch {
+      setServiceTypesError('Failed to load service types');
+    } finally {
+      setServiceTypesLoading(false);
+    }
+  }, []);
+
+  const clearServiceSearchResults = useCallback(() => {
+    setServiceSearchResults([]);
+    setServiceSearchQuery('');
+  }, []);
 
   const handleServiceSelect = useCallback(
     (service: SearchResult) => {
       setSelectedService(service);
       setValue('serviceId', service.serviceId);
-      setShowServiceSearch(false);
-      setServiceSearchResults([]);
-      setServiceSearchQuery('');
+      closeServiceSearch();
+      clearServiceSearchResults();
     },
-    [setValue],
+    [clearServiceSearchResults, closeServiceSearch, setValue],
   );
 
   const handleClearSelection = useCallback(() => {
@@ -204,8 +307,15 @@ export function useRequestForm() {
     isSubmitting,
     loading,
     showServiceSearch,
-    setShowServiceSearch,
+    closeServiceSearch,
     images,
+    serviceTypes,
+    serviceTypesLoading,
+    serviceTypesError,
+    retryLoadServiceTypes,
+    selectedServiceTypeId: watchedServiceTypeId,
+    selectedServiceTypeName,
+    canSearchServices,
     selectedService,
     serviceSearchResults,
     serviceSearchLoading,
@@ -215,6 +325,8 @@ export function useRequestForm() {
     handleLocationUpdate,
     handleAddressChange,
     forwardedCoords,
+    handleServiceTypeSelect,
+    handleOpenServiceSearch,
     searchServicesForSelection,
     handleServiceSelect,
     handleClearSelection,

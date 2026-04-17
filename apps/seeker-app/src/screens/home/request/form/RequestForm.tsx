@@ -1,8 +1,8 @@
 import { ActivityIndicator, FlatList, Image, Modal, TouchableOpacity, View } from 'react-native';
 import { Button, ImageViewer, Input, Rating, ScreenContainer, Typography } from '@repo/components';
+import { Check, ChevronDown, ImagePlus, X } from 'lucide-react-native';
 import { Controller, FormProvider } from 'react-hook-form';
-import { ImagePlus, X } from 'lucide-react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useState } from 'react';
 import { useTheme } from '@repo/theme';
 
 import { createStyles } from './RequestForm.styles';
@@ -24,6 +24,7 @@ function formatCurrency(amount: number): string {
 }
 
 export function RequestFormScreen() {
+  const [showServiceTypePicker, setShowServiceTypePicker] = useState(false);
   const { colors } = useTheme();
   const styles = createStyles(colors);
   const {
@@ -32,8 +33,15 @@ export function RequestFormScreen() {
     isSubmitting,
     loading,
     showServiceSearch,
-    setShowServiceSearch,
+    closeServiceSearch,
     images,
+    serviceTypes,
+    serviceTypesLoading,
+    serviceTypesError,
+    retryLoadServiceTypes,
+    selectedServiceTypeId,
+    selectedServiceTypeName,
+    canSearchServices,
     selectedService,
     serviceSearchResults,
     serviceSearchLoading,
@@ -43,6 +51,8 @@ export function RequestFormScreen() {
     handleLocationUpdate,
     handleAddressChange,
     forwardedCoords,
+    handleServiceTypeSelect,
+    handleOpenServiceSearch,
     searchServicesForSelection,
     handleServiceSelect,
     handleClearSelection,
@@ -99,12 +109,61 @@ export function RequestFormScreen() {
               <Typography variant="h5">Service Details</Typography>
             </View>
 
-            {/* TODO: Add service type selection */}
+            <Typography variant="body2" color="textSecondary">
+              Service Type
+            </Typography>
+
+            {serviceTypesLoading ? (
+              <View style={styles.serviceTypeLoading}>
+                <ActivityIndicator color={colors.actionPrimary} />
+              </View>
+            ) : serviceTypesError ? (
+              <View style={styles.serviceTypeErrorRow}>
+                <Typography variant="caption" color="textSecondary" style={{ flex: 1 }}>
+                  {serviceTypesError}
+                </Typography>
+                <TouchableOpacity onPress={retryLoadServiceTypes}>
+                  <Typography variant="body2" color="actionPrimary">
+                    Retry
+                  </Typography>
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <TouchableOpacity
+                style={[
+                  styles.serviceTypeSelectorButton,
+                  showServiceTypePicker && styles.serviceTypeSelectorButtonOpen,
+                ]}
+                onPress={() => setShowServiceTypePicker(true)}
+              >
+                <Typography
+                  variant="body1"
+                  color={selectedServiceTypeName ? 'textPrimary' : 'textSecondary'}
+                  style={styles.serviceTypeSelectorPlaceholder}
+                  numberOfLines={1}
+                >
+                  {selectedServiceTypeName || 'Select service type'}
+                </Typography>
+                <ChevronDown size={18} color={colors.textSecondary} />
+              </TouchableOpacity>
+            )}
+
+            {!canSearchServices ? (
+              <Typography variant="caption" color="textSecondary" style={styles.serviceTypeHint}>
+                Select a service type before choosing a provider service.
+              </Typography>
+            ) : null}
 
             <ServiceSelection
-              onOpenSearch={() => setShowServiceSearch(true)}
+              onOpenSearch={handleOpenServiceSearch}
               selectedService={selectedService}
               onClearSelection={handleClearSelection}
+              searchDisabled={!canSearchServices}
+              emptyHint={
+                canSearchServices
+                  ? 'Leave empty to be matched with providers under this service type'
+                  : 'Choose a service type first, then optionally pick a specific provider'
+              }
             />
 
             <Controller
@@ -181,35 +240,34 @@ export function RequestFormScreen() {
       </FormProvider>
 
       <Modal animationType="slide" visible={showServiceSearch}>
-        <SafeAreaView style={styles.modalContainer}>
+        <ScreenContainer style={styles.modalContainer} contentPadding="m" contentStyle={styles.modalContent}>
           <View style={styles.modalHeroCard}>
             <View style={styles.modalHeaderTopRow}>
               <Typography variant="h3" color="textInverse">
                 Select a Service
               </Typography>
-              <TouchableOpacity onPress={() => setShowServiceSearch(false)}>
+              <TouchableOpacity onPress={closeServiceSearch}>
                 <X size={24} color={colors.textInverse} />
               </TouchableOpacity>
             </View>
             <Typography variant="body2" color="textInverse">
-              Search by service type and choose the best provider for your request.
+              {selectedServiceTypeName
+                ? `Showing services under ${selectedServiceTypeName}`
+                : 'Select a service type first, then choose a provider service.'}
             </Typography>
-          </View>
-
-          <View style={styles.modalHeader}>
-            <TouchableOpacity onPress={() => setShowServiceSearch(false)}>
-              <Typography variant="body2" color="actionPrimary">
-                Close
-              </Typography>
-            </TouchableOpacity>
           </View>
 
           <View style={styles.modalInner}>
             <Input
               value={serviceSearchQuery}
               onChangeText={searchServicesForSelection}
-              placeholder="Search for services..."
-              autoFocus
+              placeholder={
+                canSearchServices
+                  ? `Search ${selectedServiceTypeName || 'services'} by provider`
+                  : 'Choose a service type first'
+              }
+              autoFocus={canSearchServices}
+              editable={canSearchServices}
             />
 
             {serviceSearchLoading ? (
@@ -224,10 +282,10 @@ export function RequestFormScreen() {
                   <TouchableOpacity style={styles.serviceResult} onPress={() => handleServiceSelect(item)}>
                     <View style={styles.serviceResultContent}>
                       <Typography variant="body1" weight="semiBold" numberOfLines={1}>
-                        {item.serviceTypeName}
+                        {item.providerName}
                       </Typography>
                       <Typography variant="caption" color="textSecondary" numberOfLines={1}>
-                        {item.providerName}
+                        {item.serviceTypeName}
                       </Typography>
                       <View style={styles.serviceResultMeta}>
                         <Rating value={item.avgRating} size={12} />
@@ -239,13 +297,17 @@ export function RequestFormScreen() {
                   </TouchableOpacity>
                 )}
                 ListEmptyComponent={
-                  serviceSearchQuery.trim() ? (
+                  !canSearchServices ? (
+                    <Typography variant="body2" color="textSecondary" style={styles.hintText}>
+                      Choose a service type in the form before searching providers.
+                    </Typography>
+                  ) : serviceSearchQuery.trim() ? (
                     <Typography variant="body2" color="textSecondary" style={styles.noResults}>
-                      No services found
+                      No providers found for this service type
                     </Typography>
                   ) : (
                     <Typography variant="body2" color="textSecondary" style={styles.hintText}>
-                      Search to find specific services
+                      Showing available providers for this service type
                     </Typography>
                   )
                 }
@@ -253,7 +315,55 @@ export function RequestFormScreen() {
               />
             )}
           </View>
-        </SafeAreaView>
+        </ScreenContainer>
+      </Modal>
+
+      <Modal animationType="slide" visible={showServiceTypePicker}>
+        <ScreenContainer style={styles.modalContainer} contentPadding="m" contentStyle={styles.modalContent}>
+          <View style={styles.modalHeroCard}>
+            <View style={styles.modalHeaderTopRow}>
+              <Typography variant="h3" color="textInverse">
+                Select Service Type
+              </Typography>
+              <TouchableOpacity onPress={() => setShowServiceTypePicker(false)}>
+                <X size={24} color={colors.textInverse} />
+              </TouchableOpacity>
+            </View>
+            <Typography variant="body2" color="textInverse">
+              Choose a service type to limit provider suggestions and service options.
+            </Typography>
+          </View>
+
+          <FlatList
+            data={serviceTypes}
+            keyExtractor={item => item.id}
+            renderItem={({ item }) => {
+              const isSelected = selectedServiceTypeId === item.id;
+
+              return (
+                <TouchableOpacity
+                  style={[styles.serviceTypeOption, isSelected && styles.serviceTypeOptionSelected]}
+                  onPress={() => {
+                    handleServiceTypeSelect(item.id);
+                    setShowServiceTypePicker(false);
+                  }}
+                  activeOpacity={0.8}
+                >
+                  <Typography variant="body1" weight={isSelected ? 'semiBold' : 'regular'}>
+                    {item.name}
+                  </Typography>
+                  {isSelected ? <Check size={18} color={colors.actionPrimary} /> : null}
+                </TouchableOpacity>
+              );
+            }}
+            ListEmptyComponent={
+              <Typography variant="body2" color="textSecondary" style={styles.noResults}>
+                No service types available
+              </Typography>
+            }
+            contentContainerStyle={styles.modalList}
+          />
+        </ScreenContainer>
       </Modal>
 
       <ImageViewer

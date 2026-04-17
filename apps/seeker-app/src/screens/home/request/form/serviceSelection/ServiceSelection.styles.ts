@@ -20,6 +20,9 @@ export const createStyles = (colors: ThemeColors) =>
       borderStyle: 'dashed',
       backgroundColor: colors.interactive.secondaryBg,
     },
+    searchButtonDisabled: {
+      opacity: 0.55,
+    },
     searchButtonText: {
       marginLeft: spacing.s,
     },
@@ -34,21 +37,10 @@ export const createStyles = (colors: ThemeColors) =>
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      marginBottom: spacing.s,
-    },
-    serviceImageContainer: {
-      width: 60,
-      height: 60,
-      borderRadius: radius.s,
-      overflow: 'hidden',
-    },
-    serviceImage: {
-      width: '100%',
-      height: '100%',
     },
     serviceInfo: {
       flex: 1,
-      marginLeft: spacing.s,
+      gap: spacing.s,
     },
     providerRow: {
       flexDirection: 'row',

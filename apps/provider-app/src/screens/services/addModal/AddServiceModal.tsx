@@ -1,8 +1,10 @@
-import { ActivityIndicator, Modal, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, FlatList, Modal, TouchableOpacity, View } from 'react-native';
 import { Button, Input, ScreenContainer, Typography } from '@repo/components';
+import { Check, ChevronDown, X } from 'lucide-react-native';
 import { Controller } from 'react-hook-form';
 import type { ProviderService } from '@repo/types';
 import { spacing, useTheme } from '@repo/theme';
+import { useEffect, useState } from 'react';
 
 import { createStyles } from './AddServiceModal.styles';
 import { useAddServiceModal } from './AddServiceModal.hooks';
@@ -15,6 +17,7 @@ type Props = {
 };
 
 export function AddServiceModal({ visible, serviceToEdit, onClose, onSuccess }: Props) {
+  const [showTypePicker, setShowTypePicker] = useState(false);
   const { colors } = useTheme();
   const styles = createStyles(colors);
 
@@ -29,6 +32,12 @@ export function AddServiceModal({ visible, serviceToEdit, onClose, onSuccess }: 
     onSubmit,
     handleCancel,
   } = useAddServiceModal({ visible, serviceToEdit, onClose, onSuccess });
+
+  useEffect(() => {
+    if (!visible) {
+      setShowTypePicker(false);
+    }
+  }, [visible]);
 
   return (
     <Modal visible={visible} animationType="slide" transparent onRequestClose={onClose}>
@@ -54,28 +63,31 @@ export function AddServiceModal({ visible, serviceToEdit, onClose, onSuccess }: 
             <Controller
               control={control}
               name="serviceTypeId"
-              render={({ field: { onChange, value } }) => (
-                <View style={styles.typeList}>
-                  {serviceTypes.map(type => {
-                    const isSelected = value === type.id;
-                    const isDisabled = isEditing && !isSelected;
-
-                    return (
-                      <TouchableOpacity
-                        key={type.id}
-                        onPress={() => !isDisabled && onChange(type.id)}
-                        style={[styles.chip, isSelected && styles.chipSelected, isDisabled && styles.chipDisabled]}
-                        disabled={isDisabled}
-                      >
-                        <Typography
-                          variant="caption"
-                          color={isSelected ? colors.white : isDisabled ? colors.textDisabled : colors.textPrimary}
-                        >
-                          {type.name}
-                        </Typography>
-                      </TouchableOpacity>
-                    );
-                  })}
+              render={({ field: { value } }) => (
+                <View>
+                  <TouchableOpacity
+                    style={[
+                      styles.typeSelectorButton,
+                      showTypePicker && styles.typeSelectorButtonOpen,
+                      isEditing && styles.typeSelectorButtonDisabled,
+                    ]}
+                    onPress={() => {
+                      if (!isEditing) {
+                        setShowTypePicker(true);
+                      }
+                    }}
+                    disabled={isEditing}
+                  >
+                    <Typography
+                      variant="body2"
+                      color={value ? 'textPrimary' : 'textSecondary'}
+                      style={styles.typeSelectorText}
+                      numberOfLines={1}
+                    >
+                      {serviceTypes.find(type => type.id === value)?.name || 'Select service type'}
+                    </Typography>
+                    {!isEditing ? <ChevronDown size={18} color={colors.textSecondary} /> : null}
+                  </TouchableOpacity>
                 </View>
               )}
             />
@@ -115,6 +127,57 @@ export function AddServiceModal({ visible, serviceToEdit, onClose, onSuccess }: 
           />
         </View>
       </ScreenContainer>
+
+      <Modal visible={showTypePicker && !isEditing} animationType="slide" onRequestClose={() => setShowTypePicker(false)}>
+        <ScreenContainer style={styles.pickerContainer} contentPadding="m" contentStyle={styles.pickerContent}>
+          <View style={styles.heroCard}>
+            <View style={styles.pickerHeader}>
+              <Typography variant="h3" color="textInverse">
+                Select Service Type
+              </Typography>
+              <TouchableOpacity onPress={() => setShowTypePicker(false)}>
+                <X size={24} color={colors.textInverse} />
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <Controller
+            control={control}
+            name="serviceTypeId"
+            render={({ field: { onChange, value } }) => (
+              <FlatList
+                data={serviceTypes}
+                keyExtractor={item => item.id}
+                renderItem={({ item }) => {
+                  const isSelected = value === item.id;
+
+                  return (
+                    <TouchableOpacity
+                      onPress={() => {
+                        onChange(item.id);
+                        setShowTypePicker(false);
+                      }}
+                      style={[styles.typeOption, isSelected && styles.typeOptionSelected]}
+                      activeOpacity={0.8}
+                    >
+                      <Typography variant="body1" weight={isSelected ? 'semiBold' : 'regular'}>
+                        {item.name}
+                      </Typography>
+                      {isSelected ? <Check size={16} color={colors.actionPrimary} /> : null}
+                    </TouchableOpacity>
+                  );
+                }}
+                ListEmptyComponent={
+                  <Typography variant="body2" color="textSecondary" style={styles.noResults}>
+                    No service types available
+                  </Typography>
+                }
+                contentContainerStyle={styles.pickerList}
+              />
+            )}
+          />
+        </ScreenContainer>
+      </Modal>
     </Modal>
   );
 }

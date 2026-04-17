@@ -28,27 +28,64 @@ export const createStyles = (colors: ThemeColors) =>
       backgroundColor: colors.card.muted,
       padding: spacing.m,
     },
-    typeList: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      gap: spacing.s,
-    },
-    chip: {
-      paddingHorizontal: spacing.m,
-      paddingVertical: spacing.s,
-      borderRadius: radius.round,
+    typeSelectorButton: {
+      borderRadius: radius.m,
       borderWidth: 1,
       borderColor: colors.card.stroke,
       backgroundColor: colors.card.base,
+      paddingHorizontal: spacing.m,
+      paddingVertical: spacing.s,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      gap: spacing.s,
     },
-    chipSelected: {
-      backgroundColor: colors.actionPrimary,
+    typeSelectorButtonDisabled: {
+      opacity: 0.65,
+    },
+    typeSelectorButtonOpen: {
+      borderWidth: 1,
       borderColor: colors.actionPrimary,
+      backgroundColor: colors.interactive.secondaryBg,
     },
-    chipDisabled: {
-      backgroundColor: colors.card.muted,
+    typeSelectorText: {
+      flex: 1,
+    },
+    pickerContainer: {
+      flex: 1,
+      backgroundColor: colors.canvas.base,
+    },
+    pickerContent: {
+      gap: spacing.m,
+    },
+    pickerHeader: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      gap: spacing.s,
+    },
+    typeOption: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      borderWidth: 1,
       borderColor: colors.card.stroke,
-      opacity: 0.5,
+      borderRadius: radius.m,
+      backgroundColor: colors.card.base,
+      padding: spacing.m,
+      marginBottom: spacing.s,
+    },
+    typeOptionSelected: {
+      borderColor: colors.actionPrimary,
+      backgroundColor: colors.interactive.secondaryBg,
+    },
+    pickerList: {
+      paddingTop: spacing.xs,
+      paddingBottom: spacing.xxxl,
+    },
+    noResults: {
+      textAlign: 'center',
+      marginTop: spacing.xl,
     },
     actions: {
       flex: 1,

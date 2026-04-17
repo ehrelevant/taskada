@@ -1,8 +1,8 @@
 import { Avatar, Typography } from '@repo/components';
 import { Controller, useFormContext } from 'react-hook-form';
-import { Image, TouchableOpacity, View } from 'react-native';
 import { Search, Sparkles, X } from 'lucide-react-native';
 import type { SearchResult } from '@repo/types';
+import { TouchableOpacity, View } from 'react-native';
 import { useTheme } from '@repo/theme';
 
 import { createStyles } from './ServiceSelection.styles';
@@ -11,9 +11,17 @@ interface ServiceSelectionProps {
   onOpenSearch: () => void;
   selectedService: SearchResult | null;
   onClearSelection: () => void;
+  searchDisabled?: boolean;
+  emptyHint?: string;
 }
 
-export function ServiceSelection({ onOpenSearch, selectedService, onClearSelection }: ServiceSelectionProps) {
+export function ServiceSelection({
+  onOpenSearch,
+  selectedService,
+  onClearSelection,
+  searchDisabled = false,
+  emptyHint,
+}: ServiceSelectionProps) {
   const { colors } = useTheme();
   const styles = createStyles(colors);
   const { control } = useFormContext();
@@ -42,9 +50,17 @@ export function ServiceSelection({ onOpenSearch, selectedService, onClearSelecti
             </Typography>
 
             {!value ? (
-              <TouchableOpacity style={styles.searchButton} onPress={onOpenSearch}>
-                <Search size={20} color={colors.actionPrimary} />
-                <Typography variant="body1" color="actionPrimary" style={styles.searchButtonText}>
+              <TouchableOpacity
+                style={[styles.searchButton, searchDisabled && styles.searchButtonDisabled]}
+                onPress={onOpenSearch}
+                disabled={searchDisabled}
+              >
+                <Search size={20} color={searchDisabled ? colors.textSecondary : colors.actionPrimary} />
+                <Typography
+                  variant="body1"
+                  color={searchDisabled ? 'textSecondary' : 'actionPrimary'}
+                  style={styles.searchButtonText}
+                >
                   Choose a Service
                 </Typography>
               </TouchableOpacity>
@@ -57,18 +73,6 @@ export function ServiceSelection({ onOpenSearch, selectedService, onClearSelecti
                   <TouchableOpacity style={styles.clearButton} onPress={onClearSelection}>
                     <X size={20} color={colors.textSecondary} />
                   </TouchableOpacity>
-                </View>
-
-                <View style={styles.serviceImageContainer}>
-                  {selectedService.providerAvatar ? (
-                    <Image
-                      source={{ uri: selectedService.providerAvatar }}
-                      style={styles.serviceImage}
-                      resizeMode="cover"
-                    />
-                  ) : (
-                    <View style={[styles.serviceImage, { backgroundColor: colors.backgroundSecondary }]} />
-                  )}
                 </View>
 
                 <View style={styles.serviceInfo}>
@@ -93,7 +97,7 @@ export function ServiceSelection({ onOpenSearch, selectedService, onClearSelecti
               <View style={styles.autoMatchHint}>
                 <Sparkles size={14} color={colors.textSecondary} />
                 <Typography variant="caption" color="textSecondary">
-                  Leave empty to be matched with the best available provider
+                  {emptyHint || 'Leave empty to be matched with the best available provider'}
                 </Typography>
               </View>
             )}

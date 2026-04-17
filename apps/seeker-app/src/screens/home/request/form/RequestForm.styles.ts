@@ -28,6 +28,56 @@ export const createStyles = (colors: ThemeColors) =>
       alignItems: 'center',
       gap: spacing.s,
     },
+    serviceTypeSelectorButton: {
+      borderRadius: radius.m,
+      borderWidth: 1,
+      borderColor: colors.card.stroke,
+      backgroundColor: colors.card.base,
+      paddingHorizontal: spacing.m,
+      paddingVertical: spacing.s,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      gap: spacing.s,
+    },
+    serviceTypeSelectorButtonOpen: {
+      borderColor: colors.actionPrimary,
+      backgroundColor: colors.interactive.secondaryBg,
+    },
+    serviceTypeSelectorPlaceholder: {
+      flex: 1,
+    },
+    serviceTypeLoading: {
+      paddingVertical: spacing.xs,
+    },
+    serviceTypeErrorRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      borderRadius: radius.s,
+      borderWidth: 1,
+      borderColor: colors.card.stroke,
+      backgroundColor: colors.card.muted,
+      padding: spacing.s,
+      gap: spacing.s,
+    },
+    serviceTypeHint: {
+      marginTop: spacing.xs,
+    },
+    serviceTypeOption: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      borderWidth: 1,
+      borderColor: colors.card.stroke,
+      borderRadius: radius.m,
+      backgroundColor: colors.card.base,
+      padding: spacing.m,
+    },
+    serviceTypeOptionSelected: {
+      borderColor: colors.actionPrimary,
+      backgroundColor: colors.interactive.secondaryBg,
+    },
     mapContainer: {
       borderRadius: radius.m,
       borderWidth: 1,
@@ -73,6 +123,9 @@ export const createStyles = (colors: ThemeColors) =>
       flex: 1,
       backgroundColor: colors.canvas.base,
     },
+    modalContent: {
+      gap: spacing.m,
+    },
     modalHeroCard: {
       borderRadius: radius.xl,
       borderWidth: 1,
@@ -80,27 +133,14 @@ export const createStyles = (colors: ThemeColors) =>
       backgroundColor: colors.home.heroStart,
       padding: spacing.m,
       gap: spacing.xs,
-      margin: spacing.m,
-      marginBottom: spacing.xs,
     },
     modalHeaderTopRow: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
     },
-    modalHeader: {
-      flexDirection: 'row',
-      justifyContent: 'flex-end',
-      alignItems: 'center',
-      paddingHorizontal: spacing.m,
-      paddingBottom: spacing.s,
-    },
-    modalSubtext: {
-      marginTop: spacing.xxs,
-    },
     modalInner: {
       flex: 1,
-      padding: spacing.m,
     },
     modalLoading: {
       flex: 1,

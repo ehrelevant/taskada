@@ -25,7 +25,7 @@ export class ServicesService {
     const services = await this.dbService.db
       .select({
         serviceId: service.id,
-        serviceName: serviceType.name,
+        serviceName: sql<string>`CONCAT(${serviceType.name}, ' by ', ${user.firstName}, ' ', ${user.lastName})`,
         serviceTypeName: serviceType.name,
         providerName: sql<string>`CONCAT(${user.firstName}, ' ', ${user.lastName})`,
         providerAvatar: user.avatarUrl,
@@ -67,7 +67,7 @@ export class ServicesService {
     const services = await this.dbService.db
       .select({
         serviceId: service.id,
-        serviceName: serviceType.name,
+        serviceName: sql<string>`CONCAT(${serviceType.name}, ' by ', ${user.firstName}, ' ', ${user.lastName})`,
         serviceTypeName: serviceType.name,
         providerName: sql<string>`CONCAT(${user.firstName}, ' ', ${user.lastName})`,
         providerAvatar: user.avatarUrl,
