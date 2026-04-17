@@ -6,6 +6,7 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { ChatGateway } from '../chat/chat.gateway';
 import { DatabaseService } from '../database/database.service';
 import { MatchingGateway } from '../matching/matching.gateway';
+import { S3Service } from '../s3/s3.service';
 
 import { UpdateBookingDto } from './dto/update-booking.dto';
 
@@ -18,6 +19,7 @@ export class BookingsService {
     private readonly dbService: DatabaseService,
     private readonly chatGateway: ChatGateway,
     private readonly matchingGateway: MatchingGateway,
+    private readonly s3Service: S3Service,
   ) {}
 
   private async getSeekerIdFromRequest(requestId: string) {
@@ -488,6 +490,8 @@ export class BookingsService {
       .where(eq(user.id, bookingRecord.seekerUserId))
       .limit(1);
 
+    const signedImages = await Promise.all(images.map(img => this.s3Service.getSignedUrl(img.image)));
+
     return {
       id: requestRecord.id,
       serviceTypeId: requestRecord.serviceTypeId,
@@ -496,7 +500,7 @@ export class BookingsService {
       description: requestRecord.description,
       createdAt: requestRecord.createdAt,
       address: addressRecord || null,
-      images: images.map(img => img.image),
+      images: signedImages,
       seeker: seekerInfo || null,
     };
   }

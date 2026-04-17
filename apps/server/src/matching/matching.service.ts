@@ -3,11 +3,13 @@ import { and, eq } from 'drizzle-orm';
 import { Injectable, Logger } from '@nestjs/common';
 
 import { DatabaseService } from '../database/database.service';
+import { S3Service } from '../s3/s3.service';
 
 export interface RequestDetails {
   id: string;
   serviceTypeId: string;
   serviceId: string | null;
+  providerUserId: string | null;
   seekerUserId: string;
   addressId: string;
   description: string | null;
@@ -37,7 +39,10 @@ export interface RequestDetails {
 export class MatchingService {
   private readonly logger = new Logger(MatchingService.name);
 
-  constructor(private readonly dbService: DatabaseService) {}
+  constructor(
+    private readonly dbService: DatabaseService,
+    private readonly s3Service: S3Service,
+  ) {}
 
   /**
    * Get providers who should receive a request broadcast
@@ -161,8 +166,22 @@ export class MatchingService {
       .from(requestImage)
       .where(eq(requestImage.requestId, requestId));
 
+    let providerUserId: string | null = null;
+    if (requestRecord.serviceId) {
+      const [serviceRecord] = await this.dbService.db
+        .select({ providerUserId: service.providerUserId })
+        .from(service)
+        .where(eq(service.id, requestRecord.serviceId))
+        .limit(1);
+
+      providerUserId = serviceRecord?.providerUserId ?? null;
+    }
+
+    const images = await Promise.all(imageRecords.map(img => this.s3Service.getSignedUrl(img.image)));
+
     return {
       ...requestRecord,
+      providerUserId,
       serviceType: serviceTypeRecord || { id: '', name: 'Unknown', iconUrl: null },
       seeker: {
         id: seekerRecord?.userId || '',
@@ -176,7 +195,7 @@ export class MatchingService {
         label: addressRecord?.label || null,
         coordinates: addressRecord?.coordinates || [0, 0],
       },
-      images: imageRecords.map(img => img.image),
+      images,
     };
   }
 

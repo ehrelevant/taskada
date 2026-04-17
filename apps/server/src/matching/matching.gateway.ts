@@ -195,8 +195,8 @@ export class MatchingGateway implements OnGatewayConnection, OnGatewayDisconnect
     client.emit('request_cancelled', { requestId });
 
     // Notify providers in the relevant rooms
-    const roomName = requestDetails.serviceId
-      ? `provider:${requestDetails.serviceId}`
+    const roomName = requestDetails.providerUserId
+      ? `provider:${requestDetails.providerUserId}`
       : `service-type:${requestDetails.serviceTypeId}`;
 
     this.server.to(roomName).emit('request_removed', { requestId });
@@ -214,9 +214,9 @@ export class MatchingGateway implements OnGatewayConnection, OnGatewayDisconnect
     }
 
     // Determine which room(s) to broadcast to
-    if (serviceId) {
+    if (serviceId && requestDetails.providerUserId) {
       // Specific provider request
-      const roomName = `provider:${serviceId}`;
+      const roomName = `provider:${requestDetails.providerUserId}`;
       this.server.to(roomName).emit('new_request', requestDetails);
       this.logger.log(`Broadcasted request ${requestId} to room ${roomName}`);
     } else {

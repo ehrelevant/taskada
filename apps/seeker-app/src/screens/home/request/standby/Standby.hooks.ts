@@ -40,15 +40,19 @@ export function useStandby() {
           setIsConnecting(false);
         }
 
-        seekerClient.onRequestCancelled(data => {
+        const handleRequestCancelled = (data: { requestId: string }) => {
           if (data.requestId === requestId) {
             Alert.alert('Request Cancelled', 'Your request has been cancelled.', [
               { text: 'OK', onPress: () => navigation.getParent()?.goBack() },
             ]);
           }
-        });
+        };
 
-        seekerClient.onRequestSettling(data => {
+        const handleRequestSettling = (data: {
+          requestId: string;
+          bookingId: string;
+          provider: { id: string; firstName: string; lastName: string; avatarUrl: string | null };
+        }) => {
           if (data.requestId === requestId) {
             navigation.replace('Chat', {
               bookingId: data.bookingId,
@@ -61,12 +65,22 @@ export function useStandby() {
               requestId,
             });
           }
-        });
+        };
 
-        seekerClient.onMatchingError(err => {
+        const handleMatchingError = (err: { message: string }) => {
           console.error('Socket error:', err);
           setError(err.message);
-        });
+        };
+
+        seekerClient.onRequestCancelled(handleRequestCancelled);
+        seekerClient.onRequestSettling(handleRequestSettling);
+        seekerClient.onMatchingError(handleMatchingError);
+
+        return () => {
+          seekerClient.offRequestCancelled(handleRequestCancelled);
+          seekerClient.offRequestSettling(handleRequestSettling);
+          seekerClient.offMatchingError(handleMatchingError);
+        };
       } catch (err) {
         console.error('Failed to setup socket:', err);
         if (isMounted) {
@@ -76,10 +90,14 @@ export function useStandby() {
       }
     };
 
-    setupSocket();
+    let unregisterHandlers: (() => void) | undefined;
+    setupSocket().then(cleanup => {
+      unregisterHandlers = cleanup;
+    });
 
     return () => {
       isMounted = false;
+      unregisterHandlers?.();
       seekerClient.unwatchRequest(requestId);
     };
   }, [requestId, navigation]);

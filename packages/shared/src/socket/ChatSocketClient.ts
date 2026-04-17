@@ -52,6 +52,7 @@ export type ProposalSubmittedData = {
 
 export class ChatSocketClient {
   private socket: Socket | null = null;
+  private joinedBookingIds = new Set<string>();
   private messageHandlers: ((message: Message) => void)[] = [];
   private typingHandlers: ((data: TypingData) => void)[] = [];
   private userJoinedHandlers: ((data: { userId: string; bookingId: string }) => void)[] = [];
@@ -69,10 +70,20 @@ export class ChatSocketClient {
       return;
     }
 
+    if (this.socket) {
+      this.socket.removeAllListeners();
+      this.socket.disconnect();
+      this.socket = null;
+    }
+
     this.socket = io(`${baseUrl}/chat`, {
       transports: ['websocket'],
       withCredentials: true,
       extraHeaders: cookie ? { Cookie: cookie } : undefined,
+      reconnection: true,
+      reconnectionAttempts: Infinity,
+      reconnectionDelay: 1000,
+      reconnectionDelayMax: 15000,
       auth: {
         userId,
         userRole,
@@ -85,6 +96,10 @@ export class ChatSocketClient {
 
     this.socket.on('disconnect', () => {
       console.log('Chat socket disconnected');
+    });
+
+    this.socket.on('reconnect', () => {
+      this.rejoinBookings();
     });
 
     this.socket.on('new_message', (message: Message) => {
@@ -138,16 +153,23 @@ export class ChatSocketClient {
 
   disconnect() {
     if (this.socket) {
+      this.joinedBookingIds.clear();
       this.socket.disconnect();
       this.socket = null;
     }
   }
 
+  isConnected() {
+    return this.socket?.connected || false;
+  }
+
   joinBooking(bookingId: string) {
+    this.joinedBookingIds.add(bookingId);
     this.socket?.emit('join_booking_chat', { bookingId });
   }
 
   leaveBooking(bookingId: string) {
+    this.joinedBookingIds.delete(bookingId);
     this.socket?.emit('leave_booking_chat', { bookingId });
   }
 
@@ -187,44 +209,88 @@ export class ChatSocketClient {
     this.messageHandlers.push(handler);
   }
 
+  offNewMessage(handler: (message: Message) => void) {
+    this.messageHandlers = this.messageHandlers.filter(existingHandler => existingHandler !== handler);
+  }
+
   onTyping(handler: (data: TypingData) => void) {
     this.typingHandlers.push(handler);
+  }
+
+  offTyping(handler: (data: TypingData) => void) {
+    this.typingHandlers = this.typingHandlers.filter(existingHandler => existingHandler !== handler);
   }
 
   onUserJoined(handler: (data: { userId: string; bookingId: string }) => void) {
     this.userJoinedHandlers.push(handler);
   }
 
+  offUserJoined(handler: (data: { userId: string; bookingId: string }) => void) {
+    this.userJoinedHandlers = this.userJoinedHandlers.filter(existingHandler => existingHandler !== handler);
+  }
+
   onUserLeft(handler: (data: { userId: string; bookingId: string }) => void) {
     this.userLeftHandlers.push(handler);
+  }
+
+  offUserLeft(handler: (data: { userId: string; bookingId: string }) => void) {
+    this.userLeftHandlers = this.userLeftHandlers.filter(existingHandler => existingHandler !== handler);
   }
 
   onBookingDeclined(handler: (data: { bookingId: string; requestId: string }) => void) {
     this.bookingDeclinedHandlers.push(handler);
   }
 
+  offBookingDeclined(handler: (data: { bookingId: string; requestId: string }) => void) {
+    this.bookingDeclinedHandlers = this.bookingDeclinedHandlers.filter(existingHandler => existingHandler !== handler);
+  }
+
   onProposalDeclined(handler: (data: { bookingId: string }) => void) {
     this.proposalDeclinedHandlers.push(handler);
+  }
+
+  offProposalDeclined(handler: (data: { bookingId: string }) => void) {
+    this.proposalDeclinedHandlers = this.proposalDeclinedHandlers.filter(existingHandler => existingHandler !== handler);
   }
 
   onProposalSubmitted(handler: (data: ProposalSubmittedData) => void) {
     this.proposalSubmittedHandlers.push(handler);
   }
 
+  offProposalSubmitted(handler: (data: ProposalSubmittedData) => void) {
+    this.proposalSubmittedHandlers = this.proposalSubmittedHandlers.filter(existingHandler => existingHandler !== handler);
+  }
+
   onProposalAccepted(handler: (data: ProposalAcceptedData) => void) {
     this.proposalAcceptedHandlers.push(handler);
+  }
+
+  offProposalAccepted(handler: (data: ProposalAcceptedData) => void) {
+    this.proposalAcceptedHandlers = this.proposalAcceptedHandlers.filter(existingHandler => existingHandler !== handler);
   }
 
   onProviderArrived(handler: (data: { bookingId: string }) => void) {
     this.providerArrivedHandlers.push(handler);
   }
 
+  offProviderArrived(handler: (data: { bookingId: string }) => void) {
+    this.providerArrivedHandlers = this.providerArrivedHandlers.filter(existingHandler => existingHandler !== handler);
+  }
+
   onBookingCompleted(handler: (data: { bookingId: string }) => void) {
     this.bookingCompletedHandlers.push(handler);
   }
 
+  offBookingCompleted(handler: (data: { bookingId: string }) => void) {
+    this.bookingCompletedHandlers = this.bookingCompletedHandlers.filter(existingHandler => existingHandler !== handler);
+  }
+
   onBookingCancelled(handler: (data: { bookingId: string }) => void) {
     this.bookingCancelledHandlers.push(handler);
+  }
+
+  offBookingCancelled(handler: (data: { bookingId: string }) => void) {
+    this.bookingCancelledHandlers = this.bookingCancelledHandlers.filter(existingHandler => existingHandler !== handler);
   }
 
   removeAllListeners() {
@@ -239,6 +305,16 @@ export class ChatSocketClient {
     this.providerArrivedHandlers = [];
     this.bookingCompletedHandlers = [];
     this.bookingCancelledHandlers = [];
+  }
+
+  private rejoinBookings() {
+    if (!this.socket?.connected) {
+      return;
+    }
+
+    for (const bookingId of this.joinedBookingIds) {
+      this.socket.emit('join_booking_chat', { bookingId });
+    }
   }
 }
 

@@ -35,7 +35,7 @@ export function RequestListScreen() {
   const { colors } = useTheme();
   const styles = createStyles(colors);
 
-  const { isAccepting, requests, isConnecting, enableRequests, disableRequests, handleViewDetails } = useRequestList();
+  const { isAccepting, requests, isConnecting, isRefreshing, enableRequests, disableRequests, handleRefresh, handleViewDetails } = useRequestList();
 
   const renderRequestCard = ({ item }: { item: IncomingRequest }) => {
     const seekerName = `${item.seeker.firstName} ${item.seeker.lastName}`.trim();
@@ -101,30 +101,39 @@ export function RequestListScreen() {
           renderItem={renderRequestCard}
           contentContainerStyle={styles.requestListContent}
           ListHeaderComponent={
-            <View style={styles.liveHeader}>
-              <View style={styles.liveTitleRow}>
-                <View style={styles.liveDot} />
-                <Typography variant="h3" color="textInverse">
-                  Live Requests
+            <View style={styles.headerContainer}>
+              <View style={styles.liveHeader}>
+                <View style={styles.liveTitleRow}>
+                  <View style={styles.liveDot} />
+                  <Typography variant="h3" color="textInverse">
+                    Live Requests
+                  </Typography>
+                </View>
+                <Typography variant="body2" color="textInverse">
+                  You are visible to seekers in your enabled services.
                 </Typography>
-              </View>
-              <Typography variant="body2" color="textInverse">
-                You are visible to seekers in your enabled services.
-              </Typography>
-              <View style={styles.liveStatsRow}>
-                <View style={styles.liveStatPill}>
-                  <Sparkles size={14} color={colors.home.chipText} />
-                  <Typography variant="caption" color={colors.home.chipText}>
-                    {requests.length} Pending
-                  </Typography>
-                </View>
-                <View style={styles.liveStatPill}>
-                  <Radio size={14} color={colors.home.chipText} />
-                  <Typography variant="caption" color={colors.home.chipText}>
-                    Actively Listening
-                  </Typography>
+                <View style={styles.liveStatsRow}>
+                  <View style={styles.liveStatPill}>
+                    <Sparkles size={14} color={colors.home.chipText} />
+                    <Typography variant="caption" color={colors.home.chipText}>
+                      {requests.length} Pending
+                    </Typography>
+                  </View>
+                  <View style={styles.liveStatPill}>
+                    <Radio size={14} color={colors.home.chipText} />
+                    <Typography variant="caption" color={colors.home.chipText}>
+                      Actively Listening
+                    </Typography>
+                  </View>
                 </View>
               </View>
+              <Button
+                title="Refresh"
+                variant="primary"
+                size="medium"
+                onPress={handleRefresh}
+                isLoading={isRefreshing}
+              />
             </View>
           }
           ListEmptyComponent={<EmptyState message="No requests yet. Waiting for seekers..." />}

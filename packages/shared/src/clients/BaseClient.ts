@@ -168,44 +168,88 @@ export abstract class BaseClient {
     this.chat.onNewMessage(handler);
   }
 
+  offNewMessage(handler: (message: Message) => void): void {
+    this.chat.offNewMessage(handler);
+  }
+
   onTyping(handler: (data: TypingData) => void): void {
     this.chat.onTyping(handler);
+  }
+
+  offTyping(handler: (data: TypingData) => void): void {
+    this.chat.offTyping(handler);
   }
 
   onUserJoined(handler: (data: { userId: string; bookingId: string }) => void): void {
     this.chat.onUserJoined(handler);
   }
 
+  offUserJoined(handler: (data: { userId: string; bookingId: string }) => void): void {
+    this.chat.offUserJoined(handler);
+  }
+
   onUserLeft(handler: (data: { userId: string; bookingId: string }) => void): void {
     this.chat.onUserLeft(handler);
+  }
+
+  offUserLeft(handler: (data: { userId: string; bookingId: string }) => void): void {
+    this.chat.offUserLeft(handler);
   }
 
   onBookingDeclined(handler: (data: { bookingId: string; requestId: string }) => void): void {
     this.chat.onBookingDeclined(handler);
   }
 
+  offBookingDeclined(handler: (data: { bookingId: string; requestId: string }) => void): void {
+    this.chat.offBookingDeclined(handler);
+  }
+
   onProposalDeclined(handler: (data: { bookingId: string }) => void): void {
     this.chat.onProposalDeclined(handler);
+  }
+
+  offProposalDeclined(handler: (data: { bookingId: string }) => void): void {
+    this.chat.offProposalDeclined(handler);
   }
 
   onProposalSubmitted(handler: (data: ProposalSubmittedData) => void): void {
     this.chat.onProposalSubmitted(handler);
   }
 
+  offProposalSubmitted(handler: (data: ProposalSubmittedData) => void): void {
+    this.chat.offProposalSubmitted(handler);
+  }
+
   onProposalAccepted(handler: (data: ProposalAcceptedData) => void): void {
     this.chat.onProposalAccepted(handler);
+  }
+
+  offProposalAccepted(handler: (data: ProposalAcceptedData) => void): void {
+    this.chat.offProposalAccepted(handler);
   }
 
   onProviderArrived(handler: (data: { bookingId: string }) => void): void {
     this.chat.onProviderArrived(handler);
   }
 
+  offProviderArrived(handler: (data: { bookingId: string }) => void): void {
+    this.chat.offProviderArrived(handler);
+  }
+
   onBookingCompleted(handler: (data: { bookingId: string }) => void): void {
     this.chat.onBookingCompleted(handler);
   }
 
+  offBookingCompleted(handler: (data: { bookingId: string }) => void): void {
+    this.chat.offBookingCompleted(handler);
+  }
+
   onBookingCancelled(handler: (data: { bookingId: string }) => void): void {
     this.chat.onBookingCancelled(handler);
+  }
+
+  offBookingCancelled(handler: (data: { bookingId: string }) => void): void {
+    this.chat.offBookingCancelled(handler);
   }
 
   removeAllListeners(): void {
@@ -214,6 +258,10 @@ export abstract class BaseClient {
 
   disconnectChat(): void {
     this.chat.disconnect();
+  }
+
+  isChatConnected(): boolean {
+    return this.chat.isConnected();
   }
 
   async connectMatching(

@@ -1,5 +1,5 @@
 import * as ImagePicker from 'expo-image-picker';
-import { Alert, FlatList } from 'react-native';
+import { Alert, AppState, FlatList } from 'react-native';
 import { authClient } from '@lib/authClient';
 import { BookingStackParamList } from '@navigation/BookingStack';
 import type { Message } from '@repo/shared';
@@ -42,6 +42,17 @@ export function useBookingChat() {
   const session = authClient.useSession();
   const currentUserId = session.data?.user?.id;
 
+  const mergeMessages = useCallback((existing: Message[], incoming: Message[]): Message[] => {
+    const messageMap = new Map(existing.map(message => [message.id, message]));
+    for (const message of incoming) {
+      messageMap.set(message.id, message);
+    }
+
+    return [...messageMap.values()].sort(
+      (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+    );
+  }, []);
+
   const loadMessages = useCallback(
     async (loadOffset = 0) => {
       try {
@@ -51,11 +62,7 @@ export function useBookingChat() {
         );
         if (response.ok) {
           const data = await response.json();
-          if (loadOffset === 0) {
-            setMessages(data.messages);
-          } else {
-            setMessages(prev => [...data.messages, ...prev]);
-          }
+          setMessages(prev => mergeMessages(prev, data.messages));
           setHasMoreMessages(data.hasMore);
           setOffset(loadOffset + data.messages.length);
         }
@@ -65,8 +72,24 @@ export function useBookingChat() {
         setIsLoading(false);
       }
     },
-    [bookingId],
+    [bookingId, mergeMessages],
   );
+
+  const refreshLatestMessages = useCallback(async () => {
+    try {
+      const response = await seekerClient.apiFetch(`/bookings/${bookingId}/messages?limit=50&offset=0`, 'GET');
+      if (!response.ok) {
+        return;
+      }
+
+      const data = await response.json();
+      setMessages(prev => mergeMessages(prev, data.messages));
+      setHasMoreMessages(data.hasMore);
+      setOffset(prevOffset => Math.max(prevOffset, data.messages.length));
+    } catch (error) {
+      console.error('Failed to refresh latest messages:', error);
+    }
+  }, [bookingId, mergeMessages]);
 
   useEffect(() => {
     if (session.data) {
@@ -75,44 +98,82 @@ export function useBookingChat() {
   }, [loadMessages, session.data]);
 
   useEffect(() => {
+    if (!session.data) {
+      return;
+    }
+
+    const intervalId = setInterval(() => {
+      if (!seekerClient.isChatConnected()) {
+        void refreshLatestMessages();
+      }
+    }, 5000);
+
+    return () => clearInterval(intervalId);
+  }, [refreshLatestMessages, session.data]);
+
+  useEffect(() => {
+    if (!session.data) {
+      return;
+    }
+
+    const appStateSubscription = AppState.addEventListener('change', nextState => {
+      if (nextState === 'active') {
+        void refreshLatestMessages();
+      }
+    });
+
+    return () => appStateSubscription.remove();
+  }, [refreshLatestMessages, session.data]);
+
+  useEffect(() => {
     if (!session.data) return;
 
     const setupSocket = async () => {
       if (!currentUserId) return;
-      await seekerClient.connectChat(authClient.getCookie(), currentUserId, 'seeker');
-      seekerClient.joinBooking(bookingId);
-
-      seekerClient.onNewMessage(message => {
-        setMessages(prev => [...prev, message]);
+      const handleNewMessage = (message: Message) => {
+        setMessages(prev => mergeMessages(prev, [message]));
         setTimeout(() => {
           flatListRef.current?.scrollToEnd({ animated: true });
         }, 100);
-      });
+      };
 
-      seekerClient.onTyping(data => {
+      const handleTyping = (data: { userId: string; bookingId: string; isTyping: boolean }) => {
         if (data.userId !== currentUserId) {
           setIsTyping(data.isTyping);
         }
-      });
+      };
 
-      seekerClient.onBookingDeclined(data => {
+      const handleBookingDeclined = (data: { bookingId: string; requestId: string }) => {
         if (data.bookingId === bookingId) {
           seekerClient.unwatchRequest(requestId);
           Alert.alert('Booking Declined', 'The provider has declined the booking.', [
             { text: 'OK', onPress: () => navigation.getParent()?.goBack() },
           ]);
         }
-      });
+      };
 
-      seekerClient.onBookingCancelled(data => {
+      const handleBookingCancelled = (data: { bookingId: string }) => {
         if (data.bookingId === bookingId) {
           Alert.alert('Booking Cancelled', 'The booking has been cancelled.', [
             { text: 'OK', onPress: () => navigation.getParent()?.goBack() },
           ]);
         }
-      });
+      };
 
-      seekerClient.onProposalSubmitted(data => {
+      const handleProposalSubmitted = (data: {
+        bookingId: string;
+        proposal: {
+          cost: number;
+          specifications: string;
+          serviceTypeName: string;
+          address:
+            | {
+                label: string | null;
+                coordinates: [number, number];
+              }
+            | undefined;
+        };
+      }) => {
         if (data.bookingId === bookingId) {
           navigation.navigate('BookingProposal', {
             bookingId,
@@ -121,17 +182,36 @@ export function useBookingChat() {
             requestId,
           });
         }
-      });
+      };
+
+      seekerClient.onNewMessage(handleNewMessage);
+      seekerClient.onTyping(handleTyping);
+      seekerClient.onBookingDeclined(handleBookingDeclined);
+      seekerClient.onBookingCancelled(handleBookingCancelled);
+      seekerClient.onProposalSubmitted(handleProposalSubmitted);
+
+      await seekerClient.connectChat(authClient.getCookie(), currentUserId, 'seeker');
+      seekerClient.joinBooking(bookingId);
+
+      return () => {
+        seekerClient.offNewMessage(handleNewMessage);
+        seekerClient.offTyping(handleTyping);
+        seekerClient.offBookingDeclined(handleBookingDeclined);
+        seekerClient.offBookingCancelled(handleBookingCancelled);
+        seekerClient.offProposalSubmitted(handleProposalSubmitted);
+      };
     };
 
-    setupSocket();
+    let unregisterHandlers: (() => void) | undefined;
+    setupSocket().then(cleanup => {
+      unregisterHandlers = cleanup;
+    });
 
     return () => {
+      unregisterHandlers?.();
       seekerClient.leaveBooking(bookingId);
-      seekerClient.removeAllListeners();
-      seekerClient.disconnectChat();
     };
-  }, [bookingId, currentUserId, navigation, providerInfo, requestId, session.data]);
+  }, [bookingId, currentUserId, mergeMessages, navigation, providerInfo, requestId, session.data]);
 
   const handleSendMessage = useCallback(async () => {
     if ((!inputText.trim() && selectedImages.length === 0) || isSending) return;

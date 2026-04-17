@@ -7,6 +7,9 @@ export const createStyles = (colors: ThemeColors) =>
       flex: 1,
       backgroundColor: colors.canvas.base,
     },
+    headerContainer: {
+      gap: spacing.s,
+    },
     liveHeader: {
       padding: spacing.heroInset,
       borderRadius: 28,
@@ -130,9 +133,5 @@ export const createStyles = (colors: ThemeColors) =>
       borderRadius: 16,
       backgroundColor: colors.card.base,
       padding: spacing.m,
-    },
-    bottomBar: {
-      backgroundColor: colors.canvas.base,
-      borderTopColor: colors.card.stroke,
     },
   });
