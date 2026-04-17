@@ -1,8 +1,8 @@
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import { Button, Card, EmptyState, Header, ScreenContainer, StatusBadge, Typography } from '@repo/components';
-import { CalendarClock, ChevronLeft, CircleDollarSign, FileText, Flag, MapPin } from 'lucide-react-native';
-import { TouchableOpacity, View } from 'react-native';
+import { Button, Card, EmptyState, ScreenContainer, StatusBadge, Typography } from '@repo/components';
+import { CalendarClock, CircleDollarSign, FileText, MapPin } from 'lucide-react-native';
 import { useTheme } from '@repo/theme';
+import { View } from 'react-native';
 
 import { createStyles } from './BookingLogs.styles';
 import { useBookingLogs } from './BookingLogs.hooks';
@@ -24,10 +24,8 @@ export function BookingLogsScreen() {
     latitude,
     longitude,
     formatDateTime,
-    handleGoBack,
     handleViewRequestDetails,
     handleViewChatLogs,
-    handleReport,
   } = useBookingLogs();
 
   if (isLoading) {
@@ -41,7 +39,7 @@ export function BookingLogsScreen() {
   return (
     <ScreenContainer
       scrollable
-      edges={['top', 'left', 'right']}
+      edges={['left', 'right']}
       stickyFooter={
         <View style={styles.footerButtons}>
           <Button title="View Request Details" onPress={handleViewRequestDetails} />
@@ -49,21 +47,6 @@ export function BookingLogsScreen() {
         </View>
       }
     >
-      <Header
-        title="Booking Details"
-        size="small"
-        leftContent={
-          <TouchableOpacity onPress={handleGoBack} style={styles.iconButton}>
-            <ChevronLeft size={24} color={colors.textPrimary} />
-          </TouchableOpacity>
-        }
-        rightContent={
-          <TouchableOpacity onPress={handleReport} style={styles.iconButton}>
-            <Flag size={20} color={colors.textSecondary} />
-          </TouchableOpacity>
-        }
-      />
-
       <View style={styles.content}>
         <View style={styles.heroCard}>
           <Typography variant="h3" color="textInverse">

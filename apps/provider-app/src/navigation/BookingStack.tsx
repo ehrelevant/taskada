@@ -87,7 +87,6 @@ const Stack = createNativeStackNavigator<BookingStackParamList>();
 export function BookingStack() {
   const { colors } = useTheme();
 
-
   const shouldHideBackButton = (routeName: keyof BookingStackParamList): boolean => {
     return routeName === 'BookingChat'
       || routeName === 'BookingTransit'
@@ -283,7 +282,6 @@ export function BookingStack() {
         component={ReportScreen}
         options={{
           title: 'Report User',
-          headerShown: false,
         }}
       />
     </Stack.Navigator>

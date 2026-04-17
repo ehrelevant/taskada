@@ -249,6 +249,7 @@ export function BookingStack() {
         options={{
           title: 'Finding Providers',
           gestureEnabled: false,
+          headerShown: false,
         }}
       />
       <Stack.Screen

@@ -11,7 +11,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 type TransactionDetailsRouteProp = RouteProp<HistoryStackParamList & BookingStackParamList, 'BookingLogs'>;
 type TransactionDetailsNavigationProp = NativeStackNavigationProp<HistoryStackParamList & BookingStackParamList, 'BookingLogs'>;
 
-interface TransactionData {
+interface BookingData {
   id: string;
   status: string;
   cost: number;
@@ -52,7 +52,7 @@ export function useBookingLogs() {
   const route = useRoute<TransactionDetailsRouteProp>();
   const { bookingId } = route.params;
 
-  const [transaction, setTransaction] = useState<TransactionData | null>(null);
+  const [booking, setBooking] = useState<BookingData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [reviews, setReviews] = useState<ReviewWithUser[]>([]);
   const [isLoadingReviews, setIsLoadingReviews] = useState(false);
@@ -69,7 +69,7 @@ export function useBookingLogs() {
         const response = await seekerClient.apiFetch(`/bookings/${bookingId}`, 'GET');
         if (response.ok) {
           const data = await response.json();
-          setTransaction(data);
+          setBooking(data);
         } else {
           throw new Error('Failed to fetch transaction');
         }
@@ -86,11 +86,11 @@ export function useBookingLogs() {
 
   useEffect(() => {
     const loadReviews = async () => {
-      if (!transaction?.serviceId) return;
+      if (!booking?.serviceId) return;
 
       try {
         setIsLoadingReviews(true);
-        const response = await seekerClient.apiFetch(`/services/${transaction.serviceId}/reviews`, 'GET');
+        const response = await seekerClient.apiFetch(`/services/${booking.serviceId}/reviews`, 'GET');
         if (response.ok) {
           const data = await response.json();
           setReviews(data);
@@ -103,47 +103,47 @@ export function useBookingLogs() {
     };
 
     loadReviews();
-  }, [transaction?.serviceId]);
+  }, [booking?.serviceId]);
 
   const handleGoBack = useCallback(() => {
     navigation.goBack();
   }, [navigation]);
 
   const handleViewServiceDetails = useCallback(() => {
-    if (transaction?.serviceId) {
+    if (booking?.serviceId) {
       navigation.getParent()?.navigate('HomeStack', {
         screen: 'ServiceDetails',
-        params: { serviceId: transaction.serviceId },
+        params: { serviceId: booking.serviceId },
       });
     }
-  }, [navigation, transaction?.serviceId]);
+  }, [navigation, booking?.serviceId]);
 
   const handleViewRequestDetails = useCallback(() => {
     navigation.navigate('RequestLogs', { bookingId });
   }, [navigation, bookingId]);
 
   const handleViewChatLogs = useCallback(() => {
-    if (transaction?.provider) {
+    if (booking?.provider) {
       navigation.navigate('ChatLogs', {
         bookingId,
         otherUser: {
-          id: transaction.provider.id,
-          firstName: transaction.provider.firstName,
-          lastName: transaction.provider.lastName,
-          avatarUrl: transaction.provider.avatarUrl,
+          id: booking.provider.id,
+          firstName: booking.provider.firstName,
+          lastName: booking.provider.lastName,
+          avatarUrl: booking.provider.avatarUrl,
         },
       });
     }
-  }, [navigation, transaction?.provider, bookingId]);
+  }, [navigation, booking?.provider, bookingId]);
 
   const handleSubmitReview = useCallback(async () => {
-    if (!transaction?.serviceId || rating === 0) return;
+    if (!booking?.serviceId || rating === 0) return;
 
     setIsSubmitting(true);
     try {
       const response = await seekerClient.apiFetch('/reviews', 'POST', {
         body: JSON.stringify({
-          serviceId: transaction.serviceId,
+          serviceId: booking.serviceId,
           bookingId,
           rating,
           comment: comment.trim() || undefined,
@@ -157,7 +157,7 @@ export function useBookingLogs() {
 
       navigation.getParent()?.navigate('HomeStack', {
         screen: 'ServiceDetails',
-        params: { serviceId: transaction.serviceId },
+        params: { serviceId: booking.serviceId },
       });
     } catch (error) {
       console.error('Error submitting review:', error);
@@ -165,21 +165,24 @@ export function useBookingLogs() {
     } finally {
       setIsSubmitting(false);
     }
-  }, [transaction?.serviceId, bookingId, rating, comment, navigation]);
+  }, [booking?.serviceId, bookingId, rating, comment, navigation]);
 
   const handleReport = useCallback(() => {
-    if (transaction?.provider) {
+    if (booking?.provider) {
       navigation.navigate('Report', {
         bookingId,
         reportedUser: {
-          id: transaction.provider.id,
-          firstName: transaction.provider.firstName,
-          lastName: transaction.provider.lastName,
-          avatarUrl: transaction.provider.avatarUrl,
+          id: booking.provider.id,
+          firstName: booking.provider.firstName,
+          lastName: booking.provider.lastName,
+          avatarUrl: booking.provider.avatarUrl,
         },
       });
     }
-  }, [bookingId, navigation, transaction?.provider]);
+  }, [bookingId, navigation, booking?.provider]);
+
+  const coordinates = booking?.address?.coordinates;
+  const [longitude, latitude] = coordinates || [0, 0];
 
   const formatDateTime = (dateString: string) => {
     const date = new Date(dateString);
@@ -193,8 +196,10 @@ export function useBookingLogs() {
   };
 
   return {
-    transaction,
+    booking,
     isLoading,
+    latitude,
+    longitude,
     reviews,
     isLoadingReviews,
     rating,

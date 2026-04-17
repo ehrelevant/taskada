@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, EmptyState, Header, ScreenContainer, Typography } from '@repo/components';
+import { Avatar, Card, EmptyState, ScreenContainer, Typography } from '@repo/components';
 import { FileText, MapPin, Sparkles, UserCircle2, Wrench } from 'lucide-react-native';
 import { Image, View } from 'react-native';
 import { useTheme } from '@repo/theme';
@@ -10,7 +10,7 @@ export function RequestLogsScreen() {
   const { colors } = useTheme();
   const styles = createStyles(colors);
 
-  const { request, isLoading, error, handleGoBack } = useRequestLogs();
+  const { request, isLoading, error } = useRequestLogs();
 
   if (isLoading) {
     return (
@@ -23,15 +23,13 @@ export function RequestLogsScreen() {
   if (error || !request) {
     return (
       <ScreenContainer edges={['left', 'right']}>
-        <EmptyState message={error || 'Request not found'} action={<Button title="Go Back" onPress={handleGoBack} />} />
+        <EmptyState message={error || 'Request not found'} />
       </ScreenContainer>
     );
   }
 
   return (
     <ScreenContainer scrollable edges={['left', 'right']} contentPadding="m" contentStyle={styles.content}>
-      <Header title="Request Details" size="small" onBack={handleGoBack} />
-
       <View style={styles.heroCard}>
         <Typography variant="h3" color="textInverse">
           Original request details
@@ -119,8 +117,6 @@ export function RequestLogsScreen() {
           </View>
         </Card>
       )}
-
-      <Button title="Go Back" onPress={handleGoBack} style={styles.button} />
     </ScreenContainer>
   );
 }

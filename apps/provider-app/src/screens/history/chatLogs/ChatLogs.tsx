@@ -1,5 +1,4 @@
-import { EmptyState, Header, ImageViewer, ScreenContainer, Typography } from '@repo/components';
-import { Flag } from 'lucide-react-native';
+import { EmptyState, ImageViewer, ScreenContainer, Typography } from '@repo/components';
 import { FlatList, Image, ScrollView, TouchableOpacity, View } from 'react-native';
 import { useTheme } from '@repo/theme';
 
@@ -10,7 +9,7 @@ export function ChatLogsScreen() {
   const { colors } = useTheme();
   const styles = createStyles(colors);
 
-  const { messages, isLoading, error, selectedImage, setSelectedImage, otherUser, handleGoBack, handleReport } =
+  const { messages, isLoading, error, selectedImage, setSelectedImage, otherUser } =
     useChatLogs();
 
   const renderMessage = ({ item }: { item: Message }) => {
@@ -66,18 +65,6 @@ export function ChatLogsScreen() {
 
   return (
     <ScreenContainer edges={['left', 'right']} padding="none">
-      <Header
-        title={`${otherUser.firstName} ${otherUser.lastName}`}
-        subtitle="Chat History"
-        size="small"
-        onBack={handleGoBack}
-        rightContent={
-          <TouchableOpacity onPress={handleReport} style={styles.iconButton}>
-            <Flag size={20} color={colors.textSecondary} />
-          </TouchableOpacity>
-        }
-      />
-
       <FlatList
         data={messages}
         renderItem={renderMessage}

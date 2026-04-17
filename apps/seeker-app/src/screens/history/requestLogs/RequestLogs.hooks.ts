@@ -1,13 +1,11 @@
 import { BookingStackParamList } from '@navigation/BookingStack';
 import { HistoryStackParamList } from '@navigation/HistoryStack';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RouteProp } from '@react-navigation/native';
 import { seekerClient } from '@lib/seekerClient';
 import { useCallback, useEffect, useState } from 'react';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 
 type RequestDetailsRouteProp = RouteProp<HistoryStackParamList & BookingStackParamList, 'RequestLogs'>;
-type RequestDetailsNavigationProp = NativeStackNavigationProp<HistoryStackParamList & BookingStackParamList, 'RequestLogs'>;
 
 interface RequestDetailsData {
   id: string;
@@ -32,7 +30,6 @@ interface RequestDetailsData {
 
 export function useRequestLogs() {
   const route = useRoute<RequestDetailsRouteProp>();
-  const navigation = useNavigation<RequestDetailsNavigationProp>();
   const { bookingId } = route.params;
 
   const [request, setRequest] = useState<RequestDetailsData | null>(null);
@@ -62,15 +59,10 @@ export function useRequestLogs() {
     loadRequestDetails();
   }, [loadRequestDetails]);
 
-  const handleGoBack = useCallback(() => {
-    navigation.goBack();
-  }, [navigation]);
-
   return {
     request,
     isLoading,
     error,
-    handleGoBack,
     loadRequestDetails,
   };
 }

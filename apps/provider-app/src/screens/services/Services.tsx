@@ -1,6 +1,6 @@
 import { Card, ScreenContainer, Typography } from '@repo/components';
-import { CircleDollarSign, Pencil, Plus, Trash2, Wrench } from 'lucide-react-native';
 import { FlatList, Switch, TouchableOpacity, View } from 'react-native';
+import { Pencil, Plus, Trash2, Wrench } from 'lucide-react-native';
 import type { ProviderService } from '@repo/types';
 import { useTheme } from '@repo/theme';
 
@@ -35,7 +35,6 @@ export function ServicesScreen() {
         <View style={styles.cardContent}>
           <Typography variant="h5">{item.serviceType.name}</Typography>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-            <CircleDollarSign size={14} color={colors.actionPrimary} />
             <Typography variant="body2" color={colors.textSecondary}>
               Starts at PHP {item.initialCost.toLocaleString()}
             </Typography>

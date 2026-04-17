@@ -31,23 +31,21 @@ export function StandbyScreen() {
   }
 
   return (
-    <ScreenContainer edges={['top', 'left', 'right']} contentPadding="m" contentStyle={styles.content}>
-      <View style={styles.heroShell}>
-        <View style={styles.heroCard}>
-          <Typography variant="h3" color="textInverse">
-            Looking for the right provider
-          </Typography>
-          <Typography variant="body2" color="textInverse">
-            We are notifying nearby verified providers that match your request details.
-          </Typography>
+    <ScreenContainer contentPadding="m" contentStyle={styles.content}>
+      <View style={styles.heroCard}>
+        <Typography variant="h3" color="textInverse">
+          Looking for the right provider
+        </Typography>
+        <Typography variant="body2" color="textInverse">
+          We are notifying nearby verified providers that match your request details.
+        </Typography>
+      </View>
 
-          <View style={styles.spinnerCard}>
-            <ActivityIndicator size="large" color={colors.actionPrimary} />
-            <Typography variant="body2" color="textSecondary" style={styles.spinnerText}>
-              Waiting for provider response...
-            </Typography>
-          </View>
-        </View>
+      <View style={styles.spinnerContainer}>
+        <ActivityIndicator size="large" color={colors.actionPrimary} />
+        <Typography variant="body2" color="textSecondary" style={styles.spinnerText}>
+          Waiting for provider response...
+        </Typography>
       </View>
 
       <Button

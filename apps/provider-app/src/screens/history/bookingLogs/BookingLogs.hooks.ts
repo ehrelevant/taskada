@@ -1,7 +1,5 @@
 import { Alert } from 'react-native';
 import { BookingStackParamList } from '@navigation/BookingStack';
-import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
-import { DashboardTabsParamList } from '@navigation/DashboardTabs';
 import { HistoryStackParamList } from '@navigation/HistoryStack';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { providerClient } from '@lib/providerClient';
@@ -75,36 +73,6 @@ export function useBookingLogs() {
     fetchBooking();
   }, [fetchBooking]);
 
-  const handleGoBack = useCallback(() => {
-    if (route.params.forceHistoryBack) {
-      const tabsNavigation = navigation.getParent<BottomTabNavigationProp<DashboardTabsParamList>>();
-      if (tabsNavigation) {
-        tabsNavigation.navigate('HistoryStack', {
-          screen: 'History',
-        });
-        return;
-      }
-
-      navigation.navigate('History');
-      return;
-    }
-
-    if (navigation.canGoBack()) {
-      navigation.goBack();
-      return;
-    }
-
-    const tabsNavigation = navigation.getParent<BottomTabNavigationProp<DashboardTabsParamList>>();
-    if (tabsNavigation) {
-      tabsNavigation.navigate('HistoryStack', {
-        screen: 'History',
-      });
-      return;
-    }
-
-    navigation.navigate('History');
-  }, [navigation, route.params.forceHistoryBack]);
-
   const handleViewRequestDetails = useCallback(() => {
     navigation.navigate('RequestLogs', { bookingId });
   }, [bookingId, navigation]);
@@ -123,15 +91,6 @@ export function useBookingLogs() {
         avatarUrl: booking.seeker?.avatarUrl ?? null,
       },
     });
-  }, [booking, bookingId, navigation]);
-
-  const handleReport = useCallback(() => {
-    if (booking?.seeker) {
-      navigation.navigate('Report', {
-        bookingId,
-        reportedUser: booking.seeker,
-      });
-    }
   }, [booking, bookingId, navigation]);
 
   const coordinates = booking?.address?.coordinates;
@@ -154,9 +113,7 @@ export function useBookingLogs() {
     latitude,
     longitude,
     formatDateTime,
-    handleGoBack,
     handleViewRequestDetails,
     handleViewChatLogs,
-    handleReport,
   };
 }

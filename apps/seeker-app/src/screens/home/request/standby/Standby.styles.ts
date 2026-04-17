@@ -6,11 +6,8 @@ export const createStyles = (colors: ThemeColors) =>
     content: {
       gap: spacing.m,
     },
-    heroShell: {
-      flex: 1,
-    },
     heroCard: {
-      flex: 1,
+      flex: 0,
       borderRadius: radius.xxl,
       borderWidth: 1,
       borderColor: colors.home.heroAccent,
@@ -18,14 +15,11 @@ export const createStyles = (colors: ThemeColors) =>
       padding: spacing.heroInset,
       gap: spacing.s,
     },
-    spinnerCard: {
-      borderRadius: radius.l,
-      borderWidth: 1,
-      borderColor: colors.card.stroke,
-      backgroundColor: colors.card.base,
+    spinnerContainer: {
+      flex: 1,
       alignItems: 'center',
       justifyContent: 'center',
-      flexGrow: 1,
+      flexGrow: 1
     },
     spinnerText: {
       marginTop: spacing.s,

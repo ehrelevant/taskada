@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { HistoryScreen } from '@screens/history/History';
 import { ReportScreen } from '@screens/report/Report';
 import { RequestLogsScreen } from '@screens/history/requestLogs/RequestLogs';
+import { StackHeader } from '@repo/components';
 
 export type HistoryStackParamList = {
   History: undefined;
@@ -37,6 +38,13 @@ export function HistoryStack() {
       initialRouteName="History"
       screenOptions={{
         animationDuration: 400,
+        header: ({ navigation, options, route, back }) => (
+          <StackHeader
+            title={typeof options.title === 'string' ? options.title : route.name}
+            canGoBack={Boolean(back)}
+            onBack={() => navigation.goBack()}
+          />
+        ),
       }}
     >
       <Stack.Screen
@@ -52,7 +60,6 @@ export function HistoryStack() {
         component={BookingLogsScreen}
         options={{
           title: 'Booking Details',
-          headerShown: false,
         }}
       />
       <Stack.Screen
@@ -60,7 +67,6 @@ export function HistoryStack() {
         component={RequestLogsScreen}
         options={{
           title: 'Request Details',
-          headerShown: false,
         }}
       />
       <Stack.Screen
@@ -68,7 +74,6 @@ export function HistoryStack() {
         component={ChatLogsScreen}
         options={{
           title: 'Chat History',
-          headerShown: false,
         }}
       />
       <Stack.Screen
@@ -76,7 +81,6 @@ export function HistoryStack() {
         component={ReportScreen}
         options={{
           title: 'Report User',
-          headerShown: false,
         }}
       />
     </Stack.Navigator>

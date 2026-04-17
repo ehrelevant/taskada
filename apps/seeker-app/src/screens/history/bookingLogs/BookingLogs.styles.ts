@@ -32,6 +32,27 @@ export const createStyles = (colors: ThemeColors) =>
       borderColor: colors.card.stroke,
       backgroundColor: colors.card.base,
     },
+        mapContainer: {
+      height: 200,
+      borderRadius: radius.m,
+      overflow: 'hidden',
+      borderWidth: 1,
+      borderColor: colors.card.stroke,
+    },
+    map: {
+      flex: 1,
+    },
+    addressContainer: {
+      marginTop: spacing.s,
+      padding: spacing.m,
+      backgroundColor: colors.card.muted,
+      borderRadius: radius.s,
+      borderWidth: 1,
+      borderColor: colors.card.stroke,
+    },
+    addressText: {
+      lineHeight: 22,
+    },
     sectionLabelRow: {
       flexDirection: 'row',
       alignItems: 'center',

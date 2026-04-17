@@ -1,5 +1,5 @@
 import { AlertTriangle, CheckCircle2, ImagePlus, ShieldAlert, X } from 'lucide-react-native';
-import { Avatar, Button, EmptyState, Header, ScreenContainer, Typography } from '@repo/components';
+import { Avatar, Button, EmptyState, ScreenContainer, Typography } from '@repo/components';
 import { Controller } from 'react-hook-form';
 import { Image, ScrollView, TextInput, TouchableOpacity, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
@@ -25,7 +25,6 @@ export function ReportScreen() {
     handlePickImage,
     handleRemoveImage,
     handleSubmit,
-    handleGoBack,
   } = useReport();
 
   useEffect(() => {
@@ -35,7 +34,6 @@ export function ReportScreen() {
   if (isChecking) {
     return (
       <ScreenContainer edges={['left', 'right']}>
-        <Header title="Report User" size="small" onBack={handleGoBack} />
         <EmptyState loading loadingMessage="Checking..." />
       </ScreenContainer>
     );
@@ -44,7 +42,6 @@ export function ReportScreen() {
   if (hasAlreadyReported) {
     return (
       <ScreenContainer edges={['left', 'right']}>
-        <Header title="Report User" size="small" onBack={handleGoBack} />
         <View style={styles.alreadyReportedContainer}>
           <CheckCircle2 size={48} color={colors.success.base} />
           <Typography variant="h6" style={styles.alreadyReportedTitle}>
@@ -62,8 +59,6 @@ export function ReportScreen() {
 
   return (
     <ScreenContainer edges={['left', 'right']}>
-      <Header title="Report User" size="small" onBack={handleGoBack} />
-
       <KeyboardAwareScrollView
         style={styles.keyboardView}
         contentContainerStyle={styles.scrollContent}

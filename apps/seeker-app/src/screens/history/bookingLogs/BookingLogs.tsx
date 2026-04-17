@@ -1,18 +1,7 @@
-import {
-  Avatar,
-  Button,
-  Card,
-  EmptyState,
-  Header,
-  Rating,
-  ReviewCard,
-  ScreenContainer,
-  StarRatingInput,
-  StatusBadge,
-  Typography,
-} from '@repo/components';
-import { CalendarClock, CircleDollarSign, FileText, Flag } from 'lucide-react-native';
-import { TextInput, TouchableOpacity, View } from 'react-native';
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import { Avatar, Button, Card, EmptyState, Rating, ReviewCard, ScreenContainer, StarRatingInput, StatusBadge, Typography } from '@repo/components';
+import { CalendarClock, CircleDollarSign, FileText, MapPin } from 'lucide-react-native';
+import { TextInput, View } from 'react-native';
 import { useTheme } from '@repo/theme';
 
 import { createStyles } from './BookingLogs.styles';
@@ -29,8 +18,10 @@ export function BookingLogsScreen() {
   const { colors } = useTheme();
   const styles = createStyles(colors);
   const {
-    transaction,
+    booking,
     isLoading,
+    latitude,
+    longitude,
     reviews,
     rating,
     setRating,
@@ -38,12 +29,10 @@ export function BookingLogsScreen() {
     setComment,
     isSubmitting,
     currentUserId,
-    handleGoBack,
     handleViewServiceDetails,
     handleViewRequestDetails,
     handleViewChatLogs,
     handleSubmitReview,
-    handleReport,
     formatDateTime,
   } = useBookingLogs();
 
@@ -55,18 +44,18 @@ export function BookingLogsScreen() {
     );
   }
 
-  const providerName = transaction?.provider
-    ? `${transaction.provider.firstName} ${transaction.provider.lastName}`
+  const providerName = booking?.provider
+    ? `${booking.provider.firstName} ${booking.provider.lastName}`
     : 'Unknown Provider';
 
   const userReview = reviews.find((review: { reviewerUserId: string }) => review.reviewerUserId === currentUserId);
   const hasReviewed = !!userReview;
-  const isCompleted = transaction?.status === 'completed';
+  const isCompleted = booking?.status === 'completed';
 
   return (
     <ScreenContainer
       scrollable
-      edges={['top', 'left', 'right']}
+      edges={['left', 'right']}
       stickyFooter={
         <View style={styles.footerButtons}>
           <Button title="View Request Details" onPress={handleViewRequestDetails} />
@@ -74,21 +63,10 @@ export function BookingLogsScreen() {
         </View>
       }
     >
-      <Header
-        title="Booking Details"
-        size="small"
-        onBack={handleGoBack}
-        rightContent={
-          <TouchableOpacity onPress={handleReport} style={styles.iconButton}>
-            <Flag size={20} color={colors.textSecondary} />
-          </TouchableOpacity>
-        }
-      />
-
       <View style={styles.content}>
         <View style={styles.heroCard}>
           <Typography variant="h3" color="textInverse">
-            Booking ummary
+            Booking Summary
           </Typography>
           <Typography variant="body2" color="textInverse">
             Review finalized details, related request info, and conversation logs.
@@ -98,7 +76,7 @@ export function BookingLogsScreen() {
         <Card elevation="m" padding="l" style={styles.serviceCard} onPress={handleViewServiceDetails}>
           <View style={styles.providerSection}>
             <Avatar
-              source={transaction?.provider?.avatarUrl ? { uri: transaction.provider.avatarUrl } : null}
+              source={booking?.provider?.avatarUrl ? { uri: booking.provider.avatarUrl } : null}
               size={80}
               name={providerName}
             />
@@ -106,21 +84,52 @@ export function BookingLogsScreen() {
               {providerName}
             </Typography>
             <Typography variant="body2" color="textSecondary">
-              {transaction?.serviceType?.name}
+              {booking?.serviceType?.name}
             </Typography>
-            {transaction?.serviceRating && (
+            {booking?.serviceRating && (
               <View style={styles.ratingRow}>
                 <Rating
-                  value={transaction.serviceRating.avgRating}
-                  reviewCount={transaction.serviceRating.reviewCount}
+                  value={booking.serviceRating.avgRating}
+                  reviewCount={booking.serviceRating.reviewCount}
                 />
               </View>
             )}
           </View>
-          <Typography variant="caption" color="actionPrimary" align="center" style={styles.tapHint}>
-            Tap to view service details
-          </Typography>
         </Card>
+
+        {booking?.address && (
+          <Card elevation="s" padding="m" style={styles.sectionCard}>
+            <View style={styles.sectionLabelRow}>
+              <MapPin size={15} color={colors.textSecondary} />
+              <Typography variant="subtitle2" style={styles.sectionLabel}>
+                Service Location
+              </Typography>
+            </View>
+            <View style={styles.mapContainer}>
+              <MapView
+                provider={PROVIDER_GOOGLE}
+                style={styles.map}
+                initialRegion={{
+                  latitude,
+                  longitude,
+                  latitudeDelta: 0.01,
+                  longitudeDelta: 0.01,
+                }}
+                scrollEnabled={false}
+                zoomEnabled={false}
+                pitchEnabled={false}
+                rotateEnabled={false}
+              >
+                <Marker coordinate={{ latitude, longitude }} title="Service Location" />
+              </MapView>
+            </View>
+            <View style={styles.addressContainer}>
+              <Typography variant="body2" style={styles.addressText}>
+                {booking.address.label || 'Location not specified'}
+              </Typography>
+            </View>
+          </Card>
+        )}
 
         <Card elevation="s" padding="m" style={styles.sectionCard}>
           <View style={styles.sectionLabelRow}>
@@ -130,11 +139,11 @@ export function BookingLogsScreen() {
             </Typography>
           </View>
           <Typography variant="h5" color="actionPrimary">
-            ₱{transaction?.cost?.toFixed(2) || '0.00'}
+            ₱{booking?.cost?.toFixed(2) || '0.00'}
           </Typography>
         </Card>
 
-        {transaction?.specifications && (
+        {booking?.specifications && (
           <Card elevation="s" padding="m" style={styles.sectionCard}>
             <View style={styles.sectionLabelRow}>
               <FileText size={15} color={colors.textSecondary} />
@@ -144,7 +153,7 @@ export function BookingLogsScreen() {
             </View>
             <View style={styles.specificationsBox}>
               <Typography variant="body1" style={styles.specificationsText}>
-                {transaction.specifications}
+                {booking.specifications}
               </Typography>
             </View>
           </Card>
@@ -157,7 +166,7 @@ export function BookingLogsScreen() {
               Booking Date and Time
             </Typography>
           </View>
-          <Typography variant="body1">{transaction?.createdAt ? formatDateTime(transaction.createdAt) : 'N/A'}</Typography>
+          <Typography variant="body1">{booking?.createdAt ? formatDateTime(booking.createdAt) : 'N/A'}</Typography>
         </Card>
 
         <Card elevation="s" padding="m" style={styles.sectionCard}>
@@ -165,8 +174,8 @@ export function BookingLogsScreen() {
             Status
           </Typography>
           <StatusBadge
-            status={STATUS_MAP[transaction?.status || ''] || 'default'}
-            label={transaction?.status?.toUpperCase() || 'UNKNOWN'}
+            status={STATUS_MAP[booking?.status || ''] || 'default'}
+            label={booking?.status?.toUpperCase() || 'UNKNOWN'}
           />
         </Card>
 

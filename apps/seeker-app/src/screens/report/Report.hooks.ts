@@ -146,10 +146,6 @@ export function useReport() {
     [selectedImages, reportedUser.id, bookingId, navigation],
   );
 
-  const handleGoBack = useCallback(() => {
-    navigation.goBack();
-  }, [navigation]);
-
   return {
     reportedUser,
     selectedReason,
@@ -163,6 +159,5 @@ export function useReport() {
     handlePickImage,
     handleRemoveImage,
     handleSubmit: handleSubmit(onSubmit),
-    handleGoBack,
   };
 }

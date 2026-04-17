@@ -1,13 +1,11 @@
 import { BookingStackParamList } from '@navigation/BookingStack';
 import { HistoryStackParamList } from '@navigation/HistoryStack';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RouteProp } from '@react-navigation/native';
 import { seekerClient } from '@lib/seekerClient';
 import { useCallback, useEffect, useState } from 'react';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 
 type ChatLogsRouteProp = RouteProp<HistoryStackParamList & BookingStackParamList, 'ChatLogs'>;
-type ChatLogsNavigationProp = NativeStackNavigationProp<HistoryStackParamList & BookingStackParamList, 'ChatLogs'>;
 
 interface Message {
   id: string;
@@ -25,7 +23,6 @@ interface Message {
 
 export function useChatLogs() {
   const route = useRoute<ChatLogsRouteProp>();
-  const navigation = useNavigation<ChatLogsNavigationProp>();
   const { bookingId, otherUser } = route.params;
 
   const [messages, setMessages] = useState<Message[]>([]);
@@ -56,17 +53,6 @@ export function useChatLogs() {
     loadChatLogs();
   }, [loadChatLogs]);
 
-  const handleGoBack = useCallback(() => {
-    navigation.goBack();
-  }, [navigation]);
-
-  const handleReport = useCallback(() => {
-    navigation.navigate('Report', {
-      bookingId,
-      reportedUser: otherUser,
-    });
-  }, [bookingId, navigation, otherUser]);
-
   return {
     messages,
     isLoading,
@@ -74,8 +60,6 @@ export function useChatLogs() {
     otherUser,
     selectedImage,
     setSelectedImage,
-    handleGoBack,
-    handleReport,
     loadChatLogs,
   };
 }
