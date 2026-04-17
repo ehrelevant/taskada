@@ -3,10 +3,6 @@ import { StyleSheet } from 'react-native';
 
 export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: colors.canvas.base,
-    },
     keyboardView: {
       flex: 1,
     },
@@ -82,9 +78,6 @@ export const createStyles = (colors: ThemeColors) =>
       color: colors.textPrimary,
       lineHeight: 22,
     },
-    imageSection: {
-      marginTop: spacing.l,
-    },
     imagePickerButton: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -120,9 +113,6 @@ export const createStyles = (colors: ThemeColors) =>
     },
     errorText: {
       marginTop: spacing.xs,
-    },
-    descriptionSection: {
-      marginTop: spacing.l,
     },
     alreadyReportedContainer: {
       flex: 1,
