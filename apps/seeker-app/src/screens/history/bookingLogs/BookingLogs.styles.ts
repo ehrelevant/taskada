@@ -32,7 +32,7 @@ export const createStyles = (colors: ThemeColors) =>
       borderColor: colors.card.stroke,
       backgroundColor: colors.card.base,
     },
-        mapContainer: {
+    mapContainer: {
       height: 200,
       borderRadius: radius.m,
       overflow: 'hidden',

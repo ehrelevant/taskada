@@ -66,9 +66,7 @@ export function BookingDetailsScreen() {
             </MapView>
           </View>
           <View style={styles.addressContainer}>
-            <Typography variant="body2">
-              {booking.address.label || 'Location not specified'}
-            </Typography>
+            <Typography variant="body2">{booking.address.label || 'Location not specified'}</Typography>
           </View>
         </Card>
       )}
@@ -80,9 +78,7 @@ export function BookingDetailsScreen() {
             Service Cost
           </Typography>
         </View>
-        <Typography variant="h4">
-          ₱{booking?.cost?.toFixed(2) || '0.00'}
-        </Typography>
+        <Typography variant="h4">₱{booking?.cost?.toFixed(2) || '0.00'}</Typography>
       </Card>
 
       {booking?.specifications && (

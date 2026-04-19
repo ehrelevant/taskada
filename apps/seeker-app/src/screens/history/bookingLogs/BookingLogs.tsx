@@ -1,5 +1,16 @@
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import { Avatar, Button, Card, EmptyState, Rating, ReviewCard, ScreenContainer, StarRatingInput, StatusBadge, Typography } from '@repo/components';
+import {
+  Avatar,
+  Button,
+  Card,
+  EmptyState,
+  Rating,
+  ReviewCard,
+  ScreenContainer,
+  StarRatingInput,
+  StatusBadge,
+  Typography,
+} from '@repo/components';
 import { CalendarClock, CircleDollarSign, FileText, MapPin } from 'lucide-react-native';
 import { TextInput, View } from 'react-native';
 import { useTheme } from '@repo/theme';
@@ -88,10 +99,7 @@ export function BookingLogsScreen() {
             </Typography>
             {booking?.serviceRating && (
               <View style={styles.ratingRow}>
-                <Rating
-                  value={booking.serviceRating.avgRating}
-                  reviewCount={booking.serviceRating.reviewCount}
-                />
+                <Rating value={booking.serviceRating.avgRating} reviewCount={booking.serviceRating.reviewCount} />
               </View>
             )}
           </View>

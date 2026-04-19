@@ -21,11 +21,7 @@ export function StandbyScreen() {
   if (error) {
     return (
       <ScreenContainer contentPadding="m">
-        <EmptyState
-          title="Error"
-          message={error}
-          action={<Button title="Go Home" onPress={handleGoHome} />}
-        />
+        <EmptyState title="Error" message={error} action={<Button title="Go Home" onPress={handleGoHome} />} />
       </ScreenContainer>
     );
   }

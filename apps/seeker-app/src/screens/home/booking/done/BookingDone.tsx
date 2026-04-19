@@ -1,12 +1,4 @@
-import {
-  Avatar,
-  Button,
-  Card,
-  Rating,
-  ScreenContainer,
-  StarRatingInput,
-  Typography,
-} from '@repo/components';
+import { Avatar, Button, Card, Rating, ScreenContainer, StarRatingInput, Typography } from '@repo/components';
 import { CheckCircle } from 'lucide-react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { TextInput, View } from 'react-native';
@@ -48,11 +40,7 @@ export function BookingDoneScreen() {
         </View>
 
         <Card elevation="s" padding="m" style={styles.summaryCard}>
-          <Avatar
-            source={otherUser.avatarUrl ? { uri: otherUser.avatarUrl } : null}
-            size={80}
-            name={providerName}
-          />
+          <Avatar source={otherUser.avatarUrl ? { uri: otherUser.avatarUrl } : null} size={80} name={providerName} />
           <View style={styles.providerInfo}>
             <Typography variant="h3" style={styles.providerName}>
               {providerName}

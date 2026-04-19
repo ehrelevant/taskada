@@ -121,9 +121,10 @@ export function BookingStack() {
     );
   };
 
-  const getReportContext = (
-    route: { name: keyof BookingStackParamList; params?: object },
-  ): { bookingId: string; reportedUser: BookingStackParamList['Report']['reportedUser'] } | null => {
+  const getReportContext = (route: {
+    name: keyof BookingStackParamList;
+    params?: object;
+  }): { bookingId: string; reportedUser: BookingStackParamList['Report']['reportedUser'] } | null => {
     if (
       route.name === 'BookingChat' ||
       route.name === 'BookingProposal' ||
@@ -185,8 +186,7 @@ export function BookingStack() {
                   </TouchableOpacity>
                 )}
 
-                {(
-                  route.name === 'BookingTransit' ||
+                {(route.name === 'BookingTransit' ||
                   route.name === 'BookingServing' ||
                   route.name === 'BookingDone') && (
                   <TouchableOpacity
@@ -207,7 +207,9 @@ export function BookingStack() {
                   </TouchableOpacity>
                 )}
 
-                {(route.name === 'BookingTransit' || route.name === 'BookingServing' || route.name === 'BookingDone') && (
+                {(route.name === 'BookingTransit' ||
+                  route.name === 'BookingServing' ||
+                  route.name === 'BookingDone') && (
                   <TouchableOpacity
                     onPress={() => {
                       const params = route.params as

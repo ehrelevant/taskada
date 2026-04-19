@@ -129,9 +129,7 @@ export function useStandby() {
               await seekerClient.apiFetch(`/requests/${requestId}`, 'DELETE');
             }
 
-            Alert.alert('Cancelled', 'Your request has been cancelled.', [
-              { text: 'OK', onPress: navigateToHome },
-            ]);
+            Alert.alert('Cancelled', 'Your request has been cancelled.', [{ text: 'OK', onPress: navigateToHome }]);
           } catch (err) {
             console.error('Failed to cancel request:', err);
             Alert.alert('Error', 'Failed to cancel request. Please try again.');

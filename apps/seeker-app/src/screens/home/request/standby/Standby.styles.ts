@@ -19,7 +19,7 @@ export const createStyles = (colors: ThemeColors) =>
       flex: 1,
       alignItems: 'center',
       justifyContent: 'center',
-      flexGrow: 1
+      flexGrow: 1,
     },
     spinnerText: {
       marginTop: spacing.s,

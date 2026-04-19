@@ -18,15 +18,8 @@ export function BookingLogsScreen() {
   const { colors } = useTheme();
   const styles = createStyles(colors);
 
-  const {
-    booking,
-    isLoading,
-    latitude,
-    longitude,
-    formatDateTime,
-    handleViewRequestDetails,
-    handleViewChatLogs,
-  } = useBookingLogs();
+  const { booking, isLoading, latitude, longitude, formatDateTime, handleViewRequestDetails, handleViewChatLogs } =
+    useBookingLogs();
 
   if (isLoading) {
     return (

@@ -61,9 +61,7 @@ export function useBookingChat() {
       messageMap.set(message.id, message);
     }
 
-    return [...messageMap.values()].sort(
-      (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-    );
+    return [...messageMap.values()].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
   }, []);
 
   const loadMessages = useCallback(

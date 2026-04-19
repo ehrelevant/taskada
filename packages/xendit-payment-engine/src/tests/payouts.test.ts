@@ -2,12 +2,17 @@
 process.env.XENDIT_API_URL = 'https://api.example.com';
 process.env.XENDIT_CLIENT_SECRET = 'mock_secret';
 
-import { CancelPayoutResponseSchema, CreatePayoutResponseSchema, GetPaymentChannelsResponseSchema, GetPayoutResponseSchema, ListPayoutsResponseSchema } from '@payouts/schema';
+import {
+  CancelPayoutResponseSchema,
+  CreatePayoutResponseSchema,
+  GetPaymentChannelsResponseSchema,
+  GetPayoutResponseSchema,
+  ListPayoutsResponseSchema,
+} from '@payouts/schema';
 import { mockGet, mockPost, partial_mockKyResponse } from '@src/tests/utils';
 
-const { create_payout, get_payout, get_payout_by_reference_id, cancel_payout, get_payment_channels } = await import(
-  '@payouts/index'
-);
+const { create_payout, get_payout, get_payout_by_reference_id, cancel_payout, get_payment_channels } =
+  await import('@payouts/index');
 
 const CreatePayoutRequestExample = {
   reference_id: 'myref-1482928194',

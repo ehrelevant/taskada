@@ -9,8 +9,7 @@ export function ChatLogsScreen() {
   const { colors } = useTheme();
   const styles = createStyles(colors);
 
-  const { messages, isLoading, error, selectedImage, setSelectedImage, otherUser } =
-    useChatLogs();
+  const { messages, isLoading, error, selectedImage, setSelectedImage, otherUser } = useChatLogs();
 
   const renderMessage = ({ item }: { item: Message }) => {
     const isOtherUser = item.userId === otherUser.id;
@@ -81,9 +80,7 @@ export function ChatLogsScreen() {
             </Typography>
           </View>
         }
-        ListEmptyComponent={
-          <EmptyState message="No messages in this conversation" />
-        }
+        ListEmptyComponent={<EmptyState message="No messages in this conversation" />}
       />
 
       <ImageViewer

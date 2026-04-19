@@ -35,7 +35,16 @@ export function RequestListScreen() {
   const { colors } = useTheme();
   const styles = createStyles(colors);
 
-  const { isAccepting, requests, isConnecting, isRefreshing, enableRequests, disableRequests, handleRefresh, handleViewDetails } = useRequestList();
+  const {
+    isAccepting,
+    requests,
+    isConnecting,
+    isRefreshing,
+    enableRequests,
+    disableRequests,
+    handleRefresh,
+    handleViewDetails,
+  } = useRequestList();
 
   const renderRequestCard = ({ item }: { item: IncomingRequest }) => {
     const seekerName = `${item.seeker.firstName} ${item.seeker.lastName}`.trim();

@@ -170,7 +170,7 @@ export function ReportScreen() {
             <ScrollView horizontal style={styles.selectedImagesContainer} showsHorizontalScrollIndicator={false}>
               {selectedImages.map((uri, index) => (
                 <View key={index} style={styles.selectedImageWrapper}>
-                  <Image source={{ uri }} width={80} height={80}/>
+                  <Image source={{ uri }} width={80} height={80} />
                   <TouchableOpacity style={styles.removeImageButton} onPress={() => handleRemoveImage(index)}>
                     <X size={14} color={colors.textInverse} />
                   </TouchableOpacity>

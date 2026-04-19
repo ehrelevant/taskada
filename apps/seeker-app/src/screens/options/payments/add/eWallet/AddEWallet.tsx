@@ -43,7 +43,7 @@ export function AddEWalletScreen() {
                 style={[styles.walletTouch, styles.walletCard, isSelected && styles.walletCardSelected]}
                 padding="m"
               >
-                <View style={[styles.placeholderLogo, { backgroundColor: wallet.color }]}> 
+                <View style={[styles.placeholderLogo, { backgroundColor: wallet.color }]}>
                   <Typography variant="caption" color="white" weight="bold">
                     {wallet.name[0]}
                   </Typography>

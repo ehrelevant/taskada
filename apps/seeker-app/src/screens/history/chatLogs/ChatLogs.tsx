@@ -8,8 +8,7 @@ import { useChatLogs } from './ChatLogs.hooks';
 export function ChatLogsScreen() {
   const { colors } = useTheme();
   const styles = createStyles(colors);
-  const { messages, isLoading, error, otherUser, selectedImage, setSelectedImage } =
-    useChatLogs();
+  const { messages, isLoading, error, otherUser, selectedImage, setSelectedImage } = useChatLogs();
 
   if (isLoading) {
     return (

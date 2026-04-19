@@ -103,9 +103,7 @@ export function useBookingDone() {
         throw new Error(error.message || 'Failed to submit review');
       }
 
-      Alert.alert('Success', 'Thank you for your review!', [
-        { text: 'OK', onPress: navigateToHome },
-      ]);
+      Alert.alert('Success', 'Thank you for your review!', [{ text: 'OK', onPress: navigateToHome }]);
     } catch (error) {
       console.error('Error submitting review:', error);
       Alert.alert('Error', error instanceof Error ? error.message : 'Failed to submit review');

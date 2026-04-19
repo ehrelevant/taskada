@@ -23,16 +23,8 @@ function formatCurrency(amount: number): string {
 export function BookingProposalScreen() {
   const { colors } = useTheme();
   const styles = createStyles(colors);
-  const {
-    cost,
-    specifications,
-    serviceTypeName,
-    address,
-    longitude,
-    latitude,
-    handleAccept,
-    handleDecline,
-  } = useBookingProposal();
+  const { cost, specifications, serviceTypeName, address, longitude, latitude, handleAccept, handleDecline } =
+    useBookingProposal();
 
   return (
     <ScreenContainer edges={['left', 'right', 'bottom']}>

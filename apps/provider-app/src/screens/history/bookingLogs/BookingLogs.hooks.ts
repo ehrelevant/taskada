@@ -7,7 +7,10 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useCallback, useEffect, useState } from 'react';
 
 type BookingDetailsRouteProp = RouteProp<HistoryStackParamList & BookingStackParamList, 'BookingLogs'>;
-type BookingDetailsNavigationProp = NativeStackNavigationProp<HistoryStackParamList & BookingStackParamList, 'BookingLogs'>;
+type BookingDetailsNavigationProp = NativeStackNavigationProp<
+  HistoryStackParamList & BookingStackParamList,
+  'BookingLogs'
+>;
 
 export interface BookingData {
   id: string;

@@ -77,12 +77,7 @@ export function PaymentMethodsScreen() {
           <Plus color={colors.actionSecondary} size={20} style={styles.plusIcon} />
         </Card>
 
-        <Card
-          elevation="xs"
-          padding="m"
-          style={styles.actionCard}
-          onPress={() => navigation.navigate('AddEWallet')}
-        >
+        <Card elevation="xs" padding="m" style={styles.actionCard} onPress={() => navigation.navigate('AddEWallet')}>
           <View style={[styles.actionIcon, styles.walletIconBg]}>
             <Wallet color={colors.secondary.base} size={24} />
           </View>

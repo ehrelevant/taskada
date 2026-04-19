@@ -128,7 +128,11 @@ export function AddServiceModal({ visible, serviceToEdit, onClose, onSuccess }: 
         </View>
       </ScreenContainer>
 
-      <Modal visible={showTypePicker && !isEditing} animationType="slide" onRequestClose={() => setShowTypePicker(false)}>
+      <Modal
+        visible={showTypePicker && !isEditing}
+        animationType="slide"
+        onRequestClose={() => setShowTypePicker(false)}
+      >
         <ScreenContainer style={styles.pickerContainer} contentPadding="m" contentStyle={styles.pickerContent}>
           <View style={styles.heroCard}>
             <View style={styles.pickerHeader}>

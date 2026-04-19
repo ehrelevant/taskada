@@ -39,11 +39,7 @@ export function BookingTransitScreen() {
             Service Provider
           </Typography>
           <View style={styles.providerCardShell}>
-            <Avatar
-              source={otherUser.avatarUrl ? { uri: otherUser.avatarUrl } : null}
-              size={80}
-              name={providerName}
-            />
+            <Avatar source={otherUser.avatarUrl ? { uri: otherUser.avatarUrl } : null} size={80} name={providerName} />
             <View>
               <Typography variant="h3">{providerName}</Typography>
               <Typography variant="overline" color="textSecondary">

@@ -88,17 +88,20 @@ export function BookingStack() {
   const { colors } = useTheme();
 
   const shouldHideBackButton = (routeName: keyof BookingStackParamList): boolean => {
-    return routeName === 'BookingChat'
-      || routeName === 'BookingTransit'
-      || routeName === 'BookingServing'
-      || routeName === 'BookingDone';
+    return (
+      routeName === 'BookingChat' ||
+      routeName === 'BookingTransit' ||
+      routeName === 'BookingServing' ||
+      routeName === 'BookingDone'
+    );
   };
 
-  const getReportContext = (
-    route: { name: keyof BookingStackParamList; params?: object },
-  ): { bookingId: string; reportedUser: OtherUser } | null => {
+  const getReportContext = (route: {
+    name: keyof BookingStackParamList;
+    params?: object;
+  }): { bookingId: string; reportedUser: OtherUser } | null => {
     const params = route.params as
-      BookingStackParamList['BookingChat']
+      | BookingStackParamList['BookingChat']
       | BookingStackParamList['BookingFinalize']
       | BookingStackParamList['BookingTransit']
       | BookingStackParamList['BookingServing']
@@ -168,7 +171,9 @@ export function BookingStack() {
                   </TouchableOpacity>
                 )}
 
-                {(route.name === 'BookingTransit' || route.name === 'BookingServing' || route.name === 'BookingDone') && (
+                {(route.name === 'BookingTransit' ||
+                  route.name === 'BookingServing' ||
+                  route.name === 'BookingDone') && (
                   <TouchableOpacity
                     onPress={() => {
                       const params = route.params as

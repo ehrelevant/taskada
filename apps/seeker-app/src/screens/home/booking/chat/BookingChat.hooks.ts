@@ -70,9 +70,7 @@ export function useBookingChat() {
       messageMap.set(message.id, message);
     }
 
-    return [...messageMap.values()].sort(
-      (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-    );
+    return [...messageMap.values()].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
   }, []);
 
   const loadMessages = useCallback(
@@ -302,9 +300,7 @@ export function useBookingChat() {
 
             if (response.ok) {
               seekerClient.cancelBooking(bookingId);
-              Alert.alert('Cancelled', 'The booking has been cancelled.', [
-                { text: 'OK', onPress: navigateToHome },
-              ]);
+              Alert.alert('Cancelled', 'The booking has been cancelled.', [{ text: 'OK', onPress: navigateToHome }]);
             }
           } catch (error) {
             console.error('Failed to cancel booking:', error);

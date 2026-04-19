@@ -77,9 +77,7 @@ export function BookingDetailsScreen() {
             Service Cost
           </Typography>
         </View>
-        <Typography variant="h4">
-          ₱{booking?.cost?.toFixed(2) || '0.00'}
-        </Typography>
+        <Typography variant="h4">₱{booking?.cost?.toFixed(2) || '0.00'}</Typography>
       </Card>
 
       {booking?.specifications && (

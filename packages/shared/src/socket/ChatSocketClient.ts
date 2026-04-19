@@ -250,7 +250,9 @@ export class ChatSocketClient {
   }
 
   offProposalDeclined(handler: (data: { bookingId: string }) => void) {
-    this.proposalDeclinedHandlers = this.proposalDeclinedHandlers.filter(existingHandler => existingHandler !== handler);
+    this.proposalDeclinedHandlers = this.proposalDeclinedHandlers.filter(
+      existingHandler => existingHandler !== handler,
+    );
   }
 
   onProposalSubmitted(handler: (data: ProposalSubmittedData) => void) {
@@ -258,7 +260,9 @@ export class ChatSocketClient {
   }
 
   offProposalSubmitted(handler: (data: ProposalSubmittedData) => void) {
-    this.proposalSubmittedHandlers = this.proposalSubmittedHandlers.filter(existingHandler => existingHandler !== handler);
+    this.proposalSubmittedHandlers = this.proposalSubmittedHandlers.filter(
+      existingHandler => existingHandler !== handler,
+    );
   }
 
   onProposalAccepted(handler: (data: ProposalAcceptedData) => void) {
@@ -266,7 +270,9 @@ export class ChatSocketClient {
   }
 
   offProposalAccepted(handler: (data: ProposalAcceptedData) => void) {
-    this.proposalAcceptedHandlers = this.proposalAcceptedHandlers.filter(existingHandler => existingHandler !== handler);
+    this.proposalAcceptedHandlers = this.proposalAcceptedHandlers.filter(
+      existingHandler => existingHandler !== handler,
+    );
   }
 
   onProviderArrived(handler: (data: { bookingId: string }) => void) {
@@ -282,7 +288,9 @@ export class ChatSocketClient {
   }
 
   offBookingCompleted(handler: (data: { bookingId: string }) => void) {
-    this.bookingCompletedHandlers = this.bookingCompletedHandlers.filter(existingHandler => existingHandler !== handler);
+    this.bookingCompletedHandlers = this.bookingCompletedHandlers.filter(
+      existingHandler => existingHandler !== handler,
+    );
   }
 
   onBookingCancelled(handler: (data: { bookingId: string }) => void) {
@@ -290,7 +298,9 @@ export class ChatSocketClient {
   }
 
   offBookingCancelled(handler: (data: { bookingId: string }) => void) {
-    this.bookingCancelledHandlers = this.bookingCancelledHandlers.filter(existingHandler => existingHandler !== handler);
+    this.bookingCancelledHandlers = this.bookingCancelledHandlers.filter(
+      existingHandler => existingHandler !== handler,
+    );
   }
 
   removeAllListeners() {
