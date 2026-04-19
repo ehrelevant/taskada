@@ -168,12 +168,13 @@ export function BookingStack() {
                   </TouchableOpacity>
                 )}
 
-                {(route.name === 'BookingTransit' || route.name === 'BookingServing') && (
+                {(route.name === 'BookingTransit' || route.name === 'BookingServing' || route.name === 'BookingDone') && (
                   <TouchableOpacity
                     onPress={() => {
                       const params = route.params as
                         | BookingStackParamList['BookingTransit']
-                        | BookingStackParamList['BookingServing'];
+                        | BookingStackParamList['BookingServing']
+                        | BookingStackParamList['BookingDone'];
 
                       navigation.navigate('BookingLogs', {
                         bookingId: params.bookingId,
