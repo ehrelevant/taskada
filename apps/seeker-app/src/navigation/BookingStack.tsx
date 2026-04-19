@@ -304,7 +304,6 @@ export function BookingStack() {
         component={BookingLogsScreen}
         options={{
           title: 'Booking Logs',
-          headerShown: false,
         }}
       />
       <Stack.Screen
@@ -312,7 +311,6 @@ export function BookingStack() {
         component={RequestLogsScreen}
         options={{
           title: 'Request Logs',
-          headerShown: false,
         }}
       />
       <Stack.Screen
@@ -320,7 +318,6 @@ export function BookingStack() {
         component={ChatLogsScreen}
         options={{
           title: 'Chat Logs',
-          headerShown: false,
         }}
       />
       <Stack.Screen
@@ -328,7 +325,6 @@ export function BookingStack() {
         component={ReportScreen}
         options={{
           title: 'Report User',
-          headerShown: false,
         }}
       />
     </Stack.Navigator>
