@@ -1,0 +1,54 @@
+// 1. SCRAPE NESTJS METRICS
+// Update the target host to match the service name for your NestJS server
+prometheus.scrape "server" {
+  targets = [{"__address__" = "host.docker.internal:3000"}]
+  metrics_path = "/metrics"
+  scheme = "http"
+  scrape_interval = "5s"
+  scrape_timeout = "3s"
+  // forward scraped metrics to the local Prometheus remote-write receiver
+  forward_to = [prometheus.remote_write.local.receiver]
+}
+
+// Remote-write endpoint for Prometheus
+prometheus.remote_write "local" {
+  endpoint {
+    url = "http://prometheus:9090/api/v1/write"
+  }
+}
+
+// 2. SEND LOGS TO LOKI
+
+loki.source.file "logger" {
+    targets = [{"__path__" = "/var/log/server/current.log"}]
+    forward_to = [loki.process.process_logs.receiver]
+    tail_from_end = true
+    file_match {
+        enabled = true
+        sync_period = "10s"
+    }
+}
+
+loki.process "process_logs" {
+    stage.json {
+        expressions = {
+            app = "",
+            pid = "process_id",
+            hostname = "host_name",
+        }
+    }
+    stage.labels {
+        values = {
+            app = "",
+            host_name = "",
+            process_id = "",
+        }
+    }
+    forward_to = [loki.write.local.receiver]
+}
+
+loki.write "local" {
+  endpoint {
+    url = "http://loki:3100/loki/api/v1/push"
+  }
+}
