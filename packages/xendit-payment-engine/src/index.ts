@@ -5,3 +5,4 @@ export * from './standard';
 
 export * from './schema';
 export * from './types';
+export { setLogger, getLogger } from './logger';

@@ -1,7 +1,9 @@
-import logger from '@logger';
+import getLogger from '@logger';
 import { HTTPError } from 'ky';
 
 import { ErrorResponseSchema } from './schema';
+
+const logger = getLogger();
 
 export async function handle_error(error: HTTPError): Promise<HTTPError> {
   const { response } = error;

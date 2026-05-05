@@ -95,7 +95,7 @@ importers:
         version: 0.545.0(react@19.1.0)
       nitro:
         specifier: 3.0.260311-beta
-        version: 3.0.260311-beta(chokidar@4.0.3)(dotenv@16.4.7)(drizzle-orm@0.44.5(@opentelemetry/api@1.9.1)(@types/pg@8.15.5)(kysely@0.28.7)(mysql2@2.3.3)(pg@8.16.3))(jiti@2.6.1)(lru-cache@11.2.7)(mysql2@2.3.3)(vite@7.3.1(@types/node@22.18.8)(jiti@2.6.1)(lightningcss@1.32.0)(terser@5.44.0)(tsx@4.21.0)(yaml@2.8.1))
+        version: 3.0.260311-beta(chokidar@4.0.3)(dotenv@16.4.7)(drizzle-orm@0.44.5(@opentelemetry/api@1.9.1)(@types/pg@8.15.5)(kysely@0.28.7)(mysql2@2.3.3)(pg@8.16.3))(jiti@2.6.1)(lru-cache@11.3.6)(mysql2@2.3.3)(vite@7.3.1(@types/node@22.18.8)(jiti@2.6.1)(lightningcss@1.32.0)(terser@5.44.0)(tsx@4.21.0)(yaml@2.8.1))
       react:
         specifier: 19.1.0
         version: 19.1.0
@@ -292,7 +292,7 @@ importers:
     devDependencies:
       '@repo/database':
         specifier: workspace:*
-        version: link:../../packages/database
+        version: file:packages/database(@opentelemetry/api@1.9.1)(@types/pg@8.15.5)(kysely@0.28.7)(mysql2@2.3.3)
       '@types/react':
         specifier: ~19.1.0
         version: 19.1.16
@@ -422,7 +422,7 @@ importers:
     devDependencies:
       '@repo/database':
         specifier: workspace:*
-        version: link:../../packages/database
+        version: file:packages/database(@opentelemetry/api@1.9.1)(@types/pg@8.15.5)(kysely@0.28.7)(mysql2@2.3.3)
       '@types/react':
         specifier: ~19.1.0
         version: 19.1.16
@@ -446,7 +446,7 @@ importers:
         version: 3.995.0
       '@better-auth/expo':
         specifier: ^1.3.27
-        version: 1.3.27(d564e9bc842e64ace4f636f40b14332d)
+        version: 1.3.27(5ca70cc7b6f5cddfc23eca58d921481d)
       '@mag123c/nestjs-stdschema':
         specifier: ^0.2.2
         version: 0.2.2(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.6)(@nestjs/graphql@13.2.0(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.6)(class-transformer@0.5.1)(class-validator@0.14.2)(graphql@16.11.0)(reflect-metadata@0.2.2))(@nestjs/swagger@11.2.0(@fastify/static@8.2.0)(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.6)(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2))(reflect-metadata@0.2.2)
@@ -470,16 +470,19 @@ importers:
         version: 11.1.13(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.6)(@nestjs/platform-socket.io@11.1.13)(reflect-metadata@0.2.2)(rxjs@7.8.2)
       '@repo/database':
         specifier: workspace:*
-        version: link:../../packages/database
+        version: file:packages/database(@opentelemetry/api@1.9.1)(@types/pg@8.15.5)(kysely@0.28.7)(mysql2@2.3.3)
       '@repo/xendit-payment-engine':
         specifier: workspace:*
-        version: link:../../packages/xendit-payment-engine
+        version: file:packages/xendit-payment-engine
       '@thallesp/nestjs-better-auth':
         specifier: ^2.0.1
         version: 2.0.1(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.6)(@nestjs/graphql@13.2.0(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.6)(class-transformer@0.5.1)(class-validator@0.14.2)(graphql@16.11.0)(reflect-metadata@0.2.2))(better-auth@1.3.27(react@19.1.0))(express@5.1.0)(graphql@16.11.0)(typescript@5.9.3)
       '@types/multer':
         specifier: ^2.0.0
         version: 2.0.0
+      '@willsoto/nestjs-prometheus':
+        specifier: ^6.1.0
+        version: 6.1.0(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(prom-client@15.1.3)
       better-auth:
         specifier: ^1.3.27
         version: 1.3.27(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(solid-js@1.9.12)
@@ -498,12 +501,33 @@ importers:
       multer:
         specifier: ^2.0.2
         version: 2.0.2
+      nestjs-pino:
+        specifier: ^4.6.1
+        version: 4.6.1(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(pino-http@11.0.0)(pino@10.3.1)(rxjs@7.8.2)
+      nestjs-prometheus:
+        specifier: ^4.6.1
+        version: 4.6.1(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(prom-client@15.1.3)
       nestjs-zod:
         specifier: ^5.1.1
         version: 5.2.1(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/swagger@11.2.0(@fastify/static@8.2.0)(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.6)(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2))(rxjs@7.8.2)(zod@4.3.6)
       pg:
         specifier: ^8.16.3
         version: 8.16.3
+      pino:
+        specifier: ^10.3.1
+        version: 10.3.1
+      pino-http:
+        specifier: ^11.0.0
+        version: 11.0.0
+      pino-pretty:
+        specifier: ^13.1.3
+        version: 13.1.3
+      pino-roll:
+        specifier: ^4.0.0
+        version: 4.0.0
+      prom-client:
+        specifier: ^15.1.3
+        version: 15.1.3
       reflect-metadata:
         specifier: ^0.2.2
         version: 0.2.2
@@ -647,7 +671,7 @@ importers:
         version: link:../components
       '@repo/database':
         specifier: workspace:*
-        version: link:../database
+        version: file:packages/database(@opentelemetry/api@1.9.1)(@types/pg@8.15.5)(kysely@0.28.7)(mysql2@2.3.3)
       '@repo/theme':
         specifier: workspace:*
         version: link:../theme
@@ -735,6 +759,9 @@ importers:
       pino:
         specifier: ^10.3.1
         version: 10.3.1
+      pino-http:
+        specifier: ^11.0.0
+        version: 11.0.0
       pino-roll:
         specifier: ^4.0.0
         version: 4.0.0
@@ -3315,11 +3342,18 @@ packages:
   '@react-navigation/routers@7.5.1':
     resolution: {integrity: sha512-pxipMW/iEBSUrjxz2cDD7fNwkqR4xoi0E/PcfTQGCcdJwLoaxzab5kSadBLj1MTJyT0YRrOXL9umHpXtp+Dv4w==}
 
+  '@repo/database@file:packages/database':
+    resolution: {directory: packages/database, type: directory}
+
   '@repo/shared@file:packages/shared':
     resolution: {directory: packages/shared, type: directory}
 
   '@repo/types@file:packages/types':
     resolution: {directory: packages/types, type: directory}
+
+  '@repo/xendit-payment-engine@file:packages/xendit-payment-engine':
+    resolution: {directory: packages/xendit-payment-engine, type: directory}
+    engines: {node: '>=24.2.0 <25'}
 
   '@rolldown/binding-android-arm64@1.0.0-rc.12':
     resolution: {integrity: sha512-pv1y2Fv0JybcykuiiD3qBOBdz6RteYojRFY1d+b95WVuzx211CRh+ytI/+9iVyWQ6koTh5dawe4S/yRfOFjgaA==}
@@ -4916,6 +4950,12 @@ packages:
     resolution: {integrity: sha512-Nst5JdK47VIl9UcGwtv2Rcgyn5lWtZ0/mhRQ4G8NN2isxpq2TO30iqHzmwoJycjWuyUfg3GFXqP/gFHXeV57IA==}
     engines: {node: '>=16.0.0'}
 
+  '@willsoto/nestjs-prometheus@6.1.0':
+    resolution: {integrity: sha512-lrCEnJBBSzUIYWGR+PsZw1YXs1B9jzxFEuNAa3RzTxuFAFdI+sW7Fp52il/U/dX2MWoHc32x06OS0nm56QwyzQ==}
+    peerDependencies:
+      '@nestjs/common': ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0 || ^11.0.0
+      prom-client: ^15.0.0
+
   '@xhmikosr/archive-type@7.1.0':
     resolution: {integrity: sha512-xZEpnGplg1sNPyEgFh0zbHxqlw5dtYg6viplmWSxUj12+QjU9SKu3U/2G73a15pEjLaOqTefNSZ1fOPUOT4Xgg==}
     engines: {node: '>=18'}
@@ -5358,6 +5398,9 @@ packages:
   binary-extensions@2.3.0:
     resolution: {integrity: sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==}
     engines: {node: '>=8'}
+
+  bintrees@1.0.2:
+    resolution: {integrity: sha512-VOMgTMwjAaUG580SXn3LacVgjurrbMme7ZZNYGSSV7mmtY6QQRh0Eg3pwIcntQ77DErK1L0NxkbetjcoXzVwKw==}
 
   bl@4.1.0:
     resolution: {integrity: sha512-1W07cM9gS6DcLperZfFSj+bWLtaPGSOHWhPiGzXmvVJbRLdG82sH/Kn8EtW1VqWVA54AKf2h5k5BbnIbwF3h6w==}
@@ -8427,6 +8470,21 @@ packages:
   nested-error-stacks@2.0.1:
     resolution: {integrity: sha512-SrQrok4CATudVzBS7coSz26QRSmlK9TzzoFbeKfcPBUFPjcQM9Rqvr/DlJkOrwI/0KcgvMub1n1g5Jt9EgRn4A==}
 
+  nestjs-pino@4.6.1:
+    resolution: {integrity: sha512-nuARXa0xpdJ1lY2+fgycIQr6H3g0VgqAWNK3xMYjOFcj2DoPETNXj0lV3Y86nRuI7BUfQp5PGiVoZvT4dTWbpQ==}
+    engines: {node: '>= 14'}
+    peerDependencies:
+      '@nestjs/common': ^8.0.0 || ^9.0.0 || ^10.0.0 || ^11.0.0
+      pino: ^7.5.0 || ^8.0.0 || ^9.0.0 || ^10.0.0
+      pino-http: ^6.4.0 || ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0 || ^11.0.0
+      rxjs: ^7.1.0
+
+  nestjs-prometheus@4.6.1:
+    resolution: {integrity: sha512-cQ5BLU3PksEXyaGU5NNR/z/RUTRs+Yrt64MHGAi0U4sExn32Qd3045QwPlsE20bNanoGxEpaEB4+m1IpfMFspw==}
+    peerDependencies:
+      '@nestjs/common': ^8.0.0
+      prom-client: ^14.0.0
+
   nestjs-zod@5.2.1:
     resolution: {integrity: sha512-pGfOsLVcXJKB6vdh59YMN9o3hvaOKFISo1EU9IUCMGl5yb0JsvY6A0ZnNnTmwb8zs7o1cWwC8GeVrawvnL8/rw==}
     peerDependencies:
@@ -8793,6 +8851,9 @@ packages:
   pino-abstract-transport@3.0.0:
     resolution: {integrity: sha512-wlfUczU+n7Hy/Ha5j9a/gZNy7We5+cXp8YL+X+PG8S0KXxw7n/JXA3c46Y0zQznIJ83URJiwy7Lh56WLokNuxg==}
 
+  pino-http@11.0.0:
+    resolution: {integrity: sha512-wqg5XIAGRRIWtTk8qPGxkbrfiwEWz1lgedVLvhLALudKXvg1/L2lTFgTGPJ4Z2e3qcRmxoFxDuSdMdMGNM6I1g==}
+
   pino-pretty@13.1.3:
     resolution: {integrity: sha512-ttXRkkOz6WWC95KeY9+xxWL6AtImwbyMHrL1mSwqwW9u+vLp/WIElvHvCSDg0xO/Dzrggz1zv3rN5ovTRVowKg==}
     hasBin: true
@@ -8983,6 +9044,10 @@ packages:
   progress@2.0.3:
     resolution: {integrity: sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==}
     engines: {node: '>=0.4.0'}
+
+  prom-client@15.1.3:
+    resolution: {integrity: sha512-6ZiOBfCywsD4k1BN9IX0uZhF+tJkV8q8llP64G5Hajs4JOeVLPCwpPVcpXy3BwYiUGgyJzsJJQeOIv7+hDSq8g==}
+    engines: {node: ^16 || ^18 || >=20}
 
   promise-limit@2.7.0:
     resolution: {integrity: sha512-7nJ6v5lnJsXwGprnGXga4wx6d1POjvi5Qmf1ivTRxTjH4Z/9Czja/UCMLVmB9N93GeWOU93XaFaEt6jbuoagNw==}
@@ -9889,6 +9954,9 @@ packages:
     resolution: {integrity: sha512-nlGpxf+hv0v7GkWBK2V9spgactGOp0qvfWRxUMjqHyzrt3SgwE48DIv/FhqPHJYLHpgW1opq3nERbz5Anq7n1g==}
     engines: {node: '>=18'}
     deprecated: Old versions of tar are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+
+  tdigest@0.1.2:
+    resolution: {integrity: sha512-+G0LLgjjo9BZX2MfdvPfH+MKLCrxlXSYec5DaPYP1fe6Iyhf0/fSmJ0bFiZ1F8BT6cGXl2LpltQptzjXKWEkKA==}
 
   temp-dir@2.0.0:
     resolution: {integrity: sha512-aoBAniQmmwtcKp/7BzsH8Cxzv8OL736p7v1ihGb5e9DJ9kTwGWHrQrVB5+lfVDzfGrdRzXch+ig7LHaY1JTOrg==}
@@ -12262,6 +12330,17 @@ snapshots:
       better-call: 1.0.19
       zod: 4.3.6
 
+  '@better-auth/expo@1.3.27(5ca70cc7b6f5cddfc23eca58d921481d)':
+    dependencies:
+      '@better-fetch/fetch': 1.1.18
+      better-auth: 1.3.27(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(solid-js@1.9.12)
+      expo-constants: 18.0.13(expo@54.0.11(@babel/core@7.29.0)(graphql@16.11.0)(react-native-webview@13.15.0(react-native@0.81.4(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0))(react-native@0.81.4(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0))(react-native@0.81.4(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))
+      expo-crypto: 15.0.7(expo@54.0.11(@babel/core@7.29.0)(graphql@16.11.0)(react-native-webview@13.15.0(react-native@0.81.4(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0))(react-native@0.81.4(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0))
+      expo-linking: 8.0.12(expo@54.0.11(@babel/core@7.29.0)(graphql@16.11.0)(react-native-webview@13.15.0(react-native@0.81.4(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0))(react-native@0.81.4(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0))(react-native@0.81.4(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)
+      expo-secure-store: 15.0.7(expo@54.0.11(@babel/core@7.29.0)(graphql@16.11.0)(react-native-webview@13.15.0(react-native@0.81.4(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0))(react-native@0.81.4(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0))
+      expo-web-browser: 15.0.10(expo@54.0.11(@babel/core@7.29.0)(graphql@16.11.0)(react-native-webview@13.15.0(react-native@0.81.4(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0))(react-native@0.81.4(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0))(react-native@0.81.4(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))
+      zod: 4.3.6
+
   '@better-auth/expo@1.3.27(a1758b8fd11203fcce32ab65043a172b)':
     dependencies:
       '@better-fetch/fetch': 1.1.18
@@ -14145,8 +14224,7 @@ snapshots:
 
   '@oozcitak/util@10.0.0': {}
 
-  '@opentelemetry/api@1.9.1':
-    optional: true
+  '@opentelemetry/api@1.9.1': {}
 
   '@oxc-project/types@0.122.0': {}
 
@@ -14456,6 +14534,44 @@ snapshots:
     dependencies:
       nanoid: 3.3.11
 
+  '@repo/database@file:packages/database(@opentelemetry/api@1.9.1)(@types/pg@8.15.5)(kysely@0.28.7)(mysql2@2.3.3)':
+    dependencies:
+      bcrypt: 6.0.0
+      drizzle-orm: 0.44.5(@opentelemetry/api@1.9.1)(@types/pg@8.15.5)(kysely@0.28.7)(mysql2@2.3.3)(pg@8.16.3)
+      drizzle-zod: 0.8.3(drizzle-orm@0.44.5(@opentelemetry/api@1.9.1)(@types/pg@8.15.5)(kysely@0.28.7)(mysql2@2.3.3)(pg@8.16.3))(zod@4.4.3)
+      pg: 8.16.3
+      zod: 4.4.3
+    transitivePeerDependencies:
+      - '@aws-sdk/client-rds-data'
+      - '@cloudflare/workers-types'
+      - '@electric-sql/pglite'
+      - '@libsql/client'
+      - '@libsql/client-wasm'
+      - '@neondatabase/serverless'
+      - '@op-engineering/op-sqlite'
+      - '@opentelemetry/api'
+      - '@planetscale/database'
+      - '@prisma/client'
+      - '@tidbcloud/serverless'
+      - '@types/better-sqlite3'
+      - '@types/pg'
+      - '@types/sql.js'
+      - '@upstash/redis'
+      - '@vercel/postgres'
+      - '@xata.io/client'
+      - better-sqlite3
+      - bun-types
+      - expo-sqlite
+      - gel
+      - knex
+      - kysely
+      - mysql2
+      - pg-native
+      - postgres
+      - prisma
+      - sql.js
+      - sqlite3
+
   '@repo/shared@file:packages/shared(fb8793682a6cc69dceff79ee98362e2c)':
     dependencies:
       '@better-auth/expo': 1.3.27(d564e9bc842e64ace4f636f40b14332d)
@@ -14484,6 +14600,15 @@ snapshots:
       - vue
 
   '@repo/types@file:packages/types': {}
+
+  '@repo/xendit-payment-engine@file:packages/xendit-payment-engine':
+    dependencies:
+      ky: 1.14.3
+      pino: 10.3.1
+      pino-http: 11.0.0
+      pino-roll: 4.0.0
+      uuid: 13.0.0
+      zod: 4.4.3
 
   '@rolldown/binding-android-arm64@1.0.0-rc.12':
     optional: true
@@ -16283,6 +16408,11 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
+  '@willsoto/nestjs-prometheus@6.1.0(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(prom-client@15.1.3)':
+    dependencies:
+      '@nestjs/common': 11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      prom-client: 15.1.3
+
   '@xhmikosr/archive-type@7.1.0':
     dependencies:
       file-type: 20.5.0
@@ -16929,6 +17059,8 @@ snapshots:
       find-versions: 5.1.0
 
   binary-extensions@2.3.0: {}
+
+  bintrees@1.0.2: {}
 
   bl@4.1.0:
     dependencies:
@@ -17630,6 +17762,11 @@ snapshots:
     dependencies:
       drizzle-orm: 0.44.5(@opentelemetry/api@1.9.1)(@types/pg@8.15.5)(kysely@0.28.7)(mysql2@2.3.3)(pg@8.16.3)
       zod: 4.3.6
+
+  drizzle-zod@0.8.3(drizzle-orm@0.44.5(@opentelemetry/api@1.9.1)(@types/pg@8.15.5)(kysely@0.28.7)(mysql2@2.3.3)(pg@8.16.3))(zod@4.4.3):
+    dependencies:
+      drizzle-orm: 0.44.5(@opentelemetry/api@1.9.1)(@types/pg@8.15.5)(kysely@0.28.7)(mysql2@2.3.3)(pg@8.16.3)
+      zod: 4.4.3
 
   dset@3.1.4: {}
 
@@ -20926,6 +21063,18 @@ snapshots:
 
   nested-error-stacks@2.0.1: {}
 
+  nestjs-pino@4.6.1(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(pino-http@11.0.0)(pino@10.3.1)(rxjs@7.8.2):
+    dependencies:
+      '@nestjs/common': 11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      pino: 10.3.1
+      pino-http: 11.0.0
+      rxjs: 7.8.2
+
+  nestjs-prometheus@4.6.1(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(prom-client@15.1.3):
+    dependencies:
+      '@nestjs/common': 11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      prom-client: 15.1.3
+
   nestjs-zod@5.2.1(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/swagger@11.2.0(@fastify/static@8.2.0)(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.6)(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2))(rxjs@7.8.2)(zod@4.3.6):
     dependencies:
       '@nestjs/common': 11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2)
@@ -20937,7 +21086,7 @@ snapshots:
 
   nf3@0.3.14: {}
 
-  nitro@3.0.260311-beta(chokidar@4.0.3)(dotenv@16.4.7)(drizzle-orm@0.44.5(@opentelemetry/api@1.9.1)(@types/pg@8.15.5)(kysely@0.28.7)(mysql2@2.3.3)(pg@8.16.3))(jiti@2.6.1)(lru-cache@11.2.7)(mysql2@2.3.3)(vite@7.3.1(@types/node@22.18.8)(jiti@2.6.1)(lightningcss@1.32.0)(terser@5.44.0)(tsx@4.21.0)(yaml@2.8.1)):
+  nitro@3.0.260311-beta(chokidar@4.0.3)(dotenv@16.4.7)(drizzle-orm@0.44.5(@opentelemetry/api@1.9.1)(@types/pg@8.15.5)(kysely@0.28.7)(mysql2@2.3.3)(pg@8.16.3))(jiti@2.6.1)(lru-cache@11.3.6)(mysql2@2.3.3)(vite@7.3.1(@types/node@22.18.8)(jiti@2.6.1)(lightningcss@1.32.0)(terser@5.44.0)(tsx@4.21.0)(yaml@2.8.1)):
     dependencies:
       consola: 3.4.2
       crossws: 0.4.4(srvx@0.11.13)
@@ -20952,7 +21101,7 @@ snapshots:
       rolldown: 1.0.0-rc.12
       srvx: 0.11.13
       unenv: 2.0.0-rc.24
-      unstorage: 2.0.0-alpha.7(chokidar@4.0.3)(db0@0.3.4(drizzle-orm@0.44.5(@opentelemetry/api@1.9.1)(@types/pg@8.15.5)(kysely@0.28.7)(mysql2@2.3.3)(pg@8.16.3))(mysql2@2.3.3))(lru-cache@11.2.7)(ofetch@2.0.0-alpha.3)
+      unstorage: 2.0.0-alpha.7(chokidar@4.0.3)(db0@0.3.4(drizzle-orm@0.44.5(@opentelemetry/api@1.9.1)(@types/pg@8.15.5)(kysely@0.28.7)(mysql2@2.3.3)(pg@8.16.3))(mysql2@2.3.3))(lru-cache@11.3.6)(ofetch@2.0.0-alpha.3)
     optionalDependencies:
       dotenv: 16.4.7
       jiti: 2.6.1
@@ -21312,6 +21461,13 @@ snapshots:
     dependencies:
       split2: 4.2.0
 
+  pino-http@11.0.0:
+    dependencies:
+      get-caller-file: 2.0.5
+      pino: 10.3.1
+      pino-std-serializers: 7.1.0
+      process-warning: 5.0.0
+
   pino-pretty@13.1.3:
     dependencies:
       colorette: 2.0.20
@@ -21458,6 +21614,11 @@ snapshots:
   process-warning@5.0.0: {}
 
   progress@2.0.3: {}
+
+  prom-client@15.1.3:
+    dependencies:
+      '@opentelemetry/api': 1.9.1
+      tdigest: 0.1.2
 
   promise-limit@2.7.0: {}
 
@@ -22611,6 +22772,10 @@ snapshots:
       minizlib: 3.1.0
       yallist: 5.0.0
 
+  tdigest@0.1.2:
+    dependencies:
+      bintrees: 1.0.2
+
   temp-dir@2.0.0: {}
 
   terminal-link@2.1.1:
@@ -23087,11 +23252,11 @@ snapshots:
       '@unrs/resolver-binding-win32-ia32-msvc': 1.11.1
       '@unrs/resolver-binding-win32-x64-msvc': 1.11.1
 
-  unstorage@2.0.0-alpha.7(chokidar@4.0.3)(db0@0.3.4(drizzle-orm@0.44.5(@opentelemetry/api@1.9.1)(@types/pg@8.15.5)(kysely@0.28.7)(mysql2@2.3.3)(pg@8.16.3))(mysql2@2.3.3))(lru-cache@11.2.7)(ofetch@2.0.0-alpha.3):
+  unstorage@2.0.0-alpha.7(chokidar@4.0.3)(db0@0.3.4(drizzle-orm@0.44.5(@opentelemetry/api@1.9.1)(@types/pg@8.15.5)(kysely@0.28.7)(mysql2@2.3.3)(pg@8.16.3))(mysql2@2.3.3))(lru-cache@11.3.6)(ofetch@2.0.0-alpha.3):
     optionalDependencies:
       chokidar: 4.0.3
       db0: 0.3.4(drizzle-orm@0.44.5(@opentelemetry/api@1.9.1)(@types/pg@8.15.5)(kysely@0.28.7)(mysql2@2.3.3)(pg@8.16.3))(mysql2@2.3.3)
-      lru-cache: 11.2.7
+      lru-cache: 11.3.6
       ofetch: 2.0.0-alpha.3
 
   update-browserslist-db@1.1.3(browserslist@4.26.2):

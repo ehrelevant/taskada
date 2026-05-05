@@ -1,9 +1,8 @@
 import * as z from 'zod';
 import ky from 'ky';
-import logger from '@logger';
 import { Buffer } from 'buffer';
+import { getLogger } from '.';
 import { handle_error } from '@standard/index';
-import type { KyResponseWithRequest } from '@src/types';
 
 const API_URL = z.string('Environment variable `XENDIT_API_URL` is missing.').parse(process.env.XENDIT_API_URL);
 const secret_key = z
@@ -21,11 +20,44 @@ const client = ky.create({
   credentials: 'same-origin',
   hooks: {
     afterResponse: [
-      (request, _options, response): KyResponseWithRequest => {
-        const r = response as KyResponseWithRequest;
-        r.request = request;
-        logger.debug({ kyResponse: r });
-        return r;
+      (_request, _options, response) => {
+        function getHeaders(obj: { headers: { entries: () => HeadersIterator<[string, string]> } }) {
+          try {
+            const ret: Record<string, string> = Object.fromEntries(obj.headers.entries());
+
+            return ret;
+          } catch {
+            return {};
+          }
+        }
+
+        const url = new URL(_request.url, API_URL);
+        let reqQuery = {};
+        let reqParams = {};
+        try {
+          reqQuery = Object.fromEntries(url.searchParams.entries());
+          reqParams = { path: url.pathname.substring(1).split('/') }; // substring(1) to remove the leading slash
+        } catch {
+          // do nothing
+        }
+
+        getLogger().info(
+          {
+            req: {
+              method: _request.method,
+              url: _request.url,
+              headers: getHeaders(_request),
+              params: reqParams,
+              query: reqQuery,
+            },
+            res: {
+              statusCode: response.status,
+              headers: getHeaders(response),
+            },
+          },
+          'request completed',
+        );
+        return response;
       },
     ],
     beforeError: [handle_error],

@@ -1,41 +1,41 @@
+import fs from 'node:fs';
+
 import pino from 'pino';
 import { join, resolve } from 'path';
-import type { KyResponseWithRequest } from '@src/types';
 
-type WithKy = { kyResponse?: KyResponseWithRequest };
+const LOG_FOLDER = resolve(join('.', 'logs', 'xendit-payment-engine'));
+fs.mkdirSync(LOG_FOLDER, { recursive: true });
+const LOG_PATH = join(LOG_FOLDER, 'package');
 
-const LOG_PATH = resolve(join('.', 'logs', 'log'));
-
-function hasKyResponse(o: unknown): o is WithKy {
-  return (
-    typeof o === 'object' && o !== null && 'kyResponse' in o && (o as Record<string, unknown>).kyResponse !== undefined
-  );
+export interface Logger {
+  info: {
+    (obj: object, msg?: string): void;
+    (msg?: string): void;
+  };
+  trace: {
+    (obj: object, msg?: string): void;
+    (msg?: string): void;
+  };
+  warn: {
+    (obj: object, msg?: string): void;
+    (msg?: string): void;
+  };
+  error: {
+    (obj: object, msg?: string): void;
+    (msg?: string): void;
+  };
+  debug: {
+    (obj: object, msg?: string): void;
+    (msg?: string): void;
+  };
 }
 
-const logger = pino(
+let injectedLogger: Logger | null = null;
+
+const defaultLogger = pino(
   {
     name: 'Taskada/Xendit Payment Engine',
     level: process.env.LOG_LEVEL || 'info',
-    mixin: (mergeObject: object, _log_level_number: number, _logger: pino.Logger): object => {
-      if (!hasKyResponse(mergeObject)) {
-        return {};
-      }
-      const resp = mergeObject.kyResponse;
-      if (resp === undefined) {
-        return {};
-      }
-
-      const returnObject = {
-        response: JSON.stringify(resp),
-      };
-      if (resp.request === undefined) {
-        return returnObject;
-      }
-      return {
-        ...returnObject,
-        request: JSON.stringify(resp.request),
-      };
-    },
     redact: {
       paths: ['*.authorization'],
     },
@@ -48,14 +48,20 @@ const logger = pino(
       extension: '.log',
       frequency: 'daily',
       size: '128M',
-      symlink: true,
       limit: {
         count: 7, // 7 rotated + 1 active = 8 total
       },
+      symlink: true,
     },
   }),
 );
 
-logger.info(`Log output will be stored in ${LOG_PATH}`);
+export function setLogger(logger: Logger): void {
+  injectedLogger = logger;
+}
 
-export default logger;
+export function getLogger(): Logger {
+  return injectedLogger ?? defaultLogger;
+}
+
+export default getLogger;
