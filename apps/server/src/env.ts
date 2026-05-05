@@ -14,8 +14,6 @@ export const S3_BUCKET_NAME = z.string('Missing S3_BUCKET_NAME').parse(process.e
 
 export const S3_PUBLIC_URL = z.string().optional().parse(process.env.S3_PUBLIC_URL);
 
-export const GRAFANA_LOKI_URL = z.string().optional().parse(process.env.GRAFANA_LOKI_URL);
-
 const DEFAULT_CORS_ORIGINS = [
   'http://localhost:3300',
   'http://localhost:3200',
